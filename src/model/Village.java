@@ -1,6 +1,6 @@
 package model;
 
-public class World
+public class Village
 {
 
 }
