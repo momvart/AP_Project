@@ -9,12 +9,6 @@ public class Trap extends DefensiveTower
     }
 
     @Override
-    public void destroy()
-    {
-
-    }
-
-    @Override
     public int getType()
     {
         return 0;

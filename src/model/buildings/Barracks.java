@@ -6,12 +6,6 @@ public class Barracks extends VillageBuilding
     TrainingManager trainingManager = new TrainingManager();
 
     @Override
-    public void destroy()
-    {
-
-    }
-
-    @Override
     public int getType()
     {
         return 0;

@@ -1,6 +1,6 @@
 package model.buildings;
 
-public enum EBuildingType
+public enum BuildingType
 {
     TOWN_HALL,
     STORAGE,

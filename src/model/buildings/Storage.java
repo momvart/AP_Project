@@ -17,12 +17,6 @@ public class Storage extends VillageBuilding
     }
 
     @Override
-    public void destroy()
-    {
-
-    }
-
-    @Override
     public int getType()
     {
         return 0;

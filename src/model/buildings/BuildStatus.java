@@ -1,6 +1,6 @@
 package model.buildings;
 
-public enum EBuildStatus
+public enum BuildStatus
 {
     BUILT,
     IN_CONSTRUCTION

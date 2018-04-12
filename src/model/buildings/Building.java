@@ -1,5 +1,7 @@
 package model.buildings;
 
+import utils.Point;
+
 public abstract class Building
 {
     int buildingNum;
@@ -7,7 +9,7 @@ public abstract class Building
     boolean destroyed;
     int level;
     int strength;
-    EBuildStatus buildStatus;
+    BuildStatus buildStatus;
 
     public int getBuildingNum()
     {
@@ -34,7 +36,7 @@ public abstract class Building
         return strength;
     }
 
-    public EBuildStatus getBuildStatus()
+    public BuildStatus getBuildStatus()
     {
         return buildStatus;
     }
@@ -43,8 +45,6 @@ public abstract class Building
     {
         level++;
     }
-
-    public abstract void destroy();
 
     public abstract int getType();
 }
