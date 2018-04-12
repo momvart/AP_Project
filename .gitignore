@@ -74,3 +74,4 @@ fabric.properties
 hs_err_pid*
 # Custom files
 AP_Project.iml
+/.idea/codeStyles/codeStyleConfig.xml

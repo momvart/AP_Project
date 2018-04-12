@@ -4,12 +4,19 @@ import utils.Point;
 
 public abstract class Building
 {
-    int buildingNum;
-    Point location;
-    boolean destroyed;
-    int level;
-    int strength;
-    BuildStatus buildStatus;
+    protected int buildingNum;
+    protected Point location;
+    protected boolean destroyed;
+    protected int level;
+    protected int strength;
+    protected BuildStatus buildStatus;
+
+    public abstract int getType();
+
+    public String getName()
+    {
+        return BuildingValues.getInfo(getType()).getName();
+    }
 
     public int getBuildingNum()
     {
@@ -45,6 +52,4 @@ public abstract class Building
     {
         level++;
     }
-
-    public abstract int getType();
 }
