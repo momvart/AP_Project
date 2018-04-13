@@ -1,9 +1,9 @@
 package models.soldiers;
 
-public class Archer extends Soldier
+public class Archer
 {
     public int getType()
     {
-
+        return 3;
     }
 }

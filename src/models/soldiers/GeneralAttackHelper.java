@@ -1,26 +1,33 @@
 package models.soldiers;
 
+import models.Attack;
 import models.buildings.Building;
 
 public class GeneralAttackHelper extends AttackHelper
+
 {
     private Building target;
+
+    public GeneralAttackHelper(Attack attack)
+    {
+        super(attack);
+    }
 
     @Override
     public void move()
     {
-        super.move();
+
     }
 
     @Override
     public void fire()
     {
-        super.fire();
+
     }
 
     @Override
     public void setTarget()
     {
-        super.setTarget();
+
     }
 }

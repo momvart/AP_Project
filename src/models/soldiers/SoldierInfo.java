@@ -10,47 +10,47 @@ public class SoldierInfo
     private int brewTime;
     private int speed;
     private int range;
-    private int favouriteTarget;
+    private Building favouriteTarget;
     private int initialHealth;
     private int initialDamage;
 
     public String getName()
     {
-
+        return name;
     }
 
     public Resource getBrewCost()
     {
-
+        return brewCost;
     }
 
     public int getBrewTime()
     {
-
+        return brewTime;
     }
 
     public int getSpeed()
     {
-
+        return speed;
     }
 
     public int getRange()
     {
-
+        return range;
     }
 
     public Building getFavouriteTarget()
-    {//TODO output type should be checked later on
-
+    {
+        return favouriteTarget;
     }
 
     public int getInitialHealth()
-    {//TODO maybe both field and method be redandent
-
+    {
+        return initialHealth;
     }
 
     public int getInitialDamage()
     {
-
+        return initialDamage;
     }
 }

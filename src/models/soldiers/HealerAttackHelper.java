@@ -1,26 +1,33 @@
 package models.soldiers;
 
+import models.Attack;
+
 import java.util.ArrayList;
 
 public class HealerAttackHelper extends AttackHelper
 {
     private ArrayList<Soldier> targets;
 
+    public HealerAttackHelper(Attack attack)
+    {
+        super(attack);
+    }
+
     @Override
     public void move()
     {
-        super.move();
+
     }
 
     @Override
     public void fire()
     {
-        super.fire();
+
     }
 
     @Override
     public void setTarget()
     {
-        super.setTarget();
+
     }
 }
