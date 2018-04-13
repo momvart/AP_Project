@@ -9,28 +9,44 @@ public class Soldier
     private int level;
     private Point location;
     private AttackHelper attackHelper;
-    public int getType(){
+
+    public int getType()
+    {
 
     }
-    public String getName(){
+
+    public String getName()
+    {
 
     }
-    public int getLevel(){
+
+    public int getLevel()
+    {
 
     }
-    public int getHealth(){
+
+    public int getHealth()
+    {
 
     }
-    public void decreaseHealth(int amount){
+
+    public void decreaseHealth(int amount)
+    {
 
     }
-    public int getDamage(){
+
+    public int getDamage()
+    {
 
     }
-    public SoldierInfo getArmyUnitInfo(){
+
+    public SoldierInfo getArmyUnitInfo()
+    {
 
     }
-    public void participateIn(Attack attack){
+
+    public void participateIn(Attack attack)
+    {
 
     }
 }

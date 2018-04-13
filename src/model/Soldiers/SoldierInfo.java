@@ -13,28 +13,44 @@ public class SoldierInfo
     private int favouriteTarget;
     private int initialHealth;
     private int initialDamage;
-    public String getName(){
+
+    public String getName()
+    {
 
     }
-    public Resource getBrewCost(){
+
+    public Resource getBrewCost()
+    {
 
     }
-    public int getBrewTime(){
+
+    public int getBrewTime()
+    {
 
     }
-    public int getSpeed(){
+
+    public int getSpeed()
+    {
 
     }
-    public int getRange(){
+
+    public int getRange()
+    {
 
     }
-    public Building getFavouriteTarget(){//TODO output type should be checked later on
+
+    public Building getFavouriteTarget()
+    {//TODO output type should be checked later on
 
     }
-    public int getInitialHealth(){//TODO maybe both field and method be redandent
+
+    public int getInitialHealth()
+    {//TODO maybe both field and method be redandent
 
     }
-    public int getInitialDamage(){
+
+    public int getInitialDamage()
+    {
 
     }
 }

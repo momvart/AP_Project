@@ -12,34 +12,54 @@ public class Attack
     private Resource claimedResorce;
     private Map map;
     private int turn;
-    public void mapInfo(){
+
+    public void mapInfo()
+    {
 
     }
-    public void addUnit(Soldier soldier){
+
+    public void addUnit(Soldier soldier)
+    {
 
     }
-    public void putUnit(int unitType , int count , Point location){
+
+    public void putUnit(int unitType, int count, Point location)
+    {
 
     }
-    public void passTurn(){
+
+    public void passTurn()
+    {
 
     }
-    public Resource getClaimedResorce(){
+
+    public Resource getClaimedResorce()
+    {
 
     }
-    public ArrayList<Soldier> getUnits(int unitType){
+
+    public ArrayList<Soldier> getUnits(int unitType)
+    {
 
     }
-    public ArrayList<Soldier> getAllUnits(){
+
+    public ArrayList<Soldier> getAllUnits()
+    {
 
     }
-    public ArrayList<DefensiveTower> getTowers(int towerType){
+
+    public ArrayList<DefensiveTower> getTowers(int towerType)
+    {
 
     }
-    public ArrayList<DefensiveTower> getAllTowers(){
+
+    public ArrayList<DefensiveTower> getAllTowers()
+    {
 
     }
-    public void quitAttack(){
+
+    public void quitAttack()
+    {
 
     }
 
