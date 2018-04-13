@@ -1,5 +1,6 @@
 package models;
 
+import models.buildings.Building;
 import models.buildings.DefensiveTower;
 import models.soldiers.Soldier;
 import utils.Point;
@@ -28,7 +29,7 @@ public class Attack
 
     public void putUnit(int unitType, int count, Point location)
     {
-        ArrayList<Soldier> deployedTroops = new ArrayList<>();
+        /*ArrayList<Soldier> deployedTroops = new ArrayList<>();
         for (int i = 0; i < count && exists(unitType); i++)
         {
             for (Soldier soldier : troopsToBeDeployed)
@@ -46,7 +47,8 @@ public class Attack
         if ()
         {
 
-        }
+        }*/
+        //TODO we should come to agreement into a whole for how to implement the mechanism of putting soldiers on the map
     }
 
     private boolean exists(int unitType)
@@ -63,6 +65,7 @@ public class Attack
 
     public void passTurn()
     {
+        //TODO a lot of things to be done...
 
     }
 
@@ -91,12 +94,28 @@ public class Attack
 
     public ArrayList<DefensiveTower> getTowers(int towerType)
     {
-
+        ArrayList<DefensiveTower> requiredTowers = new ArrayList<>();
+        for (Building building : map.getBuildings())
+        {
+            if (DefensiveTower.class.isAssignableFrom(building.getClass()) && building.getType() == towerType)
+            {
+                requiredTowers.add((DefensiveTower)building);
+            }
+        }
+        return requiredTowers;
     }
 
     public ArrayList<DefensiveTower> getAllTowers()
     {
-
+        ArrayList<DefensiveTower> defensiveTowers = new ArrayList<>();
+        for (Building building : map.getBuildings())
+        {
+            if (DefensiveTower.class.isAssignableFrom(building.getClass()))
+            {
+                defensiveTowers.add((DefensiveTower)building);
+            }
+        }
+        return defensiveTowers;
     }
 
     public void quitAttack()
