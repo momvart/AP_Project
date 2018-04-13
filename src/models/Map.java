@@ -7,6 +7,8 @@ import models.buildings.TownHall;
 import utils.Point;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Map
 {
@@ -43,25 +45,10 @@ public class Map
         return (TownHall)buildings.get(0);
     }
 
-    public ArrayList<Building> getBuildings(int getType)
+    public List<Building> getBuildings(int buildingType)
     {
-        ArrayList<Building> buildingArray = new ArrayList<>(getBuildingsCount(getType));
-        for (Building building : buildings)
-        {
-            if (building.getType() == getType)
-                buildingArray.add(building);
-        }
-        return buildingArray;
-    }
-
-    public int getBuildingsCount(int getType)
-    {
-        int count = 0;
-        for (Building building : buildings)
-        {
-            if (building.getType() == getType)
-                count++;
-        }
-        return count;
+        return buildings.stream()
+                .filter(building -> building.getType() == buildingType)
+                .collect(Collectors.toList());
     }
 }

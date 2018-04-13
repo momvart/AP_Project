@@ -50,6 +50,7 @@ public class TownHall extends VillageBuilding
         if (builders.size() < this.level / 5 + 1)
         {
             Builder builder = new Builder(builders.size() + 1);
+            builders.add(builder);
         }
     }
 }
