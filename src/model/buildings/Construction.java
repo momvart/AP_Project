@@ -12,6 +12,17 @@ public class Construction
     int builderNum;
     Building building;
 
+    public Construction(int buildingType, int startTurn, int constructTime, ConstructMode constructMode, Point location, int builderNum, Building building)
+    {
+        this.buildingType = buildingType;
+        this.startTurn = startTurn;
+        this.constructTime = constructTime;
+        this.constructMode = constructMode;
+        this.location = location;
+        this.builderNum = builderNum;
+        this.building = building;
+    }
+
     public boolean isFinished()
     {
         return false;
@@ -36,4 +47,5 @@ public class Construction
     {
         return builderNum;
     }
+
 }
