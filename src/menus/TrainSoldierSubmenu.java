@@ -1,6 +1,6 @@
 package menus;
 
-import models.buildings.Barracks;
+import model.buildings.Barracks;
 
 import java.util.ArrayList;
 

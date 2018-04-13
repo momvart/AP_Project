@@ -1,6 +1,6 @@
 package menus;
 
-import models.Village;
+import model.Village;
 
 import java.util.ArrayList;
 

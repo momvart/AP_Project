@@ -1,6 +1,6 @@
 package menus;
 
-import models.buildings.BuildingValues;
+import model.buildings.BuildingValues;
 
 public class AvailableBuildingItem extends Menu
 {
