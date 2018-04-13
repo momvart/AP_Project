@@ -1,5 +1,6 @@
 package model;
 
+import model.Soldiers.Soldier;
 import model.buildings.Building;
 import model.buildings.TownHall;
 
@@ -12,18 +13,8 @@ public class Village
     private ConstructionManager constructionManager;
     private VillageStatus villageStatus;
     private int turn;
-    private ArrayList<Building> buildings;
     private ArrayList<Soldier> soldiers;
 
-    public ArrayList<Building> getBuildings()
-    {
-        return buildings;
-    }
-
-    public ArrayList<Soldier> getSoldiers()
-    {
-        return soldiers;
-    }
 
     public String getOwner()
     {
@@ -60,8 +51,4 @@ public class Village
         return turn;
     }
 
-    public TownHall getTownHall()
-    {
-        return (TownHall)buildings.get(1);
-    }
 }

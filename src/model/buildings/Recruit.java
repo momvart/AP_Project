@@ -1,5 +1,7 @@
 package model.buildings;
 
+import model.Soldiers.Soldier;
+
 public class Recruit
 {
     int soldierType;

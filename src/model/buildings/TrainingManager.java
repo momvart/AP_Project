@@ -1,5 +1,7 @@
 package model.buildings;
 
+import model.Soldiers.Soldier;
+
 import java.util.ArrayList;
 
 public class TrainingManager
