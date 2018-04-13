@@ -5,6 +5,7 @@ import models.buildings.Building;
 import models.buildings.DefenseType;
 import models.buildings.TownHall;
 import utils.Point;
+import utils.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +13,15 @@ import java.util.stream.Collectors;
 
 public class Map
 {
-    private Building[][] map = new Building[30][30];
+    private Building[][] map;
     private ArrayList<Building> buildings;
+    private Size size;
+
+    public Map(Size size)
+    {
+        this.size = size;
+        map = new Building[size.getWidth()][size.getHeight()];
+    }
 
     public Building[][] getMap()
     {
@@ -50,5 +58,10 @@ public class Map
         return buildings.stream()
                 .filter(building -> building.getType() == buildingType)
                 .collect(Collectors.toList());
+    }
+
+    public Size getSize()
+    {
+        return size;
     }
 }

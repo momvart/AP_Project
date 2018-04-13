@@ -52,4 +52,9 @@ public abstract class Building
     {
         level++;
     }
+
+    public BuildingInfo getBuildingInfo()
+    {
+        return BuildingValues.getBuildingInfo(getType());
+    }
 }
