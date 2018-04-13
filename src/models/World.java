@@ -5,7 +5,7 @@ import models.buildings.BuildingValues;
 
 public class World
 {
-    Game game;
+    public static Game sCurrentGame;
 
     public void initialize()
     {
