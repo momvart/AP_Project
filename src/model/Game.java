@@ -22,6 +22,11 @@ public class Game
 
     public void addScore(int score)
     {
+        this.score += score;
+    }
+
+    public void passTurn()
+    {
 
     }
 }
