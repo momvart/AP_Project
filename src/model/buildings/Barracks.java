@@ -8,7 +8,7 @@ public class Barracks extends VillageBuilding
     @Override
     public int getType()
     {
-        return 0;
+        return 6;
     }
 
     @Override

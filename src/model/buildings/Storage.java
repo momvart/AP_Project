@@ -1,7 +1,7 @@
 package model.buildings;
 
 
-public class Storage extends VillageBuilding
+public abstract class Storage extends VillageBuilding
 {
     int capacity;
     int currentAmount;
@@ -14,12 +14,6 @@ public class Storage extends VillageBuilding
     public int getFreeCapacity()
     {
         return currentAmount;
-    }
-
-    @Override
-    public int getType()
-    {
-        return 0;
     }
 
     @Override

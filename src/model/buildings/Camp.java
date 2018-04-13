@@ -15,7 +15,7 @@ public class Camp extends VillageBuilding
     @Override
     public int getType()
     {
-        return 0;
+        return 7;
     }
 
     @Override

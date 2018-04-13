@@ -1,10 +1,10 @@
 package model.buildings;
 
-public class Wall extends Building
+public class ElixirStorage extends Storage
 {
     @Override
     public int getType()
     {
-        return 12;
+        return 4;
     }
 }

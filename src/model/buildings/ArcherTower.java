@@ -11,6 +11,6 @@ public class ArcherTower extends DefensiveTower
     @Override
     public int getType()
     {
-        return 0;
+        return 8;
     }
 }
