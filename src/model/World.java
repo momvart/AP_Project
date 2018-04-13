@@ -1,13 +1,15 @@
 package model;
 
 
+import model.buildings.BuildingValues;
+
 public class World
 {
     Game game;
 
     public void initialize()
     {
-
+        BuildingValues.initialize();
     }
 
     public void passTurn()

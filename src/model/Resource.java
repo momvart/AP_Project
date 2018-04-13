@@ -5,6 +5,12 @@ public class Resource
     int gold;
     int elixir;
 
+    public Resource(int gold, int elixir)
+    {
+        this.gold = gold;
+        this.elixir = elixir;
+    }
+
     public int getGold()
     {
         return gold;
