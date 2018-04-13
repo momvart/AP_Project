@@ -2,7 +2,7 @@ package menus;
 
 import models.buildings.Building;
 
-public class BuildingInfoSubmenu extends Submenu
+public class BuildingInfoSubmenu extends Submenu implements IBuildingMenu
 {
     public BuildingInfoSubmenu(ParentMenu parent)
     {

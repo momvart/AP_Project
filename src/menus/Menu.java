@@ -54,17 +54,19 @@ public class Menu
 
     public static class Id
     {
-        public static final int BUILDING_MENU = 1000;
+        public static final int VILLAGE_MAIN_MENU = 0x0000;
 
-        public static final int BUILDING_INFO = 1010;
-        public static final int OVERALL_INFO = 1011;
-        public static final int UPGRADE_INFO = 1012;
+        public static final int BUILDING_MENU = 0x1000;
 
-        public static final int TH_AVAILABLE_BUILDINGS = 1110;
-        public static final int TH_AVAILABLE_BUILDING_ITEM = 1111;
-        public static final int TH_STATUS = 1120;
+        public static final int BUILDING_INFO = 0x1010;
+        public static final int OVERALL_INFO = 0x1011;
+        public static final int UPGRADE_INFO = 0x1012;
 
-        public static final int BARRACKS_TRAIN_SOLDIER = 1210;
-        public static final int BARRACKS_TRAIN_ITEM = 1211;
+        public static final int TH_AVAILABLE_BUILDINGS = 0x1110;
+        public static final int TH_AVAILABLE_BUILDING_ITEM = 0x1111;
+        public static final int TH_STATUS = 0x1120;
+
+        public static final int BARRACKS_TRAIN_SOLDIER = 0x1210;
+        public static final int BARRACKS_TRAIN_ITEM = 0x1211;
     }
 }

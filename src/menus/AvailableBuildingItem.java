@@ -8,7 +8,7 @@ public class AvailableBuildingItem extends Menu
 
     public AvailableBuildingItem(int buildingType)
     {
-        super(Id.TH_AVAILABLE_BUILDING_ITEM, BuildingValues.getInfo(buildingType).getName());
+        super(Id.TH_AVAILABLE_BUILDING_ITEM, BuildingValues.getBuildingInfo(buildingType).getName());
         this.buildingType = buildingType;
     }
 

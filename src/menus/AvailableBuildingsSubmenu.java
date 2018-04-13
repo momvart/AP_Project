@@ -1,10 +1,11 @@
 package menus;
 
 import models.Village;
+import models.buildings.Building;
 
 import java.util.ArrayList;
 
-public class AvailableBuildingsSubmenu extends Submenu
+public class AvailableBuildingsSubmenu extends Submenu implements IBuildingMenu
 {
     private Village village;
 
@@ -23,5 +24,11 @@ public class AvailableBuildingsSubmenu extends Submenu
     {
         setItems();
         return super.getItems();
+    }
+
+    @Override
+    public Building getBuilding()
+    {
+        return ((BuildingSubmenu)parent).getBuilding();
     }
 }
