@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 public abstract class SoldierValues
 {
-    private ArrayList<SoldierInfo> soldierInfos;
+    private static ArrayList<SoldierInfo> infos;
 
-    public void initialize()
+    public static void initialize()
     {
 
     }
 
-    public SoldierInfo getSoldierInfo(int type)
+    public static SoldierInfo getSoldierInfo(int type)
     {
-
+        return infos.get(type - 1);
     }
 }
