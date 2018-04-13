@@ -1,6 +1,6 @@
 package menus;
 
-import model.buildings.Building;
+import models.buildings.Building;
 
 public class BuildingInfoSubmenu extends Submenu
 {
