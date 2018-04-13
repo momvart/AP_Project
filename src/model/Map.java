@@ -1,5 +1,6 @@
 package model;
 
+import model.Soldiers.Soldier;
 import model.buildings.Building;
 import model.buildings.DefenseType;
 import utils.Point;
