@@ -11,6 +11,6 @@ public class WizardTower extends DefensiveTower
     @Override
     public int getType()
     {
-        return 0;
+        return 11;
     }
 }

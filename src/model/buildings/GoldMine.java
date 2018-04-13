@@ -11,6 +11,6 @@ public class GoldMine extends Mine
     @Override
     public int getType()
     {
-        return 0;
+        return 1;
     }
 }

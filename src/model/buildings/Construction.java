@@ -11,7 +11,7 @@ public class Construction
     Point location;
     int builderNum;
     Building building;
-
+    boolean finished = false;
     public Construction(int buildingType, int startTurn, int constructTime, ConstructMode constructMode, Point location, int builderNum, Building building)
     {
         this.buildingType = buildingType;
@@ -23,13 +23,15 @@ public class Construction
         this.building = building;
     }
 
-    public boolean isFinished()
+    public boolean isFinished(int turn)
     {
-        return false;
+        return turn == startTurn + constructTime;
     }
 
     public void finishConstruction()
     {
+        building.buildStatus = BuildStatus.BUILT;
+        finished = true;
 
     }
 

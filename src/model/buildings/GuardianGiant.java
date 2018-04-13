@@ -11,6 +11,6 @@ public class GuardianGiant extends DefensiveTower
     @Override
     public int getType()
     {
-        return 0;
+        return 14;
     }
 }

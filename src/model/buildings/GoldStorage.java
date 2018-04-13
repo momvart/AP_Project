@@ -1,10 +1,11 @@
 package model.buildings;
 
-public class Wall extends Building
+public class GoldStorage extends Storage
 {
+
     @Override
     public int getType()
     {
-        return 12;
+        return 3;
     }
 }

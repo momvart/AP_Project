@@ -42,4 +42,17 @@ public class ConstructionManager
 
 
     }
+
+    public void checkConstructions(Village village)
+    {
+        for (Construction construction : constructions)
+        {
+            if (construction.isFinished(village.getTurn()))
+            {
+                construction.finishConstruction();
+                Builder builder = village.getTownHall().getBuilderByNum(construction.getBuilderNum());
+                builder.setBuilderStatus(BuilderStatus.FREE);
+            }
+        }
+    }
 }

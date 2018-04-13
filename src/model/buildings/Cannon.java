@@ -11,6 +11,6 @@ public class Cannon extends DefensiveTower
     @Override
     public int getType()
     {
-        return 0;
+        return 9;
     }
 }
