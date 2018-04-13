@@ -12,6 +12,7 @@ public class Construction
     int builderNum;
     Building building;
     boolean finished = false;
+
     public Construction(int buildingType, int startTurn, int constructTime, ConstructMode constructMode, Point location, int builderNum, Building building)
     {
         this.buildingType = buildingType;
@@ -40,6 +41,8 @@ public class Construction
         return buildingType;
     }
 
+    public BuildingInfo getBuildingInfo() {return BuildingValues.getBuildingInfo(buildingType);}
+
     public int getRemainingTurns()
     {
         return 0;
@@ -50,4 +53,9 @@ public class Construction
         return builderNum;
     }
 
+    @Override
+    public String toString()
+    {
+        return getBuildingInfo().getName() + " " + getRemainingTurns();
+    }
 }

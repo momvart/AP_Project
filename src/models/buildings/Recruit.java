@@ -1,6 +1,8 @@
 package models.buildings;
 
 import models.soldiers.Soldier;
+import models.soldiers.SoldierInfo;
+import models.soldiers.SoldierValues;
 
 public class Recruit
 {
@@ -13,6 +15,8 @@ public class Recruit
     {
         return soldierType;
     }
+
+    public SoldierInfo getSoldierInfo() {return SoldierValues.getSoldierInfo(soldierType);}
 
     public boolean isFinished()
     {
@@ -29,4 +33,9 @@ public class Recruit
 
     }
 
+    @Override
+    public String toString()
+    {
+        return getSoldierInfo().getName() + " " + getRemainingTurns();
+    }
 }
