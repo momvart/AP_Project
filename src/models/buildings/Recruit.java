@@ -20,7 +20,7 @@ public class Recruit
 
     public boolean isFinished()
     {
-
+        return false;
     }
 
     public int getRemainingTurns()

@@ -5,6 +5,12 @@ public class Builder
     int builderNum;
     BuilderStatus builderStatus;
 
+    public Builder(int builderNum)
+    {
+        this.builderNum = builderNum;
+        this.builderStatus = BuilderStatus.FREE;
+    }
+
     public int getBuilderNum()
     {
         return builderNum;

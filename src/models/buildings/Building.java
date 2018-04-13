@@ -15,7 +15,7 @@ public abstract class Building
 
     public String getName()
     {
-        return BuildingValues.getInfo(getType()).getName();
+        return BuildingValues.getBuildingInfo(getType()).getName();
     }
 
     public int getBuildingNum()

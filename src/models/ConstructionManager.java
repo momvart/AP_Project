@@ -20,7 +20,7 @@ public class ConstructionManager
     public void construct(int buildingType, Point location)
     {
         // TODO: 4/13/18 : define new method for getting a building with buildungType 
-        Building building;
+        Building building = null;
         // TODO: 4/13/18 : get constructTime from static information of BuildingInfo
         int constructTime = 0;
         ConstructMode constructMode;
@@ -47,7 +47,7 @@ public class ConstructionManager
             if (construction.isFinished(village.getTurn()))
             {
                 construction.finishConstruction();
-                Builder builder = village.getTownHall().getBuilderByNum(construction.getBuilderNum());
+                Builder builder = village.getMap().getTownHall().getBuilderByNum(construction.getBuilderNum());
                 builder.setBuilderStatus(BuilderStatus.FREE);
                 constructions.remove(i);
                 i--;

@@ -53,4 +53,9 @@ public class Village
     {
         return soldiers;
     }
+
+    public Resource getResources()
+    {
+        // TODO: 4/13/18 : gets all storages in map and returns resources
+    }
 }

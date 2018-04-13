@@ -7,19 +7,8 @@ import java.util.ArrayList;
 
 public class TownHall extends VillageBuilding
 {
-    int goldCapactiy;
-    int elixirCapacity;
     ArrayList<Builder> builders;
 
-    public int getGoldCapactiy()
-    {
-        return goldCapactiy;
-    }
-
-    public int getElixirCapacity()
-    {
-        return elixirCapacity;
-    }
 
     @Override
     public int getType()
@@ -31,6 +20,7 @@ public class TownHall extends VillageBuilding
     public void upgrade()
     {
         super.upgrade();
+        addBuilder();
     }
 
     public Builder getAvailableBuilder()
@@ -53,5 +43,13 @@ public class TownHall extends VillageBuilding
         }
         // TODO: 4/13/18 : throw BuilderNotFound Exception
         return null;
+    }
+
+    private void addBuilder()
+    {
+        if (builders.size() < this.level / 5 + 1)
+        {
+            Builder builder = new Builder(builders.size() + 1);
+        }
     }
 }

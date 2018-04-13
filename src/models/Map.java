@@ -23,11 +23,6 @@ public class Map
         return buildings;
     }
 
-    public ArrayList<Soldier> getSoldiers()
-    {
-        return soldiers;
-    }
-
     public boolean isValid(Point location)
     {
         return false;
@@ -46,5 +41,27 @@ public class Map
     public TownHall getTownHall()
     {
         return (TownHall)buildings.get(0);
+    }
+
+    public ArrayList<Building> getBuildings(int getType)
+    {
+        ArrayList<Building> buildingArray = new ArrayList<>(getBuildingsCount(getType));
+        for (Building building : buildings)
+        {
+            if (building.getType() == getType)
+                buildingArray.add(building);
+        }
+        return buildingArray;
+    }
+
+    public int getBuildingsCount(int getType)
+    {
+        int count = 0;
+        for (Building building : buildings)
+        {
+            if (building.getType() == getType)
+                count++;
+        }
+        return count;
     }
 }

@@ -1,5 +1,7 @@
 package models.buildings;
 
+import models.Attack;
+
 public class Trap extends DefensiveTower
 {
     @Override

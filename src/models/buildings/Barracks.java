@@ -1,5 +1,7 @@
 package models.buildings;
 
+import models.soldiers.Soldier;
+
 public class Barracks extends VillageBuilding
 {
     int soldierBrewTimeDecrease;

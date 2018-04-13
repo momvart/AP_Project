@@ -11,7 +11,7 @@ public class Attack
 {
     private ArrayList<Soldier> attackSoldiers;
     private ArrayList<Soldier> troopsToBeDeployed;
-    private Resource claimedResorce;
+    private Resource claimedResource;
     private Map map;
     private int turn;
 
@@ -69,9 +69,9 @@ public class Attack
 
     }
 
-    public Resource getClaimedResorce()
+    public Resource getClaimedResource()
     {
-        return claimedResorce;
+        return claimedResource;
     }
 
     public ArrayList<Soldier> getUnits(int unitType)
