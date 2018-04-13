@@ -51,4 +51,8 @@ public class Village
         return turn;
     }
 
+    public ArrayList<Soldier> getSoldiers()
+    {
+        return soldiers;
+    }
 }
