@@ -15,6 +15,8 @@ public class Barracks extends VillageBuilding
     public void upgrade()
     {
         super.upgrade();
+        if (soldierBrewTimeDecrease > 0)
+            soldierBrewTimeDecrease--;
     }
 
     public int getSoldierBrewTimeDecrease()

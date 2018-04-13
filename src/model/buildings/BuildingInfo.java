@@ -1,5 +1,7 @@
 package model.buildings;
 
+import model.Resource;
+
 public abstract class BuildingInfo
 {
     int type;

@@ -13,6 +13,8 @@ public abstract class Mine extends VillageBuilding
     public void upgrade()
     {
         super.upgrade();
+        double newResourceAdd = resourceAddPerDeltaT * 1.6;
+        resourceAddPerDeltaT = (int) newResourceAdd;
     }
 
     public abstract void mine(Storage storage);

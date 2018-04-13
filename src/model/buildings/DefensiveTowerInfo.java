@@ -1,5 +1,7 @@
 package model.buildings;
 
+import model.Resource;
+
 public class DefensiveTowerInfo extends BuildingInfo
 {
     DefenseType targetType;

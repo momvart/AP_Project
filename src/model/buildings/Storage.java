@@ -26,5 +26,7 @@ public class Storage extends VillageBuilding
     public void upgrade()
     {
         super.upgrade();
+        double newCapacity = capacity * 1.6;
+        capacity = (int) newCapacity;
     }
 }

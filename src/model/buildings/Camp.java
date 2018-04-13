@@ -21,7 +21,7 @@ public class Camp extends VillageBuilding
     @Override
     public void upgrade()
     {
-        super.upgrade();
+        // TODO: 4/13/18 method should throw an exception  
     }
 
     public void heal()
