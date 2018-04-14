@@ -35,7 +35,12 @@ public class Map
 
     public boolean isValid(Point location)
     {
-        return false;
+        return isValid(location.getX(), location.getY());
+    }
+
+    public boolean isValid(int x, int y)
+    {
+
     }
 
     public Building getNearestBuilding(Point location, int BuildingType)
