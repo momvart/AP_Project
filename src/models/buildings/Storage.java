@@ -13,6 +13,11 @@ public abstract class Storage extends VillageBuilding
 
     public int getFreeCapacity()
     {
+        return capacity - currentAmount;
+    }
+
+    public int getCurrentAmount()
+    {
         return currentAmount;
     }
 

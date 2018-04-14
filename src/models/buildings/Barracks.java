@@ -1,10 +1,13 @@
 package models.buildings;
 
+import models.TrainingManager;
+import models.Village;
 import models.soldiers.Soldier;
 
 public class Barracks extends VillageBuilding
 {
     int soldierBrewTimeDecrease;
+    Village village;
     TrainingManager trainingManager = new TrainingManager();
 
     @Override
@@ -26,8 +29,9 @@ public class Barracks extends VillageBuilding
         return soldierBrewTimeDecrease;
     }
 
-    public void trainSoldier(Soldier soldier)
+    public void trainSoldier(int soldierType)
     {
-
+        Soldier soldier = null;
+        trainingManager.train(soldier);
     }
 }

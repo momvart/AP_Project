@@ -32,7 +32,7 @@ public class ConstructionManager
         Builder builder = village.getMap().getTownHall().getAvailableBuilder();
         int builderNum = builder.getBuilderNum();
         builder.setBuilderStatus(BuilderStatus.WORKING);
-        Construction construction = new Construction(buildingType, village.getTurn(), constructTime, constructMode, location, builderNum, building);
+        Construction construction = new Construction(buildingType, constructTime, constructMode, location, builderNum, building, village);
         constructions.add(construction);
 
 
