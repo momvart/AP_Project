@@ -56,4 +56,9 @@ public abstract class Soldier
     {
         this.location = location;
     }
+
+    public void heal()
+    {
+        this.health = SoldierValues.getSoldierInfo(this.getType()).getInitialHealth();
+    }
 }
