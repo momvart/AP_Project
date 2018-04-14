@@ -1,6 +1,7 @@
 package models.buildings;
 
 import models.Village;
+import models.World;
 import utils.Point;
 
 public class Construction
@@ -13,23 +14,21 @@ public class Construction
     int builderNum;
     Building building;
     boolean finished = false;
-    Village village;
 
-    public Construction(int buildingType, int constructTime, ConstructMode constructMode, Point location, int builderNum, Building building, Village village)
+    public Construction(int buildingType, int constructTime, ConstructMode constructMode, Point location, int builderNum, Building building)
     {
         this.buildingType = buildingType;
-        this.startTurn = village.getTurn();
+        this.startTurn = World.sCurrentGame.getVillage().getTurn();
         this.constructTime = constructTime;
         this.constructMode = constructMode;
         this.location = location;
         this.builderNum = builderNum;
         this.building = building;
-        this.village = village;
     }
 
-    public boolean isFinished(int turn)
+    public boolean isFinished()
     {
-        return turn == startTurn + constructTime;
+        return World.sCurrentGame.getVillage().getTurn() == startTurn + constructTime;
     }
 
     public void finishConstruction()
@@ -48,7 +47,7 @@ public class Construction
 
     public int getRemainingTurns()
     {
-        return startTurn + constructTime - village.getTurn();
+        return startTurn + constructTime - World.sCurrentGame.getVillage().getTurn();
     }
 
     public int getBuilderNum()

@@ -32,7 +32,7 @@ public class ConstructionManager
         Builder builder = village.getMap().getTownHall().getAvailableBuilder();
         int builderNum = builder.getBuilderNum();
         builder.setBuilderStatus(BuilderStatus.WORKING);
-        Construction construction = new Construction(buildingType, constructTime, constructMode, location, builderNum, building, village);
+        Construction construction = new Construction(buildingType, constructTime, constructMode, location, builderNum, building);
         constructions.add(construction);
 
 
@@ -44,7 +44,7 @@ public class ConstructionManager
         for (int i = 0; i < constructions.size(); i++)
         {
             construction = constructions.get(i);
-            if (construction.isFinished(village.getTurn()))
+            if (construction.isFinished())
             {
                 construction.finishConstruction();
                 Builder builder = village.getMap().getTownHall().getBuilderByNum(construction.getBuilderNum());

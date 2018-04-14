@@ -59,23 +59,6 @@ public class Village
 
     public Resource getResources()
     {
-        Resource resource = new Resource(0, 0);
-        int goldAmount = 0;
-        int elixirAmount = 0;
-        List<Building> buildings = map.getBuildings(3);
-        for (Building building : buildings)
-        {
-            Storage storage = (Storage)building;
-            goldAmount += storage.getCurrentAmount();
-        }
-        buildings = map.getBuildings(4);
-        for (Building building : buildings)
-        {
-            Storage storage = (Storage)building;
-            elixirAmount += storage.getCurrentAmount();
-        }
-        resource.gold = goldAmount;
-        resource.elixir = elixirAmount;
-        return resource;
+        return map.getResources();
     }
 }

@@ -28,4 +28,6 @@ public abstract class Storage extends VillageBuilding
         double newCapacity = capacity * 1.6;
         capacity = (int) newCapacity;
     }
+
+
 }

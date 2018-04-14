@@ -1,9 +1,7 @@
 package models;
 
+import models.buildings.*;
 import models.soldiers.Soldier;
-import models.buildings.Building;
-import models.buildings.DefenseType;
-import models.buildings.TownHall;
 import utils.Point;
 import utils.Size;
 
@@ -16,6 +14,8 @@ public class Map
     private Building[][] map;
     private ArrayList<Building> buildings;
     private Size size;
+    private ArrayList<Storage> storages;
+    private ArrayList<DefensiveTower> defensiveTowers;
 
     public Map(Size size)
     {
@@ -63,5 +63,28 @@ public class Map
     public Size getSize()
     {
         return size;
+    }
+
+    public Resource getResources()
+    {
+        Resource resource = new Resource(0, 0);
+        for (Storage storage : storages)
+        {
+            if (storage.getType() == 3)
+                resource.gold += storage.getCurrentAmount();
+            else
+                resource.elixir += storage.getCurrentAmount();
+        }
+        return resource;
+    }
+
+    public ArrayList<Storage> getStorages()
+    {
+        return storages;
+    }
+
+    public ArrayList<DefensiveTower> getDefensiveTowers()
+    {
+        return defensiveTowers;
     }
 }

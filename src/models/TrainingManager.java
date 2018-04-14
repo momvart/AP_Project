@@ -12,7 +12,7 @@ public class TrainingManager
 
     public void train(Soldier soldier)
     {
-        Recruit recruit = new Recruit(soldier.getType(), soldier.getArmyUnitInfo().getBrewTime(), soldier, village);
+        Recruit recruit = new Recruit(soldier.getType(), soldier.getArmyUnitInfo().getBrewTime(), soldier);
         recruits.add(recruit);
     }
 

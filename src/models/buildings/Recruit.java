@@ -1,6 +1,7 @@
 package models.buildings;
 
 import models.Village;
+import models.World;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierInfo;
 import models.soldiers.SoldierValues;
@@ -11,15 +12,13 @@ public class Recruit
     private int startTurn;
     private int trainTime;
     private Soldier soldier;
-    private Village village;
 
-    public Recruit(int soldierType, int trainTime, Soldier soldier, Village village)
+    public Recruit(int soldierType, int trainTime, Soldier soldier)
     {
         this.soldierType = soldierType;
-        this.startTurn = village.getTurn();
+        this.startTurn = World.sCurrentGame.getVillage().getTurn();
         this.trainTime = trainTime;
         this.soldier = soldier;
-        this.village = village;
     }
 
     public int getSoldierType()
@@ -31,12 +30,12 @@ public class Recruit
 
     public boolean isFinished()
     {
-        return village.getTurn() == startTurn + trainTime;
+        return World.sCurrentGame.getVillage().getTurn() == startTurn + trainTime;
     }
 
     public int getRemainingTurns()
     {
-        return trainTime + startTurn - village.getTurn();
+        return trainTime + startTurn - World.sCurrentGame.getVillage().getTurn();
     }
 
     public Soldier getSoldier()
