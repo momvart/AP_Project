@@ -10,22 +10,10 @@ import java.util.List;
 public class Village
 {
     private Map map;
-    private String owner;
     private ConstructionManager constructionManager;
     private VillageStatus villageStatus;
     private int turn;
     private ArrayList<Soldier> soldiers;
-
-
-    public String getOwner()
-    {
-        return owner;
-    }
-
-    public void setOwner(String owner)
-    {
-        this.owner = owner;
-    }
 
     public VillageStatus getVillageStatus()
     {
@@ -40,6 +28,11 @@ public class Village
     public Map getMap()
     {
         return map;
+    }
+
+    public ArrayList<Building> getBuildings()
+    {
+        return map.getBuildings();
     }
 
     public ConstructionManager getConstructionManager()

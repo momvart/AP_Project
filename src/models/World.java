@@ -7,22 +7,27 @@ public class World
 {
     public static Game sCurrentGame;
 
-    public void initialize()
+    public static void initialize()
     {
         BuildingValues.initialize();
     }
 
-    public void passTurn()
+    public static void passTurn()
     {
 
     }
 
-    public void loadGame(Game game)
+    public static void newGame()
+    {
+        loadGame(new Game());
+    }
+
+    public static void loadGame(Game game)
     {
 
     }
 
-    public void saveGame(String path, String name)
+    public static void saveGame(String path, String name)
     {
 
     }

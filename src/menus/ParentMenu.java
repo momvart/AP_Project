@@ -1,15 +1,26 @@
 package menus;
 
+import exceptions.InvalidCommandException;
+
 import java.util.ArrayList;
 
 public class ParentMenu extends Menu
 {
-    ArrayList<Menu> items;
+    protected ArrayList<Menu> items;
+    protected IMenuCommandHandler commandHandler;
 
     public ParentMenu(int id, String text)
     {
         super(id, text);
         items = new ArrayList<>();
+        commandHandler = new MenuNumberCommandHandler();
+    }
+
+    public ParentMenu(int id, String text, IMenuCommandHandler commandHandler)
+    {
+        super(id, text);
+        this.items = new ArrayList<>();
+        this.commandHandler = commandHandler;
     }
 
     public ArrayList<String> getItems()
@@ -20,9 +31,9 @@ public class ParentMenu extends Menu
         return retVal;
     }
 
-    public ParentMenu insertItem(int id , String text)
+    public ParentMenu insertItem(int id, String text)
     {
-        return insertItem( new Menu(id, text));
+        return insertItem(new Menu(id, text));
     }
 
     public ParentMenu insertItem(Menu menu)
@@ -31,8 +42,14 @@ public class ParentMenu extends Menu
         return this;
     }
 
-    public void handleCommand(String command, IMenuContainer container)
+    public void handleCommand(String command, IMenuContainer container) throws InvalidCommandException
     {
-
+        Menu menu = commandHandler.handle(items, command);
+        if (menu == null)
+            throw new InvalidCommandException(command);
+        else if (menu instanceof ParentMenu)
+            container.setCurrentMenu((ParentMenu)menu, true);
+        else
+            container.onMenuItemClicked(menu);
     }
 }

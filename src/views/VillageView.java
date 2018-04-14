@@ -14,10 +14,10 @@ public class VillageView extends ConsoleMenuContainerView
 {
     private Village village;
 
-    public VillageView(Scanner scanner, Village village)
+    public VillageView(Scanner scanner)
     {
         super(scanner);
-        this.village = village;
+        this.village = World.sCurrentGame.getVillage();
     }
 
     public void showWhereAmI()

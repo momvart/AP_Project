@@ -55,6 +55,8 @@ public class Menu
     public static class Id
     {
         public static final int VILLAGE_MAIN_MENU = 0x0000;
+        public static final int VILLAGE_SHOW_BUILDINGS = 0x0100;
+        public static final int VILLAGE_RESOURCES = 0x0001;
 
         public static final int BUILDING_MENU = 0x1000;
 

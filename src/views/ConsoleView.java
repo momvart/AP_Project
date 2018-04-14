@@ -4,13 +4,18 @@ import exceptions.ConsoleException;
 
 import java.util.Scanner;
 
-public abstract class ConsoleView
+public class ConsoleView
 {
     protected Scanner scanner;
 
     public ConsoleView(Scanner scanner)
     {
         this.scanner = scanner;
+    }
+
+    public Scanner getScanner()
+    {
+        return scanner;
     }
 
     public String getCommand()
@@ -21,6 +26,11 @@ public abstract class ConsoleView
         while (command.isEmpty())
             command = scanner.nextLine().trim();
         return command;
+    }
+
+    public void showText(String text)
+    {
+        System.out.println(text);
     }
 
     public void showError(ConsoleException ex)
