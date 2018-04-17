@@ -22,8 +22,8 @@ public class VillageController
 
     public void start()
     {
-        ParentMenu mainMenu = new ParentMenu(Menu.Id.VILLAGE_MAIN_MENU, "", new MenuTextCommandHandler())
-                .insertItem(new ShowBuildingsMenu())
+        ParentMenu mainMenu = new ParentMenu(Menu.Id.VILLAGE_MAIN_MENU, "", new MenuTextCommandHandler());
+        mainMenu.insertItem(new ShowBuildingsMenu(mainMenu))
                 .insertItem(Menu.Id.VILLAGE_RESOURCES, "resources");
         theView.setCurrentMenu(mainMenu, false);
         theView.startGetting();

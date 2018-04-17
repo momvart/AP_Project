@@ -6,11 +6,11 @@ import models.buildings.Building;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class ShowBuildingsMenu extends ParentMenu
+public class ShowBuildingsMenu extends Submenu
 {
-    public ShowBuildingsMenu()
+    public ShowBuildingsMenu(ParentMenu parent)
     {
-        super(Id.VILLAGE_SHOW_BUILDINGS, "showBuildings", new MenuTextCommandHandler());
+        super(Id.VILLAGE_SHOW_BUILDINGS, "showBuildings", parent, new MenuTextCommandHandler());
     }
 
     private void setItems()

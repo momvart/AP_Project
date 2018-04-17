@@ -27,7 +27,7 @@ public class ParentMenu extends Menu
     {
         ArrayList<String> retVal = new ArrayList<>(items.size());
         for (int i = 0; i < items.size(); i++)
-            retVal.add(String.format("%d. %s", i, items.get(i).getText()));
+            retVal.add(String.format("%d. %s", i + 1, items.get(i).getText()));
         return retVal;
     }
 

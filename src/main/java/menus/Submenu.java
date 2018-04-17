@@ -14,6 +14,12 @@ public class Submenu extends ParentMenu
         this.parent = parent;
     }
 
+    public Submenu(int id, String text, ParentMenu parent, IMenuCommandHandler commandHandler)
+    {
+        super(id, text, commandHandler);
+        this.parent = parent;
+    }
+
     public ParentMenu getParent()
     {
         return parent;
