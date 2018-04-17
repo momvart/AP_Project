@@ -1,5 +1,6 @@
 package models.buildings;
 
+import models.World;
 import utils.Point;
 
 public abstract class Building
@@ -10,6 +11,19 @@ public abstract class Building
     protected int level;
     protected int strength;
     protected BuildStatus buildStatus;
+
+    public Building(Point location)
+    {
+        this.location = location;
+        if(World.sCurrentGame != null)
+        this.buildingNum = World.sCurrentGame.getVillage().getBuildings().size() + 1;
+        else
+            buildingNum = 1;
+        this.level = 0;
+        this.strength = BuildingValues.getBuildingInfo(getType()).initialStrength;
+        this.destroyed = false;
+        this.buildStatus = BuildStatus.BUILT;
+    }
 
     public abstract int getType();
 

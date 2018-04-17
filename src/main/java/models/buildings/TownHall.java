@@ -2,12 +2,18 @@ package models.buildings;
 
 import models.Builder;
 import models.BuilderStatus;
+import utils.Point;
 
 import java.util.ArrayList;
 
 public class TownHall extends VillageBuilding
 {
     ArrayList<Builder> builders;
+
+    public TownHall(Point location)
+    {
+        super(location);
+    }
 
 
     @Override

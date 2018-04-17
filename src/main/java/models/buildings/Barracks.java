@@ -3,12 +3,18 @@ package models.buildings;
 import models.TrainingManager;
 import models.Village;
 import models.soldiers.Soldier;
+import utils.Point;
 
 public class Barracks extends VillageBuilding
 {
     int soldierBrewTimeDecrease;
     Village village;
     TrainingManager trainingManager = new TrainingManager();
+
+    public Barracks(Point location)
+    {
+        super(location);
+    }
 
     @Override
     public int getType()

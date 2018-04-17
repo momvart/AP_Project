@@ -1,9 +1,14 @@
 package models.buildings;
 
+import utils.Point;
+
 public class GoldMine extends Mine
 {
-    public GoldMine()
+
+
+    public GoldMine(Point location)
     {
+        super(location);
         setResourceAddPerDeltaT(10);
     }
 

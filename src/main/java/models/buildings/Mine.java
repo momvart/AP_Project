@@ -1,8 +1,15 @@
 package models.buildings;
 
+import utils.Point;
+
 public abstract class Mine extends VillageBuilding
 {
     int resourceAddPerDeltaT;
+
+    public Mine(Point location)
+    {
+        super(location);
+    }
 
     public int getResourceAddPerDeltaT()
     {

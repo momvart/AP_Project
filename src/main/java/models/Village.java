@@ -2,6 +2,7 @@ package models;
 
 import models.buildings.*;
 import models.soldiers.Soldier;
+import utils.Point;
 import utils.Size;
 
 import java.util.ArrayList;
@@ -55,32 +56,4 @@ public class Village
         return map.getResources();
     }
 
-    public Building getNewBuilding(int type)
-    {
-        VillageBuilding villageBuilding;
-        switch (type)
-        {
-            case 1:
-                villageBuilding = new GoldMine();
-                break;
-            case 2:
-                villageBuilding = new ElixirMine();
-                break;
-            case 3:
-                villageBuilding = new GoldStorage();
-                break;
-            case 4:
-                villageBuilding = new ElixirStorage();
-                break;
-            case 5:
-                villageBuilding = new TownHall();
-                break;
-            case 6:
-                villageBuilding = new Barracks();
-                break;
-            case 7:
-                villageBuilding = new Camp();
-                break;
-        }
-    }
 }

@@ -25,21 +25,22 @@ public class BuildingValues
         int[] buildDurations = { 100, 100, 100, 100, 100, 100, 100, 60, 100, 60, 120, 20, 40, 4000 };
         int[] destroyScores = { 2, 2, 3, 3, 8, 1, 1, 3, 4, 3, 5, 1, 1, 6 };
         DefenseType[] defenseTypes = { GROUND, GROUND, AIR, BOTH, GROUND, GROUND, GROUND };
+        int[] initialStrength = {200,200,300,300,1000,300,900,300,400,300,700,100,100,700};
 
         for (int i = 0; i < 7; i++)
         {
-            VillageBuildingInfo villageBuildingInfo = new VillageBuildingInfo(i, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i]);
+            VillageBuildingInfo villageBuildingInfo = new VillageBuildingInfo(i, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i],initialStrength[i]);
             infos.add(villageBuildingInfo);
         }
         for (int i = 7; i < 14; i++)
         {
             if (i == 11)
             {
-                VillageBuildingInfo villageBuildingInfo = new VillageBuildingInfo(i, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i]);
+                VillageBuildingInfo villageBuildingInfo = new VillageBuildingInfo(i, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i],initialStrength[i]);
                 infos.add(villageBuildingInfo);
                 continue;
             }
-            DefensiveTowerInfo defensiveTowerInfo = new DefensiveTowerInfo(i, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i], defenseTypes[i - 7]);
+            DefensiveTowerInfo defensiveTowerInfo = new DefensiveTowerInfo(i, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i], defenseTypes[i - 7],initialStrength[i]);
             infos.add(defensiveTowerInfo);
         }
     }

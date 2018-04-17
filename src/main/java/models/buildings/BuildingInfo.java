@@ -10,8 +10,9 @@ public abstract class BuildingInfo
     int buildDuration;
     int destroyScore;
     Resource destroyResource;
+    int initialStrength;
 
-    public BuildingInfo(int type, String name, Resource buildCost, int buildDuration, int destroyScore, Resource destroyResource)
+    public BuildingInfo(int type, String name, Resource buildCost, int buildDuration, int destroyScore, Resource destroyResource, int initialStrength)
     {
         this.type = type;
         this.name = name;
@@ -19,6 +20,7 @@ public abstract class BuildingInfo
         this.buildDuration = buildDuration;
         this.destroyScore = destroyScore;
         this.destroyResource = destroyResource;
+        this.initialStrength = initialStrength;
     }
 
     public int getType()
@@ -49,5 +51,10 @@ public abstract class BuildingInfo
     public Resource getDestroyResource()
     {
         return destroyResource;
+    }
+
+    public int getInitialStrength()
+    {
+        return initialStrength;
     }
 }

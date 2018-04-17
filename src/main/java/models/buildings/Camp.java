@@ -1,6 +1,7 @@
 package models.buildings;
 
 import models.soldiers.Soldier;
+import utils.Point;
 
 import java.util.ArrayList;
 
@@ -8,6 +9,11 @@ public class Camp extends VillageBuilding
 {
     int capacity;
     ArrayList<Soldier> soldiers;
+
+    public Camp(Point location)
+    {
+        super(location);
+    }
 
     public int getCapacity()
     {

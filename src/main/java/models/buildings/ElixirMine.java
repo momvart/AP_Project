@@ -1,9 +1,12 @@
 package models.buildings;
 
+import utils.Point;
+
 public class ElixirMine extends Mine
 {
-    public ElixirMine()
+    public ElixirMine(Point location)
     {
+        super(location);
         setResourceAddPerDeltaT(5);
     }
 

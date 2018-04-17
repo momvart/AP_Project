@@ -1,10 +1,17 @@
 package models.buildings;
 
 
+import utils.Point;
+
 public abstract class Storage extends VillageBuilding
 {
     int capacity;
     int currentAmount;
+
+    public Storage(Point location)
+    {
+        super(location);
+    }
 
     public int getCapacity()
     {

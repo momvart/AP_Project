@@ -5,7 +5,6 @@ import models.soldiers.Soldier;
 import utils.Point;
 import utils.Size;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +21,12 @@ public class Map
     {
         this.size = size;
         map = new Building[size.getWidth()][size.getHeight()];
-
+        TownHall townHall = BuildingFactory.createBuildingByType(TownHall.class, new Point(size.getWidth() / 2 - 1, size.getHeight() / 2 - 1));
+        map[14][14] = townHall;
+        map[14][15] = townHall;
+        map[15][14] = townHall;
+        map[15][15] = townHall;
+        buildings.add(townHall);
     }
 
     public Building[][] getMap()

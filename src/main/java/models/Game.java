@@ -2,8 +2,8 @@ package models;
 
 public class Game
 {
-    Village village;
-    int score;
+    Village village = new Village();
+    int score = 0;
 
     public Village getVillage()
     {
