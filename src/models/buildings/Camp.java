@@ -28,6 +28,9 @@ public class Camp extends VillageBuilding
 
     public void heal()
     {
-
+        for (Soldier soldier : soldiers)
+        {
+            soldier.heal();
+        }
     }
 }

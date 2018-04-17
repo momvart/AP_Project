@@ -18,4 +18,9 @@ public abstract class Mine extends VillageBuilding
     }
 
     public abstract void mine(Storage storage);
+
+    protected void setResourceAddPerDeltaT(int resourceAddPerDeltaT)
+    {
+        this.resourceAddPerDeltaT = resourceAddPerDeltaT;
+    }
 }
