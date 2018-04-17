@@ -1,5 +1,7 @@
 package menus;
 
+import models.soldiers.*;
+
 public class TrainSoldierItem extends Menu
 {
     private static final String sItemTextPattern = "%s %c x%d";
@@ -11,7 +13,7 @@ public class TrainSoldierItem extends Menu
     {
         super(Id.BARRACKS_TRAIN_ITEM,
                 String.format(sItemTextPattern,
-                        SoldierValues.getInfo(soldierType).getName(),
+                        SoldierValues.getSoldierInfo(soldierType).getName(),
                         availableCount >= 0 ? 'A' : 'U',
                         availableCount));
         this.soldierType = soldierType;

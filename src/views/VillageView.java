@@ -1,11 +1,11 @@
 package views;
 
+import exceptions.InvalidCommandException;
 import models.*;
 import models.Map;
 import models.buildings.*;
 import models.soldiers.*;
 import menus.*;
-import utils.*;
 import views.dialogs.*;
 
 import java.util.*;
@@ -70,7 +70,7 @@ public class VillageView extends ConsoleMenuContainerView
 
         return new TextInputDialog(scanner,
                 String.format("Where do you want to build %s?", buildingName),
-                "\\(\\d,\\d\\)")
+                "\\((?<x>\\d+),(?<y>\\d+)\\)")
                 .showDialog();
     }
 

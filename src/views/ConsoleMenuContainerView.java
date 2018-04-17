@@ -1,5 +1,6 @@
 package views;
 
+import exceptions.InvalidCommandException;
 import menus.*;
 
 import java.util.ArrayList;
@@ -15,6 +16,30 @@ public abstract class ConsoleMenuContainerView extends ConsoleView implements IM
         super(scanner);
     }
 
+    private boolean getCancelled = false;
+
+    public void startGetting()
+    {
+        getCancelled = false;
+        while (!getCancelled)
+        {
+            String command = getCommand();
+            try
+            {
+                currentMenu.handleCommand(command, this);
+            }
+            catch (InvalidCommandException ex)
+            {
+                showError(ex);
+            }
+        }
+    }
+
+    public void stopGetting()
+    {
+        getCancelled = true;
+    }
+
     @Override
     public void onMenuItemClicked(Menu menu)
     {
@@ -24,9 +49,9 @@ public abstract class ConsoleMenuContainerView extends ConsoleView implements IM
     @Override
     public void setCurrentMenu(ParentMenu menu, boolean showNow)
     {
+        currentMenu = menu;
         if (showNow)
             showCurrentMenu();
-        currentMenu = menu;
     }
 
     @Override

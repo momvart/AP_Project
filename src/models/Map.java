@@ -40,7 +40,8 @@ public class Map
 
     public boolean isValid(int x, int y)
     {
-
+        //TODO: return correct value
+        return false;
     }
 
     public Building getNearestBuilding(Point location, int BuildingType)

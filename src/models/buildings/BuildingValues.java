@@ -15,6 +15,7 @@ public class BuildingValues
     public static void initialize()
     {
         //TODO: read from file or set info's
+        infos = new ArrayList<>();
         String[] names = { "Gold mine", "Elixir mine", "Gold storage", "Elixir storage", "Main building", "Barracks",
                 "Camp", "Archer tower", "Cannon", "Air defense", "Wizard tower", "Wall", "Trap", "Guardian Giant" };
         Resource[] buildCosts = { new Resource(150, 5), new Resource(100, 3), new Resource(200, 0)
@@ -23,7 +24,7 @@ public class BuildingValues
                 , new Resource(100, 0), new Resource(100, 0), new Resource(10000, 0) };
         int[] buildDurations = { 100, 100, 100, 100, 100, 100, 100, 60, 100, 60, 120, 20, 40, 4000 };
         int[] destroyScores = { 2, 2, 3, 3, 8, 1, 1, 3, 4, 3, 5, 1, 1, 6 };
-        DefenseType[] defenseTypes = { GROUND, GROUND, AIR, BOTH, GROUND, GROUND };
+        DefenseType[] defenseTypes = { GROUND, GROUND, AIR, BOTH, GROUND, GROUND, GROUND };
 
         for (int i = 0; i < 7; i++)
         {

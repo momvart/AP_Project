@@ -24,7 +24,8 @@ public class World
 
     public static void loadGame(Game game)
     {
-
+        //TODO: add additional settings
+        sCurrentGame = game;
     }
 
     public static void saveGame(String path, String name)

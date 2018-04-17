@@ -6,4 +6,9 @@ public class InvalidCommandException extends ConsoleException
     {
         super("invalid command", "invalid command: " + command);
     }
+
+    public InvalidCommandException(String command, String details)
+    {
+        super("invalid command", "invalid command: " + command + '\n' + details);
+    }
 }
