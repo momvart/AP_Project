@@ -7,6 +7,8 @@ public class Healer extends Soldier
 {
     private int timeTillDie = 10;
 
+    public Healer() {super();}
+
     public int getType()
     {
         return 5;
