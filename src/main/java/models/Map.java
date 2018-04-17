@@ -8,6 +8,7 @@ import utils.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Map
 {
@@ -65,11 +66,10 @@ public class Map
         return (TownHall)buildings.get(0);
     }
 
-    public List<Building> getBuildings(int buildingType)
+    public Stream<Building> getBuildings(int buildingType)
     {
         return buildings.stream()
-                .filter(building -> building.getType() == buildingType)
-                .collect(Collectors.toList());
+                .filter(building -> building.getType() == buildingType);
     }
 
     public Size getSize()

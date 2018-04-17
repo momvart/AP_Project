@@ -3,6 +3,9 @@ package models.buildings;
 import models.World;
 import utils.Point;
 
+import java.util.Comparator;
+import java.util.Optional;
+
 public abstract class Building
 {
     protected int buildingNum;
@@ -15,10 +18,18 @@ public abstract class Building
     public Building(Point location)
     {
         this.location = location;
-        if(World.sCurrentGame != null)
-        this.buildingNum = World.sCurrentGame.getVillage().getBuildings().size() + 1;
+        if (World.sCurrentGame != null)
+        {
+            World.sCurrentGame.getVillage().getMap().getBuildings(getType())
+                    .max(Comparator.comparingInt(Building::getBuildingNum))
+                    .ifPresent(building -> {
+                        if (building.buildingNum == 0)
+                            building.buildingNum = 1;
+                        this.buildingNum = building.buildingNum + 1;
+                    });
+        }
         else
-            buildingNum = 1;
+            buildingNum = 0;
         this.level = 0;
         this.strength = BuildingValues.getBuildingInfo(getType()).initialStrength;
         this.destroyed = false;
