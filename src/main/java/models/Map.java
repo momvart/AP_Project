@@ -5,6 +5,7 @@ import models.soldiers.Soldier;
 import utils.Point;
 import utils.Size;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,15 +13,16 @@ import java.util.stream.Collectors;
 public class Map
 {
     private Building[][] map;
-    private ArrayList<Building> buildings;
+    private ArrayList<Building> buildings = new ArrayList<>();
     private Size size;
-    private ArrayList<Storage> storages;
-    private ArrayList<DefensiveTower> defensiveTowers;
+    private ArrayList<Storage> storages = new ArrayList<>();
+    private ArrayList<DefensiveTower> defensiveTowers = new ArrayList<>();
 
     public Map(Size size)
     {
         this.size = size;
         map = new Building[size.getWidth()][size.getHeight()];
+
     }
 
     public Building[][] getMap()
