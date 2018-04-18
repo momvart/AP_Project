@@ -1,7 +1,12 @@
 package models.buildings;
 
+import menus.AvailableBuildingsSubmenu;
+import menus.Menu;
+import menus.ParentMenu;
+import menus.Submenu;
 import models.Builder;
 import models.BuilderStatus;
+import models.World;
 import utils.Point;
 
 import java.util.ArrayList;
@@ -58,5 +63,14 @@ public class TownHall extends VillageBuilding
             Builder builder = new Builder(builders.size() + 1);
             builders.add(builder);
         }
+    }
+
+    @Override
+    public Submenu getMenu(ParentMenu parent)
+    {
+        Submenu menu = super.getMenu(parent);
+        menu.insertItem(new AvailableBuildingsSubmenu(menu, World.sCurrentGame.getVillage()))
+                .insertItem(new Menu(Menu.Id.TH_STATUS, "Status"));
+        return menu;
     }
 }

@@ -10,7 +10,7 @@ public class ShowBuildingsMenu extends Submenu
 {
     public ShowBuildingsMenu(ParentMenu parent)
     {
-        super(Id.VILLAGE_SHOW_BUILDINGS, "showBuildings", parent, new MenuTextCommandHandler());
+        super(Id.VILLAGE_SHOW_BUILDINGS, "showBuildings", parent, MenuNumTextCommandHandler.getInstance());
     }
 
     private void setItems()
@@ -18,7 +18,7 @@ public class ShowBuildingsMenu extends Submenu
         items = new ArrayList<>();
         World.sCurrentGame.getVillage().getBuildings().stream()
                 .sorted(Comparator.comparing(Building::getName).thenComparing(Building::getBuildingNum))
-                .forEachOrdered(b -> items.add(new BuildingSubmenu(this, b)));
+                .forEachOrdered(b -> items.add(b.getMenu(this)));
     }
 
     @Override

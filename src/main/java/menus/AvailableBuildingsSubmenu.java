@@ -12,6 +12,7 @@ public class AvailableBuildingsSubmenu extends Submenu implements IBuildingMenu
     public AvailableBuildingsSubmenu(ParentMenu parent, Village village)
     {
         super(Id.TH_AVAILABLE_BUILDINGS, "Available buildings", parent);
+        this.village = village;
     }
 
     private void setItems()

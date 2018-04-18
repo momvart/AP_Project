@@ -10,7 +10,7 @@ import static models.buildings.ConstructMode.*;
 public class ConstructionManager
 {
     Village village;
-    ArrayList<Construction> constructions;
+    ArrayList<Construction> constructions = new ArrayList<>();
 
     public ArrayList<Construction> getConstructions()
     {

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Submenu extends ParentMenu
 {
-    ParentMenu parent;
+    protected ParentMenu parent;
 
     public Submenu(int id, String text, ParentMenu parent)
     {
@@ -41,8 +41,7 @@ public class Submenu extends ParentMenu
     @Override
     public void handleCommand(String command, IMenuContainer container) throws InvalidCommandException
     {
-        if (commandHandler instanceof MenuNumberCommandHandler && command.equals(Integer.toString(items.size() + 1))
-                || commandHandler instanceof MenuTextCommandHandler && command.equalsIgnoreCase("back"))
+        if (command.equals(Integer.toString(items.size() + 1)) || command.equalsIgnoreCase("back"))
             container.setCurrentMenu(parent, true);
         else
             super.handleCommand(command, container);

@@ -20,6 +20,28 @@ public class VillageView extends ConsoleMenuContainerView
         this.village = World.sCurrentGame.getVillage();
     }
 
+    @Override
+    public void onMenuItemClicked(Menu menu)
+    {
+        switch (menu.getId())
+        {
+            case Menu.Id.VILLAGE_RESOURCES:
+                showResources();
+                break;
+            case Menu.Id.OVERALL_INFO:
+                showBuildingOverallInfo(((IBuildingMenu)currentMenu).getBuilding());
+                break;
+            case Menu.Id.UPGRADE_INFO:
+                showUpgradeInfo(((IBuildingMenu)currentMenu).getBuilding());
+                break;
+            case Menu.Id.TH_STATUS:
+                showConstructionsStatus(World.sCurrentGame.getVillage().getConstructionManager().getConstructions());
+                break;
+            default:
+                super.onMenuItemClicked(menu);
+        }
+    }
+
     public void showWhereAmI()
     {
         //TODO: check if has more possibilities.

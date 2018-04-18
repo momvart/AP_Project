@@ -13,7 +13,7 @@ public class ParentMenu extends Menu
     {
         super(id, text);
         items = new ArrayList<>();
-        commandHandler = new MenuNumberCommandHandler();
+        commandHandler = MenuNumTextCommandHandler.getInstance();
     }
 
     public ParentMenu(int id, String text, IMenuCommandHandler commandHandler)

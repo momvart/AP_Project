@@ -6,19 +6,11 @@ public class Menu
 
     private int id;
     private String text;
-    private String command;
 
     public Menu(int id, String text)
     {
         this.id = id;
         this.text = text;
-    }
-
-    public Menu(int id, String text, String command)
-    {
-        this.id = id;
-        this.text = text;
-        this.command = command;
     }
 
     public int getId()
@@ -39,16 +31,6 @@ public class Menu
     public void setText(String text)
     {
         this.text = text;
-    }
-
-    public String getCommand()
-    {
-        return command;
-    }
-
-    public void setCommand(String command)
-    {
-        this.command = command;
     }
 
 
