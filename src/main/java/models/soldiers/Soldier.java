@@ -12,9 +12,9 @@ public abstract class Soldier
 
     public abstract int getType();
 
-    void setAttackHelper(AttackHelper attackHelper)
+    public AttackHelper getAttackHelper()
     {
-        this.attackHelper = attackHelper;
+        return attackHelper;
     }
 
     public int getLevel()

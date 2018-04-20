@@ -1,6 +1,5 @@
 package models;
 
-import models.buildings.Building;
 import models.buildings.DefensiveTower;
 import models.soldiers.Soldier;
 import utils.Point;
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 public class Attack
 {
     private ArrayList<Soldier> attackSoldiers;
-    private ArrayList<Soldier> troopsToBeDeployed;
     private Resource claimedResource;
     private Map map;
     private int turn;
@@ -23,55 +21,104 @@ public class Attack
     public void addUnit(Soldier soldier)
     {
         attackSoldiers.add(soldier);
-        troopsToBeDeployed.add(soldier);
         soldier.participateIn(this);
     }
 
-    public void putUnit(int unitType, int count, Point location)
+    public void putUnits(int unitType, int count, Point location)
     {
-        /*ArrayList<Soldier> deployedTroops = new ArrayList<>();
-        for (int i = 0; i < count && exists(unitType); i++)
+        if(getUnitsInToBeDeplyed(unitType) != null && getUnitsInToBeDeplyed(unitType).size() >= count)//TODO‌ Exceptions of more than 5 soldiers should be handled later on , when we come to an agreemaent of how to suppose the soldiers on the map
         {
-            for (Soldier soldier : troopsToBeDeployed)
+            for (int i = 0; i < count ; i++)
             {
-                if (soldier.getType() == unitType)
-                {
-                    soldier.setLocation(location);
-                    deployedTroops.add(soldier);
-                    break;
-                }
+                putUnit(getUnitsInToBeDeplyed(unitType).get(i)  ,  location);
             }
         }
-        troopsToBeDeployed.removeAll(deployedTroops);
-
-        if ()
-        {
-
-        }*/
-        //TODO we should come to agreement into a whole for how to implement the mechanism of putting soldiers on the map
     }
 
-    private boolean exists(int unitType)
+    private void putUnit(Soldier soldier, Point location)
     {
-        for (Soldier attackSoldier : troopsToBeDeployed)
+        if (map.isValid(location))
         {
-            if (attackSoldier.getType() == unitType)
+            soldier.setLocation(location);
+            soldier.getAttackHelper().setSoldierIsDeployed(true);
+        }
+    }
+
+    public ArrayList<Soldier> getSoldiersToBeDeployed()
+    {
+        ArrayList<Soldier> troopsToBeDeplyed = new ArrayList<>();
+        for (Soldier attackSoldier : attackSoldiers)
+        {
+            if (attackSoldier.getAttackHelper().isSoldierDeployed() == false)
             {
-                return true;
+                troopsToBeDeplyed.add(attackSoldier);
             }
         }
-        return false;
+        return troopsToBeDeplyed;
+    }
+
+    public ArrayList<Soldier> getUnitsInToBeDeplyed(int unitType)
+    {
+        ArrayList<Soldier> reqTroops = new ArrayList<>();
+        for (Soldier soldier : getSoldiersToBeDeployed())
+        {
+            if (soldier.getType() == unitType)
+            {
+                reqTroops.add(soldier);
+            }
+        }
+        return reqTroops;
     }
 
     public void passTurn()
     {
-        //TODO a lot of things to be done...
+        moveSoldiers();
+        setNewTargetToSoldiers();
+        fireSoldiers();
+        turn++;
+    }
 
+    private void setNewTargetToSoldiers()
+    {
+        for (Soldier soldier : getSoldiersOnMap())
+        {
+            soldier.getAttackHelper().setTarget();
+        }
+    }
+
+
+    private void fireSoldiers()
+    {
+        for (Soldier soldier : getSoldiersOnMap())
+        {
+            soldier.getAttackHelper().fire();
+        }
+    }
+
+    private void moveSoldiers()
+    {
+        for (Soldier soldier : getSoldiersOnMap())
+        {
+            soldier.getAttackHelper().move();
+        }
     }
 
     public Resource getClaimedResource()
     {
         return claimedResource;
+    }
+
+    public ArrayList<Soldier> getSoldiersOnMap()
+    {
+        ArrayList<Soldier> deployedSoldiers = new ArrayList<>();
+        for (Soldier attackSoldier : attackSoldiers)
+        {
+            if (attackSoldier.getAttackHelper().isSoldierDeployed())
+            {
+                deployedSoldiers.add(attackSoldier);
+            }
+        }
+        return deployedSoldiers;
     }
 
     public ArrayList<Soldier> getUnits(int unitType)
@@ -95,11 +142,11 @@ public class Attack
     public ArrayList<DefensiveTower> getTowers(int towerType)
     {
         ArrayList<DefensiveTower> requiredTowers = new ArrayList<>();
-        for (Building building : map.getBuildings())
+        for (DefensiveTower defensiveTower : map.getDefensiveTowers())
         {
-            if (DefensiveTower.class.isAssignableFrom(building.getClass()) && building.getType() == towerType)
+            if (defensiveTower.getType() == towerType)
             {
-                requiredTowers.add((DefensiveTower)building);
+                requiredTowers.add(defensiveTower);
             }
         }
         return requiredTowers;
@@ -107,15 +154,7 @@ public class Attack
 
     public ArrayList<DefensiveTower> getAllTowers()
     {
-        ArrayList<DefensiveTower> defensiveTowers = new ArrayList<>();
-        for (Building building : map.getBuildings())
-        {
-            if (DefensiveTower.class.isAssignableFrom(building.getClass()))
-            {
-                defensiveTowers.add((DefensiveTower)building);
-            }
-        }
-        return defensiveTowers;
+        return map.getDefensiveTowers();
     }
 
     public void quitAttack()
@@ -123,4 +162,8 @@ public class Attack
 
     }
 
+    public Map getMap()
+    {
+        return map;
+    }
 }

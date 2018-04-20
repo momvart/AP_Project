@@ -10,7 +10,7 @@ public class HealerAttackHelper extends AttackHelper
 
     public HealerAttackHelper(Attack attack)
     {
-        super(attack);
+        super(attack, null, null);
     }
 
     @Override
