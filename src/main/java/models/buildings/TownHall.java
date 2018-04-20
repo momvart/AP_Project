@@ -1,5 +1,6 @@
 package models.buildings;
 
+import exceptions.NoAvailableBuilderException;
 import menus.AvailableBuildingsSubmenu;
 import menus.Menu;
 import menus.ParentMenu;
@@ -13,11 +14,13 @@ import java.util.ArrayList;
 
 public class TownHall extends VillageBuilding
 {
-    ArrayList<Builder> builders;
+    ArrayList<Builder> builders = new ArrayList<>();
 
     public TownHall(Point location)
     {
         super(location);
+        Builder builder = new Builder(1);
+        builders.add(builder);
     }
 
 
@@ -34,15 +37,14 @@ public class TownHall extends VillageBuilding
         addBuilder();
     }
 
-    public Builder getAvailableBuilder()
+    public Builder getAvailableBuilder() throws NoAvailableBuilderException
     {
         for (Builder builder : builders)
         {
             if (builder.getBuilderStatus() == BuilderStatus.FREE)
                 return builder;
         }
-        // TODO: 4/13/18 : throw BuilderNotAvailable Exception
-        return null;
+        throw new NoAvailableBuilderException("No available builder","no Available Builder");
     }
 
     public Builder getBuilderByNum(int num)

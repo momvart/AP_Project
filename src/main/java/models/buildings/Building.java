@@ -81,6 +81,11 @@ public abstract class Building
         level++;
     }
 
+    public void decreaseStrength(int amount)
+    {
+        this.strength -= amount;
+    }
+
     public BuildingInfo getBuildingInfo()
     {
         return BuildingValues.getBuildingInfo(getType());

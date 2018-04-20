@@ -11,7 +11,7 @@ import java.util.List;
 public class Village
 {
     private Map map = new Map(new Size(30, 30));
-    private ConstructionManager constructionManager = new ConstructionManager();
+    private ConstructionManager constructionManager = new ConstructionManager(this);
     private VillageStatus villageStatus = VillageStatus.NORMAL;
     private int turn = 0;
     private ArrayList<Soldier> soldiers = new ArrayList<>();

@@ -22,7 +22,7 @@ public class BuildingValues
                 , new Resource(200, 0), new Resource(200, 0), new Resource(200, 0), new Resource(200, 0)
                 , new Resource(300, 0), new Resource(400, 0), new Resource(300, 0), new Resource(500, 0)
                 , new Resource(100, 0), new Resource(100, 0), new Resource(10000, 0) };
-        int[] buildDurations = { 100, 100, 100, 100, 100, 100, 100, 60, 100, 60, 120, 20, 40, 4000 };
+        int[] buildDurations = { 300, 100, 200, 100, 100, 100, 100, 60, 100, 60, 120, 20, 40, 4000 };
         int[] destroyScores = { 2, 2, 3, 3, 8, 1, 1, 3, 4, 3, 5, 1, 1, 6 };
         DefenseType[] defenseTypes = { GROUND, GROUND, AIR, BOTH, GROUND, GROUND, GROUND };
         int[] initialStrength = {200,200,300,300,1000,300,900,300,400,300,700,100,100,700};

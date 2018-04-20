@@ -1,5 +1,6 @@
 package models;
 
+import exceptions.NoAvailableBuilderException;
 import models.buildings.*;
 import utils.Point;
 
@@ -9,20 +10,23 @@ import static models.buildings.ConstructMode.*;
 
 public class ConstructionManager
 {
-    Village village;
-    ArrayList<Construction> constructions = new ArrayList<>();
+    public ConstructionManager(Village village)
+    {
+        this.village = village;
+    }
+
+    private Village village;
+    private ArrayList<Construction> constructions = new ArrayList<>();
 
     public ArrayList<Construction> getConstructions()
     {
         return constructions;
     }
 
-    public void construct(int buildingType, Point location)
+    public void construct(int buildingType, Point location) throws NoAvailableBuilderException
     {
-        // TODO: 4/13/18 : define new method for getting a building with buildungType 
-        Building building = null;
-        // TODO: 4/13/18 : get constructTime from static information of BuildingInfo
-        int constructTime = 0;
+        Building building = BuildingFactory.createBuildingByTypeId(buildingType,location);
+        int constructTime = building.getBuildingInfo().getBuildDuration();
         ConstructMode constructMode;
         if (village.getMap().isValid(location))
             constructMode = CONSTRUCT;
@@ -55,5 +59,4 @@ public class ConstructionManager
 
         }
     }
-
 }

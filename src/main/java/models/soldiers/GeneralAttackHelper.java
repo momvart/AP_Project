@@ -121,6 +121,6 @@ public class GeneralAttackHelper extends AttackHelper
     private boolean isTargetReachable(Building favouriteTarget)
     {
         //TODO we should check if there is a road to the target (including the 4sideOpenity of target)
-
+        return false;
     }
 }

@@ -28,6 +28,10 @@ public class Map
         map[15][14] = townHall;
         map[15][15] = townHall;
         buildings.add(townHall);
+        Storage goldStorage = BuildingFactory.createBuildingByType(GoldStorage.class, new Point(size.getWidth() / 2 - 4, size.getHeight() / 2 - 4));
+        buildings.add(goldStorage);
+        Storage elixirStorage = BuildingFactory.createBuildingByType(ElixirStorage.class,new Point(size.getWidth()/2 + 4 ,size.getHeight()/2 + 4 ));
+        buildings.add(elixirStorage);
     }
 
     public Building[][] getMap()
