@@ -118,8 +118,9 @@ public class GeneralAttackHelper extends AttackHelper
         return manhatanianDistance(getSoldierLocation() , favoutriteTarget.getLocation()) < 24;//TODO to be manipulated for increasing the performance
     }
 
-    private boolean isTargetReachable(Building favoutriteTarget)
+    private boolean isTargetReachable(Building favouriteTarget)
     {
         //TODO we should check if there is a road to the target (including the 4sideOpenity of target)
+
     }
 }
