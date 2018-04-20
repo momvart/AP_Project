@@ -3,6 +3,10 @@ package models.buildings;
 import models.World;
 import utils.Point;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Stream;
+
 public abstract class Mine extends VillageBuilding
 {
     int resourceAddPerDeltaT;
@@ -26,7 +30,7 @@ public abstract class Mine extends VillageBuilding
         resourceAddPerDeltaT = (int)newResourceAdd;
     }
 
-    public void passTurn(Storage storage)
+    public void passTurn()
     {
         minedResources += resourceAddPerDeltaT;
     }
@@ -36,10 +40,16 @@ public abstract class Mine extends VillageBuilding
         this.resourceAddPerDeltaT = resourceAddPerDeltaT;
     }
 
-    protected void mine()
+    public  void mine()
     {
-        Storage storage = (Storage)World.sCurrentGame.getVillage().getMap().getBuildings(getType() + 2);
-        storage.addToStorage(minedResources);
+        ArrayList<Storage> storages = World.sCurrentGame.getVillage().getMap().getStorages();
+        storages.sort(Comparator.comparingInt(Storage::getFreeCapacity).reversed());
+        storages.get(0).addToStorage(minedResources);
         minedResources = 0 ;
+    }
+
+    public int getMinedResources()
+    {
+        return minedResources;
     }
 }

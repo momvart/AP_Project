@@ -58,6 +58,6 @@ public class Construction
     @Override
     public String toString()
     {
-        return getBuildingInfo().getName() + " " + getRemainingTurns();
+        return getBuildingInfo().getName() + " " + getRemainingTurns() + " " + constructMode.toString();
     }
 }

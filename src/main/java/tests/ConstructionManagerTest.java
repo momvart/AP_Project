@@ -1,7 +1,9 @@
-package models;
+package tests;
 
 import exceptions.ConsoleException;
 import exceptions.NoAvailableBuilderException;
+import models.ConstructionManager;
+import models.World;
 import models.buildings.Construction;
 import utils.Point;
 
@@ -27,6 +29,7 @@ public class ConstructionManagerTest
             System.out.println(construction.toString());
             System.out.println(construction.getBuilderNum());
             System.out.println(construction.isFinished());
+
         }
     }
 
@@ -35,6 +38,7 @@ public class ConstructionManagerTest
     {
 
         constructionManager.construct(1,new Point(2,3));
+
     }
     @org.junit.Test
     public void secondTestconstruct() throws NoAvailableBuilderException
