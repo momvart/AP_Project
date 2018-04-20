@@ -43,7 +43,10 @@ public abstract class Mine extends VillageBuilding
     public  void mine()
     {
         ArrayList<Storage> storages = World.sCurrentGame.getVillage().getMap().getStorages();
-        storages.sort(Comparator.comparingInt(Storage::getFreeCapacity).reversed());
+        if(this.getType() == 1)
+        storages.sort(Comparator.comparingInt(Storage::getType).thenComparingInt(Storage::getFreeCapacity));
+        else
+            storages.sort(Comparator.comparingInt(Storage::getType).reversed().thenComparingInt(Storage::getFreeCapacity));
         storages.get(0).addToStorage(minedResources);
         minedResources = 0 ;
     }

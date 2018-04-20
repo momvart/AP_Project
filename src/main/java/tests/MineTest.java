@@ -44,29 +44,36 @@ public class MineTest
     @Test
     public void mine()
     {
-        System.out.println(goldStorage.toString());
-        System.out.println(elixirStorage.toString());
-        System.out.println(goldMine.toString());
-        System.out.println(elixirMine.toString());
-        System.out.println();
-        System.out.println(goldMine.getResourceAddPerDeltaT());
-        System.out.println(elixirMine.getResourceAddPerDeltaT());
+        goldMine.passTurn();
         goldMine.passTurn();
         elixirMine.passTurn();
-        System.out.println(goldMine.getMinedResources());
-        System.out.println(elixirMine.getMinedResources());
+        elixirMine.passTurn();
+        assertEquals(goldStorage.getCurrentAmount(),0);
+        assertEquals(elixirStorage.getCurrentAmount(),0);;
+        assertEquals(elixirMine.getMinedResources(),10);
+        assertEquals(goldMine.getMinedResources(),20);
         goldMine.mine();
         elixirMine.mine();
-        System.out.println(goldMine.getMinedResources());
-        System.out.println(elixirMine.getMinedResources());
-        elixirMine.passTurn();
+        assertEquals(goldStorage.getCurrentAmount(),20);
+        assertEquals(elixirStorage.getCurrentAmount(),10);;
+        assertEquals(elixirMine.getMinedResources(),0);
+        assertEquals(goldMine.getMinedResources(),0);
+        goldMine.passTurn();
+        goldMine.passTurn();
         goldMine.passTurn();
         elixirMine.passTurn();
-        goldMine.passTurn();
         elixirMine.passTurn();
-        goldMine.passTurn();
+        elixirMine.passTurn();
+        assertEquals(goldStorage.getCurrentAmount(),20);
+        assertEquals(elixirStorage.getCurrentAmount(),10);;
+        assertEquals(elixirMine.getMinedResources(),15);
+        assertEquals(goldMine.getMinedResources(),30);
+        goldMine.mine();
+        elixirMine.mine();
+        assertEquals(goldStorage.getCurrentAmount(),50);
+        assertEquals(elixirStorage.getCurrentAmount(),20);;
+        assertEquals(elixirMine.getMinedResources(),0);
+        assertEquals(goldMine.getMinedResources(),0);
 
-        System.out.println(goldMine.getMinedResources());
-        System.out.println(elixirMine.getMinedResources());
     }
 }
