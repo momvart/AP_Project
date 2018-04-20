@@ -33,8 +33,11 @@ public abstract class Storage extends VillageBuilding
     {
         super.upgrade();
         double newCapacity = capacity * 1.6;
-        capacity = (int) newCapacity;
+        capacity = (int)newCapacity;
     }
 
-
+    public void addToStorage(int amount)
+    {
+        currentAmount = (amount + currentAmount) <= capacity ? amount + currentAmount : capacity;
+    }
 }
