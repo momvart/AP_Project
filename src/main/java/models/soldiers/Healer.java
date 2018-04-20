@@ -14,11 +14,6 @@ public class Healer extends Soldier
         return 5;
     }
 
-    public int getHealingAmount()
-    {
-        return SoldierValues.getSoldierInfo(this.getType()).getInitialDamage();//TODO I'm teling that damage of healer should be her healing amount
-    }
-
     public void ageOneDeltaT()
     {
         if (timeTillDie > 0)
@@ -35,6 +30,6 @@ public class Healer extends Soldier
     @Override
     public void participateIn(Attack attack)
     {
-        super.setAttackHelper(new HealerAttackHelper(attack));
+        setAttackHelper(new HealerAttackHelper(attack, SoldierValues.getSoldierInfo(this.getType()).getFavouriteTarget(), getLocation(), getDamage(), SoldierValues.getSoldierInfo(this.getType()).getRange()));
     }
 }

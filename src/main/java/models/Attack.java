@@ -1,6 +1,7 @@
 package models;
 
 import models.buildings.DefensiveTower;
+import models.soldiers.Healer;
 import models.soldiers.Soldier;
 import utils.Point;
 
@@ -72,11 +73,63 @@ public class Attack
 
     public void passTurn()
     {
+        ageHealersOnMap();
+        killAgedHealers();
+        removeDeadUnits();
         moveSoldiers();
         setNewTargetToSoldiers();
         fireSoldiers();
         turn++;
     }
+
+    private void removeDeadUnits()
+    {
+        ArrayList<Soldier> walkingDeadSoldiers = new ArrayList<>();
+        for (Soldier attackSoldier : attackSoldiers)
+        {
+            if (attackSoldier.getHealth() <= 0)
+            {
+                walkingDeadSoldiers.add(attackSoldier);
+            }
+        }
+        attackSoldiers.removeAll(walkingDeadSoldiers);
+    }
+
+    private void killAgedHealers()
+    {
+        ArrayList<Healer> walkingDeadHealers = new ArrayList<>();
+        for (Healer healer : getHealersOnMap())
+        {
+            if (healer.getTimeTillDie() <= 0)
+            {
+                walkingDeadHealers.add(healer);
+            }
+        }
+        attackSoldiers.removeAll(walkingDeadHealers);
+    }
+
+    private void ageHealersOnMap()
+    {
+
+        for (Healer healer : getHealersOnMap())
+        {
+            healer.ageOneDeltaT();
+        }
+    }
+
+    private ArrayList<Healer> getHealersOnMap()
+    {
+        ArrayList<Healer> healers = new ArrayList<>();
+        for (Soldier soldier : getSoldiersOnMap())
+        {
+            if (soldier.getType() == new Healer().getType())
+            {
+                healers.add((Healer)soldier);
+            }
+        }
+        return healers;
+    }
+
 
     private void setNewTargetToSoldiers()
     {

@@ -29,12 +29,12 @@ public abstract class Soldier
 
     public void decreaseHealth(int amount)
     {
-        health -= amount;
+        health = Math.max(health - amount, 0);
     }
 
     public int getDamage()
     {
-        return SoldierValues.getSoldierInfo(this.getType()).getInitialDamage() + level;
+        return SoldierValues.getSoldierInfo(this.getType()).getInitialDamage() + level - 1;
     }
 
     public SoldierInfo getArmyUnitInfo()
@@ -44,7 +44,7 @@ public abstract class Soldier
 
     public void participateIn(Attack attack)
     {
-        this.attackHelper = new GeneralAttackHelper(attack);
+        this.attackHelper = new GeneralAttackHelper(attack, SoldierValues.getSoldierInfo(this.getType()).getFavouriteTarget(), this.getLocation(), this.getDamage(), SoldierValues.getSoldierInfo(this.getType()).getRange());
     }
 
     public Point getLocation()
@@ -57,8 +57,23 @@ public abstract class Soldier
         this.location = location;
     }
 
+    public void setAttackHelper(AttackHelper attackHelper)
+    {
+        this.attackHelper = attackHelper;//TODO‌ note that this parts application is in healer participateIn method
+    }
+
     public void heal()
     {
-        this.health = SoldierValues.getSoldierInfo(this.getType()).getInitialHealth();
+        this.health = getInitialHelathOfUnitThisLevel();
+    }
+
+    private int getInitialHelathOfUnitThisLevel()
+    {
+        return SoldierValues.getSoldierInfo(this.getType()).getInitialDamage() + (level - 1) * 5;//TODO levels are supposed starting from 1
+    }
+
+    public void increaseHealth(int amount)
+    {
+        this.health = Math.min(this.getHealth() + amount, getInitialHelathOfUnitThisLevel());
     }
 }
