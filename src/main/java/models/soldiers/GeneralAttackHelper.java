@@ -2,7 +2,6 @@ package models.soldiers;
 
 import models.Attack;
 import models.buildings.Building;
-import models.buildings.DefensiveTower;
 import utils.Point;
 
 import java.util.ArrayList;
@@ -55,16 +54,23 @@ public class GeneralAttackHelper extends AttackHelper
         }
     }
 
-    private DefensiveTower getNearestBuilding()
+    private Building getNearestBuilding()
     {
-        ArrayList<DefensiveTower> towers = attack.getMap().getDefensiveTowers();
-        for (int i = 1; i <= 60  ; i++)
+        if (attack.getMap().getBuildings() != null)
         {
-            for (DefensiveTower tower : towers)
+            ArrayList<Building> buildings = attack.getMap().getBuildings();
+            ArrayList<Integer> distances = new ArrayList<>();
+            for (Building building : buildings)
             {
-                if (manhatanianDistance(getSoldierLocation() ,tower.getLocation()) == i)
+                distances.add(euclidianDistance(building.getLocation(), getSoldierLocation()));
+            }
+            Collections.sort(distances);
+
+            for (Building building : buildings)
+            {
+                if (euclidianDistance(building.getLocation(), getSoldierLocation()) == distances.get(0))
                 {
-                    return tower;
+                    return building;
                 }
             }
         }
