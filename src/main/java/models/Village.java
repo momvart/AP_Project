@@ -57,25 +57,34 @@ public class Village
         return map.getResources();
     }
 
+    public Resource getTotalResourceCapacity()
+    {
+        int gold = 0, elixir = 0;
+        for (Storage storage : map.getStorages())
+            if (storage instanceof GoldStorage)
+                gold += storage.getCapacity();
+            else
+                elixir += storage.getCapacity();
+        return new Resource(gold, elixir);
+    }
+
     public void construct(int buildingType, Point location) throws NotEnoughResourceException, NoAvailableBuilderException
     {
-
         Resource cost = BuildingValues.getBuildingInfo(buildingType).getBuildCost();
-        Resource available  = getResources();
-        if(available.isLessThanOrEqual(cost))
-            throw new NotEnoughResourceException(available,cost);
-        constructionManager.construct(buildingType,location);
-        getResources().decrease(cost);
-
-    }
-    public void  upgradeBuilding(Building building) throws NotEnoughResourceException, NoAvailableBuilderException
-    {
-        Resource cost= BuildingValues.getBuildingInfo(building.getType()).getBuildCost();
         Resource available = getResources();
-        if(available.isLessThanOrEqual(cost))
-            throw new NotEnoughResourceException(available,cost);
+        if (available.isLessThanOrEqual(cost))
+            throw new NotEnoughResourceException(available, cost);
+        constructionManager.construct(buildingType, location);
+        getResources().decrease(cost);
+    }
+
+    public void upgradeBuilding(Building building) throws NotEnoughResourceException, NoAvailableBuilderException
+    {
+        Resource cost = BuildingValues.getBuildingInfo(building.getType()).getBuildCost();
+        Resource available = getResources();
+        if (available.isLessThanOrEqual(cost))
+            throw new NotEnoughResourceException(available, cost);
         constructionManager.upgrade(building);
         getResources().decrease(cost);
-
     }
 }

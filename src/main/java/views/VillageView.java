@@ -150,10 +150,14 @@ public class VillageView extends ConsoleMenuContainerView
 
     public void showStorageSourceInfo(Storage storage)
     {
-//        System.out.printf("Your %s storage is %d / %d",
-//                storage instanceof GoldStorage ? "gold" : "elixir",
-//                storage.getCapacity() - storage.getFreeCapacity(),
-//                storage.getCapacity());
+        if (storage instanceof GoldStorage)
+            System.out.printf("Your %s storage is %d / %d loaded.", "gold",
+                    village.getResources().getGold(),
+                    village.getTotalResourceCapacity().getGold());
+        else
+            System.out.printf("Your %s storage is %d / %d loaded.", "elixir",
+                    village.getResources().getElixir(),
+                    village.getTotalResourceCapacity().getElixir());
     }
 
     public void showAttackInfo(DefensiveTower tower)

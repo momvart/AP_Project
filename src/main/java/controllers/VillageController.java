@@ -1,5 +1,6 @@
 package controllers;
 
+import exceptions.ConsoleException;
 import menus.*;
 import models.Village;
 import models.World;
@@ -38,13 +39,18 @@ public class VillageController implements IMenuClickListener
         {
             case Menu.Id.UPGRADE_COMMAND:
             {
-g                Building building = ((IBuildingMenu)menu).getBuilding();
+                Building building = ((IBuildingMenu)theView.getCurrentMenu()).getBuilding();
                 Resource cost = building.getBuildingInfo().getUpgradeCost();
                 if (theView.showUpgradeDialog(building.getName(), cost).getResultCode() != DialogResultCode.YES)
                     break;
-                if (World.sCurrentGame.getVillage().getResources().isGreaterThanOrEqual(cost))
-                    //TODO: call upgrade method.
-                    ;
+                try
+                {
+                    World.getVillage().upgradeBuilding(building);
+                }
+                catch (ConsoleException ex)
+                {
+                    theView.showError(ex);
+                }
             }
             break;
         }

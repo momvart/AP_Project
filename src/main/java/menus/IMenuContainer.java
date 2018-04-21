@@ -6,6 +6,8 @@ public interface IMenuContainer
 
     void setCurrentMenu(ParentMenu menu, boolean showNow);
 
+    ParentMenu getCurrentMenu();
+
     void showCurrentMenu();
 
     void addClickListener(IMenuClickListener listener);

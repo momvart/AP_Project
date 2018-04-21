@@ -60,6 +60,12 @@ public abstract class ConsoleMenuContainerView extends ConsoleView implements IM
     }
 
     @Override
+    public ParentMenu getCurrentMenu()
+    {
+        return currentMenu;
+    }
+
+    @Override
     public void showCurrentMenu()
     {
         currentMenu.getItems().forEach(System.out::println);
