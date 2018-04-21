@@ -38,7 +38,7 @@ public class VillageController implements IMenuClickListener
         {
             case Menu.Id.UPGRADE_COMMAND:
             {
-                Building building = ((IBuildingMenu)menu).getBuilding();
+g                Building building = ((IBuildingMenu)menu).getBuilding();
                 Resource cost = building.getBuildingInfo().getUpgradeCost();
                 if (theView.showUpgradeDialog(building.getName(), cost).getResultCode() != DialogResultCode.YES)
                     break;

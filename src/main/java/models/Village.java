@@ -68,8 +68,14 @@ public class Village
         getResources().decrease(cost);
 
     }
-    public void  upgradeBuilding(Building building)
+    public void  upgradeBuilding(Building building) throws NotEnoughResourceException, NoAvailableBuilderException
     {
+        Resource cost= BuildingValues.getBuildingInfo(building.getType()).getBuildCost();
+        Resource available = getResources();
+        if(available.isLessThanOrEqual(cost))
+            throw new NotEnoughResourceException(available,cost);
+        constructionManager.upgrade(building);
+        getResources().decrease(cost);
 
     }
 }
