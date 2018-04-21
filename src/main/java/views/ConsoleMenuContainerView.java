@@ -22,22 +22,27 @@ public abstract class ConsoleMenuContainerView extends ConsoleView implements IM
     {
         getCancelled = false;
         while (!getCancelled)
-        {
-            String command = getCommand();
             try
             {
-                currentMenu.handleCommand(command, this);
+                handleCommand(getCommand());
             }
             catch (InvalidCommandException ex)
             {
                 showError(ex);
             }
-        }
     }
 
     public void stopGetting()
     {
         getCancelled = true;
+    }
+
+    protected void handleCommand(String command) throws InvalidCommandException
+    {
+        if (command.equalsIgnoreCase("showmenu"))
+            showCurrentMenu();
+        else
+            currentMenu.handleCommand(command, this);
     }
 
     @Override

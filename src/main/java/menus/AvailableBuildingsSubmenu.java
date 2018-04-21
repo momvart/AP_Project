@@ -1,9 +1,15 @@
 package menus;
 
+import models.Resource;
 import models.Village;
+import models.World;
 import models.buildings.Building;
+import models.buildings.BuildingInfo;
+import models.buildings.BuildingValues;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class AvailableBuildingsSubmenu extends Submenu implements IBuildingMenu
 {
@@ -17,7 +23,12 @@ public class AvailableBuildingsSubmenu extends Submenu implements IBuildingMenu
 
     private void setItems()
     {
-        //TODO: getting list of available buildings from village and set it to `items`
+        Resource availableResource = World.sCurrentGame.getVillage().getResources();
+        items = BuildingValues.getInfos().stream()
+                .filter(info -> info.getBuildCost().isLessThanOrEqual(availableResource))
+                .sorted(Comparator.comparing(BuildingInfo::getName))
+                .map(info -> new Menu(Id.TH_AVAILABLE_BUILDING_ITEM, info.getName()))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override

@@ -6,11 +6,19 @@ public class Menu
 
     private int id;
     private String text;
+    protected boolean clickable = true;
 
     public Menu(int id, String text)
     {
         this.id = id;
         this.text = text;
+    }
+
+    public Menu(int id, String text, boolean clickable)
+    {
+        this.id = id;
+        this.text = text;
+        this.clickable = clickable;
     }
 
     public int getId()
@@ -33,6 +41,10 @@ public class Menu
         this.text = text;
     }
 
+    public boolean isClickable()
+    {
+        return clickable;
+    }
 
     public static class Id
     {
@@ -45,6 +57,7 @@ public class Menu
         public static final int BUILDING_INFO = 0x1010;
         public static final int OVERALL_INFO = 0x1011;
         public static final int UPGRADE_INFO = 0x1012;
+        public static final int UPGRADE_COMMAND = 0x1013;
 
         public static final int TH_AVAILABLE_BUILDINGS = 0x1110;
         public static final int TH_AVAILABLE_BUILDING_ITEM = 0x1111;

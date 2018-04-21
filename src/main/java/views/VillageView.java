@@ -21,6 +21,19 @@ public class VillageView extends ConsoleMenuContainerView
     }
 
     @Override
+    protected void handleCommand(String command) throws InvalidCommandException
+    {
+        switch (command.toLowerCase())
+        {
+            case "whereami":
+                showWhereAmI();
+                break;
+            default:
+                super.handleCommand(command);
+        }
+    }
+
+    @Override
     public void onMenuItemClicked(Menu menu)
     {
         switch (menu.getId())
@@ -70,7 +83,6 @@ public class VillageView extends ConsoleMenuContainerView
     public void showUpgradeInfo(Building building)
     {
         System.out.println("Upgrade Cost: " + building.getBuildingInfo().getBuildCost().toString(false));
-        //TODO: checking for upgrade command
     }
 
     public DialogResult showConstructDialog(String buildingName, Resource cost)

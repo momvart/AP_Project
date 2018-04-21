@@ -8,7 +8,7 @@ public class BuildingInfoSubmenu extends Submenu implements IBuildingMenu
     {
         super(Id.BUILDING_INFO, "Info", parent);
         insertItem(Id.OVERALL_INFO, "Overall info");
-        insertItem(Id.UPGRADE_INFO, "Upgrade info");
+        insertItem(new BuildingUpgradeSubmenu(this));
     }
 
     public Building getBuilding()

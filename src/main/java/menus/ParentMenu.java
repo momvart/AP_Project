@@ -11,7 +11,7 @@ public class ParentMenu extends Menu
 
     public ParentMenu(int id, String text)
     {
-        super(id, text);
+        super(id, text, false);
         items = new ArrayList<>();
         commandHandler = MenuNumTextCommandHandler.getInstance();
     }
@@ -47,9 +47,9 @@ public class ParentMenu extends Menu
         Menu menu = commandHandler.handle(items, command);
         if (menu == null)
             throw new InvalidCommandException(command);
-        else if (menu instanceof ParentMenu)
-            container.setCurrentMenu((ParentMenu)menu, true);
-        else
+        if (menu.isClickable())
             container.onMenuItemClicked(menu);
+        if (menu instanceof ParentMenu)
+            container.setCurrentMenu((ParentMenu)menu, true);
     }
 }

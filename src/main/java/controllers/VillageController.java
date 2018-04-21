@@ -6,8 +6,9 @@ import models.World;
 import views.VillageView;
 import models.*;
 import models.buildings.*;
+import views.dialogs.DialogResultCode;
 
-public class VillageController
+public class VillageController implements IMenuClickListener
 {
     private VillageView theView;
     private Village theVillage;
@@ -17,6 +18,7 @@ public class VillageController
     {
         this.parentController = parentController;
         this.theView = theView;
+        theView.addClickListener(this);
         this.theVillage = World.sCurrentGame.getVillage();
     }
 
@@ -27,5 +29,24 @@ public class VillageController
                 .insertItem(Menu.Id.VILLAGE_RESOURCES, "resources");
         theView.setCurrentMenu(mainMenu, false);
         theView.startGetting();
+    }
+
+    @Override
+    public void onItemClicked(Menu menu)
+    {
+        switch (menu.getId())
+        {
+            case Menu.Id.UPGRADE_COMMAND:
+            {
+                Building building = ((IBuildingMenu)menu).getBuilding();
+                Resource cost = building.getBuildingInfo().getUpgradeCost();
+                if (theView.showUpgradeDialog(building.getName(), cost).getResultCode() != DialogResultCode.YES)
+                    break;
+                if (World.sCurrentGame.getVillage().getResources().isGreaterThanOrEqual(cost))
+                    //TODO: call upgrade method.
+                    ;
+            }
+            break;
+        }
     }
 }
