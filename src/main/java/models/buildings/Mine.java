@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 public abstract class Mine extends VillageBuilding
 {
     int resourceAddPerDeltaT;
-    int minedResources;
+    protected int minedResources;
 
     public Mine(Point location)
     {
@@ -40,16 +40,7 @@ public abstract class Mine extends VillageBuilding
         this.resourceAddPerDeltaT = resourceAddPerDeltaT;
     }
 
-    public  void mine()
-    {
-        ArrayList<Storage> storages = World.sCurrentGame.getVillage().getMap().getStorages();
-        if(this.getType() == 1)
-        storages.sort(Comparator.comparingInt(Storage::getType).thenComparingInt(Storage::getFreeCapacity));
-        else
-            storages.sort(Comparator.comparingInt(Storage::getType).reversed().thenComparingInt(Storage::getFreeCapacity));
-        storages.get(0).addToStorage(minedResources);
-        minedResources = 0 ;
-    }
+    public abstract void mine();
 
     public int getMinedResources()
     {

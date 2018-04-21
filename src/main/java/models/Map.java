@@ -17,6 +17,7 @@ public class Map
     private Size size;
     private ArrayList<Storage> storages = new ArrayList<>();
     private ArrayList<DefensiveTower> defensiveTowers = new ArrayList<>();
+    private Resource resources = new Resource(0,0);
 
     public Map(Size size)
     {
@@ -83,15 +84,7 @@ public class Map
 
     public Resource getResources()
     {
-        Resource resource = new Resource(0, 0);
-        for (Storage storage : storages)
-        {
-            if (storage.getType() == 3)
-                resource.gold += storage.getCurrentAmount();
-            else
-                resource.elixir += storage.getCurrentAmount();
-        }
-        return resource;
+        return resources;
     }
 
     public ArrayList<Storage> getStorages()
@@ -103,4 +96,5 @@ public class Map
     {
         return defensiveTowers;
     }
+
 }

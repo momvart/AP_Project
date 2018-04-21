@@ -6,7 +6,6 @@ import utils.Point;
 public abstract class Storage extends VillageBuilding
 {
     int capacity;
-    int currentAmount;
 
     public Storage(Point location)
     {
@@ -18,16 +17,6 @@ public abstract class Storage extends VillageBuilding
         return capacity;
     }
 
-    public int getFreeCapacity()
-    {
-        return capacity - currentAmount;
-    }
-
-    public int getCurrentAmount()
-    {
-        return currentAmount;
-    }
-
     @Override
     public void upgrade()
     {
@@ -36,8 +25,4 @@ public abstract class Storage extends VillageBuilding
         capacity = (int)newCapacity;
     }
 
-    public void addToStorage(int amount)
-    {
-        currentAmount = (amount + currentAmount) <= capacity ? amount + currentAmount : capacity;
-    }
 }

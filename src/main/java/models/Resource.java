@@ -34,6 +34,21 @@ public class Resource implements Comparable<Resource>
         this.elixir = elixir;
     }
 
+    public Resource decrease(Resource resource)
+    {
+        if(resource.gold > gold || resource.elixir > elixir)
+            throw new IllegalArgumentException("not enough resource in storage to decrease");
+        this.gold -= resource.gold;
+        this.elixir -= resource.elixir;
+        return this;
+    }
+    public Resource increase(Resource resource)
+    {
+        gold += resource.gold;
+        elixir += resource.elixir;
+        return this;
+    }
+
     @Override
     public String toString()
     {
@@ -77,5 +92,7 @@ public class Resource implements Comparable<Resource>
     }
 
     public boolean isLessThanOrEqual(Resource o) {return gold <= o.gold && elixir <= o.elixir;}
+
+
 
 }

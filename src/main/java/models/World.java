@@ -32,4 +32,9 @@ public class World
     {
 
     }
+
+    public static Village getVillage()
+    {
+        return sCurrentGame.getVillage();
+    }
 }

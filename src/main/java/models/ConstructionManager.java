@@ -27,19 +27,21 @@ public class ConstructionManager
     {
         Building building = BuildingFactory.createBuildingByTypeId(buildingType,location);
         int constructTime = building.getBuildingInfo().getBuildDuration();
-        ConstructMode constructMode;
-        if (village.getMap().isValid(location))
-            constructMode = CONSTRUCT;
-        else
-            constructMode = UPGRADE;
-
         Builder builder = village.getMap().getTownHall().getAvailableBuilder();
         int builderNum = builder.getBuilderNum();
         builder.setBuilderStatus(BuilderStatus.WORKING);
-        Construction construction = new Construction(buildingType, constructTime, constructMode, location, builderNum, building);
+        Construction construction = new Construction(buildingType, constructTime, CONSTRUCT, location, builderNum, building);
         constructions.add(construction);
 
 
+    }
+    public void upgrade(Building building) throws NoAvailableBuilderException
+    {
+        int constructTime = building.getBuildingInfo().getBuildDuration();
+        Builder builder = village.getMap().getTownHall().getAvailableBuilder();
+        builder.builderStatus = BuilderStatus.WORKING;
+        Construction construction = new Construction(building.getType(),constructTime,UPGRADE,building.getLocation(),builder.builderNum,building);
+        constructions.add(construction);
     }
 
     public void checkConstructions()
@@ -56,7 +58,6 @@ public class ConstructionManager
                 constructions.remove(i);
                 i--;
             }
-
         }
     }
 }

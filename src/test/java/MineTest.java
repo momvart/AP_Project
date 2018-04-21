@@ -44,6 +44,7 @@ public class MineTest
     @Test
     public void mine()
     {
+        // TODO: 4/21/18 : check more tests
         goldMine.passTurn();
         goldMine.passTurn();
         elixirMine.passTurn();

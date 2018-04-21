@@ -1,12 +1,13 @@
 package models;
 
+import exceptions.NoAvailableBuilderException;
+import exceptions.NotEnoughResourceException;
 import models.buildings.*;
 import models.soldiers.Soldier;
 import utils.Point;
 import utils.Size;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Village
 {
@@ -56,4 +57,19 @@ public class Village
         return map.getResources();
     }
 
+    public void construct(int buildingType, Point location) throws NotEnoughResourceException, NoAvailableBuilderException
+    {
+
+        Resource cost = BuildingValues.getBuildingInfo(buildingType).getBuildCost();
+        Resource available  = getResources();
+        if(available.isLessThanOrEqual(cost))
+            throw new NotEnoughResourceException(available,cost);
+        constructionManager.construct(buildingType,location);
+        getResources().decrease(cost);
+
+    }
+    public void  upgradeBuilding(Building building)
+    {
+
+    }
 }
