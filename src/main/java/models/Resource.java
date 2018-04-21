@@ -1,8 +1,9 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
-public class Resource
+public class Resource implements Comparable<Resource>
 {
     int gold;
     int elixir;
@@ -52,4 +53,29 @@ public class Resource
         }
         return sb.toString();
     }
+
+    @Override
+    public int compareTo(Resource o)
+    {
+        if (gold == o.gold && elixir == o.elixir)
+            return 0;
+        else
+            return gold > o.gold ? 1 : -1;
+    }
+
+    public int compareTo(Resource o, boolean goldPrior)
+    {
+        if (gold == o.gold && elixir == o.elixir)
+            return 0;
+        else
+            return (goldPrior ? gold > o.gold : elixir > o.elixir) ? 1 : -1;
+    }
+
+    public boolean isGreaterThanOrEqual(Resource o)
+    {
+        return gold >= o.gold && elixir >= o.elixir;
+    }
+
+    public boolean isLessThanOrEqual(Resource o) {return gold <= o.gold && elixir <= o.elixir;}
+
 }

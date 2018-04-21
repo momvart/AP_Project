@@ -38,6 +38,8 @@ public abstract class BuildingInfo
         return buildCost;
     }
 
+    public Resource getUpgradeCost() {return getBuildCost();}
+
     public int getBuildDuration()
     {
         return buildDuration;

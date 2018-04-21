@@ -39,12 +39,10 @@ public class TownHall extends VillageBuilding
 
     public Builder getAvailableBuilder() throws NoAvailableBuilderException
     {
-        for (Builder builder : builders)
-        {
-            if (builder.getBuilderStatus() == BuilderStatus.FREE)
-                return builder;
-        }
-        throw new NoAvailableBuilderException("No available builder","no Available Builder");
+        return builders.stream()
+                .filter(builder -> builder.getBuilderStatus() == BuilderStatus.FREE)
+                .findFirst()
+                .orElseThrow(NoAvailableBuilderException::new);
     }
 
     public Builder getBuilderByNum(int num)
