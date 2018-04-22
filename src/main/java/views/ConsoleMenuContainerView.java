@@ -2,11 +2,12 @@ package views;
 
 import exceptions.InvalidCommandException;
 import menus.*;
+import utils.ICommandManager;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public abstract class ConsoleMenuContainerView extends ConsoleView implements IMenuContainer
+public abstract class ConsoleMenuContainerView extends ConsoleView implements IMenuContainer, ICommandManager
 {
     protected ParentMenu currentMenu;
     protected ArrayList<IMenuClickListener> listeners = new ArrayList<>();
@@ -16,28 +17,29 @@ public abstract class ConsoleMenuContainerView extends ConsoleView implements IM
         super(scanner);
     }
 
-    private boolean getCancelled = false;
+//    private boolean getCancelled = false;
+//
+//    public void startGetting()
+//    {
+//        getCancelled = false;
+//        while (!getCancelled)
+//            try
+//            {
+//                handleCommand(getCommand());
+//            }
+//            catch (InvalidCommandException ex)
+//            {
+//                showError(ex);
+//            }
+//    }
+//
+//    public void stopGetting()
+//    {
+//        getCancelled = true;
+//    }
 
-    public void startGetting()
-    {
-        getCancelled = false;
-        while (!getCancelled)
-            try
-            {
-                handleCommand(getCommand());
-            }
-            catch (InvalidCommandException ex)
-            {
-                showError(ex);
-            }
-    }
-
-    public void stopGetting()
-    {
-        getCancelled = true;
-    }
-
-    protected void handleCommand(String command) throws InvalidCommandException
+    @Override
+    public void manageCommand(String command) throws InvalidCommandException
     {
         if (command.equalsIgnoreCase("showmenu"))
             showCurrentMenu();

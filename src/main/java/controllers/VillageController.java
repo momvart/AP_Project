@@ -1,10 +1,13 @@
 package controllers;
 
 import exceptions.ConsoleException;
+import exceptions.InvalidCommandException;
 import exceptions.NotEnoughResourceException;
 import menus.*;
 import models.Village;
 import models.World;
+import utils.ConsoleUtilities;
+import utils.ICommandManager;
 import utils.Point;
 import views.VillageView;
 import models.*;
@@ -15,27 +18,40 @@ import views.dialogs.TextInputDialog;
 
 import java.util.regex.Matcher;
 
-public class VillageController implements IMenuClickListener
+public class VillageController implements IMenuClickListener, ICommandManager
 {
     private VillageView theView;
     private Village theVillage;
-    private MainController parentController;
 
-    public VillageController(MainController parentController, VillageView theView)
+    public VillageController(VillageView theView)
     {
-        this.parentController = parentController;
+        this.theVillage = World.sCurrentGame.getVillage();
+
         this.theView = theView;
         theView.addClickListener(this);
-        this.theVillage = World.sCurrentGame.getVillage();
-    }
-
-    public void start()
-    {
         ParentMenu mainMenu = new ParentMenu(Menu.Id.VILLAGE_MAIN_MENU, "", MenuTextCommandHandler.getInstance());
         mainMenu.insertItem(new ShowBuildingsMenu(mainMenu))
                 .insertItem(Menu.Id.VILLAGE_RESOURCES, "resources");
         theView.setCurrentMenu(mainMenu, false);
-        theView.startGetting();
+    }
+
+    @Override
+    public void manageCommand(String command) throws InvalidCommandException
+    {
+        try
+        {
+            theView.manageCommand(command);
+        }
+        catch (InvalidCommandException ex)
+        {
+            Matcher m = null;
+            if ((m = ConsoleUtilities.getMatchedCommand("turn\\s+(\\d+)", command)) != null)
+            {
+                for (int i = 0; i < Integer.parseInt(m.group(1)); i++)
+                    World.passTurn();
+            }
+            throw ex;
+        }
     }
 
     @Override

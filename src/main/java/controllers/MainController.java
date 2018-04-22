@@ -3,14 +3,17 @@ package controllers;
 import exceptions.InvalidCommandException;
 import models.World;
 import utils.ConsoleUtilities;
+import utils.ICommandManager;
 import views.ConsoleView;
 import views.VillageView;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.regex.Matcher;
 
-public class MainController
+public class MainController implements ICommandManager
 {
-    ConsoleView theView;
+    private ConsoleView theView;
 
     public MainController(ConsoleView theView)
     {
@@ -32,25 +35,46 @@ public class MainController
         }
     }
 
-    private void manageCommand(String command) throws InvalidCommandException
+    private ICommandManager childCommandManager = null;
+
+    public void manageCommand(String command) throws InvalidCommandException
     {
-        Matcher m;
-        if (command.equals("newGame"))
+        try
         {
-            World.newGame();
-            enterGame();
+            if (childCommandManager != null)
+                childCommandManager.manageCommand(command);
+            else
+                throw new InvalidCommandException(command);
         }
-        else if ((m = ConsoleUtilities.getMatchedCommand("load (%s)", command)) != null)
+        catch (InvalidCommandException ex)
         {
-            String path = m.group(0);
-            //TODO: parsing json
+            Matcher m;
+            if (command.equals("newGame"))
+            {
+                World.newGame();
+                enterGame();
+            }
+            else if ((m = ConsoleUtilities.getMatchedCommand("load\\s+(\\w+)", command)) != null)
+            {
+                String path = m.group(1);
+                //TODO: parsing json
+            }
+            else if ((m = ConsoleUtilities.getMatchedCommand("save\\s+(\\w+)\\s+(\\w+)", command)) != null)
+            {
+                saveGame(Paths.get(m.group(1), m.group(2)));
+            }
+            else
+                throw new InvalidCommandException(command);
         }
-        else
-            throw new InvalidCommandException(command);
     }
 
     private void enterGame()
     {
-        new VillageController(this, new VillageView(theView.getScanner())).start();
+        childCommandManager = new VillageController(new VillageView(theView.getScanner()));
+    }
+
+    private void saveGame(Path path)
+    {
+
     }
 }

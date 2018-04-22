@@ -21,7 +21,7 @@ public class VillageView extends ConsoleMenuContainerView
     }
 
     @Override
-    protected void handleCommand(String command) throws InvalidCommandException
+    public void manageCommand(String command) throws InvalidCommandException
     {
         switch (command.toLowerCase())
         {
@@ -29,7 +29,7 @@ public class VillageView extends ConsoleMenuContainerView
                 showWhereAmI();
                 break;
             default:
-                super.handleCommand(command);
+                super.manageCommand(command);
         }
     }
 
