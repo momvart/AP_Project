@@ -17,4 +17,6 @@ public abstract class SoldierValues
     {
         return infos.get(type - 1);
     }
+
+    public static ArrayList<SoldierInfo> getInfos() { return infos; }
 }

@@ -12,6 +12,11 @@ public abstract class BuildingInfo
     Resource destroyResource;
     int initialStrength;
 
+    public BuildingInfo()
+    {
+
+    }
+
     public BuildingInfo(int type, String name, Resource buildCost, int buildDuration, int destroyScore, Resource destroyResource, int initialStrength)
     {
         this.type = type;

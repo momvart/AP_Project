@@ -1,7 +1,12 @@
 package models.buildings;
 
+import com.google.gson.reflect.TypeToken;
 import models.Resource;
+import com.google.gson.*;
+import com.google.gson.stream.*;
 
+import java.nio.file.*;
+import java.io.*;
 import java.util.ArrayList;
 
 import static models.buildings.DefenseType.*;
@@ -12,36 +17,22 @@ public class BuildingValues
 
     private static ArrayList<BuildingInfo> infos;
 
-    public static void initialize()
+    public static void initialize(Path path) throws IOException
     {
-        //TODO: read from file or set info's
-        infos = new ArrayList<>();
-        String[] names = { "Gold mine", "Elixir mine", "Gold storage", "Elixir storage", "Main building", "Barracks",
-                "Camp", "Archer tower", "Cannon", "Air defense", "Wizard tower", "Wall", "Trap", "Guardian Giant" };
-        Resource[] buildCosts = { new Resource(150, 5), new Resource(100, 3), new Resource(200, 0)
-                , new Resource(200, 0), new Resource(200, 0), new Resource(200, 0), new Resource(200, 0)
-                , new Resource(300, 0), new Resource(400, 0), new Resource(300, 0), new Resource(500, 0)
-                , new Resource(100, 0), new Resource(100, 0), new Resource(10000, 0) };
-        int[] buildDurations = { 300, 100, 200, 100, 100, 100, 100, 60, 100, 60, 120, 20, 40, 4000 };
-        int[] destroyScores = { 2, 2, 3, 3, 8, 1, 1, 3, 4, 3, 5, 1, 1, 6 };
-        DefenseType[] defenseTypes = { GROUND, GROUND, AIR, BOTH, GROUND, GROUND, GROUND };
-        int[] initialStrength = { 200, 200, 300, 300, 1000, 300, 900, 300, 400, 300, 700, 100, 100, 700 };
-
-        for (int i = 0; i < 7; i++)
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(BuildingInfo.class, new serialization.BuildingInfoAdapter())
+                .create();
+        BufferedReader reader = null;
+        try
         {
-            VillageBuildingInfo villageBuildingInfo = new VillageBuildingInfo(i + 1, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i], initialStrength[i]);
-            infos.add(villageBuildingInfo);
+            reader = Files.newBufferedReader(path);
+            infos = new ArrayList<>();
+            infos = gson.fromJson(reader, new TypeToken<ArrayList<BuildingInfo>>() { }.getType());
         }
-        for (int i = 7; i < 14; i++)
+        finally
         {
-            if (i == 11)
-            {
-                VillageBuildingInfo villageBuildingInfo = new VillageBuildingInfo(i + 1, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i], initialStrength[i]);
-                infos.add(villageBuildingInfo);
-                continue;
-            }
-            DefensiveTowerInfo defensiveTowerInfo = new DefensiveTowerInfo(i + 1, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i], defenseTypes[i - 7], initialStrength[i]);
-            infos.add(defensiveTowerInfo);
+            if (reader != null)
+                reader.close();
         }
     }
 
@@ -51,4 +42,42 @@ public class BuildingValues
     }
 
     public static ArrayList<BuildingInfo> getInfos() {return infos;}
+
+    public static Class getBuildingClass(int type)
+    {
+        switch (type)
+        {
+            case 1:
+                return GoldMine.class;
+            case 2:
+                return ElixirMine.class;
+            case 3:
+                return GoldStorage.class;
+            case 4:
+                return ElixirStorage.class;
+            case 5:
+                return TownHall.class;
+            case 6:
+                return Barracks.class;
+            case 7:
+                return Camp.class;
+            case 8:
+                return ArcherTower.class;
+            case 9:
+                return Cannon.class;
+            case 10:
+                return AirDefense.class;
+            case 11:
+                return WizardTower.class;
+            case 12:
+                //todo : wall implementation
+                return null;
+            case 13:
+                return Trap.class;
+            case 14:
+                return GuardianGiant.class;
+            default:
+                throw new IllegalArgumentException("Building type is not valid: " + type);
+        }
+    }
 }

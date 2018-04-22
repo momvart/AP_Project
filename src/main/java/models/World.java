@@ -3,13 +3,27 @@ package models;
 
 import models.buildings.BuildingValues;
 
+import java.io.IOException;
+import java.nio.file.Paths;
+
 public class World
 {
     public static Game sCurrentGame;
 
     public static void initialize()
     {
-        BuildingValues.initialize();
+        try
+        {
+            BuildingValues.initialize(Paths.get(World.class.getClassLoader().getResource("BuildingValues.json").toURI()));
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 
     public static void passTurn()
