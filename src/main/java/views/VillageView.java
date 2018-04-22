@@ -98,7 +98,7 @@ public class VillageView extends ConsoleMenuContainerView
         for (int i = 0; i < map.getSize().getHeight(); i++)
         {
             for (int j = 0; j < map.getSize().getWidth(); j++)
-                System.out.print(map.isValid(j, i));
+                System.out.print(map.isEmpty(j, i) ? 0 : 1);
             System.out.print('\n');
         }
 

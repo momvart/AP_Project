@@ -1,13 +1,19 @@
 package controllers;
 
 import exceptions.ConsoleException;
+import exceptions.NotEnoughResourceException;
 import menus.*;
 import models.Village;
 import models.World;
+import utils.Point;
 import views.VillageView;
 import models.*;
 import models.buildings.*;
+import views.dialogs.DialogResult;
 import views.dialogs.DialogResultCode;
+import views.dialogs.TextInputDialog;
+
+import java.util.regex.Matcher;
 
 public class VillageController implements IMenuClickListener
 {
@@ -46,6 +52,37 @@ public class VillageController implements IMenuClickListener
                 try
                 {
                     World.getVillage().upgradeBuilding(building);
+                }
+                catch (ConsoleException ex)
+                {
+                    theView.showError(ex);
+                }
+            }
+            case Menu.Id.TH_AVAILABLE_BUILDING_ITEM:
+            {
+                //TODO: construct method should check for location to be empty
+                //TODO: when building is in construction map should show its location as not empty.
+                //TODO: seems that construct method doesn't add the building to the map till its construction finishes.
+                BuildingInfo info = ((AvailableBuildingItem)menu).getBuildingInfo();
+                try
+                {
+                    if (theView.showConstructDialog(info.getName(), info.getBuildCost()).getResultCode() != DialogResultCode.YES)
+                        break;
+                    Point location = null;
+                    while (true)
+                    {
+                        DialogResult mapResult = theView.showConstructionMapDialog(info.getName(), theVillage.getMap());
+                        if (mapResult.getResultCode() == DialogResultCode.CANCEL)
+                            return;
+
+                        Matcher m = (Matcher)mapResult.getData(TextInputDialog.KEY_MATCHER);
+                        location = new Point(Integer.parseInt(m.group("x")) - 1, Integer.parseInt(m.group("y")) - 1);
+                        if (theVillage.getMap().isEmpty(location))
+                            break;
+
+                        theView.showText("You can't build this building here. Please choose another cell.");
+                    }
+                    theVillage.construct(info.getType(), location);
                 }
                 catch (ConsoleException ex)
                 {

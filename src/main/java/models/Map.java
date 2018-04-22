@@ -17,7 +17,7 @@ public class Map
     private Size size;
     private ArrayList<Storage> storages = new ArrayList<>();
     private ArrayList<DefensiveTower> defensiveTowers = new ArrayList<>();
-    private Resource resources = new Resource(0,0);
+    private Resource resources = new Resource(0, 0);
 
     public Map(Size size)
     {
@@ -31,7 +31,7 @@ public class Map
         buildings.add(townHall);
         Storage goldStorage = BuildingFactory.createBuildingByType(GoldStorage.class, new Point(size.getWidth() / 2 - 4, size.getHeight() / 2 - 4));
         buildings.add(goldStorage);
-        Storage elixirStorage = BuildingFactory.createBuildingByType(ElixirStorage.class,new Point(size.getWidth()/2 + 4 ,size.getHeight()/2 + 4 ));
+        Storage elixirStorage = BuildingFactory.createBuildingByType(ElixirStorage.class, new Point(size.getWidth() / 2 + 4, size.getHeight() / 2 + 4));
         buildings.add(elixirStorage);
     }
 
@@ -45,15 +45,49 @@ public class Map
         return buildings;
     }
 
+    /**
+     * Checks if the location is in map or not.
+     *
+     * @param location The location to check
+     * @return
+     */
     public boolean isValid(Point location)
     {
         return isValid(location.getX(), location.getY());
     }
 
+    /**
+     * Checks if the location is in map or not.
+     * @param x The coordinate x
+     * @param y The coordinate y
+     * @return
+     */
     public boolean isValid(int x, int y)
     {
-        //TODO: return correct value
-        return false;
+        return x <= size.getWidth() && y <= size.getHeight() && x >= 0 && y >= 0;
+    }
+
+    /**
+     * Checks if location is empty for new building. Marginal cells are not empty.
+     *
+     * @return
+     */
+    public boolean isEmpty(Point location) {return isEmpty(location.getX(), location.getY());}
+
+    /**
+     * Checks if location is empty for new building. Marginal cells are not empty.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean isEmpty(int x, int y)
+    {
+        if (x == 0 || y == 0)
+            return false;
+        if (x == size.getWidth() - 1 || y == size.getHeight() - 1)
+            return false;
+        return isValid(x, y) && map[x][y] == null;
     }
 
     public Building getNearestBuilding(Point location, int BuildingType)

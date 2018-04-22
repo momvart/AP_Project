@@ -68,6 +68,11 @@ public class Village
         return new Resource(gold, elixir);
     }
 
+    public Builder getAvailableBuilder() throws NoAvailableBuilderException
+    {
+        return map.getTownHall().getAvailableBuilder();
+    }
+
     public void construct(int buildingType, Point location) throws NotEnoughResourceException, NoAvailableBuilderException
     {
         Resource cost = BuildingValues.getBuildingInfo(buildingType).getBuildCost();

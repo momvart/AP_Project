@@ -27,7 +27,7 @@ public class ConstructionManager
     {
         Building building = BuildingFactory.createBuildingByTypeId(buildingType,location);
         int constructTime = building.getBuildingInfo().getBuildDuration();
-        Builder builder = village.getMap().getTownHall().getAvailableBuilder();
+        Builder builder = village.getAvailableBuilder();
         int builderNum = builder.getBuilderNum();
         builder.setBuilderStatus(BuilderStatus.WORKING);
         Construction construction = new Construction(buildingType, constructTime, CONSTRUCT, location, builderNum, building);
@@ -38,7 +38,7 @@ public class ConstructionManager
     public void upgrade(Building building) throws NoAvailableBuilderException
     {
         int constructTime = building.getBuildingInfo().getBuildDuration();
-        Builder builder = village.getMap().getTownHall().getAvailableBuilder();
+        Builder builder = village.getAvailableBuilder();
         builder.builderStatus = BuilderStatus.WORKING;
         Construction construction = new Construction(building.getType(),constructTime,UPGRADE,building.getLocation(),builder.builderNum,building);
         constructions.add(construction);

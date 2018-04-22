@@ -19,7 +19,11 @@ public class World
 
     public static void newGame()
     {
-        loadGame(new Game());
+        //TODO: check value with document
+        loadGame(new Game()
+        {{
+            getVillage().getResources().increase(2000, 2000);
+        }});
     }
 
     public static void loadGame(Game game)
