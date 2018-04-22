@@ -1,5 +1,6 @@
 package models.buildings;
 
+import models.*;
 import models.Village;
 import models.World;
 import utils.Point;
@@ -13,16 +14,16 @@ public class Construction
     Point location;
     int builderNum;
     Building building;
-    boolean finished = false;
 
-    public Construction(int buildingType, int constructTime, ConstructMode constructMode, Point location, int builderNum, Building building)
+    public Construction(int buildingType, int constructTime, ConstructMode constructMode, Point location, Builder builder, Building building)
     {
         this.buildingType = buildingType;
         this.startTurn = World.sCurrentGame.getVillage().getTurn();
         this.constructTime = constructTime;
         this.constructMode = constructMode;
         this.location = location;
-        this.builderNum = builderNum;
+        this.builderNum = builder.getBuilderNum();
+        builder.setBuilderStatus(BuilderStatus.WORKING);
         this.building = building;
     }
 
@@ -34,8 +35,7 @@ public class Construction
     public void finishConstruction()
     {
         building.buildStatus = BuildStatus.BUILT;
-        finished = true;
-
+        getBuilder().setBuilderStatus(BuilderStatus.FREE);
     }
 
     public int getBuildingType()
@@ -53,6 +53,11 @@ public class Construction
     public int getBuilderNum()
     {
         return builderNum;
+    }
+
+    public Builder getBuilder()
+    {
+        return World.getVillage().getMap().getTownHall().getBuilderByNum(builderNum);
     }
 
     @Override

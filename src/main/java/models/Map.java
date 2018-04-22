@@ -35,9 +35,10 @@ public class Map
         buildings.add(elixirStorage);
     }
 
-    public Building[][] getMap()
+    public void addBuilding(Building building)
     {
-        return map;
+        map[building.getLocation().getX()][building.getLocation().getY()] = building;
+        buildings.add(building);
     }
 
     public ArrayList<Building> getBuildings()

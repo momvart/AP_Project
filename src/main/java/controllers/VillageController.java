@@ -90,6 +90,11 @@ public class VillageController implements IMenuClickListener
                 }
             }
             break;
+            case Menu.Id.BARRACKS_TRAIN_ITEM:
+            {
+                //TODO: training soldiers should be implemented.
+            }
+            break;
         }
     }
 }

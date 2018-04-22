@@ -25,22 +25,19 @@ public class ConstructionManager
 
     public void construct(int buildingType, Point location) throws NoAvailableBuilderException
     {
-        Building building = BuildingFactory.createBuildingByTypeId(buildingType,location);
+        Building building = BuildingFactory.createBuildingByTypeId(buildingType, location);
         int constructTime = building.getBuildingInfo().getBuildDuration();
         Builder builder = village.getAvailableBuilder();
-        int builderNum = builder.getBuilderNum();
-        builder.setBuilderStatus(BuilderStatus.WORKING);
-        Construction construction = new Construction(buildingType, constructTime, CONSTRUCT, location, builderNum, building);
+        World.getVillage().getMap().addBuilding(building);
+        Construction construction = new Construction(buildingType, constructTime, CONSTRUCT, location, builder, building);
         constructions.add(construction);
-
-
     }
+
     public void upgrade(Building building) throws NoAvailableBuilderException
     {
         int constructTime = building.getBuildingInfo().getBuildDuration();
         Builder builder = village.getAvailableBuilder();
-        builder.builderStatus = BuilderStatus.WORKING;
-        Construction construction = new Construction(building.getType(),constructTime,UPGRADE,building.getLocation(),builder.builderNum,building);
+        Construction construction = new Construction(building.getType(), constructTime, UPGRADE, building.getLocation(), builder, building);
         constructions.add(construction);
     }
 
@@ -53,8 +50,6 @@ public class ConstructionManager
             if (construction.isFinished())
             {
                 construction.finishConstruction();
-                Builder builder = village.getMap().getTownHall().getBuilderByNum(construction.getBuilderNum());
-                builder.setBuilderStatus(BuilderStatus.FREE);
                 constructions.remove(i);
                 i--;
             }

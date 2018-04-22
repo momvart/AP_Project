@@ -50,6 +50,15 @@ public class VillageView extends ConsoleMenuContainerView
             case Menu.Id.TH_STATUS:
                 showConstructionsStatus(World.sCurrentGame.getVillage().getConstructionManager().getConstructions());
                 break;
+            case Menu.Id.BARRACKS_STATUS:
+                //TODO: no method found in barracks for getting trains
+                break;
+            case Menu.Id.CAMP_CAPACITY_INFO:
+                showCampsCapacityInfo((Camp)((IBuildingMenu)currentMenu).getBuilding());
+                break;
+            case Menu.Id.CAMP_SOLDIERS:
+                showAvailableSoldiers();
+                break;
             default:
                 super.onMenuItemClicked(menu);
         }
@@ -117,8 +126,9 @@ public class VillageView extends ConsoleMenuContainerView
 
     public void showConstructionsStatus(List<Construction> constructions)
     {
-        constructions.stream().sorted(Comparator.comparing(c -> c.getBuildingInfo().getName()))
-                .forEach(System.out::println);
+        constructions.stream()
+                .sorted(Comparator.comparing(c -> c.getBuildingInfo().getName()))
+                .forEach(c -> System.out.printf("%s %d", c.getBuildingInfo().getName(), c.getRemainingTurns()));
     }
 
     public DialogResult showSoldierTrainCountDialog()

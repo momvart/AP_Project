@@ -65,5 +65,9 @@ public class Menu
 
         public static final int BARRACKS_TRAIN_SOLDIER = 0x1210;
         public static final int BARRACKS_TRAIN_ITEM = 0x1211;
+        public static final int BARRACKS_STATUS = 0x1220;
+
+        public static final int CAMP_CAPACITY_INFO = 0x1311;
+        public static final int CAMP_SOLDIERS = 0x1320;
     }
 }

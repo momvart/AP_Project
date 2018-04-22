@@ -1,14 +1,18 @@
 package models.buildings;
 
+import menus.Menu;
+import menus.ParentMenu;
+import menus.Submenu;
+import menus.TrainSoldierSubmenu;
 import models.TrainingManager;
 import models.Village;
+import models.World;
 import models.soldiers.Soldier;
 import utils.Point;
 
 public class Barracks extends VillageBuilding
 {
     int soldierBrewTimeDecrease;
-    Village village;
     TrainingManager trainingManager = new TrainingManager();
 
     public Barracks(Point location)
@@ -39,5 +43,14 @@ public class Barracks extends VillageBuilding
     {
         Soldier soldier = null;
         trainingManager.train(soldier);
+    }
+
+    @Override
+    public Submenu getMenu(ParentMenu parent)
+    {
+        Submenu menu = super.getMenu(parent);
+        menu.insertItem(new TrainSoldierSubmenu(menu, this, World.getVillage().getResources().getElixir()))
+                .insertItem(new Menu(Menu.Id.BARRACKS_STATUS, "Status"));
+        return menu;
     }
 }
