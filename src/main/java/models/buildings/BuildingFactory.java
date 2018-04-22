@@ -5,7 +5,7 @@ import utils.Point;
 public class BuildingFactory
 {
 
-    public static Building createBuildingByTypeId(int type , Point location)
+    public static Building createBuildingByTypeId(int type, Point location)
     {
         switch (type)
         {
@@ -38,8 +38,9 @@ public class BuildingFactory
                 return new Trap(location);
             case 14:
                 return new GuardianGiant(location);
+            default:
+                throw new IllegalArgumentException("Building type is not valid: " + type);
         }
-        return null;
     }
 
     public static <T extends Building> T createBuildingByType(Class<T> tClass, Point location)

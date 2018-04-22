@@ -29,18 +29,18 @@ public class BuildingValues
 
         for (int i = 0; i < 7; i++)
         {
-            VillageBuildingInfo villageBuildingInfo = new VillageBuildingInfo(i, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i], initialStrength[i]);
+            VillageBuildingInfo villageBuildingInfo = new VillageBuildingInfo(i + 1, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i], initialStrength[i]);
             infos.add(villageBuildingInfo);
         }
         for (int i = 7; i < 14; i++)
         {
             if (i == 11)
             {
-                VillageBuildingInfo villageBuildingInfo = new VillageBuildingInfo(i, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i], initialStrength[i]);
+                VillageBuildingInfo villageBuildingInfo = new VillageBuildingInfo(i + 1, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i], initialStrength[i]);
                 infos.add(villageBuildingInfo);
                 continue;
             }
-            DefensiveTowerInfo defensiveTowerInfo = new DefensiveTowerInfo(i, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i], defenseTypes[i - 7], initialStrength[i]);
+            DefensiveTowerInfo defensiveTowerInfo = new DefensiveTowerInfo(i + 1, names[i], buildCosts[i], buildDurations[i], destroyScores[i], buildCosts[i], defenseTypes[i - 7], initialStrength[i]);
             infos.add(defensiveTowerInfo);
         }
     }

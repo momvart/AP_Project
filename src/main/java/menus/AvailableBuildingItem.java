@@ -1,19 +1,20 @@
 package menus;
 
+import models.buildings.BuildingInfo;
 import models.buildings.BuildingValues;
 
 public class AvailableBuildingItem extends Menu
 {
-    private int buildingType;
+    private BuildingInfo buildingInfo;
 
-    public AvailableBuildingItem(int buildingType)
+    public AvailableBuildingItem(BuildingInfo buildingInfo)
     {
-        super(Id.TH_AVAILABLE_BUILDING_ITEM, BuildingValues.getBuildingInfo(buildingType).getName());
-        this.buildingType = buildingType;
+        super(Id.TH_AVAILABLE_BUILDING_ITEM, buildingInfo.getName());
+        this.buildingInfo = buildingInfo;
     }
 
-    public int getBuildingType()
+    public BuildingInfo getBuildingInfo()
     {
-        return buildingType;
+        return buildingInfo;
     }
 }

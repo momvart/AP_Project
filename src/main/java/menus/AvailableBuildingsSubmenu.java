@@ -27,7 +27,7 @@ public class AvailableBuildingsSubmenu extends Submenu implements IBuildingMenu
         items = BuildingValues.getInfos().stream()
                 .filter(info -> info.getBuildCost().isLessThanOrEqual(availableResource))
                 .sorted(Comparator.comparing(BuildingInfo::getName))
-                .map(info -> new Menu(Id.TH_AVAILABLE_BUILDING_ITEM, info.getName()))
+                .map(AvailableBuildingItem::new)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
