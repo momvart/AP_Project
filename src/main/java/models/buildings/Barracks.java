@@ -8,6 +8,7 @@ import models.TrainingManager;
 import models.Village;
 import models.World;
 import models.soldiers.Soldier;
+import models.soldiers.SoldierFactory;
 import utils.Point;
 
 public class Barracks extends VillageBuilding
@@ -41,7 +42,7 @@ public class Barracks extends VillageBuilding
 
     public void trainSoldier(int soldierType)
     {
-        Soldier soldier = null;
+        Soldier soldier = SoldierFactory.createSoldierByTypeID(soldierType,this.level);
         trainingManager.train(soldier);
     }
 

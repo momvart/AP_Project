@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class TrainingManager
 {
-    ArrayList<Recruit> recruits;
-    Village village;
+    ArrayList<Recruit> recruits  = new ArrayList<>();
+    Village village = World.getVillage();
 
     public void train(Soldier soldier)
     {

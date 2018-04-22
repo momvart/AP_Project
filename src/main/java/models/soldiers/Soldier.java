@@ -1,6 +1,8 @@
 package models.soldiers;
 
 import models.Attack;
+import models.World;
+import models.buildings.Barracks;
 import utils.Point;
 
 public abstract class Soldier
@@ -9,6 +11,13 @@ public abstract class Soldier
     private int level;
     private Point location;
     private AttackHelper attackHelper;
+
+    public Soldier(int level)
+    {
+        health = SoldierValues.getSoldierInfo(this.getType()).getInitialHealth();
+        this.level = level;
+        location = new Point(-1,-1);
+    }
 
     public abstract int getType();
 

@@ -71,10 +71,11 @@ public class Attack
         return reqTroops;
     }
 
-    public void passTurn()
+    public void passTurn(int barracksLevel)
     {
-        ageHealersOnMap();
-        killAgedHealers();
+        // TODO: 4/22/18 : Saber, Why we need new Healer when we want to killAgedHealers ? Ansewr this question as soon as you saw this message. 
+        ageHealersOnMap(barracksLevel);
+        killAgedHealers(barracksLevel);
         removeDeadUnits();
         moveSoldiers();
         setNewTargetToSoldiers();
@@ -95,10 +96,11 @@ public class Attack
         attackSoldiers.removeAll(walkingDeadSoldiers);
     }
 
-    private void killAgedHealers()
+    private void killAgedHealers(int barracksLevel)
     {
         ArrayList<Healer> walkingDeadHealers = new ArrayList<>();
-        for (Healer healer : getHealersOnMap())
+        // TODO: 4/22/18 : Saber must check this part again
+        for (Healer healer : getHealersOnMap(barracksLevel))
         {
             if (healer.getTimeTillDie() <= 0)
             {
@@ -108,21 +110,22 @@ public class Attack
         attackSoldiers.removeAll(walkingDeadHealers);
     }
 
-    private void ageHealersOnMap()
+    private void ageHealersOnMap(int barracksLevel)
     {
 
-        for (Healer healer : getHealersOnMap())
+        for (Healer healer : getHealersOnMap(barracksLevel))
         {
             healer.ageOneDeltaT();
         }
     }
 
-    private ArrayList<Healer> getHealersOnMap()
+    private ArrayList<Healer> getHealersOnMap(int barracksLevel)
     {
+        // TODO: 4/22/18 Saber must check this part again. 
         ArrayList<Healer> healers = new ArrayList<>();
         for (Soldier soldier : getSoldiersOnMap())
         {
-            if (soldier.getType() == new Healer().getType())
+            if (soldier.getType() == new Healer(barracksLevel).getType())
             {
                 healers.add((Healer)soldier);
             }

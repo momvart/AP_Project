@@ -36,7 +36,7 @@ public class BuildingFactory
                 return null;
             case 13:
                 return new Trap(location);
-            case 14:
+            case     14:
                 return new GuardianGiant(location);
             default:
                 throw new IllegalArgumentException("Building type is not valid: " + type);

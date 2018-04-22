@@ -2,7 +2,11 @@ package models.soldiers;
 
 public class Giant extends Soldier
 {
-    public Giant() {super();}
+
+    public Giant(int level)
+    {
+        super(level);
+    }
 
     public int getType()
     {
