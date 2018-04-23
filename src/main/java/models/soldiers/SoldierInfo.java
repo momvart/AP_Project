@@ -1,18 +1,40 @@
 package models.soldiers;
 
+import models.Builder;
 import models.Resource;
 import models.buildings.Building;
 
+import java.lang.reflect.Type;
+
 public class SoldierInfo
 {
+    private int type;
     private String name;
     private Resource brewCost;
     private int brewTime;
     private int speed;
     private int range;
-    private Building favouriteTarget;
+    private Class<? extends Building>[] favouriteTargets;
     private int initialHealth;
     private int initialDamage;
+
+    public SoldierInfo()
+    {
+
+    }
+
+    public SoldierInfo(int type, String name, Resource brewCost, int brewTime, int speed, int range, int initialHealth, int initialDamage, Class<? extends Building>... favouriteTargets)
+    {
+        this.type = type;
+        this.name = name;
+        this.brewCost = brewCost;
+        this.brewTime = brewTime;
+        this.speed = speed;
+        this.range = range;
+        this.favouriteTargets = favouriteTargets;
+        this.initialHealth = initialHealth;
+        this.initialDamage = initialDamage;
+    }
 
     public String getName()
     {
@@ -39,9 +61,9 @@ public class SoldierInfo
         return range;
     }
 
-    public Building getFavouriteTarget()
+    public Class<? extends Building>[] getFavouriteTargets()
     {
-        return favouriteTarget;
+        return favouriteTargets;
     }
 
     public int getInitialHealth()

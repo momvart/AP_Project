@@ -2,9 +2,11 @@ package models.soldiers;
 
 import models.Attack;
 import models.buildings.Building;
+import models.buildings.Storage;
 import utils.Point;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class GeneralAttackHelper extends AttackHelper
@@ -12,9 +14,9 @@ public class GeneralAttackHelper extends AttackHelper
 {
     private Building target;
 
-    public GeneralAttackHelper(Attack attack, Building favouriteTarget, Point location, int soldierDamagePotential, int soldierRange)
+    public GeneralAttackHelper(Attack attack, Soldier soldier, Point location, int soldierDamagePotential, int soldierRange)
     {
-        super(attack, favouriteTarget, location, soldierDamagePotential, soldierRange);
+        super(attack, soldier, location, soldierDamagePotential, soldierRange);
     }
 
     @Override
@@ -28,13 +30,13 @@ public class GeneralAttackHelper extends AttackHelper
     {
         if (isTargetInRange())
         {
-            target.decreaseStrength(getSoldierDamagePotential());
+            target.decreaseStrength(getDamage());
         }
     }
 
     private boolean isTargetInRange()
     {
-        return euclidianDistance(target.getLocation(), getSoldierLocation()) <= getSoldierRange();
+        return euclidianDistance(target.getLocation(), getSoldierLocation()) <= getRange();
     }
 
 
@@ -83,7 +85,7 @@ public class GeneralAttackHelper extends AttackHelper
         ArrayList<Building> towers = super.attack.getMap().getBuildings();
         for (Building tower : towers)
         {
-            if (tower.getType() == super.getSoldierFavouriteTarget().getType())
+            if (Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(c -> c.isInstance(tower)))
             {
                 favoutriteTargets.add(tower);
             }
@@ -93,14 +95,14 @@ public class GeneralAttackHelper extends AttackHelper
         {
             for (Building favoutriteTarget : favoutriteTargets)
             {
-                manhatanianDistances.add(manhatanianDistance (favoutriteTarget.getLocation() , super.getSoldierLocation()));
+                manhatanianDistances.add(manhatanianDistance(favoutriteTarget.getLocation(), super.getSoldierLocation()));
             }
             Collections.sort(manhatanianDistances);
             for (Building favoutriteTarget : favoutriteTargets)
             {
-                for (int i = 0; i <manhatanianDistances.size() ; i++)
+                for (int i = 0; i < manhatanianDistances.size(); i++)
                 {
-                    if (manhatanianDistance(favoutriteTarget.getLocation() , super.getSoldierLocation()) == manhatanianDistances.get(i))
+                    if (manhatanianDistance(favoutriteTarget.getLocation(), super.getSoldierLocation()) == manhatanianDistances.get(i))
                     {
                         if (isTargetReachable(favoutriteTarget) && isntTargetTooFar(favoutriteTarget))
                         {
@@ -115,7 +117,7 @@ public class GeneralAttackHelper extends AttackHelper
 
     private boolean isntTargetTooFar(Building favoutriteTarget)
     {
-        return manhatanianDistance(getSoldierLocation() , favoutriteTarget.getLocation()) < 24;//TODO to be manipulated for increasing the performance
+        return manhatanianDistance(getSoldierLocation(), favoutriteTarget.getLocation()) < 24;//TODO to be manipulated for increasing the performance
     }
 
     private boolean isTargetReachable(Building favouriteTarget)

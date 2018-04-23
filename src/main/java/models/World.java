@@ -2,6 +2,7 @@ package models;
 
 
 import models.buildings.BuildingValues;
+import models.soldiers.SoldierValues;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -15,6 +16,7 @@ public class World
         try
         {
             BuildingValues.initialize(Paths.get(World.class.getClassLoader().getResource("BuildingValues.json").toURI()));
+            SoldierValues.initialize(Paths.get(World.class.getClassLoader().getResource("SoldierValues.json").toURI()));
         }
         catch (IOException ex)
         {

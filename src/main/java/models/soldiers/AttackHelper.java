@@ -8,35 +8,30 @@ import utils.Point;
 public abstract class AttackHelper
 {
     protected Attack attack;
-    private boolean isSoldierDeployed;
-    private Building soldierFavouriteTarget;
+    protected Soldier soldier;
+    private boolean soldierDeployed;
     private Point soldierLocation;
-    private int soldierDamagePotential;
-    private int soldierRange;
+    private int damage;
+    private int range;
 
     public boolean isSoldierDeployed()
     {
-        return isSoldierDeployed;
+        return soldierDeployed;
     }
 
     public void setSoldierIsDeployed(boolean isSoldierDeployed)
     {
-        this.isSoldierDeployed = isSoldierDeployed;
+        this.soldierDeployed = isSoldierDeployed;
     }
 
 
-    public AttackHelper(Attack attack, Building favouriteTarget, Point location, int soldierDamagePotential, int soldierRange)
+    public AttackHelper(Attack attack, Soldier soldier, Point location, int damage, int range)
     {
         this.attack = attack;
-        this.soldierFavouriteTarget = favouriteTarget;
+        this.soldier = soldier;
         this.soldierLocation = location;
-        this.soldierDamagePotential = soldierDamagePotential;
-        this.soldierRange = soldierRange;
-    }
-
-    public Building getSoldierFavouriteTarget()
-    {
-        return soldierFavouriteTarget;
+        this.damage = damage;
+        this.range = range;
     }
 
     public Point getSoldierLocation()
@@ -44,14 +39,14 @@ public abstract class AttackHelper
         return soldierLocation;
     }
 
-    public int getSoldierDamagePotential()
+    public int getDamage()
     {
-        return soldierDamagePotential;
+        return damage;
     }
 
-    public int getSoldierRange()
+    public int getRange()
     {
-        return soldierRange;
+        return range;
     }
 
     public int euclidianDistance(Point location1, Point location2)

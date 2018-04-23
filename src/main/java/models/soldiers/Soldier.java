@@ -16,7 +16,7 @@ public abstract class Soldier
     {
         health = SoldierValues.getSoldierInfo(this.getType()).getInitialHealth();
         this.level = level;
-        location = new Point(-1,-1);
+        location = new Point(-1, -1);
     }
 
     public abstract int getType();
@@ -46,14 +46,14 @@ public abstract class Soldier
         return SoldierValues.getSoldierInfo(this.getType()).getInitialDamage() + level - 1;
     }
 
-    public SoldierInfo getArmyUnitInfo()
+    public SoldierInfo getSoldierInfo()
     {
         return SoldierValues.getSoldierInfo(this.getType());
     }
 
     public void participateIn(Attack attack)
     {
-        this.attackHelper = new GeneralAttackHelper(attack, SoldierValues.getSoldierInfo(this.getType()).getFavouriteTarget(), this.getLocation(), this.getDamage(), SoldierValues.getSoldierInfo(this.getType()).getRange());
+        this.attackHelper = new GeneralAttackHelper(attack, this, this.getLocation(), this.getDamage(), SoldierValues.getSoldierInfo(this.getType()).getRange());
     }
 
     public Point getLocation()
