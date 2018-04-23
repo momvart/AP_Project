@@ -27,6 +27,7 @@ public class Game
 
     public void passTurn()
     {
-
+        //TODO: check for attack mode
+        village.passTurn();
     }
 }

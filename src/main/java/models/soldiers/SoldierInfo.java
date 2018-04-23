@@ -17,13 +17,14 @@ public class SoldierInfo
     private Class<? extends Building>[] favouriteTargets;
     private int initialHealth;
     private int initialDamage;
+    private int minBarracksLevel;
 
     public SoldierInfo()
     {
 
     }
 
-    public SoldierInfo(int type, String name, Resource brewCost, int brewTime, int speed, int range, int initialHealth, int initialDamage, Class<? extends Building>... favouriteTargets)
+    public SoldierInfo(int type, String name, Resource brewCost, int brewTime, int speed, int range, int initialHealth, int initialDamage, int minBarracksLevel, Class<? extends Building>... favouriteTargets)
     {
         this.type = type;
         this.name = name;
@@ -34,6 +35,12 @@ public class SoldierInfo
         this.favouriteTargets = favouriteTargets;
         this.initialHealth = initialHealth;
         this.initialDamage = initialDamage;
+        this.minBarracksLevel = minBarracksLevel;
+    }
+
+    public int getType()
+    {
+        return type;
     }
 
     public String getName()
@@ -74,5 +81,10 @@ public class SoldierInfo
     public int getInitialDamage()
     {
         return initialDamage;
+    }
+
+    public int getMinBarracksLevel()
+    {
+        return minBarracksLevel;
     }
 }

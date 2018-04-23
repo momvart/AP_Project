@@ -11,14 +11,15 @@
     "range": 1,
     "favouriteTargets": [],
     "initialHealth": 100,
-    "initialDamage": 10
+    "initialDamage": 10,
+    "minBarracksLevel": 0
   },
   {
     "type": 2,
     "name": "Giant",
     "brewCost": {
       "gold": 0,
-      "elixir": 125
+      "elixir": 150
     },
     "brewTime": 30,
     "speed": 3,
@@ -32,28 +33,30 @@
       }
     ],
     "initialHealth": 500,
-    "initialDamage": 30
+    "initialDamage": 30,
+    "minBarracksLevel": 0
   },
   {
     "type": 3,
     "name": "Dragon",
     "brewCost": {
       "gold": 0,
-      "elixir": 175
+      "elixir": 200
     },
-    "brewTime": 40,
+    "brewTime": 45,
     "speed": 6,
     "range": 3,
     "favouriteTargets": [],
     "initialHealth": 700,
-    "initialDamage": 30
+    "initialDamage": 30,
+    "minBarracksLevel": 2
   },
   {
     "type": 4,
     "name": "Archer",
     "brewCost": {
       "gold": 0,
-      "elixir": 60
+      "elixir": 75
     },
     "brewTime": 10,
     "speed": 2,
@@ -64,14 +67,15 @@
       }
     ],
     "initialHealth": 100,
-    "initialDamage": 10
+    "initialDamage": 10,
+    "minBarracksLevel": 0
   },
   {
     "type": 5,
     "name": "Wall breaker",
     "brewCost": {
       "gold": 0,
-      "elixir": 60
+      "elixir": 40
     },
     "brewTime": 10,
     "speed": 6,
@@ -82,7 +86,8 @@
       }
     ],
     "initialHealth": 100,
-    "initialDamage": 50
+    "initialDamage": 50,
+    "minBarracksLevel": 0
   },
   {
     "type": 6,
@@ -96,6 +101,7 @@
     "range": 10,
     "favouriteTargets": [],
     "initialHealth": -1,
-    "initialDamage": 50
+    "initialDamage": 25,
+    "minBarracksLevel": 0
   }
 ]

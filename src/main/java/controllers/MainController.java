@@ -80,7 +80,7 @@ public class MainController implements ICommandManager
         {
             World.openGame(reader);
         }
-        catch (JsonSyntaxException | JsonIOException ex)
+        catch (JsonParseException ex)
         {
             throw new MyJsonException(ex);
         }

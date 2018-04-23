@@ -12,10 +12,8 @@ public class TrainSoldierItem extends Menu
     public TrainSoldierItem(int soldierType, int availableCount)
     {
         super(Id.BARRACKS_TRAIN_ITEM,
-                String.format(sItemTextPattern,
-                        SoldierValues.getSoldierInfo(soldierType).getName(),
-                        availableCount >= 0 ? 'A' : 'U',
-                        availableCount));
+                SoldierValues.getSoldierInfo(soldierType).getName() + " " +
+                        (availableCount >= 0 ? "A x" + availableCount : "U"));
         this.soldierType = soldierType;
         this.availableCount = availableCount;
     }

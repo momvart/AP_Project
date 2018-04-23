@@ -31,29 +31,28 @@ public class TextInputDialog extends ConsoleDialog
     public DialogResult showDialog()
     {
         showMessage();
-        if (pattern.isEmpty())
-            return new DialogResult(DialogResultCode.YES).addData(KEY_TEXT, getCommand());
-        else
-            while (true)
+        while (true)
+        {
+            String command = getCommand();
+            if (command.equalsIgnoreCase("back"))
+                return new DialogResult(DialogResultCode.CANCEL);
+            Matcher matched = null;
+            if (!pattern.isEmpty())
+                matched = ConsoleUtilities.getMatchedCommand(pattern, command);
+            try
             {
-                String command = getCommand();
-                Matcher matched = null;
-                if (!pattern.isEmpty())
-                    matched = ConsoleUtilities.getMatchedCommand(pattern, command);
-                try
-                {
-                    if (matched != null)
-                        return new DialogResult(DialogResultCode.YES).addData(KEY_TEXT, matched.group(0)).addData(KEY_MATCHER, matched);
-                    else if (pattern.isEmpty())
-                        return new DialogResult(DialogResultCode.YES).addData(KEY_TEXT, command);
-                    else
-                        throw new InvalidCommandException(command, "Input doesn't match pattern.");
-                }
-                catch (InvalidCommandException ex)
-                {
-                    showError(ex);
-                }
+                if (matched != null)
+                    return new DialogResult(DialogResultCode.YES).addData(KEY_TEXT, matched.group(0)).addData(KEY_MATCHER, matched);
+                else if (pattern.isEmpty())
+                    return new DialogResult(DialogResultCode.YES).addData(KEY_TEXT, command);
+                else
+                    throw new InvalidCommandException(command, "Input doesn't match pattern.");
             }
+            catch (InvalidCommandException ex)
+            {
+                showError(ex);
+            }
+        }
     }
 
 }

@@ -1,12 +1,10 @@
-package tests;
-
 import exceptions.ConsoleException;
 import exceptions.NoAvailableBuilderException;
 import models.ConstructionManager;
 import models.World;
 import models.buildings.Construction;
 import utils.Point;
-
+import org.junit.*;
 import static org.junit.Assert.*;
 
 public class ConstructionManagerTest

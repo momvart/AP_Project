@@ -35,7 +35,7 @@ public class World
 
     public static void passTurn()
     {
-
+        sCurrentGame.passTurn();
     }
 
     public static void newGame()

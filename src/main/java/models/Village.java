@@ -99,11 +99,10 @@ public class Village
         if (villageStatus.equals(VillageStatus.NORMAL))
         {
             turn++;
-            Stream<Mine> mines = getMap().getBuildings(Mine.class);
-            mines.forEach(Mine::passTurn);
-            Stream<Barracks> barracks = getMap().getBuildings(Barracks.class);
-            barracks.forEach(Barracks::passTurn);
+            getMap().getBuildings(Mine.class).forEach(Mine::passTurn);
+            getMap().getBuildings(Barracks.class).forEach(Barracks::passTurn);
             getMap().getTownHall().passTurn();
+            constructionManager.checkConstructions();
         }
     }
 }

@@ -47,10 +47,12 @@ public class VillageController implements IMenuClickListener, ICommandManager
             Matcher m = null;
             if ((m = ConsoleUtilities.getMatchedCommand("turn\\s+(\\d+)", command)) != null)
             {
-                for (int i = 0; i < Integer.parseInt(m.group(1)); i++)
+                int count = Integer.parseInt(m.group(1));
+                for (int i = 0; i < count; i++)
                     World.passTurn();
             }
-            throw ex;
+            else
+                throw ex;
         }
     }
 

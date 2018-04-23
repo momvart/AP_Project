@@ -1,5 +1,3 @@
-package tests;
-
 import models.World;
 import models.buildings.ElixirMine;
 import models.buildings.ElixirStorage;
