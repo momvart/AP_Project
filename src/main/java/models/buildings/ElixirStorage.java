@@ -11,9 +11,10 @@ public class ElixirStorage extends Storage
         capacity = DEFAULT_CAPACITY;
     }
 
+    public static final int BUILDING_TYPE = 4;
     @Override
     public int getType()
     {
-        return 4;
+        return BUILDING_TYPE;
     }
 }

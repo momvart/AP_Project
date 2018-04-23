@@ -1,9 +1,9 @@
 package utils;
 
-import exceptions.InvalidCommandException;
+import exceptions.ConsoleException;
 
 public interface ICommandManager
 {
 
-    void manageCommand(String command) throws InvalidCommandException;
+    void manageCommand(String command) throws ConsoleException;
 }

@@ -25,7 +25,8 @@ public abstract class Building
         {
             World.sCurrentGame.getVillage().getMap().getBuildings(getType())
                     .max(Comparator.comparingInt(Building::getBuildingNum))
-                    .ifPresent(building -> {
+                    .ifPresent(building ->
+                    {
                         if (building.buildingNum == 0)
                             building.buildingNum = 1;
                         this.buildingNum = building.buildingNum + 1;

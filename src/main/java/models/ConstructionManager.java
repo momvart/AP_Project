@@ -15,7 +15,7 @@ public class ConstructionManager
         this.village = village;
     }
 
-    private Village village;
+    private transient Village village;
     private ArrayList<Construction> constructions = new ArrayList<>();
 
     public ArrayList<Construction> getConstructions()

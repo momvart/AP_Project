@@ -19,9 +19,10 @@ public class ElixirMine extends Mine
         minedResources = 0;
     }
 
+    public static final int BUILDING_TYPE = 2;
     @Override
     public int getType()
     {
-        return 2;
+        return BUILDING_TYPE;
     }
 }

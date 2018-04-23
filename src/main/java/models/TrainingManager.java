@@ -1,5 +1,6 @@
 package models;
 
+import models.buildings.Barracks;
 import models.buildings.Recruit;
 import models.soldiers.Soldier;
 
@@ -7,12 +8,12 @@ import java.util.ArrayList;
 
 public class TrainingManager
 {
-    ArrayList<Recruit> recruits  = new ArrayList<>();
-    Village village = World.getVillage();
+    private ArrayList<Recruit> recruits = new ArrayList<>();
+    private transient Village village = World.getVillage();
 
     public void train(Soldier soldier)
     {
-        Recruit recruit = new Recruit(soldier.getType(), soldier.getArmyUnitInfo().getBrewTime(), soldier);
+        Recruit recruit = new Recruit(soldier.getType(), soldier.getSoldierInfo().getBrewTime(), soldier);
         recruits.add(recruit);
     }
 
@@ -28,6 +29,7 @@ public class TrainingManager
             }
         }
     }
+
     public ArrayList<Recruit> getRecruits()
     {
         return recruits;

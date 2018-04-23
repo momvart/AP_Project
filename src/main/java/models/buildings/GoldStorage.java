@@ -11,9 +11,10 @@ public class GoldStorage extends Storage
         capacity = DEFAULT_CAPACITY;
     }
 
+    public static final int BUILDING_TYPE = 3;
     @Override
     public int getType()
     {
-        return 3;
+        return BUILDING_TYPE;
     }
 }

@@ -1,14 +1,15 @@
 package controllers;
 
-import exceptions.InvalidCommandException;
-import models.World;
-import utils.ConsoleUtilities;
-import utils.ICommandManager;
+import com.google.gson.*;
+import exceptions.*;
+import models.*;
+import models.buildings.*;
+import utils.*;
 import views.ConsoleView;
 import views.VillageView;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
+import java.nio.file.*;
 import java.util.regex.Matcher;
 
 public class MainController implements ICommandManager
@@ -28,7 +29,7 @@ public class MainController implements ICommandManager
             {
                 manageCommand(theView.getCommand());
             }
-            catch (InvalidCommandException ex)
+            catch (ConsoleException ex)
             {
                 theView.showError(ex);
             }
@@ -37,7 +38,7 @@ public class MainController implements ICommandManager
 
     private ICommandManager childCommandManager = null;
 
-    public void manageCommand(String command) throws InvalidCommandException
+    public void manageCommand(String command) throws ConsoleException
     {
         try
         {
@@ -54,12 +55,12 @@ public class MainController implements ICommandManager
                 World.newGame();
                 enterGame();
             }
-            else if ((m = ConsoleUtilities.getMatchedCommand("load\\s+(\\w+)", command)) != null)
+            else if ((m = ConsoleUtilities.getMatchedCommand("load\\s+(\\S+)", command)) != null)
             {
-                String path = m.group(1);
-                //TODO: parsing json
+                openGame(Paths.get(m.group(1)));
+                enterGame();
             }
-            else if ((m = ConsoleUtilities.getMatchedCommand("save\\s+(\\w+)\\s+(\\w+)", command)) != null)
+            else if ((m = ConsoleUtilities.getMatchedCommand("save\\s+(\\S+)\\s+(\\S+)", command)) != null)
             {
                 saveGame(Paths.get(m.group(1), m.group(2)));
             }
@@ -73,8 +74,43 @@ public class MainController implements ICommandManager
         childCommandManager = new VillageController(new VillageView(theView.getScanner()));
     }
 
-    private void saveGame(Path path)
+    private void openGame(Path path) throws MyJsonException, MyIOException
     {
+        try (BufferedReader reader = Files.newBufferedReader(path))
+        {
+            World.openGame(reader);
+        }
+        catch (JsonSyntaxException | JsonIOException ex)
+        {
+            throw new MyJsonException(ex);
+        }
+        catch (NoSuchFileException ex)
+        {
+            throw new MyIOException("File not found.", ex);
+        }
+        catch (IOException ex)
+        {
+            throw new MyIOException(ex);
+        }
+    }
 
+    private void saveGame(Path path) throws MyJsonException, MyIOException
+    {
+        try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING))
+        {
+            World.saveGame(writer);
+        }
+        catch (JsonIOException ex)
+        {
+            throw new MyJsonException(ex);
+        }
+        catch (NoSuchFileException ex)
+        {
+            throw new MyIOException("File not found.", ex);
+        }
+        catch (IOException ex)
+        {
+            throw new MyIOException(ex);
+        }
     }
 }

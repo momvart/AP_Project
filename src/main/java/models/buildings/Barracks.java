@@ -13,8 +13,8 @@ import utils.Point;
 
 public class Barracks extends VillageBuilding
 {
-    int soldierBrewTimeDecrease;
-    TrainingManager trainingManager = new TrainingManager();
+    private int soldierBrewTimeDecrease;
+    private TrainingManager trainingManager = new TrainingManager();
 
     public Barracks(Point location)
     {
@@ -35,6 +35,11 @@ public class Barracks extends VillageBuilding
             soldierBrewTimeDecrease--;
     }
 
+    public TrainingManager getTrainingManager()
+    {
+        return trainingManager;
+    }
+
     public int getSoldierBrewTimeDecrease()
     {
         return soldierBrewTimeDecrease;
@@ -42,7 +47,7 @@ public class Barracks extends VillageBuilding
 
     public void trainSoldier(int soldierType)
     {
-        Soldier soldier = SoldierFactory.createSoldierByTypeID(soldierType,this.level);
+        Soldier soldier = SoldierFactory.createSoldierByTypeID(soldierType, this.level);
         trainingManager.train(soldier);
     }
 

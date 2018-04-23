@@ -1,11 +1,16 @@
 package models;
 
 
+import models.buildings.*;
 import models.buildings.BuildingValues;
 import models.soldiers.SoldierValues;
 
-import java.io.IOException;
-import java.nio.file.Paths;
+import java.io.*;
+import java.nio.file.*;
+
+import com.google.gson.*;
+import com.google.gson.stream.*;
+import com.google.gson.reflect.*;
 
 public class World
 {
@@ -48,9 +53,25 @@ public class World
         sCurrentGame = game;
     }
 
-    public static void saveGame(String path, String name)
+    private static Gson createSerializer()
     {
+        return new GsonBuilder()
+                .registerTypeAdapter(Building.class, new serialization.BuilderAdapter())
+                .registerTypeAdapter(Class.class, new serialization.ClassAdapter())
+                .setPrettyPrinting()
+                .create();
+    }
 
+    public static void openGame(Reader reader)
+    {
+        Gson g = createSerializer();
+        loadGame(g.fromJson(reader, Game.class));
+    }
+
+    public static void saveGame(Writer writer)
+    {
+        Gson g = createSerializer();
+        g.toJson(sCurrentGame, Game.class, writer);
     }
 
     public static Village getVillage()

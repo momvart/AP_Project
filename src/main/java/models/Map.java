@@ -12,11 +12,11 @@ import java.util.stream.Stream;
 
 public class Map
 {
-    private Building[][] map;
+    private transient Building[][] map;
     private ArrayList<Building> buildings = new ArrayList<>();
     private Size size;
-    private ArrayList<Storage> storages = new ArrayList<>();
-    private ArrayList<DefensiveTower> defensiveTowers = new ArrayList<>();
+    private transient ArrayList<Storage> storages = new ArrayList<>();
+    private transient ArrayList<DefensiveTower> defensiveTowers = new ArrayList<>();
     private Resource resources = new Resource(0, 0);
 
     public Map(Size size)

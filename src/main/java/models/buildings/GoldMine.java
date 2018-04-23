@@ -20,9 +20,10 @@ public class GoldMine extends Mine
         minedResources = 0;
     }
 
+    public static final int BUILDING_TYPE = 1;
     @Override
     public int getType()
     {
-        return 1;
+        return BUILDING_TYPE;
     }
 }
