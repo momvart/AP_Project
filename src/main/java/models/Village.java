@@ -8,6 +8,7 @@ import utils.Point;
 import utils.Size;
 
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 public class Village
 {
@@ -91,5 +92,18 @@ public class Village
             throw new NotEnoughResourceException(available, cost);
         constructionManager.upgrade(building);
         getResources().decrease(cost);
+    }
+
+    public void passTurn()
+    {
+        if (villageStatus.equals(VillageStatus.NORMAL))
+        {
+            turn++;
+            Stream<Mine> mines = getMap().getBuildings(Mine.class);
+            mines.forEach(Mine::passTurn);
+            Stream<Barracks> barracks = getMap().getBuildings(Barracks.class);
+            barracks.forEach(Barracks::passTurn);
+            getMap().getTownHall().passTurn();
+        }
     }
 }

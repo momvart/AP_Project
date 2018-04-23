@@ -25,6 +25,7 @@ public class Construction
         this.builderNum = builder.getBuilderNum();
         builder.setBuilderStatus(BuilderStatus.WORKING);
         this.building = building;
+        building.buildStatus = BuildStatus.IN_CONSTRUCTION;
     }
 
     public boolean isFinished()

@@ -23,6 +23,10 @@ public class TownHall extends VillageBuilding
         builders.add(builder);
     }
 
+    public void passTurn()
+    {
+        addBuilder();
+    }
 
     @Override
     public int getType()

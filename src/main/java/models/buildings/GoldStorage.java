@@ -12,6 +12,7 @@ public class GoldStorage extends Storage
     }
 
     public static final int BUILDING_TYPE = 3;
+
     @Override
     public int getType()
     {

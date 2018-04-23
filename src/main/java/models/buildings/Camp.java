@@ -8,12 +8,12 @@ import java.util.ArrayList;
 public class Camp extends VillageBuilding
 {
     int capacity;
-    ArrayList<Soldier> soldiers;
 
     public Camp(Point location)
     {
         super(location);
     }
+
 
     public int getCapacity()
     {
@@ -30,13 +30,5 @@ public class Camp extends VillageBuilding
     public void upgrade()
     {
         // TODO: 4/13/18 method should throw an exception  
-    }
-
-    public void heal()
-    {
-        for (Soldier soldier : soldiers)
-        {
-            soldier.heal();
-        }
     }
 }

@@ -21,6 +21,11 @@ public class Barracks extends VillageBuilding
         super(location);
     }
 
+    public void passTurn()
+    {
+        trainingManager.checkTraining();
+    }
+
     @Override
     public int getType()
     {

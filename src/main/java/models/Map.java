@@ -106,10 +106,15 @@ public class Map
         return (TownHall)buildings.get(0);
     }
 
-    public Stream<Building> getBuildings(int buildingType)
+    public <T extends Building> Stream<T> getBuildings(Class<T> buildingType)
     {
         return buildings.stream()
-                .filter(building -> building.getType() == buildingType);
+                .filter(buildingType::isInstance)
+                .map(building -> (T)building);
+    }
+    public Stream<Building> getBuildings(int buildingType)
+    {
+        return buildings.stream().filter(building -> building.getType() == buildingType);
     }
 
     public Size getSize()
@@ -131,5 +136,6 @@ public class Map
     {
         return defensiveTowers;
     }
+
 
 }

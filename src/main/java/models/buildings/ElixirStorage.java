@@ -12,6 +12,7 @@ public class ElixirStorage extends Storage
     }
 
     public static final int BUILDING_TYPE = 4;
+
     @Override
     public int getType()
     {
