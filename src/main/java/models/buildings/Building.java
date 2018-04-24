@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public abstract class Building
 {
+    protected int ID;
     protected int buildingNum;
     protected Point location;
     protected boolean destroyed;
@@ -38,6 +39,14 @@ public abstract class Building
         this.strength = BuildingValues.getBuildingInfo(getType()).initialStrength;
         this.destroyed = false;
         this.buildStatus = BuildStatus.BUILT;
+        StringBuilder s = new StringBuilder();
+        s.append(String.format("%2d", this.getType())).append(buildingNum);
+        this.ID = Integer.parseInt(s.toString());
+    }
+
+    public int getID()
+    {
+        return ID;
     }
 
     public abstract int getType();

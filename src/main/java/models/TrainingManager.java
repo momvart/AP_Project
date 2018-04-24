@@ -2,7 +2,7 @@ package models;
 
 import models.buildings.Barracks;
 import models.buildings.Recruit;
-import models.soldiers.Soldier;
+import models.soldiers.SoldierValues;
 
 import java.util.ArrayList;
 
@@ -10,22 +10,26 @@ public class TrainingManager
 {
     private ArrayList<Recruit> recruits = new ArrayList<>();
     private transient Village village = World.getVillage();
+    private transient Barracks barracks;
 
-    public void train(Soldier soldier)
+    public void train(int soldierType, int count)
     {
-        Recruit recruit = new Recruit(soldier.getType(), soldier.getSoldierInfo().getBrewTime(), soldier);
+        Recruit recruit = new Recruit(soldierType, SoldierValues.getSoldierInfo(soldierType).getBrewTime(), count, barracks.getLevel());
         recruits.add(recruit);
     }
 
-    public void checkTraining()
+    public void passTurn()
     {
         for (int i = 0; i < recruits.size(); i++)
         {
             if (recruits.get(i).isFinished())
             {
-                village.getSoldiers().add(recruits.get(i).getSoldier());
-                recruits.remove(i);
-                i--;
+                recruits.get(i).finishSoldier();
+                if (recruits.get(i).checkCompleteFinish())
+                {
+                    recruits.remove(i);
+                    i--;
+                }
             }
         }
     }

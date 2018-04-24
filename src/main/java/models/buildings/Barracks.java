@@ -5,10 +5,7 @@ import menus.ParentMenu;
 import menus.Submenu;
 import menus.TrainSoldierSubmenu;
 import models.TrainingManager;
-import models.Village;
 import models.World;
-import models.soldiers.Soldier;
-import models.soldiers.SoldierFactory;
 import utils.Point;
 
 public class Barracks extends VillageBuilding
@@ -23,7 +20,7 @@ public class Barracks extends VillageBuilding
 
     public void passTurn()
     {
-        trainingManager.checkTraining();
+        trainingManager.passTurn();
     }
 
     @Override
@@ -50,10 +47,9 @@ public class Barracks extends VillageBuilding
         return soldierBrewTimeDecrease;
     }
 
-    public void trainSoldier(int soldierType)
+    public void trainSoldier(int soldierType, int count)
     {
-        Soldier soldier = SoldierFactory.createSoldierByTypeID(soldierType, this.level);
-        trainingManager.train(soldier);
+        trainingManager.train(soldierType, count);
     }
 
     @Override
