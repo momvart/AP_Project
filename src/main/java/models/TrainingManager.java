@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class TrainingManager
 {
     private ArrayList<Recruit> recruits = new ArrayList<>();
+    private transient Barracks barracks;
 
     public void train(Soldier soldier)
     {
@@ -22,9 +23,12 @@ public class TrainingManager
         {
             if (recruits.get(i).isFinished())
             {
-                World.getVillage().getSoldiers().add(recruits.get(i).getSoldier());
-                recruits.remove(i);
-                i--;
+                recruits.get(i).finishSoldier();
+                if (recruits.get(i).checkCompleteFinish())
+                {
+                    recruits.remove(i);
+                    i--;
+                }
             }
         }
     }
