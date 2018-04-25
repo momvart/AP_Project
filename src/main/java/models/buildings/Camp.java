@@ -7,11 +7,11 @@ import java.util.ArrayList;
 
 public class Camp extends VillageBuilding
 {
-    int capacity;
+    private int capacity;
 
-    public Camp(Point location)
+    public Camp(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
     }
 
 

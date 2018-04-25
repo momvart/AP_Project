@@ -6,9 +6,9 @@ import utils.Point;
 public class AirDefense extends DefensiveTower
 {
 
-    public AirDefense(Point location)
+    public AirDefense(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
     }
 
     @Override

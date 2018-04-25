@@ -8,9 +8,9 @@ public abstract class DefensiveTower extends Building
     private int attackPower;
     private int range;
 
-    public DefensiveTower(Point location)
+    public DefensiveTower(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
     }
 
     public int getRange()

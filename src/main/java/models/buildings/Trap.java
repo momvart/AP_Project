@@ -5,9 +5,9 @@ import utils.Point;
 
 public class Trap extends DefensiveTower
 {
-    public Trap(Point location)
+    public Trap(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
     }
 
     @Override

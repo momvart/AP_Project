@@ -2,51 +2,32 @@ package models.buildings;
 
 import menus.BuildingSubmenu;
 import menus.ParentMenu;
-import menus.Submenu;
-import models.World;
 import utils.Point;
-
-import java.util.Comparator;
-import java.util.Optional;
 
 public abstract class Building
 {
-    protected int ID;
-    protected int buildingNum;
+    private int buildingNum = -1;
     protected Point location;
-    protected boolean destroyed;
+    protected boolean destroyed = false;
     protected int level;
     protected int strength;
-    protected BuildStatus buildStatus;
+    protected BuildStatus buildStatus = BuildStatus.BUILT;
 
-    public Building(Point location)
+    public Building()
     {
-        this.location = location;
-        if (World.sCurrentGame != null)
-        {
-            World.sCurrentGame.getVillage().getMap().getBuildings(getType())
-                    .max(Comparator.comparingInt(Building::getBuildingNum))
-                    .ifPresent(building ->
-                    {
-                        if (building.buildingNum == 0)
-                            building.buildingNum = 1;
-                        this.buildingNum = building.buildingNum + 1;
-                    });
-        }
-        else
-            buildingNum = 0;
-        this.level = 0;
-        this.strength = BuildingValues.getBuildingInfo(getType()).initialStrength;
-        this.destroyed = false;
-        this.buildStatus = BuildStatus.BUILT;
-        StringBuilder s = new StringBuilder();
-        s.append(String.format("%2d", this.getType())).append(buildingNum);
-        this.ID = Integer.parseInt(s.toString());
+
     }
 
-    public int getID()
+    public Building(Point location, int buildingNum)
     {
-        return ID;
+        this.location = location;
+        this.buildingNum = buildingNum;
+        this.strength = BuildingValues.getBuildingInfo(getType()).initialStrength;
+    }
+
+    public long getID()
+    {
+        return getType() << (Integer.SIZE / Byte.SIZE) + buildingNum;
     }
 
     public abstract int getType();
@@ -101,7 +82,7 @@ public abstract class Building
         return BuildingValues.getBuildingInfo(getType());
     }
 
-    public Submenu getMenu(ParentMenu parent)
+    public BuildingSubmenu getMenu(ParentMenu parent)
     {
         return new BuildingSubmenu(parent, this);
     }

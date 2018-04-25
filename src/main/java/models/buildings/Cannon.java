@@ -5,9 +5,9 @@ import utils.Point;
 
 public class Cannon extends DefensiveTower
 {
-    public Cannon(Point location)
+    public Cannon(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
     }
 
     @Override

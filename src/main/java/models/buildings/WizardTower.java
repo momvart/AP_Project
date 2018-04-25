@@ -5,9 +5,9 @@ import utils.Point;
 
 public class WizardTower extends DefensiveTower
 {
-    public WizardTower(Point location)
+    public WizardTower(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
     }
 
     @Override

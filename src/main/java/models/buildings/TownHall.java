@@ -1,10 +1,7 @@
 package models.buildings;
 
 import exceptions.NoAvailableBuilderException;
-import menus.AvailableBuildingsSubmenu;
-import menus.Menu;
-import menus.ParentMenu;
-import menus.Submenu;
+import menus.*;
 import models.Builder;
 import models.BuilderStatus;
 import models.World;
@@ -16,9 +13,9 @@ public class TownHall extends VillageBuilding
 {
     ArrayList<Builder> builders = new ArrayList<>();
 
-    public TownHall(Point location)
+    public TownHall(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
         Builder builder = new Builder(1);
         builders.add(builder);
     }
@@ -28,10 +25,12 @@ public class TownHall extends VillageBuilding
         addBuilder();
     }
 
+    public static final int BUILDING_TYPE = 5;
+
     @Override
     public int getType()
     {
-        return 5;
+        return BUILDING_TYPE;
     }
 
     @Override
@@ -70,9 +69,9 @@ public class TownHall extends VillageBuilding
     }
 
     @Override
-    public Submenu getMenu(ParentMenu parent)
+    public BuildingSubmenu getMenu(ParentMenu parent)
     {
-        Submenu menu = super.getMenu(parent);
+        BuildingSubmenu menu = super.getMenu(parent);
         menu.insertItem(new AvailableBuildingsSubmenu(menu, World.sCurrentGame.getVillage()))
                 .insertItem(new Menu(Menu.Id.TH_STATUS, "Status"));
         return menu;

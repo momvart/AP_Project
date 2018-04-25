@@ -5,9 +5,9 @@ import utils.Point;
 
 public class ArcherTower extends DefensiveTower
 {
-    public ArcherTower(Point location)
+    public ArcherTower(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
     }
 
     @Override

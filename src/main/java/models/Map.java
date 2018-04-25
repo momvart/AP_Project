@@ -2,49 +2,65 @@ package models;
 
 import models.buildings.*;
 import models.soldiers.Soldier;
+import serialization.ClassAdapter;
+import utils.MySortedList;
 import utils.Point;
 import utils.Size;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Map
 {
     private transient Building[][] map;
-    private ArrayList<Building> buildings = new ArrayList<>();
+    private transient ArrayList<MySortedList<Long, Building>> buildings;
     private Size size;
-    private transient ArrayList<Storage> storages = new ArrayList<>();
-    private transient ArrayList<DefensiveTower> defensiveTowers = new ArrayList<>();
     private Resource resources = new Resource(0, 0);
+
+    public Map()
+    {
+
+    }
 
     public Map(Size size)
     {
         this.size = size;
-        map = new Building[size.getWidth()][size.getHeight()];
-        TownHall townHall = BuildingFactory.createBuildingByType(TownHall.class, new Point(size.getWidth() / 2 - 1, size.getHeight() / 2 - 1));
-        map[14][14] = townHall;
-        map[14][15] = townHall;
-        map[15][14] = townHall;
-        map[15][15] = townHall;
-        buildings.add(townHall);
-        Storage goldStorage = BuildingFactory.createBuildingByType(GoldStorage.class, new Point(size.getWidth() / 2 - 4, size.getHeight() / 2 - 4));
-        buildings.add(goldStorage);
-        Storage elixirStorage = BuildingFactory.createBuildingByType(ElixirStorage.class, new Point(size.getWidth() / 2 + 4, size.getHeight() / 2 + 4));
-        buildings.add(elixirStorage);
+
+        setUpBuildingsLists(new ArrayList<>());
+
+        initialize();
     }
 
-    public void addBuilding(Building building)
+    public void initialize()
     {
-        map[building.getLocation().getX()][building.getLocation().getY()] = building;
-        buildings.add(building);
+        TownHall townHall = BuildingFactory.createBuildingByType(TownHall.class, new Point(size.getWidth() / 2 - 1, size.getHeight() / 2 - 1), 1);
+        map[townHall.getLocation().getX()][townHall.getLocation().getY()] = townHall;
+        map[townHall.getLocation().getX()][townHall.getLocation().getY() + 1] = townHall;
+        map[townHall.getLocation().getX() + 1][townHall.getLocation().getY()] = townHall;
+        map[townHall.getLocation().getX() + 1][townHall.getLocation().getY() + 1] = townHall;
+        addBuilding(townHall);
+        Storage goldStorage = BuildingFactory.createBuildingByType(GoldStorage.class, new Point(size.getWidth() / 2 - 4, size.getHeight() / 2 - 4), 1);
+        addBuilding(goldStorage);
+        Storage elixirStorage = BuildingFactory.createBuildingByType(ElixirStorage.class, new Point(size.getWidth() / 2 + 4, size.getHeight() / 2 + 4), 1);
+        addBuilding(elixirStorage);
     }
 
-    public ArrayList<Building> getBuildings()
+    public Size getSize()
     {
-        return buildings;
+        return size;
     }
+
+    public Resource getResources()
+    {
+        return resources;
+    }
+
 
     /**
      * Checks if the location is in map or not.
@@ -59,6 +75,7 @@ public class Map
 
     /**
      * Checks if the location is in map or not.
+     *
      * @param x The coordinate x
      * @param y The coordinate y
      * @return
@@ -91,51 +108,59 @@ public class Map
         return isValid(x, y) && map[x][y] == null;
     }
 
-    public Building getNearestBuilding(Point location, int BuildingType)
+    public void addBuilding(Building building)
     {
-        return null;
+        if (building.getBuildingNum() < 0)
+            throw new IllegalArgumentException("Building number is not valid.");
+        if (!isValid(building.getLocation()))
+            throw new IllegalArgumentException("Location is not valid.");
+
+        map[building.getLocation().getX()][building.getLocation().getY()] = building;
+        buildings.get(building.getType() - 1).addValue(building);
     }
 
-    public Soldier getNearestSoldier(Point location, DefenseType defenseType)
+    public void setUpBuildingsLists(Iterable<Building> buildingsList)
     {
-        return null;
+        buildings = new ArrayList<>(BuildingValues.BUILDING_TYPES_COUNT);
+        Function<Building, Long> keyExtractor = Building::getID;
+        for (int i = 0; i < BuildingValues.BUILDING_TYPES_COUNT; i++)
+            buildings.add(new MySortedList<>(keyExtractor));
+
+        map = new Building[size.getWidth()][size.getHeight()];
+
+        for (Building b : buildingsList)
+            addBuilding(b);
+    }
+
+    public ArrayList<Building> getBuildings()
+    {
+        ArrayList<Building> retVal = new ArrayList<>();
+        for (MySortedList<Long, Building> list : buildings)
+            retVal.addAll(list.getValues());
+
+        return retVal;
+    }
+
+    public ArrayList<MySortedList<Long, Building>> getAllBuildings()
+    {
+        return buildings;
+    }
+
+    public MySortedList<Long, Building> getBuildings(int buildingType)
+    {
+        return buildings.get(buildingType - 1);
+    }
+
+    public <T extends Building> void forEachBuilding(Class<T> type, Consumer<T> consumer)
+    {
+        for (MySortedList<Long, Building> list : buildings)
+            if (type.isInstance(list.getMin()))
+                list.forEach(b -> consumer.accept(type.cast(b)));
     }
 
     public TownHall getTownHall()
     {
-        return (TownHall)buildings.get(0);
+        return (TownHall)getBuildings(TownHall.BUILDING_TYPE).getByIndex(0);
     }
-
-    public <T extends Building> Stream<T> getBuildings(Class<T> buildingType)
-    {
-        return buildings.stream()
-                .filter(buildingType::isInstance)
-                .map(building -> (T)building);
-    }
-    public Stream<Building> getBuildings(int buildingType)
-    {
-        return buildings.stream().filter(building -> building.getType() == buildingType);
-    }
-
-    public Size getSize()
-    {
-        return size;
-    }
-
-    public Resource getResources()
-    {
-        return resources;
-    }
-
-    public ArrayList<Storage> getStorages()
-    {
-        return storages;
-    }
-
-    public ArrayList<DefensiveTower> getDefensiveTowers()
-    {
-        return defensiveTowers;
-    }
-
 
 }

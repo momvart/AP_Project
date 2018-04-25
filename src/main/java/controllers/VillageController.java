@@ -1,20 +1,13 @@
 package controllers;
 
-import exceptions.ConsoleException;
-import exceptions.InvalidCommandException;
-import exceptions.NotEnoughResourceException;
+import exceptions.*;
 import menus.*;
-import models.Village;
-import models.World;
-import utils.ConsoleUtilities;
-import utils.ICommandManager;
-import utils.Point;
-import views.VillageView;
 import models.*;
+import models.soldiers.*;
+import utils.*;
+import views.VillageView;
 import models.buildings.*;
-import views.dialogs.DialogResult;
-import views.dialogs.DialogResultCode;
-import views.dialogs.TextInputDialog;
+import views.dialogs.*;
 
 import java.util.regex.Matcher;
 
@@ -80,7 +73,6 @@ public class VillageController implements IMenuClickListener, ICommandManager
             {
                 //TODO: construct method should check for location to be empty
                 //TODO: when building is in construction map should show its location as not empty.
-                //TODO: seems that construct method doesn't add the building to the map till its construction finishes.
                 BuildingInfo info = ((AvailableBuildingItem)menu).getBuildingInfo();
                 try
                 {
@@ -110,7 +102,20 @@ public class VillageController implements IMenuClickListener, ICommandManager
             break;
             case Menu.Id.BARRACKS_TRAIN_ITEM:
             {
-                //TODO: training soldiers should be implemented.
+                TrainSoldierItem item = (TrainSoldierItem)menu;
+                try
+                {
+                    if (item.getAvailableCount() < 0)
+                        throw new SoldierUnavailableException(SoldierValues.getSoldierInfo(item.getSoldierType()));
+                    DialogResult result = theView.showSoldierTrainCountDialog();
+                    if (result.getResultCode() != DialogResultCode.YES)
+                        break;
+                    ((Barracks)((TrainSoldierSubmenu)theView.getCurrentMenu()).getBuilding()).trainSoldier(item.getSoldierType(), (int)result.getData(NumberInputDialog.KEY_NUMBER));
+                }
+                catch (ConsoleException ex)
+                {
+                    theView.showError(ex);
+                }
             }
             break;
         }

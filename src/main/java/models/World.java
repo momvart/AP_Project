@@ -11,6 +11,7 @@ import java.nio.file.*;
 import com.google.gson.*;
 import com.google.gson.stream.*;
 import com.google.gson.reflect.*;
+import serialization.*;
 
 public class World
 {
@@ -43,6 +44,7 @@ public class World
         //TODO: check value with document
         loadGame(new Game()
         {{
+            initialize();
             getVillage().getResources().increase(2000, 2000);
         }});
     }
@@ -56,8 +58,9 @@ public class World
     private static Gson createSerializer()
     {
         return new GsonBuilder()
-                .registerTypeAdapter(Building.class, new serialization.BuilderAdapter())
-                .registerTypeAdapter(Class.class, new serialization.ClassAdapter())
+                .registerTypeAdapter(Building.class, new BuilderAdapter())
+                .registerTypeAdapter(Class.class, new ClassAdapter())
+                .registerTypeAdapter(Map.class, new MapAdapter())
                 .setPrettyPrinting()
                 .create();
     }

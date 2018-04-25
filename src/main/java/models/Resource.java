@@ -37,7 +37,7 @@ public class Resource implements Comparable<Resource>
     public Resource decrease(Resource resource)
     {
         if (resource.gold > gold || resource.elixir > elixir)
-            throw new IllegalArgumentException("not enough resource in storage to decrease");
+            throw new IllegalArgumentException("not enough resource to decrease");
         this.gold -= resource.gold;
         this.elixir -= resource.elixir;
         return this;
@@ -55,6 +55,13 @@ public class Resource implements Comparable<Resource>
         this.gold += gold;
         this.elixir += elixir;
         return this;
+    }
+
+    public static Resource multiply(Resource resource, int multiplier)
+    {
+        if (multiplier < 0)
+            throw new IllegalArgumentException("Multiplier is negative: " + multiplier);
+        return new Resource(resource.gold * multiplier, resource.elixir * multiplier);
     }
 
     @Override

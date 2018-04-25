@@ -5,9 +5,9 @@ import utils.Point;
 
 public class GuardianGiant extends DefensiveTower
 {
-    public GuardianGiant(Point location)
+    public GuardianGiant(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
     }
 
     @Override

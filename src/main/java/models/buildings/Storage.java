@@ -7,9 +7,9 @@ public abstract class Storage extends VillageBuilding
 {
     int capacity;
 
-    public Storage(Point location)
+    public Storage(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
     }
 
     public int getCapacity()

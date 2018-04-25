@@ -5,8 +5,8 @@ import utils.Point;
 public abstract class VillageBuilding extends Building
 {
 
-    public VillageBuilding(Point location)
+    public VillageBuilding(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
     }
 }

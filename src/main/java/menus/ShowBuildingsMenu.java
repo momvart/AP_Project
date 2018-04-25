@@ -1,10 +1,10 @@
 package menus;
 
+import models.Map;
 import models.World;
-import models.buildings.Building;
+import models.buildings.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 
 public class ShowBuildingsMenu extends Submenu
 {
@@ -16,9 +16,14 @@ public class ShowBuildingsMenu extends Submenu
     private void setItems()
     {
         items = new ArrayList<>();
-        World.sCurrentGame.getVillage().getBuildings().stream()
-                .sorted(Comparator.comparing(Building::getName).thenComparing(Building::getBuildingNum))
-                .forEachOrdered(b -> items.add(b.getMenu(this)));
+        Map map = World.sCurrentGame.getVillage().getMap();
+        BuildingValues.getInfos().stream()
+                .sorted(Comparator.comparing(BuildingInfo::getName))
+                .forEachOrdered(info ->
+                {
+                    List<Building> list = map.getBuildings(info.getType()).getValues();
+                    list.forEach(building -> items.add(building.getMenu(this).setShowBuildingNum(list.size() > 1)));
+                });
     }
 
     @Override

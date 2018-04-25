@@ -4,9 +4,9 @@ import utils.Point;
 
 public class Wall extends Building
 {
-    public Wall(Point location)
+    public Wall(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
     }
 
     @Override

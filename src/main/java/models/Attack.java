@@ -11,7 +11,7 @@ public class Attack
 {
     private ArrayList<Soldier> attackSoldiers;
     private Resource claimedResource;
-    private Map map;
+    private AttackMap map;
     private int turn;
 
     public void mapInfo()

@@ -1,21 +1,22 @@
 package models.buildings;
 
-import menus.Menu;
-import menus.ParentMenu;
-import menus.Submenu;
-import menus.TrainSoldierSubmenu;
+import exceptions.NotEnoughResourceException;
+import menus.*;
+import models.Resource;
 import models.TrainingManager;
 import models.World;
+import models.soldiers.SoldierValues;
 import utils.Point;
 
 public class Barracks extends VillageBuilding
 {
     private int soldierBrewTimeDecrease;
-    private TrainingManager trainingManager = new TrainingManager();
+    private TrainingManager trainingManager;
 
-    public Barracks(Point location)
+    public Barracks(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
+        trainingManager = new TrainingManager(this);
     }
 
     public void passTurn()
@@ -47,15 +48,16 @@ public class Barracks extends VillageBuilding
         return soldierBrewTimeDecrease;
     }
 
-    public void trainSoldier(int soldierType, int count)
+    public void trainSoldier(int soldierType, int count) throws NotEnoughResourceException
     {
+        World.getVillage().spendResource(Resource.multiply(SoldierValues.getSoldierInfo(soldierType).getBrewCost(), count));
         trainingManager.train(soldierType, count);
     }
 
     @Override
-    public Submenu getMenu(ParentMenu parent)
+    public BuildingSubmenu getMenu(ParentMenu parent)
     {
-        Submenu menu = super.getMenu(parent);
+        BuildingSubmenu menu = super.getMenu(parent);
         menu.insertItem(new TrainSoldierSubmenu(menu, this, World.getVillage().getResources().getElixir()))
                 .insertItem(new Menu(Menu.Id.BARRACKS_STATUS, "Status"));
         return menu;

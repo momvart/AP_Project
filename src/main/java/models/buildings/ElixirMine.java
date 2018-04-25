@@ -6,9 +6,9 @@ import utils.Point;
 
 public class ElixirMine extends Mine
 {
-    public ElixirMine(Point location)
+    public ElixirMine(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
         setResourceAddPerDeltaT(5);
     }
 

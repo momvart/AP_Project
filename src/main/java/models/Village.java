@@ -12,11 +12,18 @@ import java.util.stream.Stream;
 
 public class Village
 {
-    private Map map = new Map(new Size(30, 30));
-    private ConstructionManager constructionManager = new ConstructionManager(this);
+    private Map map;
+    private ConstructionManager constructionManager;
     private VillageStatus villageStatus = VillageStatus.NORMAL;
     private int turn = 0;
-    private ArrayList<Soldier> soldiers = new ArrayList<>();
+    private ArrayList<Soldier> soldiers;
+
+    public void initialize()
+    {
+        map = new Map(new Size(30, 30));
+        constructionManager = new ConstructionManager(this);
+        soldiers = new ArrayList<>();
+    }
 
     public VillageStatus getVillageStatus()
     {
@@ -61,13 +68,25 @@ public class Village
     public Resource getTotalResourceCapacity()
     {
         int gold = 0, elixir = 0;
-        for (Storage storage : map.getStorages())
-            if (storage instanceof GoldStorage)
-                gold += storage.getCapacity();
-            else
-                elixir += storage.getCapacity();
+        for (Building storage : map.getBuildings(GoldStorage.BUILDING_TYPE))
+            gold += ((GoldStorage)storage).getCapacity();
+        for (Building storage : map.getBuildings(ElixirStorage.BUILDING_TYPE))
+            elixir += ((ElixirStorage)storage).getCapacity();
         return new Resource(gold, elixir);
     }
+
+    public void spendResource(Resource toSpend) throws NotEnoughResourceException
+    {
+        try
+        {
+            getResources().decrease(toSpend);
+        }
+        catch (IllegalArgumentException ex)
+        {
+            throw new NotEnoughResourceException(getResources(), toSpend);
+        }
+    }
+
 
     public Builder getAvailableBuilder() throws NoAvailableBuilderException
     {
@@ -81,7 +100,7 @@ public class Village
         if (available.isLessThanOrEqual(cost))
             throw new NotEnoughResourceException(available, cost);
         constructionManager.construct(buildingType, location);
-        getResources().decrease(cost);
+        spendResource(cost);
     }
 
     public void upgradeBuilding(Building building) throws NotEnoughResourceException, NoAvailableBuilderException
@@ -91,7 +110,7 @@ public class Village
         if (available.isLessThanOrEqual(cost))
             throw new NotEnoughResourceException(available, cost);
         constructionManager.upgrade(building);
-        getResources().decrease(cost);
+        spendResource(cost);
     }
 
     public void passTurn()
@@ -99,8 +118,8 @@ public class Village
         if (villageStatus.equals(VillageStatus.NORMAL))
         {
             turn++;
-            getMap().getBuildings(Mine.class).forEach(Mine::passTurn);
-            getMap().getBuildings(Barracks.class).forEach(Barracks::passTurn);
+            getMap().forEachBuilding(Mine.class, Mine::passTurn);
+            getMap().forEachBuilding(Barracks.class, Barracks::passTurn);
             getMap().getTownHall().passTurn();
             constructionManager.checkConstructions();
         }

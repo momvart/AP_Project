@@ -12,9 +12,9 @@ public abstract class Mine extends VillageBuilding
     int resourceAddPerDeltaT;
     protected int minedResources;
 
-    public Mine(Point location)
+    public Mine(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
     }
 
     public int getResourceAddPerDeltaT()

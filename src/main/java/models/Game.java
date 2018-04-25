@@ -2,8 +2,19 @@ package models;
 
 public class Game
 {
-    private Village village = new Village();
+    private Village village;
     private int score = 0;
+
+    public Game()
+    {
+
+    }
+
+    public void initialize()
+    {
+        village = new Village();
+        village.initialize();
+    }
 
     public Village getVillage()
     {

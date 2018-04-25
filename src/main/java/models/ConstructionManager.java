@@ -25,7 +25,7 @@ public class ConstructionManager
 
     public void construct(int buildingType, Point location) throws NoAvailableBuilderException
     {
-        Building building = BuildingFactory.createBuildingByTypeId(buildingType, location);
+        Building building = BuildingFactory.createBuildingByTypeId(buildingType, location, village.getMap());
         int constructTime = building.getBuildingInfo().getBuildDuration();
         Builder builder = village.getAvailableBuilder();
         World.getVillage().getMap().addBuilding(building);

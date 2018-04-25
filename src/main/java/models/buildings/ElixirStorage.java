@@ -5,9 +5,10 @@ import utils.Point;
 public class ElixirStorage extends Storage
 {
     private static final int DEFAULT_CAPACITY = 20;
-    public ElixirStorage(Point location)
+
+    public ElixirStorage(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
         capacity = DEFAULT_CAPACITY;
     }
 

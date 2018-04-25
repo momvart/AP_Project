@@ -7,9 +7,9 @@ import utils.Point;
 
 public class GoldMine extends Mine
 {
-    public GoldMine(Point location)
+    public GoldMine(Point location, int buildingNum)
     {
-        super(location);
+        super(location, buildingNum);
         setResourceAddPerDeltaT(10);
     }
 
@@ -21,6 +21,7 @@ public class GoldMine extends Mine
     }
 
     public static final int BUILDING_TYPE = 1;
+
     @Override
     public int getType()
     {
