@@ -37,5 +37,6 @@ public class ConsoleView
     {
         System.out.println(ex.getMessage());
         System.err.println(ex.getDatailedMessage());
+        ex.printStackTrace();
     }
 }

@@ -25,7 +25,7 @@ public abstract class Building
         this.strength = BuildingValues.getBuildingInfo(getType()).initialStrength;
     }
 
-    public long getID()
+    public long getId()
     {
         return getType() << (Integer.SIZE / Byte.SIZE) + buildingNum;
     }
@@ -65,6 +65,11 @@ public abstract class Building
     public BuildStatus getBuildStatus()
     {
         return buildStatus;
+    }
+
+    public void setBuildStatus(BuildStatus buildStatus)
+    {
+        this.buildStatus = buildStatus;
     }
 
     public void upgrade()

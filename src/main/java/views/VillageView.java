@@ -51,7 +51,7 @@ public class VillageView extends ConsoleMenuContainerView
                 showConstructionsStatus(World.sCurrentGame.getVillage().getConstructionManager().getConstructions());
                 break;
             case Menu.Id.BARRACKS_STATUS:
-                //TODO: no method found in barracks for getting trains
+                showSoldierTrainingsStatus(((Barracks)((IBuildingMenu)currentMenu).getBuilding()).getTrainingManager().getRecruits());
                 break;
             case Menu.Id.CAMP_CAPACITY_INFO:
                 showCampsCapacityInfo((Camp)((IBuildingMenu)currentMenu).getBuilding());
@@ -128,7 +128,7 @@ public class VillageView extends ConsoleMenuContainerView
     {
         constructions.stream()
                 .sorted(Comparator.comparing(c -> c.getBuildingInfo().getName()))
-                .forEach(c -> System.out.printf("%s %d", c.getBuildingInfo().getName(), c.getRemainingTurns()));
+                .forEach(c -> System.out.printf("%s %d\n", c.getBuildingInfo().getName(), c.getRemainingTurns()));
     }
 
     public DialogResult showSoldierTrainCountDialog()
@@ -136,7 +136,7 @@ public class VillageView extends ConsoleMenuContainerView
         return new NumberInputDialog(scanner, "How many of this soldier do you want to build?").showDialog();
     }
 
-    public void showSoldierTrainingsStatus(Queue<Recruit> recruits)
+    public void showSoldierTrainingsStatus(Iterable<Recruit> recruits)
     {
         //TODO: needs to be sorted
         for (Recruit r : recruits)

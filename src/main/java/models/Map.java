@@ -1,20 +1,13 @@
 package models;
 
 import models.buildings.*;
-import models.soldiers.Soldier;
-import serialization.ClassAdapter;
 import utils.MySortedList;
 import utils.Point;
 import utils.Size;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Map
 {
@@ -122,7 +115,7 @@ public class Map
     public void setUpBuildingsLists(Iterable<Building> buildingsList)
     {
         buildings = new ArrayList<>(BuildingValues.BUILDING_TYPES_COUNT);
-        Function<Building, Long> keyExtractor = Building::getID;
+        Function<Building, Long> keyExtractor = Building::getId;
         for (int i = 0; i < BuildingValues.BUILDING_TYPES_COUNT; i++)
             buildings.add(new MySortedList<>(keyExtractor));
 
@@ -156,6 +149,11 @@ public class Map
         for (MySortedList<Long, Building> list : buildings)
             if (type.isInstance(list.getMin()))
                 list.forEach(b -> consumer.accept(type.cast(b)));
+    }
+
+    public <T extends Building> T getBuildingById(long id)
+    {
+        return (T)buildings.get((int)(id >>> (Integer.SIZE / Byte.SIZE))).get(id);
     }
 
     public TownHall getTownHall()

@@ -12,6 +12,7 @@ public class Recruit
     private int soldierType;
     private int startTurn;
     private int count;
+    private int trainedCount;
     private int level;
 
     public Recruit(int soldierType, int count, int level)
@@ -29,19 +30,22 @@ public class Recruit
 
     public SoldierInfo getSoldierInfo() { return SoldierValues.getSoldierInfo(soldierType); }
 
-    private int getTrainTime()
+    private int getSingleTrainTime() {return getSoldierInfo().getBrewTime();}
+
+    private int getTotalTrainTime()
     {
-        return getSoldierInfo().getBrewTime();
+        return getSingleTrainTime() * count;
     }
 
-    public boolean isFinished()
+    public boolean isCurrentFinished()
     {
-        return World.sCurrentGame.getVillage().getTurn() == startTurn + getTrainTime();
+        return getRemainingTurns() % getSingleTrainTime() == 0 &&
+                World.sCurrentGame.getVillage().getTurn() != startTurn;
     }
 
     public int getRemainingTurns()
     {
-        return getTrainTime() + startTurn - World.sCurrentGame.getVillage().getTurn();
+        return getTotalTrainTime() + startTurn - World.sCurrentGame.getVillage().getTurn();
     }
 
     public int getCount()
@@ -51,18 +55,18 @@ public class Recruit
 
     public void finishSoldier()
     {
-        this.count -= 1;
+        this.trainedCount += 1;
         World.getVillage().getSoldiers().add(SoldierFactory.createSoldierByTypeID(soldierType, level));
     }
 
     public boolean checkCompleteFinish()
     {
-        return count == 0;
+        return count == trainedCount;
     }
 
     @Override
     public String toString()
     {
-        return getSoldierInfo().getName() + " " + getRemainingTurns();
+        return String.format("%s x%d: %d", getSoldierInfo().getName(), count - trainedCount, getRemainingTurns());
     }
 }

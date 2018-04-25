@@ -28,16 +28,16 @@ public class ConstructionManager
         Building building = BuildingFactory.createBuildingByTypeId(buildingType, location, village.getMap());
         int constructTime = building.getBuildingInfo().getBuildDuration();
         Builder builder = village.getAvailableBuilder();
-        World.getVillage().getMap().addBuilding(building);
-        Construction construction = new Construction(buildingType, constructTime, CONSTRUCT, location, builder, building);
+        Construction construction = new Construction(building, constructTime, CONSTRUCT, builder);
         constructions.add(construction);
+        World.getVillage().getMap().addBuilding(building);
     }
 
     public void upgrade(Building building) throws NoAvailableBuilderException
     {
         int constructTime = building.getBuildingInfo().getBuildDuration();
         Builder builder = village.getAvailableBuilder();
-        Construction construction = new Construction(building.getType(), constructTime, UPGRADE, building.getLocation(), builder, building);
+        Construction construction = new Construction(building, constructTime, UPGRADE, builder);
         constructions.add(construction);
     }
 

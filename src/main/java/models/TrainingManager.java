@@ -2,14 +2,13 @@ package models;
 
 import models.buildings.Barracks;
 import models.soldiers.Recruit;
-import models.soldiers.SoldierValues;
 
 import java.util.ArrayList;
 
 public class TrainingManager
 {
     private ArrayList<Recruit> recruits = new ArrayList<>();
-    private transient Barracks barracks;
+    private long barracksId;
 
     public TrainingManager()
     {
@@ -18,20 +17,29 @@ public class TrainingManager
 
     public TrainingManager(Barracks barracks)
     {
-        this.barracks = barracks;
+        this.barracksId = barracks.getId();
+        this.cachedBarracks = barracks;
+    }
+
+    private transient Barracks cachedBarracks;
+
+    public Barracks getBarracks()
+    {
+        if (cachedBarracks == null)
+            cachedBarracks = World.getVillage().getMap().getBuildingById(barracksId);
+        return cachedBarracks;
     }
 
     public void train(int soldierType, int count)
     {
-        Recruit recruit = new Recruit(soldierType, count, barracks.getLevel());
+        Recruit recruit = new Recruit(soldierType, count, getBarracks().getLevel());
         recruits.add(recruit);
     }
 
     public void passTurn()
     {
         for (int i = 0; i < recruits.size(); i++)
-        {
-            if (recruits.get(i).isFinished())
+            if (recruits.get(i).isCurrentFinished())
             {
                 recruits.get(i).finishSoldier();
                 if (recruits.get(i).checkCompleteFinish())
@@ -40,7 +48,6 @@ public class TrainingManager
                     i--;
                 }
             }
-        }
     }
 
     public ArrayList<Recruit> getRecruits()

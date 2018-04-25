@@ -12,9 +12,14 @@ public abstract class Soldier
     private Point location;
     private AttackHelper attackHelper;
 
+    public Soldier()
+    {
+
+    }
+
     public Soldier(int level)
     {
-        health = SoldierValues.getSoldierInfo(this.getType()).getInitialHealth();
+        health = getSoldierInfo().getInitialHealth();
         this.level = level;
         location = new Point(-1, -1);
     }
