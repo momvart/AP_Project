@@ -153,7 +153,7 @@ public class Map
 
     public <T extends Building> T getBuildingById(long id)
     {
-        return (T)buildings.get((int)(id >>> (Integer.SIZE / Byte.SIZE))).get(id);
+        return (T)getBuildings((int)(id >>> Integer.SIZE)).get(id);
     }
 
     public TownHall getTownHall()

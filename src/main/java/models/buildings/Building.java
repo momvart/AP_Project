@@ -27,7 +27,7 @@ public abstract class Building
 
     public long getId()
     {
-        return getType() << (Integer.SIZE / Byte.SIZE) + buildingNum;
+        return ((long)getType() << Integer.SIZE) + buildingNum;
     }
 
     public abstract int getType();

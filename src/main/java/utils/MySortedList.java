@@ -11,7 +11,7 @@ public class MySortedList<K extends Comparable<K>, V> implements Iterable<V>
     private ArrayList<V> values;
     private ArrayList<K> keys;
 
-    private boolean hasExtractor;
+    private transient boolean hasExtractor;
     private transient Function<V, K> keyExtractor;
 
     private transient Comparator<K> keyComparator;

@@ -74,7 +74,7 @@ public class MainController implements ICommandManager
         childCommandManager = new VillageController(new VillageView(theView.getScanner()));
     }
 
-    private void openGame(Path path) throws MyJsonException, MyIOException
+    private void openGame(Path path) throws ConsoleException
     {
         try (BufferedReader reader = Files.newBufferedReader(path))
         {
@@ -91,6 +91,10 @@ public class MainController implements ICommandManager
         catch (IOException ex)
         {
             throw new MyIOException(ex);
+        }
+        catch (Exception ex)
+        {
+            throw new ConsoleException("Couldn't open game.", ex.getMessage(), ex);
         }
     }
 

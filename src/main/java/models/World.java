@@ -3,6 +3,7 @@ package models;
 
 import models.buildings.*;
 import models.buildings.BuildingValues;
+import models.soldiers.Soldier;
 import models.soldiers.SoldierValues;
 
 import java.io.*;
@@ -59,6 +60,7 @@ public class World
     {
         return new GsonBuilder()
                 .registerTypeAdapter(Building.class, new BuilderAdapter())
+                .registerTypeAdapter(Soldier.class, new SoldierAdapter())
                 .registerTypeAdapter(Class.class, new ClassAdapter())
                 .registerTypeAdapter(Map.class, new MapAdapter())
                 .setPrettyPrinting()
