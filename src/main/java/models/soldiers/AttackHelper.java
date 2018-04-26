@@ -2,56 +2,48 @@ package models.soldiers;
 
 
 import models.Attack;
-import models.buildings.Building;
 import utils.Point;
 
 public abstract class AttackHelper
 {
     protected Attack attack;
     protected Soldier soldier;
-    private boolean soldierDeployed;
-    private Point soldierLocation;
-    private int damage;
-    private int range;
+    private boolean isSoldierDeployed = false;
+
+    public AttackHelper(Attack attack, Soldier soldier)
+    {
+        this.attack = attack;
+        this.soldier = soldier;
+    }
 
     public boolean isSoldierDeployed()
     {
-        return soldierDeployed;
+        return isSoldierDeployed;
     }
 
     public void setSoldierIsDeployed(boolean isSoldierDeployed)
     {
-        this.soldierDeployed = isSoldierDeployed;
-    }
-
-
-    public AttackHelper(Attack attack, Soldier soldier, Point location, int damage, int range)
-    {
-        this.attack = attack;
-        this.soldier = soldier;
-        this.soldierLocation = location;
-        this.damage = damage;
-        this.range = range;
+        this.isSoldierDeployed = isSoldierDeployed;
     }
 
     public Point getSoldierLocation()
     {
-        return soldierLocation;
+        return soldier.getLocation();
     }
 
     public int getDamage()
     {
-        return damage;
+        return soldier.getDamage();
     }
 
     public int getRange()
     {
-        return range;
+        return SoldierValues.getSoldierInfo(soldier.getType()).getRange();
     }
 
-    public int euclidianDistance(Point location1, Point location2)
+    public double euclidianDistance(Point location1, Point location2)
     {
-        return (int)Math.floor(Math.sqrt(Math.pow(location1.getX() - location2.getX(), 2) + Math.pow(location1.getY() - location2.getY(), 2)));
+        return Math.sqrt(Math.pow(location1.getX() - location2.getX(), 2) + Math.pow(location1.getY() - location2.getY(), 2));
     }
 
     public Integer manhatanianDistance(Point location1, Point location2)
@@ -59,6 +51,24 @@ public abstract class AttackHelper
         return Math.abs(location1.getX() - location2.getX()) + Math.abs(location1.getY() - location2.getY());
     }
 
+    public void passTurn()
+    {
+        removeSoldierIfDead();
+        if (soldier != null && isSoldierDeployed)
+        {
+            move();
+            setTarget();
+            fire();
+        }
+    }
+
+    public void removeSoldierIfDead()
+    {
+        if (soldier.getHealth() <= 0)
+        {
+            soldier = null;
+        }
+    }
     public abstract void move();
 
     public abstract void fire();

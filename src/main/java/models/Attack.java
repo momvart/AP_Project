@@ -13,7 +13,8 @@ public class Attack
     private Resource claimedResource;
     private AttackMap map;
     private int turn;
-
+    public ArrayList<Soldier> soldiersOnMap = new ArrayList<>();
+    private ArrayList<Healer> healersOnMap = new ArrayList<>();
     public void mapInfo()
     {
 
@@ -42,6 +43,11 @@ public class Attack
         {
             soldier.setLocation(location);
             soldier.getAttackHelper().setSoldierIsDeployed(true);
+            soldiersOnMap.add(soldier);
+            if (soldier.getType() == 5)//TODO‌ Here 5 is type of the healer.TO be checked if there is a change in initial SoldierValues
+            {
+                healersOnMap.add((Healer)soldier);
+            }
         }
     }
 
@@ -71,91 +77,43 @@ public class Attack
         return reqTroops;
     }
 
-    public void passTurn(int barracksLevel)
+    public void passTurn()
     {
-        // TODO: 4/22/18 : Saber, Why we need new Healer when we want to killAgedHealers ? Ansewr this question as soon as you saw this message. 
-        ageHealersOnMap(barracksLevel);
-        killAgedHealers(barracksLevel);
-        removeDeadUnits();
-        moveSoldiers();
-        setNewTargetToSoldiers();
-        fireSoldiers();
+        ageHealersOnMap();
+        killAgedHealers();
+        for (Soldier soldier : soldiersOnMap)
+        {
+            if (soldier != null)
+            {
+                soldier.getAttackHelper().passTurn();
+            }
+        }
         turn++;
     }
 
-    private void removeDeadUnits()
+
+    private void killAgedHealers()
     {
-        ArrayList<Soldier> walkingDeadSoldiers = new ArrayList<>();
-        for (Soldier attackSoldier : attackSoldiers)
+        for (Healer healer : healersOnMap)
         {
-            if (attackSoldier.getHealth() <= 0)
+            if (healer != null)
             {
-                walkingDeadSoldiers.add(attackSoldier);
+                if (healer.getTimeTillDie() <= 0)
+                {
+                    healer = null;
+                }
             }
         }
-        attackSoldiers.removeAll(walkingDeadSoldiers);
     }
 
-    private void killAgedHealers(int barracksLevel)
+    private void ageHealersOnMap()
     {
-        ArrayList<Healer> walkingDeadHealers = new ArrayList<>();
-        // TODO: 4/22/18 : Saber must check this part again
-        for (Healer healer : getHealersOnMap(barracksLevel))
+        for (Healer healer : healersOnMap)
         {
-            if (healer.getTimeTillDie() <= 0)
+            if (healer != null)
             {
-                walkingDeadHealers.add(healer);
+                healer.ageOneDeltaT();
             }
-        }
-        attackSoldiers.removeAll(walkingDeadHealers);
-    }
-
-    private void ageHealersOnMap(int barracksLevel)
-    {
-
-        for (Healer healer : getHealersOnMap(barracksLevel))
-        {
-            healer.ageOneDeltaT();
-        }
-    }
-
-    private ArrayList<Healer> getHealersOnMap(int barracksLevel)
-    {
-        // TODO: 4/22/18 Saber must check this part again. 
-        ArrayList<Healer> healers = new ArrayList<>();
-        for (Soldier soldier : getSoldiersOnMap())
-        {
-            if (soldier.getType() == new Healer(barracksLevel).getType())
-            {
-                healers.add((Healer)soldier);
-            }
-        }
-        return healers;
-    }
-
-
-    private void setNewTargetToSoldiers()
-    {
-        for (Soldier soldier : getSoldiersOnMap())
-        {
-            soldier.getAttackHelper().setTarget();
-        }
-    }
-
-
-    private void fireSoldiers()
-    {
-        for (Soldier soldier : getSoldiersOnMap())
-        {
-            soldier.getAttackHelper().fire();
-        }
-    }
-
-    private void moveSoldiers()
-    {
-        for (Soldier soldier : getSoldiersOnMap())
-        {
-            soldier.getAttackHelper().move();
         }
     }
 
@@ -164,18 +122,6 @@ public class Attack
         return claimedResource;
     }
 
-    public ArrayList<Soldier> getSoldiersOnMap()
-    {
-        ArrayList<Soldier> deployedSoldiers = new ArrayList<>();
-        for (Soldier attackSoldier : attackSoldiers)
-        {
-            if (attackSoldier.getAttackHelper().isSoldierDeployed())
-            {
-                deployedSoldiers.add(attackSoldier);
-            }
-        }
-        return deployedSoldiers;
-    }
 
     public ArrayList<Soldier> getUnits(int unitType)
     {

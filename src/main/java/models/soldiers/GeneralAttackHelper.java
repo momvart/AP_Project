@@ -2,8 +2,6 @@ package models.soldiers;
 
 import models.Attack;
 import models.buildings.Building;
-import models.buildings.Storage;
-import utils.Point;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,15 +12,18 @@ public class GeneralAttackHelper extends AttackHelper
 {
     private Building target;
 
-    public GeneralAttackHelper(Attack attack, Soldier soldier, Point location, int soldierDamagePotential, int soldierRange)
+    public GeneralAttackHelper(Attack attack, Soldier soldier)
     {
-        super(attack, soldier, location, soldierDamagePotential, soldierRange);
+        super(attack, soldier);
     }
 
     @Override
     public void move()
     {
-
+        if (!isTargetInRange())
+        {
+            //TODO‌ to be done by the code Mahdi is working on.
+        }
     }
 
     @Override
@@ -38,7 +39,6 @@ public class GeneralAttackHelper extends AttackHelper
     {
         return euclidianDistance(target.getLocation(), getSoldierLocation()) <= getRange();
     }
-
 
     @Override
     public void setTarget()
@@ -61,7 +61,7 @@ public class GeneralAttackHelper extends AttackHelper
         if (attack.getMap().getBuildings() != null)
         {
             ArrayList<Building> buildings = attack.getMap().getBuildings();
-            ArrayList<Integer> distances = new ArrayList<>();
+            ArrayList<Double> distances = new ArrayList<>();
             for (Building building : buildings)
             {
                 distances.add(euclidianDistance(building.getLocation(), getSoldierLocation()));
@@ -122,7 +122,7 @@ public class GeneralAttackHelper extends AttackHelper
 
     private boolean isTargetReachable(Building favouriteTarget)
     {
-        //TODO we should check if there is a road to the target (including the 4sideOpenity of target)
-        return false;
+        //attack.getMap().isReachable();
+        return true;
     }
 }

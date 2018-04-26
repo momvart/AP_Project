@@ -1,8 +1,6 @@
 package models.soldiers;
 
 import models.Attack;
-import models.World;
-import models.buildings.Barracks;
 import utils.Point;
 
 public abstract class Soldier
@@ -19,8 +17,8 @@ public abstract class Soldier
 
     public Soldier(int level)
     {
-        health = getSoldierInfo().getInitialHealth();
         this.level = level;
+        health = getInitialHelthOfUnitThisLevel();
         location = new Point(-1, -1);
     }
 
@@ -58,7 +56,7 @@ public abstract class Soldier
 
     public void participateIn(Attack attack)
     {
-        this.attackHelper = new GeneralAttackHelper(attack, this, this.getLocation(), this.getDamage(), SoldierValues.getSoldierInfo(this.getType()).getRange());
+        this.attackHelper = new GeneralAttackHelper(attack, this);
     }
 
     public Point getLocation()
@@ -78,16 +76,16 @@ public abstract class Soldier
 
     public void heal()
     {
-        this.health = getInitialHelathOfUnitThisLevel();
+        this.health = getInitialHelthOfUnitThisLevel();
     }
 
-    private int getInitialHelathOfUnitThisLevel()
+    private int getInitialHelthOfUnitThisLevel()
     {
         return SoldierValues.getSoldierInfo(this.getType()).getInitialDamage() + (level - 1) * 5;//TODO levels are supposed starting from 1
     }
 
     public void increaseHealth(int amount)
     {
-        this.health = Math.min(this.getHealth() + amount, getInitialHelathOfUnitThisLevel());
+        this.health = Math.min(this.getHealth() + amount, getInitialHelthOfUnitThisLevel());
     }
 }

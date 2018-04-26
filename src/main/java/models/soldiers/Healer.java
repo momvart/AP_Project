@@ -34,6 +34,6 @@ public class Healer extends Soldier
     @Override
     public void participateIn(Attack attack)
     {
-        setAttackHelper(new HealerAttackHelper(attack, this, getLocation(), getDamage(), SoldierValues.getSoldierInfo(this.getType()).getRange()));
+        setAttackHelper(new HealerAttackHelper(attack, this));
     }
 }
