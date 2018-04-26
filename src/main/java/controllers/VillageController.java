@@ -74,11 +74,11 @@ public class VillageController implements IMenuClickListener, ICommandManager
             {
                 //TODO: construct method should check for location to be empty
                 //TODO: when building is in construction map should show its location as not empty.
-                BuildingInfo info = ((AvailableBuildingItem)menu).getBuildingInfo();
                 try
                 {
+                    BuildingInfo info = ((AvailableBuildingItem)menu).getBuildingInfo();
                     if (theView.showConstructDialog(info.getName(), info.getBuildCost()).getResultCode() != DialogResultCode.YES)
-                        break;
+                    {break;}
                     Point location = null;
                     while (true)
                     {

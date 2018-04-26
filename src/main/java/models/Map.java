@@ -125,6 +125,11 @@ public class Map
             addBuilding(b);
     }
 
+    public Building[][] getMap()
+    {
+        return map;
+    }
+
     public ArrayList<Building> getBuildings()
     {
         ArrayList<Building> retVal = new ArrayList<>();
