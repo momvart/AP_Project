@@ -56,7 +56,7 @@ public class Attack
         ArrayList<Soldier> troopsToBeDeplyed = new ArrayList<>();
         for (Soldier attackSoldier : attackSoldiers)
         {
-            if (attackSoldier.getAttackHelper().isSoldierDeployed() == false)
+            if (!attackSoldier.getAttackHelper().isDead() && !attackSoldier.getAttackHelper().isSoldierDeployed())
             {
                 troopsToBeDeplyed.add(attackSoldier);
             }
@@ -69,7 +69,7 @@ public class Attack
         ArrayList<Soldier> reqTroops = new ArrayList<>();
         for (Soldier soldier : getSoldiersToBeDeployed())
         {
-            if (soldier.getType() == unitType)
+            if (soldier != null && !soldier.getAttackHelper().isDead() && soldier.getType() == unitType)
             {
                 reqTroops.add(soldier);
             }
@@ -83,7 +83,7 @@ public class Attack
         killAgedHealers();
         for (Soldier soldier : soldiersOnMap)
         {
-            if (soldier != null)
+            if (soldier != null && !soldier.getAttackHelper().isDead())
             {
                 soldier.getAttackHelper().passTurn();
             }
@@ -96,10 +96,11 @@ public class Attack
     {
         for (Healer healer : healersOnMap)
         {
-            if (healer != null)
+            if (healer != null && !healer.getAttackHelper().isDead())
             {
                 if (healer.getTimeTillDie() <= 0)
                 {
+                    healer.getAttackHelper().setDead(true);
                     healer = null;
                 }
             }
@@ -110,7 +111,7 @@ public class Attack
     {
         for (Healer healer : healersOnMap)
         {
-            if (healer != null)
+            if (healer != null && !healer.getAttackHelper().isDead())
             {
                 healer.ageOneDeltaT();
             }
@@ -128,7 +129,7 @@ public class Attack
         ArrayList<Soldier> units = new ArrayList<>();
         for (Soldier attackSoldier : attackSoldiers)
         {
-            if (attackSoldier.getType() == unitType)
+            if (attackSoldier != null && !attackSoldier.getAttackHelper().isDead() && attackSoldier.getType() == unitType)
             {
                 units.add(attackSoldier);
             }
@@ -146,7 +147,7 @@ public class Attack
         ArrayList<DefensiveTower> requiredTowers = new ArrayList<>();
         for (DefensiveTower defensiveTower : map.getDefensiveTowers())
         {
-            if (defensiveTower.getType() == towerType)
+            if (defensiveTower != null && defensiveTower.getType() == towerType)
             {
                 requiredTowers.add(defensiveTower);
             }

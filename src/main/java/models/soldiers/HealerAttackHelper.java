@@ -30,18 +30,24 @@ public class HealerAttackHelper extends AttackHelper
     @Override
     public void move()
     {
-        changeDestinationIfNeeded();
-        //TODO‌ in the path finding algorithm we should use the destination attribute in the roll of destination
+        if (soldier != null && !soldier.getAttackHelper().isDead())
+        {
+            changeDestinationIfNeeded();
+            //TODO‌ in the path finding algorithm we should use the destination attribute in the roll of destination
+        }
     }
 
     @Override
     public void fire()
     {
-        if (targets != null && targets.size() != 0)
+        if (soldier != null && !soldier.getAttackHelper().isDead())
         {
-            for (Soldier target : targets)
+            if (targets != null && targets.size() != 0)
             {
-                target.increaseHealth(getDamage());
+                for (Soldier target : targets)
+                {
+                    target.increaseHealth(getDamage());
+                }
             }
         }
     }
@@ -80,7 +86,7 @@ public class HealerAttackHelper extends AttackHelper
     {
         Point shouldISwitchTo = getSoldiersConcentrationPoint();
         int shouldISwitchToNumber = countNumberOfSoldiersAround(shouldISwitchTo);
-        if (Math.abs(countNumberOfSoldiersAround(destination) - shouldISwitchToNumber) < (0.3 * shouldISwitchToNumber))
+        if (countNumberOfSoldiersAround(destination) <= (0.7 * shouldISwitchToNumber))
         {
             destination = shouldISwitchTo;
         }
@@ -91,10 +97,14 @@ public class HealerAttackHelper extends AttackHelper
         int numberOfSoldiersInRange = 0;
         for (Soldier soldier : attack.soldiersOnMap)
         {
-            if (euclidianDistance(soldier.getLocation(), point) <= 10)
+            if (soldier != null && !soldier.getAttackHelper().isDead())
             {
-                numberOfSoldiersInRange++;
+                if (euclidianDistance(soldier.getLocation(), point) <= getRange())
+                {
+                    numberOfSoldiersInRange++;
+                }
             }
+
         }
         return numberOfSoldiersInRange;
     }
@@ -106,9 +116,12 @@ public class HealerAttackHelper extends AttackHelper
         ArrayList<Soldier> soldiersInRange = new ArrayList<>();
         for (Soldier soldier : attack.soldiersOnMap)
         {
-            if (euclidianDistance(soldier.getLocation(), getSoldierLocation()) <= getRange())
+            if (soldier != null && !soldier.getAttackHelper().isDead())
             {
-                soldiersInRange.add(soldier);
+                if (euclidianDistance(soldier.getLocation(), getSoldierLocation()) <= getRange())
+                {
+                    soldiersInRange.add(soldier);
+                }
             }
         }
         return soldiersInRange;

@@ -20,18 +20,24 @@ public class GeneralAttackHelper extends AttackHelper
     @Override
     public void move()
     {
-        if (!isTargetInRange())
+        if (soldier != null && !soldier.getAttackHelper().isDead())
         {
-            //TODO‌ to be done by the code Mahdi is working on.
+            if (!isTargetInRange())
+            {
+                //TODO‌ to be done by the code Mahdi is working on.
+            }
         }
     }
 
     @Override
     public void fire()
     {
-        if (isTargetInRange())
+        if (soldier != null && !soldier.getAttackHelper().isDead())
         {
-            target.decreaseStrength(getDamage());
+            if (isTargetInRange())
+            {
+                target.decreaseStrength(getDamage());
+            }
         }
     }
 
@@ -43,15 +49,18 @@ public class GeneralAttackHelper extends AttackHelper
     @Override
     public void setTarget()
     {
-        if (target == null || target.getStrength() <= 0)
+        if (soldier != null && !soldier.getAttackHelper().isDead())
         {
-            if (getBestFavouriteTarget() != null)
+            if (target == null || target.getStrength() <= 0)
             {
-                target = getBestFavouriteTarget();
-            }
-            else
-            {
-                target = getNearestBuilding();
+                if (getBestFavouriteTarget() != null)
+                {
+                    target = getBestFavouriteTarget();
+                }
+                else
+                {
+                    target = getNearestBuilding();
+                }
             }
         }
     }
