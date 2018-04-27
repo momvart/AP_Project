@@ -1,5 +1,6 @@
 package models;
 
+import exceptions.FilledCellException;
 import exceptions.NoAvailableBuilderException;
 import models.buildings.*;
 import utils.Point;
@@ -23,14 +24,14 @@ public class ConstructionManager
         return constructions;
     }
 
-    public void construct(int buildingType, Point location) throws NoAvailableBuilderException
+    public void construct(int buildingType, Point location) throws NoAvailableBuilderException, FilledCellException
     {
         Building building = BuildingFactory.createBuildingByTypeId(buildingType, location, village.getMap());
         int constructTime = building.getBuildingInfo().getBuildDuration();
         Builder builder = village.getAvailableBuilder();
+        World.getVillage().getMap().addBuilding(building);
         Construction construction = new Construction(building, constructTime, CONSTRUCT, builder);
         constructions.add(construction);
-        World.getVillage().getMap().addBuilding(building);
     }
 
     public void upgrade(Building building) throws NoAvailableBuilderException

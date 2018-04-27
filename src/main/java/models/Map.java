@@ -1,5 +1,6 @@
 package models;
 
+import exceptions.FilledCellException;
 import models.buildings.*;
 import utils.MySortedList;
 import utils.Point;
@@ -33,11 +34,10 @@ public class Map
     public void initialize()
     {
         TownHall townHall = BuildingFactory.createBuildingByType(TownHall.class, new Point(size.getWidth() / 2 - 1, size.getHeight() / 2 - 1), 1);
-        map[townHall.getLocation().getX()][townHall.getLocation().getY()] = townHall;
+        addBuilding(townHall);
         map[townHall.getLocation().getX()][townHall.getLocation().getY() + 1] = townHall;
         map[townHall.getLocation().getX() + 1][townHall.getLocation().getY()] = townHall;
         map[townHall.getLocation().getX() + 1][townHall.getLocation().getY() + 1] = townHall;
-        addBuilding(townHall);
         Storage goldStorage = BuildingFactory.createBuildingByType(GoldStorage.class, new Point(size.getWidth() / 2 - 4, size.getHeight() / 2 - 4), 1);
         addBuilding(goldStorage);
         Storage elixirStorage = BuildingFactory.createBuildingByType(ElixirStorage.class, new Point(size.getWidth() / 2 + 4, size.getHeight() / 2 + 4), 1);
@@ -75,38 +75,45 @@ public class Map
      */
     public boolean isValid(int x, int y)
     {
-        return x <= size.getWidth() && y <= size.getHeight() && x >= 0 && y >= 0;
+        return x < size.getWidth() && y < size.getHeight() && x >= 0 && y >= 0;
     }
 
     /**
-     * Checks if location is empty for new building. Marginal cells are not empty.
+     * Checks if location is empty for new building. Marginal cells are not empty. Zero based.
      *
      * @return
      */
-    public boolean isEmpty(Point location) {return isEmpty(location.getX(), location.getY());}
+    public boolean isEmptyForBuilding(Point location) {return isEmptyForBuilding(location.getX(), location.getY());}
 
     /**
-     * Checks if location is empty for new building. Marginal cells are not empty.
+     * Checks if location is empty for new building. Marginal cells are not empty. Zero based.
      *
      * @param x
      * @param y
      * @return
      */
-    public boolean isEmpty(int x, int y)
+    public boolean isEmptyForBuilding(int x, int y)
     {
         if (x == 0 || y == 0)
             return false;
         if (x == size.getWidth() - 1 || y == size.getHeight() - 1)
             return false;
+        return isEmpty(x, y);
+    }
+
+    public boolean isEmpty(int x, int y)
+    {
         return isValid(x, y) && map[x][y] == null;
     }
 
-    public void addBuilding(Building building)
+    public void addBuilding(Building building) throws FilledCellException
     {
         if (building.getBuildingNum() < 0)
             throw new IllegalArgumentException("Building number is not valid.");
         if (!isValid(building.getLocation()))
             throw new IllegalArgumentException("Location is not valid.");
+        if (!isEmptyForBuilding(building.getLocation()))
+            throw new FilledCellException(building.getLocation());
 
         map[building.getLocation().getX()][building.getLocation().getY()] = building;
         buildings.get(building.getType() - 1).addValue(building);
@@ -125,7 +132,7 @@ public class Map
             addBuilding(b);
     }
 
-    public Building[][] getMap()
+    public Building[][] getArrayMap()
     {
         return map;
     }

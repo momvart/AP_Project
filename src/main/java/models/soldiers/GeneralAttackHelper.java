@@ -131,7 +131,7 @@ public class GeneralAttackHelper extends AttackHelper
 
     private boolean isTargetReachable(Building favouriteTarget)
     {
-        //attack.getMap().isReachable();
+        //attack.getArrayMap().isReachable();
         return true;
     }
 }

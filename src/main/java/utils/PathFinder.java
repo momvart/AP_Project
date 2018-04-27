@@ -1,62 +1,116 @@
 package utils;
 
 import models.Map;
-import models.Village;
 import models.buildings.Building;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 
 public class PathFinder
 {
-    private static final int VERTICAL_COST = 10;
-    private static final int DIAGONAL_COST = 14;
-    List<Node> openList = new LinkedList<>();
-    List<Node> closedList = new LinkedList<>();
-    List<Node> result = new LinkedList<>();
+    private static final double VERTICAL_COST = 1;
+    private static final double DIAGONAL_COST = 1.41;
+
+    private static final int VERTICAL_COST_INT = 10;
+    private static final int DIAGONAL_COST_INT = 14;
+
+    List<MapCellNode> openList = new LinkedList<>();
+    List<MapCellNode> closedList = new LinkedList<>();
+    List<MapCellNode> result = new LinkedList<>();
     Map map;
     Building[][] buildings;
-    Node[][] nodes;
+    MapCellNode[][] nodes;
 
     public PathFinder(Map map)
     {
         this.map = map;
     }
 
-    public List findPath(Node start, Node target)
+
+    public List<MapCellNode> findPath2(MapCellNode start, MapCellNode target)
     {
         initialize(start, target);
+        TreeSet<MapCellNode> priority = new TreeSet<>(Comparator.comparingDouble(MapCellNode::getF).thenComparing(MapCellNode::getDistStart).thenComparing(MapCellNode::getDistEnd).thenComparing(MapCellNode::getX).thenComparing(MapCellNode::getY));
+        start.setDistStart(0);
+        priority.add(start);
+        do
+        {
+            MapCellNode node = priority.first();
+            if (node.equals(target))
+                break;
+            priority.remove(node);
+            int x = node.getX();
+            int y = node.getY();
+            for (int i = -1; i <= 1; i++)
+                for (int j = -1; j <= 1; j++)
+                    if (!(i == 0 && j == 0) && map.isEmpty(x + i, y + j))
+                    {
+                        MapCellNode child = nodes[x + i][y + j];
+                        if (child.isVisited())
+                            continue;
+                        double dist = (i == j || i == -j) ? DIAGONAL_COST : VERTICAL_COST;
+                        if (node.getDistStart() + dist < child.getDistStart())
+                        {
+                            priority.remove(child);
+                            child.setDistStart(node.getDistStart() + dist);
+                            child.setParent(node);
+                            priority.add(child);
+                        }
+                    }
+            node.setVisited(true);
+        } while (!priority.isEmpty());
+
+        return extractPath(start, target);
+    }
+
+    private List<MapCellNode> extractPath(MapCellNode start, MapCellNode target)
+    {
+        LinkedList<MapCellNode> path = new LinkedList<>();
+        MapCellNode current = target;
+        path.add(current);
+        while (!current.equals(start))
+        {
+            current = current.getParent();
+            path.add(current);
+        }
+        return path;
+    }
+
+    public List findPath(MapCellNode start, MapCellNode target)
+    {
+        initialize(start, target);
+        start.setDistStart(0);
         openList.add(start);
-        Node lastNode;
+        MapCellNode lastNode;
         while (true)
         {
-            openList.sort(Comparator.comparingInt(Node::getF));
-            int x = openList.get(0).getPoint().x;
-            int y = openList.get(0).getPoint().y;
+            openList.sort(Comparator.comparingDouble(MapCellNode::getF));
+            int x = openList.get(0).getX();
+            int y = openList.get(0).getY();
             for (int i = -1; i <= 1; i++)
                 for (int j = -1; j <= 1; j++)
                 {
-                    if (map.isEmpty(i + x, j + y) && map.isValid(i + x, j + y) && !(i == 0 && j == 0) && !closedList.contains(nodes[i + x][y + j]))
+                    if (map.isEmptyForBuilding(i + x, j + y) && map.isValid(i + x, j + y) && !(i == 0 && j == 0) && !closedList.contains(nodes[i + x][y + j]))
                     {
                         nodes[i + x][j + y].setParent(openList.get(0));
                         if (nodes[x][y].getParent() != null)
-                            nodes[i + x][j + y].setG(nodes[x][y].getParent().getG() + i == j || i == -j ? DIAGONAL_COST : VERTICAL_COST);
+                            nodes[i + x][j + y].setDistStart(nodes[x][y].getParent().getDistStart() + i == j || i == -j ? DIAGONAL_COST : VERTICAL_COST);
                         else
-                            nodes[i + x][j + y].setG(i == j || i == -j ? DIAGONAL_COST : VERTICAL_COST);
+                            nodes[i + x][j + y].setDistStart(i == j || i == -j ? DIAGONAL_COST : VERTICAL_COST);
                         openList.add(nodes[i + x][j + y]);
                     }
                 }
             closedList.add(openList.get(0));
             openList.remove(0);
-            Node theNode = closedList.get(closedList.size() - 1);
-            for (Node node : openList)
+            MapCellNode theNode = closedList.get(closedList.size() - 1);
+            for (MapCellNode node : openList)
             {
-                if (node.getG() > theNode.getG() + (theNode.getPoint().x == node.getPoint().x || theNode.getPoint().y == node.getPoint().y ? VERTICAL_COST : DIAGONAL_COST))
+                if (node.getDistStart() > theNode.getDistStart() + (theNode.getX() == node.getX() || theNode.getY() == node.getY() ? VERTICAL_COST : DIAGONAL_COST))
                 {
                     node.setParent(theNode);
-                    node.setG(theNode.getG() + (theNode.getPoint().x == node.getPoint().x || theNode.getPoint().y == node.getPoint().y ? VERTICAL_COST : DIAGONAL_COST));
+                    node.setDistStart(theNode.getDistStart() + (theNode.getX() == node.getX() || theNode.getY() == node.getY() ? VERTICAL_COST : DIAGONAL_COST));
                 }
             }
             if (theNode.equals(target))
@@ -75,20 +129,23 @@ public class PathFinder
         return result;
     }
 
-    private void initialize(Node start, Node target)
+    private void initialize(MapCellNode start, MapCellNode target)
     {
-        nodes = new Node[map.getSize().getWidth()][map.getSize().getHeight()];
+        nodes = new MapCellNode[map.getSize().getWidth()][map.getSize().getHeight()];
         for (int i = 0; i < map.getSize().getWidth(); i++)
             for (int j = 0; j < map.getSize().getHeight(); j++)
             {
-                nodes[i][j] = new Node(new Point(i, j), null, 0, getDistance(i, j, target));
+                nodes[i][j] = new MapCellNode(new Point(i, j), null, getDistance(i, j, target));
             }
         nodes[start.getPoint().getX()][start.getPoint().getY()] = start;
         nodes[target.getPoint().getX()][target.getPoint().getY()] = target;
     }
 
-    private int getDistance(int x, int y, Node target)
+    private double getDistance(int x, int y, MapCellNode target)
     {
-        return Math.abs(x - target.getPoint().x) + Math.abs(y - target.getPoint().y);
+        int deltaX = x - target.getX();
+        int deltaY = y - target.getY();
+        return (Math.sqrt(deltaX * deltaX + deltaY * deltaY));
+//        return 0;
     }
 }

@@ -2,8 +2,8 @@ package utils;
 
 public class Point
 {
-    int x;
-    int y;
+    private int x;
+    private int y;
 
     public Point(int x, int y)
     {
@@ -29,5 +29,22 @@ public class Point
     public void setY(int y)
     {
         this.y = y;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (!(obj instanceof Point))
+            return false;
+        if (obj == this)
+            return true;
+        Point p = (Point)obj;
+        return this.x == p.x && this.y == p.y;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("(%d,%d)", x, y);
     }
 }
