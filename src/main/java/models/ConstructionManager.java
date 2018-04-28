@@ -11,12 +11,6 @@ import static models.buildings.ConstructMode.*;
 
 public class ConstructionManager
 {
-    public ConstructionManager(Village village)
-    {
-        this.village = village;
-    }
-
-    private transient Village village;
     private ArrayList<Construction> constructions = new ArrayList<>();
 
     public ArrayList<Construction> getConstructions()
@@ -24,11 +18,17 @@ public class ConstructionManager
         return constructions;
     }
 
+    private Village getVillage()
+    {
+        //TODO: change is necessary if it wants to manage multi villages
+        return World.getVillage();
+    }
+
     public void construct(int buildingType, Point location) throws NoAvailableBuilderException, FilledCellException
     {
-        Building building = BuildingFactory.createBuildingByTypeId(buildingType, location, village.getMap());
+        Building building = BuildingFactory.createBuildingByTypeId(buildingType, location, getVillage().getMap());
         int constructTime = building.getBuildingInfo().getBuildDuration();
-        Builder builder = village.getAvailableBuilder();
+        Builder builder = getVillage().getAvailableBuilder();
         World.getVillage().getMap().addBuilding(building);
         Construction construction = new Construction(building, constructTime, CONSTRUCT, builder);
         constructions.add(construction);
@@ -37,7 +37,7 @@ public class ConstructionManager
     public void upgrade(Building building) throws NoAvailableBuilderException
     {
         int constructTime = building.getBuildingInfo().getBuildDuration();
-        Builder builder = village.getAvailableBuilder();
+        Builder builder = getVillage().getAvailableBuilder();
         Construction construction = new Construction(building, constructTime, UPGRADE, builder);
         constructions.add(construction);
     }

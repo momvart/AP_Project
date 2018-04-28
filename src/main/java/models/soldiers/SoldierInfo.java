@@ -3,11 +3,14 @@ package models.soldiers;
 import models.Builder;
 import models.Resource;
 import models.buildings.Building;
+import models.buildings.Wall;
 
 import java.lang.reflect.Type;
 
 public class SoldierInfo
 {
+    private static final Class[] sSoldierClasses = new Class[] { Guardian.class, Giant.class, Dragon.class, Archer.class, WallBreaker.class, Healer.class };
+
     private int type;
     private String name;
     private Resource brewCost;
@@ -41,6 +44,11 @@ public class SoldierInfo
     public int getType()
     {
         return type;
+    }
+
+    public Class getSoldierClass()
+    {
+        return sSoldierClasses[type - 1];
     }
 
     public String getName()

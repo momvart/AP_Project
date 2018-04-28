@@ -9,9 +9,15 @@ public class BuildingSubmenu extends Submenu implements IBuildingMenu
 
     public BuildingSubmenu(ParentMenu parent, Building building)
     {
+        this(parent, building, new BuildingInfoSubmenu(null));
+    }
+
+    public BuildingSubmenu(ParentMenu parent, Building building, BuildingInfoSubmenu infoSubmenu)
+    {
         super(Id.BUILDING_MENU, building.getName() + " " + building.getBuildingNum(), parent);
         this.building = building;
-        insertItem(new BuildingInfoSubmenu(this));
+        infoSubmenu.parent = this;
+        insertItem(infoSubmenu);
     }
 
     @Override

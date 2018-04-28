@@ -1,6 +1,8 @@
 package models.buildings;
 
 
+import menus.BuildingInfoSubmenu;
+import menus.Menu;
 import utils.Point;
 
 public abstract class Storage extends VillageBuilding
@@ -25,4 +27,10 @@ public abstract class Storage extends VillageBuilding
         capacity = (int)newCapacity;
     }
 
+    @Override
+    public BuildingInfoSubmenu getInfoSubmenu()
+    {
+        return (BuildingInfoSubmenu)new BuildingInfoSubmenu(null)
+                .insertItem(Menu.Id.STORAGE_SRC_INFO, "Sources info");
+    }
 }

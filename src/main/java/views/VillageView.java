@@ -18,6 +18,15 @@ public class VillageView extends ConsoleMenuContainerView
     {
         super(scanner);
         this.village = World.sCurrentGame.getVillage();
+        initialize();
+    }
+
+    private void initialize()
+    {
+        ParentMenu mainMenu = new ParentMenu(Menu.Id.VILLAGE_MAIN_MENU, "", MenuTextCommandHandler.getInstance());
+        mainMenu.insertItem(new ShowBuildingsMenu(mainMenu))
+                .insertItem(Menu.Id.VILLAGE_RESOURCES, "resources");
+        setCurrentMenu(mainMenu, false);
     }
 
     @Override
@@ -58,6 +67,12 @@ public class VillageView extends ConsoleMenuContainerView
                 break;
             case Menu.Id.CAMP_SOLDIERS:
                 showAvailableSoldiers();
+                break;
+            case Menu.Id.STORAGE_SRC_INFO:
+                showStorageSourceInfo((Storage)((IBuildingMenu)currentMenu).getBuilding());
+                break;
+            case Menu.Id.DEFENSIVE_TARGET_INFO:
+                showAttackInfo((DefensiveTower)((IBuildingMenu)currentMenu).getBuilding());
                 break;
             default:
                 super.onMenuItemClicked(menu);
@@ -107,7 +122,7 @@ public class VillageView extends ConsoleMenuContainerView
         for (int i = 0; i < map.getSize().getHeight(); i++)
         {
             for (int j = 0; j < map.getSize().getWidth(); j++)
-                System.out.print(map.isEmpty(j, i) ? 0 : 1);
+                System.out.print(map.isEmptyForBuilding(j, i) ? 0 : 1);
             System.out.print('\n');
         }
 
@@ -161,11 +176,11 @@ public class VillageView extends ConsoleMenuContainerView
     public void showStorageSourceInfo(Storage storage)
     {
         if (storage instanceof GoldStorage)
-            System.out.printf("Your %s storage is %d / %d loaded.", "gold",
+            System.out.printf("Your %s storage is %d / %d loaded.\n", "gold",
                     village.getResources().getGold(),
                     village.getTotalResourceCapacity().getGold());
         else
-            System.out.printf("Your %s storage is %d / %d loaded.", "elixir",
+            System.out.printf("Your %s storage is %d / %d loaded.\n", "elixir",
                     village.getResources().getElixir(),
                     village.getTotalResourceCapacity().getElixir());
     }

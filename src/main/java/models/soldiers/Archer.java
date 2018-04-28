@@ -7,8 +7,10 @@ public class Archer extends Soldier
         super(level);
     }
 
+    public static final int SOLDIER_TYPE = 4;
+
     public int getType()
     {
-        return 3;
+        return 4;
     }
 }

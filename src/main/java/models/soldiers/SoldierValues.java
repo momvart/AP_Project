@@ -41,22 +41,13 @@ public abstract class SoldierValues
 
     public static Class getSoldierClass(int soldierType)
     {
-        switch (soldierType)
+        try
         {
-            case 1:
-                return Guardian.class;
-            case 2:
-                return Giant.class;
-            case 3:
-                return Dragon.class;
-            case 4:
-                return Archer.class;
-            case 5:
-                return WallBreaker.class;
-            case 6:
-                return Healer.class;
-            default:
-                throw new IllegalArgumentException("Soldier type is not valid.");
+            return getSoldierInfo(soldierType).getSoldierClass();
+        }
+        catch (ArrayIndexOutOfBoundsException ex)
+        {
+            throw new IllegalArgumentException("Soldier type is not valid.", ex);
         }
     }
 }

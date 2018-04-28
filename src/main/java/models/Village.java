@@ -21,7 +21,7 @@ public class Village
     public void initialize()
     {
         map = new Map(new Size(30, 30));
-        constructionManager = new ConstructionManager(this);
+        constructionManager = new ConstructionManager();
         soldiers = new ArrayList<>();
     }
 

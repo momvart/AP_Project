@@ -1,5 +1,6 @@
 package models.buildings;
 
+import menus.BuildingInfoSubmenu;
 import menus.BuildingSubmenu;
 import menus.ParentMenu;
 import utils.Point;
@@ -87,8 +88,10 @@ public abstract class Building
         return BuildingValues.getBuildingInfo(getType());
     }
 
+    public BuildingInfoSubmenu getInfoSubmenu() { return new BuildingInfoSubmenu(null); }
+
     public BuildingSubmenu getMenu(ParentMenu parent)
     {
-        return new BuildingSubmenu(parent, this);
+        return new BuildingSubmenu(parent, this, getInfoSubmenu());
     }
 }

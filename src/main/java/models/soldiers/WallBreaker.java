@@ -8,8 +8,10 @@ public class WallBreaker extends Soldier
         super(level);
     }
 
+    public static final int SOLDIER_TYPE = 5;
+
     public int getType()
     {
-        return 4;
+        return SOLDIER_TYPE;
     }
 }

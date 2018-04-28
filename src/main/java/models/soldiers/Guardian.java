@@ -8,8 +8,10 @@ public class Guardian extends Soldier
         super(level);
     }
 
+    public static final int SOLDIER_TYPE = 1;
+
     public int getType()
     {
-        return 0;
+        return SOLDIER_TYPE;
     }
 }

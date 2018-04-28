@@ -8,8 +8,10 @@ public class Dragon extends Soldier
         super(level);
     }
 
+    public static final int SOLDIER_TYPE = 3;
+
     public int getType()
     {
-        return 2;
+        return SOLDIER_TYPE;
     }
 }

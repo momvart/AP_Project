@@ -8,8 +8,10 @@ public class Giant extends Soldier
         super(level);
     }
 
+    public static final int SOLDIER_TYPE = 2;
+
     public int getType()
     {
-        return 1;
+        return SOLDIER_TYPE;
     }
 }

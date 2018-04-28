@@ -12,10 +12,11 @@ public class Healer extends Soldier
         super(level);
     }
 
+    public static final int SOLDIER_TYPE = 6;
 
     public int getType()
     {
-        return 5;
+        return 6;
     }
 
     public void ageOneDeltaT()
