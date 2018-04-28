@@ -7,7 +7,7 @@ public class ConsoleUtilities
 {
     public static Matcher getMatchedCommand(String pattern, String text)
     {
-        Pattern p = Pattern.compile(pattern);
+        Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(text);
         if (m.find())
             return m;

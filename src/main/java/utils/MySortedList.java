@@ -136,6 +136,79 @@ public class MySortedList<K extends Comparable<K>, V> implements Iterable<V>
         return values.get(index);
     }
 
+    public K getKeyByIndex(int index)
+    {
+        if (hasExtractor)
+            return keyExtractor.apply(getByIndex(index));
+        else
+            return keys.get(index);
+    }
+
+    /**
+     * Gives a sublist of current list using a comparator.
+     *
+     * @param key
+     * @param comparator Should not give an opposite order.
+     * @return
+     */
+    public MySortedList<K, V> getRange(K key, Comparator<K> comparator)
+    {
+        int first = findFirstIndex(key, comparator);
+        if (first < 0)
+            return new MySortedList<>();
+        int last = findLastIndex(key, comparator);
+
+        MySortedList<K, V> retVal;
+        if (hasExtractor)
+            retVal = new MySortedList<>(keyExtractor, keyComparator);
+        else
+            retVal = new MySortedList<>(keyComparator);
+
+        retVal.values = new ArrayList<>(values.subList(first, last + 1));
+        if (!hasExtractor)
+            retVal.keys = new ArrayList<>(keys.subList(first, last + 1));
+
+        return retVal;
+    }
+
+    public int findFirstIndex(K key, Comparator<K> comparator)
+    {
+        int low = 0, high = size() - 1;
+        while (low <= high)
+        {
+            int mid = (low + high) >>> 1;
+            K midKey = getKeyByIndex(mid);
+
+            int cmp = comparator.compare(midKey, key);
+            if (cmp == 0 && (mid == 0 || comparator.compare(key, getKeyByIndex(mid - 1)) > 0))
+                return mid;
+            else if (cmp < 0)
+                low = mid + 1;
+            else
+                high = mid - 1;
+        }
+        return ~low;
+    }
+
+    public int findLastIndex(K key, Comparator<K> comparator)
+    {
+        int low = 0, high = size() - 1;
+        while (low <= high)
+        {
+            int mid = (low + high) >>> 1;
+            K midKey = getKeyByIndex(mid);
+
+            int cmp = comparator.compare(midKey, key);
+            if (cmp == 0 && (mid == size() - 1 || comparator.compare(key, getKeyByIndex(mid + 1)) < 0))
+                return mid;
+            else if (cmp > 0)
+                high = mid - 1;
+            else
+                low = mid + 1;
+        }
+        return ~low;
+    }
+
     public List<K> getKeys()
     {
         return Collections.unmodifiableList(keys);
