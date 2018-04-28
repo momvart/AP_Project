@@ -13,18 +13,15 @@ public class PathFinder
     private static final int VERTICAL_COST = 10;
     private static final int DIAGONAL_COST = 14;
 
-    List<MapCellNode> openList = new LinkedList<>();
-    List<MapCellNode> closedList = new LinkedList<>();
-    List<MapCellNode> result = new LinkedList<>();
+
 
     public List<MapCellNode> findPath(Map map, MapCellNode start, MapCellNode target)
     {
+
         MapCellNode[][] nodes = new MapCellNode[map.getSize().getWidth()][map.getSize().getHeight()];
         initialize(nodes, start, target);
         TreeSet<MapCellNode> priority = new TreeSet<>(Comparator.comparingInt(MapCellNode::getF).thenComparing(MapCellNode::getX).thenComparing(MapCellNode::getY));
-        start.setDistStart(0);
         priority.add(start);
-        int counter = 0;
         do
         {
             MapCellNode node = priority.first();
@@ -44,8 +41,8 @@ public class PathFinder
                             child = new MapCellNode(new Point(x + i, y + j), node, 0);
                             child.setDistEnd(getDistance(child, target));
                             nodes[x + i][y + j] = child;
-                            counter++;
                         }
+
                         if (child.isVisited())
                             continue;
                         int dist = (i == j || i == -j) ? DIAGONAL_COST : VERTICAL_COST;
@@ -59,7 +56,6 @@ public class PathFinder
                     }
             node.setVisited(true);
         } while (!priority.isEmpty());
-        System.out.println(counter);
         return extractPath(start, target);
     }
 
@@ -78,6 +74,11 @@ public class PathFinder
 
     private void initialize(MapCellNode[][] nodes, MapCellNode start, MapCellNode target)
     {
+        start.setDistStart(0);
+        start.setVisited(false);
+        target.setVisited(false);
+        target.setDistEnd(0);
+        target.setDistStart(Integer.MAX_VALUE);
         nodes[start.getX()][start.getY()] = start;
         nodes[target.getX()][target.getY()] = target;
     }

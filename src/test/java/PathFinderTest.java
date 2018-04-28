@@ -54,7 +54,7 @@ public class PathFinderTest
         PathFinder pathFinder = new PathFinder();
         this.pathFinder = pathFinder;
         start = new MapCellNode(new Point(0, 0), null, 0);
-        target = new MapCellNode(new Point(5, 5), null, 0);
+        target = new MapCellNode(new Point(23, 23), null, 0);
     }
 
     @org.junit.After
@@ -65,7 +65,7 @@ public class PathFinderTest
     @org.junit.Test
     public void findPath()
     {
-        for (int i = 0; i < 5000; i++)
+        for (int i = 0; i < 10000; i++)
         {
             List<MapCellNode> path = pathFinder.findPath(World.getVillage().getMap(), start, target);
         }
