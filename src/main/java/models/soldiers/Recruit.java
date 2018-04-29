@@ -56,7 +56,7 @@ public class Recruit
     public void finishSoldier()
     {
         this.trainedCount += 1;
-        World.getVillage().getSoldiers().add(SoldierFactory.createSoldierByTypeID(soldierType, level));
+        World.getVillage().addSoldier(SoldierFactory.createSoldierByTypeID(soldierType, level));
     }
 
     public boolean checkCompleteFinish()

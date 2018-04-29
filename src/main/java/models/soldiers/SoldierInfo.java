@@ -9,7 +9,6 @@ import java.lang.reflect.Type;
 
 public class SoldierInfo
 {
-    private static final Class[] sSoldierClasses = new Class[] { Guardian.class, Giant.class, Dragon.class, Archer.class, WallBreaker.class, Healer.class };
 
     private int type;
     private String name;
@@ -48,7 +47,7 @@ public class SoldierInfo
 
     public Class getSoldierClass()
     {
-        return sSoldierClasses[type - 1];
+        return SoldierValues.sSoldierClasses[type - 1];
     }
 
     public String getName()

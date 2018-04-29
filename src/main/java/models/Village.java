@@ -1,14 +1,12 @@
 package models;
 
-import exceptions.NoAvailableBuilderException;
-import exceptions.NotEnoughResourceException;
+import exceptions.*;
 import models.buildings.*;
-import models.soldiers.Soldier;
-import utils.Point;
-import utils.Size;
+import models.soldiers.*;
+import utils.*;
 
-import java.util.ArrayList;
-import java.util.stream.Stream;
+import java.util.*;
+import java.util.stream.*;
 
 public class Village
 {
@@ -16,7 +14,7 @@ public class Village
     private ConstructionManager constructionManager;
     private VillageStatus villageStatus = VillageStatus.NORMAL;
     private int turn = 0;
-    private ArrayList<Soldier> soldiers;
+    private ArrayList<ArrayList<Soldier>> soldiers;
 
     public void initialize()
     {
@@ -45,21 +43,7 @@ public class Village
         return map.getBuildings();
     }
 
-    public ConstructionManager getConstructionManager()
-    {
-        return constructionManager;
-    }
-
-    public int getTurn()
-    {
-        return turn;
-    }
-
-    public ArrayList<Soldier> getSoldiers()
-    {
-        return soldiers;
-    }
-
+    ///region Resources
     public Resource getResources()
     {
         return map.getResources();
@@ -86,7 +70,14 @@ public class Village
             throw new NotEnoughResourceException(getResources(), toSpend);
         }
     }
+    ///endregion
 
+    ///region Constructions
+
+    public ConstructionManager getConstructionManager()
+    {
+        return constructionManager;
+    }
 
     public Builder getAvailableBuilder() throws NoAvailableBuilderException
     {
@@ -113,6 +104,13 @@ public class Village
         spendResource(cost);
     }
 
+    ///endregion
+
+    public int getTurn()
+    {
+        return turn;
+    }
+
     public void passTurn()
     {
         if (villageStatus.equals(VillageStatus.NORMAL))
@@ -123,5 +121,38 @@ public class Village
             getMap().getTownHall().passTurn();
             constructionManager.checkConstructions();
         }
+    }
+
+    public void setupSoldiers(Iterable<Soldier> soldierList)
+    {
+        soldiers = new ArrayList<>(SoldierValues.SOLDIER_TYPES_COUNT);
+        for (int i = 0; i < SoldierValues.SOLDIER_TYPES_COUNT; i++)
+            soldiers.add(new ArrayList<>());
+        soldierList.forEach(this::addSoldier);
+    }
+
+    public void addSoldier(Soldier soldier)
+    {
+        //TODO: checking for capacity
+        soldiers.get(soldier.getType() - 1).add(soldier);
+    }
+
+    public ArrayList<Soldier> getSoldiers(int soldierType)
+    {
+        return soldiers.get(soldierType - 1);
+    }
+
+    public Stream<Soldier> getAllSoldiers()
+    {
+        return soldiers.stream().flatMap(Collection::stream);
+    }
+
+    public List<Soldier> selectUnit(int soldierType, int count) throws NotEnoughSoldierException
+    {
+        //TODO: should be implemented after soldiers field changed.
+        if (count == -1)
+            //select all
+            ;
+        return null;
     }
 }

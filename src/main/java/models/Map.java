@@ -54,6 +54,7 @@ public class Map
         return resources;
     }
 
+    ///region Checking Cells
 
     /**
      * Checks if the location is in map or not.
@@ -106,6 +107,10 @@ public class Map
         return isValid(x, y) && map[x][y] == null;
     }
 
+    ///endregion
+
+    ///region Buildings
+
     public void addBuilding(Building building) throws FilledCellException
     {
         if (building.getBuildingNum() < 0)
@@ -128,8 +133,7 @@ public class Map
 
         map = new Building[size.getWidth()][size.getHeight()];
 
-        for (Building b : buildingsList)
-            addBuilding(b);
+        buildingsList.forEach(this::addBuilding);
     }
 
     public Building[][] getArrayMap()
@@ -173,4 +177,5 @@ public class Map
         return (TownHall)getBuildings(TownHall.BUILDING_TYPE).getByIndex(0);
     }
 
+    ///endregion
 }

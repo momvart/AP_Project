@@ -6,6 +6,7 @@ import models.soldiers.Soldier;
 import utils.Point;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Attack
 {
@@ -15,6 +16,13 @@ public class Attack
     private int turn;
     public ArrayList<Soldier> soldiersOnMap = new ArrayList<>();
     private ArrayList<Healer> healersOnMap = new ArrayList<>();
+
+    public Attack(AttackMap map)
+    {
+        this.map = map;
+    }
+
+
     public void mapInfo()
     {
 
@@ -26,13 +34,19 @@ public class Attack
         soldier.participateIn(this);
     }
 
+    public void addUnits(List<Soldier> soldiers)
+    {
+        attackSoldiers.addAll(soldiers);
+        soldiers.forEach(s -> s.participateIn(this));
+    }
+
     public void putUnits(int unitType, int count, Point location)
     {
-        if(getUnitsInToBeDeplyed(unitType) != null && getUnitsInToBeDeplyed(unitType).size() >= count)//TODO‌ Exceptions of more than 5 soldiers should be handled later on , when we come to an agreemaent of how to suppose the soldiers on the map
+        if (getUnitsInToBeDeplyed(unitType) != null && getUnitsInToBeDeplyed(unitType).size() >= count)//TODO‌ Exceptions of more than 5 soldiers should be handled later on , when we come to an agreemaent of how to suppose the soldiers on the map
         {
-            for (int i = 0; i < count ; i++)
+            for (int i = 0; i < count; i++)
             {
-                putUnit(getUnitsInToBeDeplyed(unitType).get(i)  ,  location);
+                putUnit(getUnitsInToBeDeplyed(unitType).get(i), location);
             }
         }
     }
@@ -155,7 +169,7 @@ public class Attack
         return requiredTowers;
     }
 
-    public ArrayList<DefensiveTower> getAllTowers()
+    public List<DefensiveTower> getAllTowers()
     {
         return map.getDefensiveTowers();
     }
@@ -165,7 +179,7 @@ public class Attack
 
     }
 
-    public Map getMap()
+    public AttackMap getMap()
     {
         return map;
     }

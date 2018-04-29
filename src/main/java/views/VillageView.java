@@ -160,17 +160,14 @@ public class VillageView extends ConsoleMenuContainerView
 
     public void showCampsCapacityInfo(Camp camp)
     {
-        System.out.printf("Your camp capacity is %d / %d\n", village.getSoldiers().size(), camp.getCapacity());
+        System.out.printf("Your camp capacity is %d / %d\n", village.getAllSoldiers().count(), camp.getCapacity());
     }
 
     public void showAvailableSoldiers()
     {
-        int[] counts = new int[SoldierValues.SOLDIER_TYPES_COUNT];
-        for (Soldier soldier : village.getSoldiers())
-            counts[soldier.getType() - 1]++;
-        for (int i = 0; i < counts.length; i++)
-            if (counts[i] > 0)
-                System.out.printf("%s x%d\n", SoldierValues.getSoldierInfo(i + 1), counts[i]);
+        for (int i = 1; i <= SoldierValues.SOLDIER_TYPES_COUNT; i++)
+            if (village.getSoldiers(i).size() > 0)
+                System.out.printf("%s x%d\n", SoldierValues.getSoldierInfo(i), village.getSoldiers(i).size());
     }
 
     public void showStorageSourceInfo(Storage storage)
