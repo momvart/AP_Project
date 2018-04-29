@@ -51,10 +51,10 @@ public class PathFinderTest
         World.getVillage().getMap().addBuilding(new ElixirMine(new Point(17, 18), 14));
         World.getVillage().getMap().addBuilding(new ElixirMine(new Point(18, 18), 15));
 
-        PathFinder pathFinder = new PathFinder(World.getVillage().getMap());
+        PathFinder pathFinder = new PathFinder();
         this.pathFinder = pathFinder;
         start = new MapCellNode(new Point(0, 0), null, 0);
-        target = new MapCellNode(new Point(15, 23), null, 0);
+        target = new MapCellNode(new Point(23, 23), null, 0);
     }
 
     @org.junit.After
@@ -65,46 +65,10 @@ public class PathFinderTest
     @org.junit.Test
     public void findPath()
     {
-        List<MapCellNode> path = pathFinder.findPath(start, target);
-
-//        boolean found = false;
-//        for (int i = 0; i < World.getVillage().getMap().getSize().getWidth(); i++)
-//        {
-//            for (int j = 0; j < World.getVillage().getMap().getSize().getHeight(); j++)
-//            {
-//                for (int k = 0; k < path.size(); k++)
-//                {
-//                    if (i == path.get(k).getPoint().getX() && j == path.get(k).getPoint().getY())
-//                        found = true;
-//                }
-//                if (i == target.getPoint().getX() && j == target.getPoint().getY())
-//                {
-//                    System.out.print("T");
-//                    found = false;
-//                }
-//                else if (found)
-//                {
-//                    System.out.print("*");
-//                    found = false;
-//                }
-//                else if (i == start.getPoint().getX() && j == start.getPoint().getY())
-//                    System.out.print("S");
-//                else if (World.getVillage().getMap().isEmptyForBuilding(i, j))
-//                    System.out.print("-");
-//                else
-//                    System.out.print("#");
-//            }
-//            System.out.println();
-//        }
-        printMap(path, "hazrat");
-    }
-
-    @Test
-    public void testFindPath2()
-    {
-        List<MapCellNode> path = pathFinder.findPath2(start, target);
-
-        printMap(path, "me");
+        for (int i = 0; i < 10000; i++)
+        {
+            List<MapCellNode> path = pathFinder.findPath(World.getVillage().getMap(), start, target);
+        }
     }
 
     private void printMap(List<MapCellNode> path, String text)

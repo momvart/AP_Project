@@ -5,12 +5,12 @@ import java.util.Objects;
 public class MapCellNode
 {
     private Point point;
-    private double distEnd;
-    private double distStart = Double.MAX_VALUE;
+    private int distEnd;
+    private int distStart = Integer.MAX_VALUE;
     private MapCellNode parent;
     private boolean visited = false;
 
-    public MapCellNode(Point point, MapCellNode parent, double distEnd)
+    public MapCellNode(Point point, MapCellNode parent, int distEnd)
     {
         this.point = point;
         this.parent = parent;
@@ -26,27 +26,27 @@ public class MapCellNode
 
     public int getY() { return point.getY(); }
 
-    public double getDistEnd()
+    public int getDistEnd()
     {
         return distEnd;
     }
 
-    public void setDistEnd(double distEnd)
+    public void setDistEnd(int distEnd)
     {
         this.distEnd = distEnd;
     }
 
-    public double getDistStart()
+    public int getDistStart()
     {
         return distStart;
     }
 
-    public void setDistStart(double distStart)
+    public void setDistStart(int distStart)
     {
         this.distStart = distStart;
     }
 
-    public double getF()
+    public int getF()
     {
         return distStart + distEnd;
     }
@@ -76,8 +76,15 @@ public class MapCellNode
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MapCellNode node = (MapCellNode)o;
-        return Objects.equals(point, node.point);
+        MapCellNode that = (MapCellNode)o;
+        return Objects.equals(point, that.point);
+    }
+
+    @Override
+    public int hashCode()
+    {
+
+        return Objects.hash(point);
     }
 
     @Override

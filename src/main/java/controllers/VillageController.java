@@ -88,7 +88,7 @@ public class VillageController implements IMenuClickListener, ICommandManager
 
                         Matcher m = (Matcher)mapResult.getData(TextInputDialog.KEY_MATCHER);
                         location = new Point(Integer.parseInt(m.group("x")) - 1, Integer.parseInt(m.group("y")) - 1);
-                        if (theVillage.getMap().isEmpty(location))
+                        if (theVillage.getMap().isEmpty(location.getX(), location.getY()))
                             break;
 
                         theView.showText("You can't build this building here. Please choose another cell.");
