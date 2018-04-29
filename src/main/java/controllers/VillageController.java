@@ -5,10 +5,12 @@ import menus.*;
 import models.*;
 import models.soldiers.*;
 import utils.*;
+import views.AttackView;
 import views.VillageView;
 import models.buildings.*;
 import views.dialogs.*;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class VillageController implements IMenuClickListener, ICommandManager
@@ -22,27 +24,32 @@ public class VillageController implements IMenuClickListener, ICommandManager
 
         this.theView = theView;
         theView.addClickListener(this);
-        ParentMenu mainMenu = new ParentMenu(Menu.Id.VILLAGE_MAIN_MENU, "", MenuTextCommandHandler.getInstance());
-        mainMenu.insertItem(new ShowBuildingsMenu(mainMenu))
-                .insertItem(Menu.Id.VILLAGE_RESOURCES, "resources");
-        theView.setCurrentMenu(mainMenu, false);
+        childCommandManager = theView;
     }
 
+    private ICommandManager childCommandManager;
+
     @Override
-    public void manageCommand(String command) throws InvalidCommandException
+    public void manageCommand(String command) throws ConsoleException
     {
         try
         {
-            theView.manageCommand(command);
+            childCommandManager.manageCommand(command);
         }
         catch (InvalidCommandException ex)
         {
-            Matcher m = null;
+            Matcher m;
             if ((m = ConsoleUtilities.getMatchedCommand("turn\\s+(\\d+)", command)) != null)
             {
                 int count = Integer.parseInt(m.group(1));
                 for (int i = 0; i < count; i++)
                     World.passTurn();
+            }
+            else if (command.equalsIgnoreCase("attack"))
+            {
+                AttackController controller = new AttackController(new AttackView(theView.getScanner()));
+                childCommandManager = controller;
+                controller.start(new ArrayList<>());
             }
             else
                 throw ex;
@@ -78,7 +85,7 @@ public class VillageController implements IMenuClickListener, ICommandManager
                 {
                     BuildingInfo info = ((AvailableBuildingItem)menu).getBuildingInfo();
                     if (theView.showConstructDialog(info.getName(), info.getBuildCost()).getResultCode() != DialogResultCode.YES)
-                    {break;}
+                        break;
                     Point location = null;
                     while (true)
                     {
@@ -88,7 +95,7 @@ public class VillageController implements IMenuClickListener, ICommandManager
 
                         Matcher m = (Matcher)mapResult.getData(TextInputDialog.KEY_MATCHER);
                         location = new Point(Integer.parseInt(m.group("x")) - 1, Integer.parseInt(m.group("y")) - 1);
-                        if (theVillage.getMap().isEmpty(location.getX(), location.getY()))
+                        if (theVillage.getMap().isEmptyForBuilding(location))
                             break;
 
                         theView.showText("You can't build this building here. Please choose another cell.");

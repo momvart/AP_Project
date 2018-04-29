@@ -3,16 +3,16 @@ package models;
 import models.buildings.*;
 import utils.*;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class AttackMap extends Map
 {
-    private ArrayList<DefensiveTower> defensiveTowers;
+    private MySortedList<Long, DefensiveTower> defensiveTowers;
 
     public AttackMap(Size size)
     {
         super(size);
-        defensiveTowers = new ArrayList<>();
+        defensiveTowers = new MySortedList<>(DefensiveTower::getId);
     }
 
     @Override
@@ -20,12 +20,12 @@ public class AttackMap extends Map
     {
         super.addBuilding(building);
         if (building instanceof DefensiveTower)
-            defensiveTowers.add((DefensiveTower)building);
+            defensiveTowers.addValue((DefensiveTower)building);
     }
 
-    public ArrayList<DefensiveTower> getDefensiveTowers()
+    public List<DefensiveTower> getDefensiveTowers()
     {
-        return defensiveTowers;
+        return defensiveTowers.getValues();
     }
 
     public Building getNearestBuilding(Point location, int BuildingType)
