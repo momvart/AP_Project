@@ -131,9 +131,10 @@ public class Village
         soldierList.forEach(this::addSoldier);
     }
 
-    public void addSoldier(Soldier soldier)
+    public void addSoldier(Soldier soldier) throws NotEnoughCampCapacityException
     {
-        //TODO: checking for capacity
+        if (getCampsCapacity() <= getSoldiersCount())
+            throw new NotEnoughCampCapacityException("Camp can't build new soldier", "Not enough camp capacity");
         soldiers.get(soldier.getType() - 1).add(soldier);
     }
 
@@ -149,10 +150,28 @@ public class Village
 
     public List<Soldier> selectUnit(int soldierType, int count) throws NotEnoughSoldierException
     {
-        //TODO: should be implemented after soldiers field changed.
+        int size = getSoldiers(soldierType).size();
+        if (size < count)
+            throw new NotEnoughSoldierException(soldierType, size, count);
         if (count == -1)
-            //select all
-            ;
-        return null;
+            return getSoldiers(soldierType);
+        else
+            return getSoldiers(soldierType).subList(0, count);
+    }
+
+    public int getCampsCapacity()
+    {
+        int sum = 0;
+        for (Building camp : getMap().getBuildings(Camp.BUILDING_TYPE).getValues())
+            sum += ((Camp)camp).getCapacity();
+        return sum;
+    }
+
+    public int getSoldiersCount()
+    {
+        int count = 0;
+        for (int i = 0; i < soldiers.size(); i++)
+            count += soldiers.get(i).size();
+        return count;
     }
 }

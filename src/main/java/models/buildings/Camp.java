@@ -1,9 +1,7 @@
 package models.buildings;
 
-import models.soldiers.Soldier;
+import exceptions.UnavailableUpgradeException;
 import utils.Point;
-
-import java.util.ArrayList;
 
 public class Camp extends VillageBuilding
 {
@@ -20,15 +18,17 @@ public class Camp extends VillageBuilding
         return capacity;
     }
 
+    public static final int BUILDING_TYPE = 7;
+
     @Override
     public int getType()
     {
-        return 7;
+        return BUILDING_TYPE;
     }
 
     @Override
     public void upgrade()
     {
-        // TODO: 4/13/18 method should throw an exception  
+        throw new UnavailableUpgradeException(this);
     }
 }

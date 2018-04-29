@@ -1,5 +1,6 @@
 package models.buildings;
 
+import exceptions.BuilderNotFoundException;
 import exceptions.NoAvailableBuilderException;
 import menus.*;
 import models.Builder;
@@ -55,8 +56,7 @@ public class TownHall extends VillageBuilding
             if (builder.getBuilderNum() == num)
                 return builder;
         }
-        // TODO: 4/13/18 : throw BuilderNotFound Exception
-        return null;
+        throw new BuilderNotFoundException("Builder not found", "Builder not found");
     }
 
     private void addBuilder()
