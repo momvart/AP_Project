@@ -10,8 +10,9 @@ import views.VillageView;
 import models.buildings.*;
 import views.dialogs.*;
 
-import java.util.ArrayList;
+import java.nio.file.Paths;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 public class VillageController implements IMenuClickListener, ICommandManager
 {
@@ -49,7 +50,7 @@ public class VillageController implements IMenuClickListener, ICommandManager
             {
                 AttackController controller = new AttackController(new AttackView(theView.getScanner()));
                 childCommandManager = controller;
-                controller.start(new ArrayList<>());
+                controller.start(World.sSettings.getAttackMapPaths().stream().map(Paths::get).collect(Collectors.toList()));
             }
             else
                 throw ex;

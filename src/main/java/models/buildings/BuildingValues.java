@@ -22,17 +22,10 @@ public class BuildingValues
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(BuildingInfo.class, new serialization.BuildingInfoAdapter())
                 .create();
-        BufferedReader reader = null;
-        try
+        try (BufferedReader reader = Files.newBufferedReader(path))
         {
-            reader = Files.newBufferedReader(path);
             infos = new ArrayList<>();
             infos = gson.fromJson(reader, new TypeToken<ArrayList<BuildingInfo>>() { }.getType());
-        }
-        finally
-        {
-            if (reader != null)
-                reader.close();
         }
     }
 

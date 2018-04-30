@@ -22,6 +22,11 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
 
     }
 
+    public void setAttack(Attack theAttack)
+    {
+        this.theAttack = theAttack;
+    }
+
     @Override
     public void onMenuItemClicked(Menu menu)
     {
@@ -50,17 +55,21 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
         //TODO: needs to be tested.
 
         int lastType = -1;
+        if (map.getDefensiveTowers().size() > 0)
+            lastType = map.getDefensiveTowers().get(0).getType();
         int counter = 0;
         for (DefensiveTower tower : map.getDefensiveTowers())
             if (lastType != tower.getType())
             {
-                if (lastType != -1)
-                    System.out.printf("%s: %d\n", SoldierValues.getSoldierInfo(lastType).getName(), counter);
+                System.out.printf("%s: %d\n", BuildingValues.getBuildingInfo(lastType).getName(), counter);
                 lastType = tower.getType();
-                counter = 0;
+                counter = 1;
             }
             else
                 counter++;
+
+        if (lastType != -1)
+            System.out.printf("%s: %d\n", BuildingValues.getBuildingInfo(lastType).getName(), counter);
     }
 
     public void showResourcesStatus()
@@ -68,7 +77,8 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
         Resource claimed = theAttack.getClaimedResource();
         System.out.printf("Gold achieved: %d\nElixir achieved: %d\nGold remained in map: %d\nElixir remained in map: %d\n",
                 claimed.getGold(),
-                claimed.getElixir());//TODO: get remained resources.
+                claimed.getElixir(),
+                0, 0);//TODO: get remained resources.
     }
 
     private void showTowerStatus(DefensiveTower tower)

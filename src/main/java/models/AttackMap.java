@@ -15,6 +15,12 @@ public class AttackMap extends Map
         defensiveTowers = new MySortedList<>(DefensiveTower::getId);
     }
 
+    public AttackMap(Size size, Resource resource)
+    {
+        this(size);
+        this.resources = resource;
+    }
+
     @Override
     public void addBuilding(Building building)
     {

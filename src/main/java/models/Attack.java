@@ -20,6 +20,7 @@ public class Attack
     public Attack(AttackMap map)
     {
         this.map = map;
+        claimedResource = new Resource(0, 0);
     }
 
 

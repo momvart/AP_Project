@@ -5,9 +5,10 @@ import models.buildings.*;
 
 import java.lang.reflect.Type;
 
-public class BuilderAdapter implements JsonSerializer<Building>, JsonDeserializer<Building>
+public class BuildingAdapter implements JsonSerializer<Building>, JsonDeserializer<Building>
 {
     private static final String TYPE_FIELD_NAME = "type";
+
     @Override
     public Building deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
     {

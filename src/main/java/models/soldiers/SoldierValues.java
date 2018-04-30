@@ -22,17 +22,10 @@ public abstract class SoldierValues
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Class.class, new serialization.ClassAdapter())
                 .create();
-        BufferedReader reader = null;
-        try
+        try (BufferedReader reader = Files.newBufferedReader(path))
         {
-            reader = Files.newBufferedReader(path);
             infos = new ArrayList<>();
             infos = gson.fromJson(reader, new TypeToken<ArrayList<SoldierInfo>>() { }.getType());
-        }
-        finally
-        {
-            if (reader != null)
-                reader.close();
         }
     }
 

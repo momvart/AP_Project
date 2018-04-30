@@ -5,8 +5,12 @@ import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import exceptions.*;
 import menus.*;
 import models.Attack;
+import models.AttackMap;
 import models.World;
+import models.buildings.Building;
 import models.soldiers.SoldierValues;
+import serialization.AttackMapGlobalAdapter;
+import serialization.BuildingGlobalAdapter;
 import utils.ConsoleUtilities;
 import utils.ICommandManager;
 import utils.Point;
@@ -27,19 +31,26 @@ public class AttackController implements IMenuClickListener, ICommandManager
     private AttackView theView;
     private Attack theAttack;
 
-    public AttackController(AttackView theView)
+    public AttackController(AttackView view)
     {
-        this.theView = theView;
+        this.theView = view;
+        theView.addClickListener(this);
     }
 
     public void start(List<Path> paths)
     {
         ParentMenu mainMenu = new ParentMenu(Menu.Id.ATTACK_MAIN_MENU, "");
-        mainMenu.insertItem(new Menu(Menu.Id.ATTACK_LOAD_MAP, "Load map"));
+        mainMenu.insertItem(new Menu(Menu.Id.ATTACK_LOAD_MAP, "Load Map"));
         paths.forEach(p -> mainMenu.insertItem(new AttackMapItem(mainMenu, p)));
         mainMenu.insertItem(new Menu(Menu.Id.ATTACK_MAIN_BACK, "back"));
         theView.setCurrentMenu(mainMenu, true);
         childCommandManager = theView;
+    }
+
+    private void setTheAttack(Attack theAttack)
+    {
+        this.theAttack = theAttack;
+        theView.setAttack(theAttack);
     }
 
     @Override
@@ -54,7 +65,10 @@ public class AttackController implements IMenuClickListener, ICommandManager
                     DialogResult result = theView.showOpenMapDialog();
                     if (result.getResultCode() != DialogResultCode.YES)
                         break;
-                    openMap(Paths.get((String)result.getData(TextInputDialog.KEY_TEXT)));
+                    String path = (String)result.getData(TextInputDialog.KEY_TEXT);
+                    openMap(Paths.get(path));
+                    World.sSettings.getAttackMapPaths().add(path);
+                    World.saveSettings();
                 }
                 break;
                 case Menu.Id.ATTACK_LOAD_MAP_ITEM:
@@ -68,6 +82,7 @@ public class AttackController implements IMenuClickListener, ICommandManager
                 case Menu.Id.ATTACK_MAP_ATTACK:
                 {
                     //theAttack = new Attack();
+                    theView.setCurrentMenu(null, false);
                 }
                 break;
             }
@@ -160,8 +175,12 @@ public class AttackController implements IMenuClickListener, ICommandManager
         try (BufferedReader reader = Files.newBufferedReader(path))
         {
             Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(AttackMap.class, new AttackMapGlobalAdapter())
+                    .registerTypeAdapter(Building.class, new BuildingGlobalAdapter())
                     .create();
-            //TODO: complete the code
+
+            AttackMap map = gson.fromJson(reader, AttackMap.class);
+            setTheAttack(new Attack(map));
         }
         catch (JsonParseException ex)
         {

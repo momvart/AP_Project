@@ -186,7 +186,7 @@ public class VillageView extends ConsoleMenuContainerView
     {
         //TODO: what's target?
         System.out.println("Target: ");
-        System.out.println("Damage: " + tower.getAttackPower());
+        System.out.println("Damage: " + tower.getDamagePower());
         System.out.println("Damage Range: " + tower.getRange());
     }
 }

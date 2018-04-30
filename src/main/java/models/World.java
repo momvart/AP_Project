@@ -10,13 +10,12 @@ import java.io.*;
 import java.nio.file.*;
 
 import com.google.gson.*;
-import com.google.gson.stream.*;
-import com.google.gson.reflect.*;
 import serialization.*;
 
 public class World
 {
     public static Game sCurrentGame;
+    public static Settings sSettings;
 
     public static void initialize()
     {
@@ -24,6 +23,7 @@ public class World
         {
             BuildingValues.initialize(Paths.get(World.class.getClassLoader().getResource("BuildingValues.json").toURI()));
             SoldierValues.initialize(Paths.get(World.class.getClassLoader().getResource("SoldierValues.json").toURI()));
+            loadSettings(Paths.get(World.class.getClassLoader().getResource("Settings.json").toURI()));
         }
         catch (IOException ex)
         {
@@ -32,6 +32,40 @@ public class World
         catch (Exception ex)
         {
 
+        }
+    }
+
+    public static void loadSettings(Path path) throws IOException
+    {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        try (BufferedReader reader = Files.newBufferedReader(path))
+        {
+            sSettings = gson.fromJson(reader, Settings.class);
+        }
+    }
+
+    public static void saveSettings()
+    {
+        try
+        {
+            saveSettings(Paths.get(World.class.getClassLoader().getResource("Settings.json").toURI()));
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void saveSettings(Path path) throws IOException
+    {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        try (BufferedWriter writer = Files.newBufferedWriter(path))
+        {
+            gson.toJson(sSettings, Settings.class, writer);
         }
     }
 
@@ -59,7 +93,7 @@ public class World
     private static Gson createSerializer()
     {
         return new GsonBuilder()
-                .registerTypeAdapter(Building.class, new BuilderAdapter())
+                .registerTypeAdapter(Building.class, new BuildingAdapter())
                 .registerTypeAdapter(Soldier.class, new SoldierAdapter())
                 .registerTypeAdapter(Class.class, new ClassAdapter())
                 .registerTypeAdapter(Map.class, new MapAdapter())

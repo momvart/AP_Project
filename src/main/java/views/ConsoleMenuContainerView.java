@@ -17,34 +17,15 @@ public abstract class ConsoleMenuContainerView extends ConsoleView implements IM
         super(scanner);
     }
 
-//    private boolean getCancelled = false;
-//
-//    public void startGetting()
-//    {
-//        getCancelled = false;
-//        while (!getCancelled)
-//            try
-//            {
-//                handleCommand(getCommand());
-//            }
-//            catch (InvalidCommandException ex)
-//            {
-//                showError(ex);
-//            }
-//    }
-//
-//    public void stopGetting()
-//    {
-//        getCancelled = true;
-//    }
-
     @Override
     public void manageCommand(String command) throws InvalidCommandException
     {
         if (command.equalsIgnoreCase("showmenu"))
             showCurrentMenu();
-        else
+        else if (currentMenu != null)
             currentMenu.handleCommand(command, this);
+        else
+            throw new InvalidCommandException(command);
     }
 
     @Override

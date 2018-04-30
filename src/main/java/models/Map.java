@@ -15,7 +15,7 @@ public class Map
     private transient Building[][] map;
     private transient ArrayList<MySortedList<Long, Building>> buildings;
     private Size size;
-    private Resource resources = new Resource(0, 0);
+    protected Resource resources = new Resource(0, 0);
 
     public Map()
     {
