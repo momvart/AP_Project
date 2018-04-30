@@ -1,23 +1,26 @@
 package models.buildings;
 
+import com.google.gson.annotations.SerializedName;
 import models.Resource;
 
 public abstract class BuildingInfo
 {
-    int type;
-    String name;
-    Resource buildCost;
-    int buildDuration;
-    int destroyScore;
-    Resource destroyResource;
-    int initialStrength;
+    private int type;
+    private String name;
+    private Resource buildCost;
+    private int buildDuration;
+    private int destroyScore;
+    private Resource destroyResource;
+    private int initialStrength;
+    @SerializedName("ustginc")
+    private int upgradeStrengthInc;
 
     public BuildingInfo()
     {
 
     }
 
-    public BuildingInfo(int type, String name, Resource buildCost, int buildDuration, int destroyScore, Resource destroyResource, int initialStrength)
+    public BuildingInfo(int type, String name, Resource buildCost, int buildDuration, int destroyScore, Resource destroyResource, int initialStrength, int upgradeStrengthInc)
     {
         this.type = type;
         this.name = name;
@@ -26,6 +29,7 @@ public abstract class BuildingInfo
         this.destroyScore = destroyScore;
         this.destroyResource = destroyResource;
         this.initialStrength = initialStrength;
+        this.upgradeStrengthInc = upgradeStrengthInc;
     }
 
     public int getType()
@@ -63,5 +67,10 @@ public abstract class BuildingInfo
     public int getInitialStrength()
     {
         return initialStrength;
+    }
+
+    public int getUpgradeStrengthInc()
+    {
+        return upgradeStrengthInc;
     }
 }

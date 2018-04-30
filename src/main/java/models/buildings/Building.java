@@ -23,7 +23,7 @@ public abstract class Building
     {
         this.location = location;
         this.buildingNum = buildingNum;
-        this.strength = BuildingValues.getBuildingInfo(getType()).initialStrength;
+        this.strength = BuildingValues.getBuildingInfo(getType()).getInitialStrength();
     }
 
     public long getId()

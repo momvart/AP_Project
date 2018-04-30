@@ -13,6 +13,7 @@
       "elixir": 5
     },
     "initialStrength": 200,
+    "ustginc": 0,
     "infoType": 0
   },
   {
@@ -29,6 +30,7 @@
       "elixir": 3
     },
     "initialStrength": 200,
+    "ustginc": 0,
     "infoType": 0
   },
   {
@@ -45,6 +47,7 @@
       "elixir": 0
     },
     "initialStrength": 300,
+    "ustginc": 0,
     "infoType": 0
   },
   {
@@ -61,6 +64,7 @@
       "elixir": 0
     },
     "initialStrength": 300,
+    "ustginc": 0,
     "infoType": 0
   },
   {
@@ -77,6 +81,7 @@
       "elixir": 0
     },
     "initialStrength": 1000,
+    "ustginc": 500,
     "infoType": 0
   },
   {
@@ -93,6 +98,7 @@
       "elixir": 0
     },
     "initialStrength": 300,
+    "ustginc": 0,
     "infoType": 0
   },
   {
@@ -109,12 +115,12 @@
       "elixir": 0
     },
     "initialStrength": 900,
+    "ustginc": 0,
     "infoType": 0
   },
   {
     "targetType": "GROUND",
     "udmginc": 1,
-    "ustginc": 10,
     "type": 8,
     "name": "Archer tower",
     "buildCost": {
@@ -128,12 +134,12 @@
       "elixir": 0
     },
     "initialStrength": 300,
+    "ustginc": 10,
     "infoType": 1
   },
   {
     "targetType": "GROUND",
     "udmginc": 1,
-    "ustginc": 10,
     "type": 9,
     "name": "Cannon",
     "buildCost": {
@@ -147,12 +153,12 @@
       "elixir": 0
     },
     "initialStrength": 400,
+    "ustginc": 10,
     "infoType": 1
   },
   {
     "targetType": "AIR",
     "udmginc": 1,
-    "ustginc": 10,
     "type": 10,
     "name": "Air defense",
     "buildCost": {
@@ -166,12 +172,12 @@
       "elixir": 0
     },
     "initialStrength": 300,
+    "ustginc": 10,
     "infoType": 1
   },
   {
     "targetType": "BOTH",
     "udmginc": 1,
-    "ustginc": 10,
     "type": 11,
     "name": "Wizard tower",
     "buildCost": {
@@ -185,6 +191,7 @@
       "elixir": 0
     },
     "initialStrength": 700,
+    "ustginc": 10,
     "infoType": 1
   },
   {
@@ -201,12 +208,12 @@
       "elixir": 0
     },
     "initialStrength": 100,
+    "ustginc": 10,
     "infoType": 0
   },
   {
     "targetType": "GROUND",
     "udmginc": 1,
-    "ustginc": 10,
     "type": 13,
     "name": "Trap",
     "buildCost": {
@@ -220,12 +227,12 @@
       "elixir": 0
     },
     "initialStrength": 100,
+    "ustginc": 10,
     "infoType": 1
   },
   {
     "targetType": "GROUND",
     "udmginc": 1,
-    "ustginc": 10,
     "type": 14,
     "name": "Guardian Giant",
     "buildCost": {
@@ -239,6 +246,7 @@
       "elixir": 0
     },
     "initialStrength": 700,
+    "ustginc": 10,
     "infoType": 1
   }
 ]
