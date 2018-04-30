@@ -16,9 +16,11 @@ public class ArcherTower extends DefensiveTower
 
     }
 
+    public static final int BUILDING_TYPE = 8;
+
     @Override
     public int getType()
     {
-        return 8;
+        return BUILDING_TYPE;
     }
 }

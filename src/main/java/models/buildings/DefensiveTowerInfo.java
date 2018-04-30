@@ -7,24 +7,29 @@ public class DefensiveTowerInfo extends BuildingInfo
 {
     private DefenseType targetType;
 
+    private int initialDamage;
     @SerializedName("udmginc")
     private int upgradeDamageInc;
 
-
-    public DefensiveTowerInfo(int type, String name, Resource buildCost, int buildDuration, int destroyScore, Resource destroyResource, int initialStrength, DefenseType targetType, int upgradeDamageInc, int upgradeStrengthInc)
-    {
-        super(type, name, buildCost, buildDuration, destroyScore, destroyResource, initialStrength, upgradeStrengthInc);
-        this.targetType = targetType;
-        this.upgradeDamageInc = upgradeDamageInc;
-    }
+    private int attackRange;
 
     public DefenseType getTargetType()
     {
         return targetType;
     }
 
+    public int getInitialDamage()
+    {
+        return initialDamage;
+    }
+
     public int getUpgradeDamageInc()
     {
         return upgradeDamageInc;
+    }
+
+    public int getAttackRange()
+    {
+        return attackRange;
     }
 }

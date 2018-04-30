@@ -3,6 +3,8 @@ package models.buildings;
 import com.google.gson.annotations.SerializedName;
 import models.Resource;
 
+import java.util.HashMap;
+
 public abstract class BuildingInfo
 {
     private int type;
@@ -14,6 +16,8 @@ public abstract class BuildingInfo
     private int initialStrength;
     @SerializedName("ustginc")
     private int upgradeStrengthInc;
+
+    private HashMap<String, Object> metadata;
 
     public BuildingInfo()
     {
@@ -72,5 +76,10 @@ public abstract class BuildingInfo
     public int getUpgradeStrengthInc()
     {
         return upgradeStrengthInc;
+    }
+
+    public Object getMetadata(String key)
+    {
+        return metadata.get(key);
     }
 }

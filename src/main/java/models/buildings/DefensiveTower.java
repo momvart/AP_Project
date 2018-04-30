@@ -7,7 +7,7 @@ import utils.Point;
 
 public abstract class DefensiveTower extends Building
 {
-    private int attackPower;
+    private int damagePower;
     private int range;
 
     public DefensiveTower(Point location, int buildingNum)
@@ -20,9 +20,18 @@ public abstract class DefensiveTower extends Building
         return range;
     }
 
-    public int getAttackPower()
+    public int getDamagePower()
     {
-        return attackPower;
+        return damagePower;
+    }
+
+    @Override
+    public void ensureLevel()
+    {
+        super.ensureLevel();
+        DefensiveTowerInfo info = (DefensiveTowerInfo)getBuildingInfo();
+        damagePower = info.getInitialDamage() + info.getUpgradeDamageInc() * level;
+        range = info.getAttackRange();
     }
 
     public abstract void attack(Attack attack);

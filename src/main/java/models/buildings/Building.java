@@ -93,6 +93,15 @@ public abstract class Building
         return BuildingValues.getBuildingInfo(getType());
     }
 
+
+    /**
+     * Method for setting properties of this building by level
+     */
+    public void ensureLevel()
+    {
+        strength = getBuildingInfo().getInitialStrength() + getBuildingInfo().getUpgradeStrengthInc() * level;
+    }
+
     public BuildingInfoSubmenu getInfoSubmenu() { return new BuildingInfoSubmenu(null); }
 
     public BuildingSubmenu getMenu(ParentMenu parent)
