@@ -51,12 +51,10 @@ public class TownHall extends VillageBuilding
 
     public Builder getBuilderByNum(int num)
     {
-        for (Builder builder : builders)
-        {
-            if (builder.getBuilderNum() == num)
-                return builder;
-        }
-        throw new BuilderNotFoundException("Builder not found", "Builder not found");
+        return builders.stream()
+                .filter(builder -> builder.getBuilderNum() == num)
+                .findFirst()
+                .orElseThrow(() -> new BuilderNotFoundException(num));
     }
 
     private void addBuilder()

@@ -134,7 +134,7 @@ public class Village
     public void addSoldier(Soldier soldier) throws NotEnoughCampCapacityException
     {
         if (getCampsCapacity() <= getSoldiersCount())
-            throw new NotEnoughCampCapacityException("Camp can't build new soldier", "Not enough camp capacity");
+            throw new NotEnoughCampCapacityException();
         soldiers.get(soldier.getType() - 1).add(soldier);
     }
 

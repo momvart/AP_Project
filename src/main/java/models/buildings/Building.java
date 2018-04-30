@@ -48,6 +48,11 @@ public abstract class Building
         return location;
     }
 
+    public void setLocation(Point location)
+    {
+        this.location = location;
+    }
+
     public boolean isDestroyed()
     {
         return destroyed;

@@ -2,8 +2,8 @@ package exceptions;
 
 public class BuilderNotFoundException extends ConsoleRuntimeException
 {
-    public BuilderNotFoundException(String message, String datailedMessage)
+    public BuilderNotFoundException(int builderNum)
     {
-        super(message, datailedMessage);
+        super("Builder not found.", "Can't find builder with num: " + builderNum);
     }
 }
