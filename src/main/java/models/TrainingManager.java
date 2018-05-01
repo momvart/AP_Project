@@ -39,6 +39,11 @@ public class TrainingManager
     public void passTurn()
     {
         for (int i = 0; i < recruits.size(); i++)
+        {
+            if (recruits.get(i).getArmyQueue().size() != 0)
+            {
+                recruits.get(i).addSoldiersInQueueToArmy();
+            }
             if (recruits.get(i).isCurrentFinished())
             {
                 recruits.get(i).finishSoldier();
@@ -48,6 +53,7 @@ public class TrainingManager
                     i--;
                 }
             }
+        }
     }
 
     public ArrayList<Recruit> getRecruits()

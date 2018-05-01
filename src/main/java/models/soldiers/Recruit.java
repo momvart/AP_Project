@@ -1,11 +1,9 @@
 package models.soldiers;
 
-import models.Village;
+import exceptions.NotEnoughCampCapacityException;
 import models.World;
-import models.soldiers.Soldier;
-import models.soldiers.SoldierFactory;
-import models.soldiers.SoldierInfo;
-import models.soldiers.SoldierValues;
+
+import java.util.ArrayList;
 
 public class Recruit
 {
@@ -14,6 +12,7 @@ public class Recruit
     private int count;
     private int trainedCount;
     private int level;
+    private ArrayList<Soldier> armyQueue;
 
     public Recruit(int soldierType, int count, int level)
     {
@@ -21,11 +20,17 @@ public class Recruit
         this.startTurn = World.sCurrentGame.getVillage().getTurn();
         this.count = count;
         this.level = level;
+        armyQueue = new ArrayList();
     }
 
     public int getSoldierType()
     {
         return soldierType;
+    }
+
+    public ArrayList getArmyQueue()
+    {
+        return armyQueue;
     }
 
     public SoldierInfo getSoldierInfo() { return SoldierValues.getSoldierInfo(soldierType); }
@@ -56,7 +61,31 @@ public class Recruit
     public void finishSoldier()
     {
         this.trainedCount += 1;
-        World.getVillage().addSoldier(SoldierFactory.createSoldierByTypeID(soldierType, level));
+        try
+        {
+            World.getVillage().addSoldier(SoldierFactory.createSoldierByTypeID(soldierType, level));
+        }
+        catch (NotEnoughCampCapacityException ex)
+        {
+            armyQueue.add(SoldierFactory.createSoldierByTypeID(soldierType, level));
+        }
+
+    }
+
+    public void addSoldiersInQueueToArmy()
+    {
+        while (armyQueue.size() != 0)
+        {
+            try
+            {
+                World.getVillage().addSoldier(armyQueue.get(0));
+                armyQueue.remove(0);
+            }
+            catch (NotEnoughCampCapacityException ex)
+            {
+                break;
+            }
+        }
     }
 
     public boolean checkCompleteFinish()

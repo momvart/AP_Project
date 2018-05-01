@@ -3,7 +3,10 @@ package models.buildings;
 import menus.BuildingInfoSubmenu;
 import menus.Menu;
 import models.Attack;
+import models.soldiers.Soldier;
 import utils.Point;
+
+import java.util.List;
 
 public abstract class DefensiveTower extends Building
 {
@@ -34,7 +37,12 @@ public abstract class DefensiveTower extends Building
         range = info.getAttackRange();
     }
 
-    public abstract void attack(Attack attack);
+
+    public void attack(Attack attack)
+    {
+        List<Soldier> soldiersInRange = attack.getSoldiersInRange(this.location, range);
+        soldiersInRange.forEach(soldier -> soldier.decreaseHealth(damagePower));
+    }
 
     @Override
     public BuildingInfoSubmenu getInfoSubmenu()

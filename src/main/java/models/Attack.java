@@ -1,8 +1,10 @@
 package models;
 
+import models.buildings.DefenseType;
 import models.buildings.DefensiveTower;
 import models.soldiers.Healer;
 import models.soldiers.Soldier;
+import utils.PathFinder;
 import utils.Point;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ public class Attack
     private int turn;
     public ArrayList<Soldier> soldiersOnMap = new ArrayList<>();
     private ArrayList<Healer> healersOnMap = new ArrayList<>();
+    private PathFinder pathFinder = new PathFinder();
 
     public Attack(AttackMap map)
     {
@@ -183,5 +186,24 @@ public class Attack
     public AttackMap getMap()
     {
         return map;
+    }
+
+    public List<Soldier> getSoldiersInRange(Point location, int range)
+    {
+        List<Soldier> soldiers = new ArrayList<>();
+        for (Soldier soldier : soldiersOnMap)
+        {
+            if (getDistance(location, soldier.getLocation()) <= range)
+            {
+                soldiers.add(soldier);
+            }
+        }
+        return soldiers;
+    }
+
+    private double getDistance(Point source, Point destination)
+    {
+        return Math.sqrt((source.getX() - destination.getX()) * (source.getX() - destination.getX()) +
+                (source.getY() - destination.getY()) * (source.getY() - destination.getY()));
     }
 }
