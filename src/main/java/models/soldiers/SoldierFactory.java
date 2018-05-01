@@ -2,26 +2,16 @@ package models.soldiers;
 
 public class SoldierFactory
 {
-    public static Soldier createSoldierByTypeID(int type , int level)
+    public static Soldier createSoldierByTypeID(int type, int level)
     {
-        switch (type)
+        try
         {
-            case 0:
-                return new Guardian(level);
-            case 1:
-                return new Giant(level);
-            case 2:
-                return new Dragon(level);
-            case 3:
-                return new Archer(level);
-            case 4:
-                return new WallBreaker(level
-                );
-            case 5:
-                return new Healer(level);
+            return (Soldier)SoldierValues.sSoldierClasses[type - 1].getConstructor(int.class).newInstance(level);
         }
-        return null;
-        // TODO: 4/22/18 : throw an exception here if needed.
+        catch (Exception ex)
+        {
+            return null;
+        }
     }
 
 

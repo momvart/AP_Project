@@ -5,19 +5,20 @@ import models.buildings.DefensiveTower;
 import models.soldiers.Healer;
 import models.soldiers.Soldier;
 import utils.PathFinder;
+import models.soldiers.SoldierCollection;
 import utils.Point;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Attack
 {
-    private ArrayList<Soldier> attackSoldiers;
+    private SoldierCollection soldiers = new SoldierCollection();
     private Resource claimedResource;
     private AttackMap map;
     private int turn;
-    public ArrayList<Soldier> soldiersOnMap = new ArrayList<>();
-    private ArrayList<Healer> healersOnMap = new ArrayList<>();
+    public SoldierCollection soldiersOnMap = new SoldierCollection();
     private PathFinder pathFinder = new PathFinder();
 
     public Attack(AttackMap map)
@@ -34,25 +35,24 @@ public class Attack
 
     public void addUnit(Soldier soldier)
     {
-        attackSoldiers.add(soldier);
+        soldiers.addSoldier(soldier);
         soldier.participateIn(this);
     }
 
-    public void addUnits(List<Soldier> soldiers)
+    public void addUnits(List<Soldier> soldierList)
     {
-        attackSoldiers.addAll(soldiers);
-        soldiers.forEach(s -> s.participateIn(this));
+        soldierList.forEach(s ->
+        {
+            soldiers.addSoldier(s);
+            s.participateIn(this);
+        });
     }
 
     public void putUnits(int unitType, int count, Point location)
     {
-        if (getUnitsInToBeDeplyed(unitType) != null && getUnitsInToBeDeplyed(unitType).size() >= count)//TODO‌ Exceptions of more than 5 soldiers should be handled later on , when we come to an agreemaent of how to suppose the soldiers on the map
-        {
-            for (int i = 0; i < count; i++)
-            {
-                putUnit(getUnitsInToBeDeplyed(unitType).get(i), location);
-            }
-        }
+        List<Soldier> available = getUnitsInToBeDeployed(unitType).collect(Collectors.toList());
+        if (available.size() >= count)
+            available.forEach(soldier -> putUnit(soldier, location));
     }
 
     private void putUnit(Soldier soldier, Point location)
@@ -61,79 +61,43 @@ public class Attack
         {
             soldier.setLocation(location);
             soldier.getAttackHelper().setSoldierIsDeployed(true);
-            soldiersOnMap.add(soldier);
-            if (soldier.getType() == 5)//TODO‌ Here 5 is type of the healer.TO be checked if there is a change in initial SoldierValues
-            {
-                healersOnMap.add((Healer)soldier);
-            }
+            soldiersOnMap.addSoldier(soldier);
         }
     }
 
-    public ArrayList<Soldier> getSoldiersToBeDeployed()
-    {
-        ArrayList<Soldier> troopsToBeDeplyed = new ArrayList<>();
-        for (Soldier attackSoldier : attackSoldiers)
-        {
-            if (!attackSoldier.getAttackHelper().isDead() && !attackSoldier.getAttackHelper().isSoldierDeployed())
-            {
-                troopsToBeDeplyed.add(attackSoldier);
-            }
-        }
-        return troopsToBeDeplyed;
-    }
 
-    public ArrayList<Soldier> getUnitsInToBeDeplyed(int unitType)
+    public Stream<Soldier> getUnitsInToBeDeployed(int unitType)
     {
-        ArrayList<Soldier> reqTroops = new ArrayList<>();
-        for (Soldier soldier : getSoldiersToBeDeployed())
-        {
-            if (soldier != null && !soldier.getAttackHelper().isDead() && soldier.getType() == unitType)
-            {
-                reqTroops.add(soldier);
-            }
-        }
-        return reqTroops;
+        return getUnits(unitType).filter(s -> !s.getAttackHelper().isSoldierDeployed());
     }
 
     public void passTurn()
     {
         ageHealersOnMap();
         killAgedHealers();
-        for (Soldier soldier : soldiersOnMap)
-        {
-            if (soldier != null && !soldier.getAttackHelper().isDead())
-            {
-                soldier.getAttackHelper().passTurn();
-            }
-        }
+        soldiersOnMap.getAllSoldiers()
+                .filter(soldier -> !soldier.getAttackHelper().isDead())
+                .forEach(soldier -> soldier.getAttackHelper().passTurn());
+
         turn++;
     }
 
 
     private void killAgedHealers()
     {
-        for (Healer healer : healersOnMap)
+        getDeployedUnits(Healer.SOLDIER_TYPE).forEach(soldier ->
         {
-            if (healer != null && !healer.getAttackHelper().isDead())
+            Healer healer = (Healer)soldier;
+            if (healer.getTimeTillDie() <= 0)
             {
-                if (healer.getTimeTillDie() <= 0)
-                {
-                    healer.getAttackHelper().setDead(true);
-                    healer = null;
-                }
+                healer.getAttackHelper().setDead(true);
             }
-        }
+        });
     }
 
     private void ageHealersOnMap()
     {
-        for (Healer healer : healersOnMap)
-        {
-            if (healer != null && !healer.getAttackHelper().isDead())
-            {
-                healer.ageOneDeltaT();
-            }
-        }
+        getDeployedUnits(Healer.SOLDIER_TYPE).forEach(soldier -> ((Healer)soldier).ageOneDeltaT());
     }
 
     public Resource getClaimedResource()
@@ -142,40 +106,36 @@ public class Attack
     }
 
 
-    public ArrayList<Soldier> getUnits(int unitType)
+    public Stream<Soldier> getUnits(int unitType)
     {
-        ArrayList<Soldier> units = new ArrayList<>();
-        for (Soldier attackSoldier : attackSoldiers)
-        {
-            if (attackSoldier != null && !attackSoldier.getAttackHelper().isDead() && attackSoldier.getType() == unitType)
-            {
-                units.add(attackSoldier);
-            }
-        }
-        return units;
+        return soldiers.getSoldiers(unitType).stream()
+                .filter(soldier -> soldier != null && !soldier.getAttackHelper().isDead());
     }
 
-    public ArrayList<Soldier> getAllUnits()
+    public Stream<Soldier> getDeployedUnits(int unitType)
     {
-        return attackSoldiers;
+        return soldiersOnMap.getSoldiers(unitType).stream()
+                .filter(soldier -> soldier != null && !soldier.getAttackHelper().isDead());
     }
 
-    public ArrayList<DefensiveTower> getTowers(int towerType)
+    public Stream<Soldier> getAllDeployedUnits()
     {
-        ArrayList<DefensiveTower> requiredTowers = new ArrayList<>();
-        for (DefensiveTower defensiveTower : map.getDefensiveTowers())
-        {
-            if (defensiveTower != null && defensiveTower.getType() == towerType)
-            {
-                requiredTowers.add(defensiveTower);
-            }
-        }
-        return requiredTowers;
+        return soldiersOnMap.getAllSoldiers().filter(soldier -> soldier != null && !soldier.getAttackHelper().isDead());
+    }
+
+    public Stream<Soldier> getAllUnits()
+    {
+        return soldiers.getAllSoldiers();
     }
 
     public List<DefensiveTower> getAllTowers()
     {
-        return map.getDefensiveTowers();
+        return map.getAllDefensiveTowers();
+    }
+
+    public List<DefensiveTower> getTowers(int towerType)
+    {
+        return map.getDefensiveTowers(towerType);
     }
 
     public void quitAttack()
@@ -190,15 +150,7 @@ public class Attack
 
     public List<Soldier> getSoldiersInRange(Point location, int range)
     {
-        List<Soldier> soldiers = new ArrayList<>();
-        for (Soldier soldier : soldiersOnMap)
-        {
-            if (getDistance(location, soldier.getLocation()) <= range)
-            {
-                soldiers.add(soldier);
-            }
-        }
-        return soldiers;
+        return getAllDeployedUnits().filter(soldier -> getDistance(location, soldier.getLocation()) <= range).collect(Collectors.toList());
     }
 
     private double getDistance(Point source, Point destination)

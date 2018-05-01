@@ -55,10 +55,10 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
         //TODO: needs to be tested.
 
         int lastType = -1;
-        if (map.getDefensiveTowers().size() > 0)
-            lastType = map.getDefensiveTowers().get(0).getType();
+        if (map.getAllDefensiveTowers().size() > 0)
+            lastType = map.getAllDefensiveTowers().get(0).getType();
         int counter = 0;
-        for (DefensiveTower tower : map.getDefensiveTowers())
+        for (DefensiveTower tower : map.getAllDefensiveTowers())
             if (lastType != tower.getType())
             {
                 System.out.printf("%s: %d\n", BuildingValues.getBuildingInfo(lastType).getName(), counter);
@@ -93,12 +93,12 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
 
     public void showTowersStatus(int towerType)
     {
-
+        theAttack.getTowers(towerType).forEach(this::showTowerStatus);
     }
 
     public void showAllTowersStatus()
     {
-
+        theAttack.getAllTowers().forEach(this::showTowerStatus);
     }
 
     private void showSoldierStatus(Soldier soldier)
@@ -113,12 +113,12 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
 
     public void showSoldiersStatus(int soldierType)
     {
-
+        theAttack.getUnits(soldierType).forEach(this::showSoldierStatus);
     }
 
     public void showAllSoldiersStatus()
     {
-
+        theAttack.getAllUnits().forEach(this::showSoldierStatus);
     }
 
     public void showAllAll()

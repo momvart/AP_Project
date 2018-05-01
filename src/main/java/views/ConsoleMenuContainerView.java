@@ -20,10 +20,11 @@ public abstract class ConsoleMenuContainerView extends ConsoleView implements IM
     @Override
     public void manageCommand(String command) throws InvalidCommandException
     {
-        if (command.equalsIgnoreCase("showmenu"))
-            showCurrentMenu();
-        else if (currentMenu != null)
-            currentMenu.handleCommand(command, this);
+        if (currentMenu != null)
+            if (command.equalsIgnoreCase("showmenu"))
+                showCurrentMenu();
+            else
+                currentMenu.handleCommand(command, this);
         else
             throw new InvalidCommandException(command);
     }

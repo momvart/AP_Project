@@ -5,6 +5,8 @@ import utils.Point;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class HealerAttackHelper extends AttackHelper
 {
@@ -95,7 +97,8 @@ public class HealerAttackHelper extends AttackHelper
     private int countNumberOfSoldiersAround(Point point)
     {
         int numberOfSoldiersInRange = 0;
-        for (Soldier soldier : attack.soldiersOnMap)
+        List<Soldier> soldiers = attack.getAllDeployedUnits().collect(Collectors.toList());
+        for (Soldier soldier : soldiers)
         {
             if (soldier != null && !soldier.getAttackHelper().isDead())
             {
@@ -114,7 +117,8 @@ public class HealerAttackHelper extends AttackHelper
     private ArrayList<Soldier> getSoldiersInRange()
     {
         ArrayList<Soldier> soldiersInRange = new ArrayList<>();
-        for (Soldier soldier : attack.soldiersOnMap)
+        List<Soldier> soldiers = attack.getAllDeployedUnits().collect(Collectors.toList());
+        for (Soldier soldier : soldiers)
         {
             if (soldier != null && !soldier.getAttackHelper().isDead())
             {

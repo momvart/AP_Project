@@ -26,7 +26,7 @@ import java.util.regex.Matcher;
 public class AttackController implements IMenuClickListener, ICommandManager
 {
     private static final String SELECT_UNIT_PATTERN = "select\\s+(?<type>\\w+)\\s+(?<count>\\d+)";
-    private static final String PUT_UNIT_PATTERN = "put\\s+(?<type>\\w+)\\s+(?<count>\\d+)\\s+in\\s+(?<x>\\d+)\\s+,\\s+(?<y>\\d+)";
+    private static final String PUT_UNIT_PATTERN = "put\\s+(?<type>\\w+)\\s+(?<count>\\d+)\\s+in\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)";
 
     private AttackView theView;
     private Attack theAttack;
@@ -69,6 +69,7 @@ public class AttackController implements IMenuClickListener, ICommandManager
                     openMap(Paths.get(path));
                     World.sSettings.getAttackMapPaths().add(path);
                     World.saveSettings();
+                    theView.setCurrentMenu(new AttackMapItem(theView.getCurrentMenu(), Paths.get(path)), true);
                 }
                 break;
                 case Menu.Id.ATTACK_LOAD_MAP_ITEM:
