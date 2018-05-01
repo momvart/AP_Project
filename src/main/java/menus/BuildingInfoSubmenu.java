@@ -15,4 +15,10 @@ public class BuildingInfoSubmenu extends Submenu implements IBuildingMenu
     {
         return ((BuildingSubmenu)parent).getBuilding();
     }
+
+    @Override
+    public BuildingInfoSubmenu insertItem(int id, String text)
+    {
+        return (BuildingInfoSubmenu)super.insertItem(id, text);
+    }
 }

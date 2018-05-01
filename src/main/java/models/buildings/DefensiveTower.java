@@ -39,7 +39,7 @@ public abstract class DefensiveTower extends Building
     @Override
     public BuildingInfoSubmenu getInfoSubmenu()
     {
-        return (BuildingInfoSubmenu)new BuildingInfoSubmenu(null)
+        return new BuildingInfoSubmenu(null)
                 .insertItem(Menu.Id.DEFENSIVE_TARGET_INFO, "Attack Info");
     }
 }

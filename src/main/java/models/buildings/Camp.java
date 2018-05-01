@@ -1,6 +1,10 @@
 package models.buildings;
 
 import exceptions.UnavailableUpgradeException;
+import menus.BuildingInfoSubmenu;
+import menus.BuildingSubmenu;
+import menus.Menu;
+import menus.ParentMenu;
 import utils.Point;
 
 public class Camp extends VillageBuilding
@@ -10,6 +14,7 @@ public class Camp extends VillageBuilding
     public Camp(Point location, int buildingNum)
     {
         super(location, buildingNum);
+        capacity = (int)(double)getBuildingInfo().getMetadata("initialCapacity");
     }
 
 
@@ -30,5 +35,19 @@ public class Camp extends VillageBuilding
     public void upgrade()
     {
         throw new UnavailableUpgradeException(this);
+    }
+
+    @Override
+    public BuildingInfoSubmenu getInfoSubmenu()
+    {
+        return new BuildingInfoSubmenu(null)
+                .insertItem(Menu.Id.CAMP_CAPACITY_INFO, "Capacity Info");
+    }
+
+    @Override
+    public BuildingSubmenu getMenu(ParentMenu parent)
+    {
+        return super.getMenu(parent)
+                .insertItem(Menu.Id.CAMP_SOLDIERS, "Soldiers");
     }
 }

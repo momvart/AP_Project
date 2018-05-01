@@ -29,6 +29,12 @@ public class BuildingSubmenu extends Submenu implements IBuildingMenu
             return building.getName();
     }
 
+    @Override
+    public BuildingSubmenu insertItem(int id, String text)
+    {
+        return (BuildingSubmenu)super.insertItem(id, text);
+    }
+
     public BuildingSubmenu setShowBuildingNum(boolean showBuildingNum)
     {
         this.showBuildingNum = showBuildingNum;

@@ -14,13 +14,13 @@ public class Village
     private ConstructionManager constructionManager;
     private VillageStatus villageStatus = VillageStatus.NORMAL;
     private int turn = 0;
-    private ArrayList<ArrayList<Soldier>> soldiers;
+    private SoldierCollection soldiers;
 
     public void initialize()
     {
         map = new Map(new Size(30, 30));
         constructionManager = new ConstructionManager();
-        soldiers = new ArrayList<>();
+        soldiers = new SoldierCollection();
     }
 
     public VillageStatus getVillageStatus()
@@ -125,9 +125,7 @@ public class Village
 
     public void setupSoldiers(Iterable<Soldier> soldierList)
     {
-        soldiers = new ArrayList<>(SoldierValues.SOLDIER_TYPES_COUNT);
-        for (int i = 0; i < SoldierValues.SOLDIER_TYPES_COUNT; i++)
-            soldiers.add(new ArrayList<>());
+        soldiers = new SoldierCollection();
         soldierList.forEach(this::addSoldier);
     }
 
@@ -135,17 +133,17 @@ public class Village
     {
         if (getCampsCapacity() <= getSoldiersCount())
             throw new NotEnoughCampCapacityException();
-        soldiers.get(soldier.getType() - 1).add(soldier);
+        soldiers.addSoldier(soldier);
     }
 
     public ArrayList<Soldier> getSoldiers(int soldierType)
     {
-        return soldiers.get(soldierType - 1);
+        return soldiers.getSoldiers(soldierType);
     }
 
     public Stream<Soldier> getAllSoldiers()
     {
-        return soldiers.stream().flatMap(Collection::stream);
+        return soldiers.getAllSoldiers();
     }
 
     public List<Soldier> selectUnit(int soldierType, int count) throws NotEnoughSoldierException
@@ -169,9 +167,6 @@ public class Village
 
     public int getSoldiersCount()
     {
-        int count = 0;
-        for (int i = 0; i < soldiers.size(); i++)
-            count += soldiers.get(i).size();
-        return count;
+        return (int)getAllSoldiers().count();
     }
 }

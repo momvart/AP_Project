@@ -122,6 +122,9 @@
     },
     "initialStrength": 900,
     "ustginc": 0,
+    "metadata": {
+      "initialCapacity": 50
+    },
     "infoType": 0
   },
   {

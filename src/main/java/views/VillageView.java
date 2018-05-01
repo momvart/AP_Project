@@ -167,7 +167,7 @@ public class VillageView extends ConsoleMenuContainerView
     {
         for (int i = 1; i <= SoldierValues.SOLDIER_TYPES_COUNT; i++)
             if (village.getSoldiers(i).size() > 0)
-                System.out.printf("%s x%d\n", SoldierValues.getSoldierInfo(i), village.getSoldiers(i).size());
+                System.out.printf("%s x%d\n", SoldierValues.getSoldierInfo(i).getName(), village.getSoldiers(i).size());
     }
 
     public void showStorageSourceInfo(Storage storage)
