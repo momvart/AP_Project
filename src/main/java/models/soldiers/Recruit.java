@@ -12,15 +12,16 @@ public class Recruit
     private int count;
     private int trainedCount;
     private int level;
-    private ArrayList<Soldier> armyQueue;
+    private int soldierBrewTimeDecrease;
+    private ArrayList<Soldier> armyQueue = new ArrayList<>();
 
-    public Recruit(int soldierType, int count, int level)
+    public Recruit(int soldierType, int count, int level, int soldierBrewTimeDecrease)
     {
         this.soldierType = soldierType;
         this.startTurn = World.sCurrentGame.getVillage().getTurn();
         this.count = count;
         this.level = level;
-        armyQueue = new ArrayList();
+        this.soldierBrewTimeDecrease = soldierBrewTimeDecrease;
     }
 
     public int getSoldierType()
@@ -35,7 +36,11 @@ public class Recruit
 
     public SoldierInfo getSoldierInfo() { return SoldierValues.getSoldierInfo(soldierType); }
 
-    private int getSingleTrainTime() {return getSoldierInfo().getBrewTime();}
+    private int getSingleTrainTime()
+    {
+        return getSoldierInfo().getBrewTime() - soldierBrewTimeDecrease >= 1 ?
+                getSoldierInfo().getBrewTime() - soldierBrewTimeDecrease : 1;
+    }
 
     private int getTotalTrainTime()
     {
@@ -44,7 +49,7 @@ public class Recruit
 
     public boolean isCurrentFinished()
     {
-        return getRemainingTurns() % getSingleTrainTime() == 0 &&
+        return getRemainingTurns() % (getSingleTrainTime()) == 0 &&
                 World.sCurrentGame.getVillage().getTurn() != startTurn;
     }
 

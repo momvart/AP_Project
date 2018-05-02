@@ -1,8 +1,10 @@
 package models.buildings;
 
+import exceptions.UnavailableUpgradeException;
 import menus.BuildingInfoSubmenu;
 import menus.BuildingSubmenu;
 import menus.ParentMenu;
+import models.World;
 import utils.Point;
 
 public abstract class Building
@@ -80,7 +82,10 @@ public abstract class Building
 
     public void upgrade()
     {
-        level++;
+        if (level < World.getVillage().getMap().getTownHall().getLevel())
+            level++;
+        else
+            throw new UnavailableUpgradeException(this);
     }
 
     public void decreaseStrength(int amount)

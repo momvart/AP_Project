@@ -32,7 +32,7 @@ public class TrainingManager
 
     public void train(int soldierType, int count)
     {
-        Recruit recruit = new Recruit(soldierType, count, getBarracks().getLevel());
+        Recruit recruit = new Recruit(soldierType, count, getBarracks().getLevel(), getBarracks().getSoldierBrewTimeDecrease());
         recruits.add(recruit);
     }
 
