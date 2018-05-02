@@ -100,7 +100,7 @@ public class Village
         Resource available = getResources();
         if (available.isLessThanOrEqual(cost))
             throw new NotEnoughResourceException(available, cost);
-        if (building.getLevel() == getMap().getTownHall().getLevel())
+        if (building.getLevel() == getMap().getTownHall().getLevel() && building.getType() != TownHall.BUILDING_TYPE)
             throw new UnavailableUpgradeException(building);
         if (building.getType() == Camp.BUILDING_TYPE)
             throw new UnavailableUpgradeException(building);
