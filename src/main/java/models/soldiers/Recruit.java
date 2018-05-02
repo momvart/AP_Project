@@ -14,6 +14,7 @@ public class Recruit
     private int level;
     private int soldierBrewTimeDecrease;
     private ArrayList<Soldier> armyQueue = new ArrayList<>();
+    private boolean isTraining = false;
 
     public Recruit(int soldierType, int count, int level, int soldierBrewTimeDecrease)
     {
@@ -55,12 +56,26 @@ public class Recruit
 
     public int getRemainingTurns()
     {
+        if (!isTraining)
+            startTurn = World.getVillage().getTurn();
         return getTotalTrainTime() + startTurn - World.sCurrentGame.getVillage().getTurn();
+
     }
 
     public int getCount()
     {
         return count;
+    }
+
+    public boolean isTraining()
+    {
+        return isTraining;
+    }
+
+    public void setTraining(boolean training)
+    {
+        isTraining = training;
+        startTurn = World.getVillage().getTurn() - 1;
     }
 
     public void finishSoldier()

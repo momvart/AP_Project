@@ -38,19 +38,18 @@ public class TrainingManager
 
     public void passTurn()
     {
-        for (int i = 0; i < recruits.size(); i++)
+        if (recruits.size() > 0)
         {
-            if (recruits.get(i).getArmyQueue().size() != 0)
+            if (!recruits.get(0).isTraining())
+                recruits.get(0).setTraining(true);
+            if (recruits.get(0).getArmyQueue().size() != 0)
+                recruits.get(0).addSoldiersInQueueToArmy();
+            if (recruits.get(0).isCurrentFinished())
             {
-                recruits.get(i).addSoldiersInQueueToArmy();
-            }
-            if (recruits.get(i).isCurrentFinished())
-            {
-                recruits.get(i).finishSoldier();
-                if (recruits.get(i).checkCompleteFinish())
+                recruits.get(0).finishSoldier();
+                if (recruits.get(0).checkCompleteFinish())
                 {
-                    recruits.remove(i);
-                    i--;
+                    recruits.remove(0);
                 }
             }
         }

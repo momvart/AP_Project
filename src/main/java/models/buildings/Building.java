@@ -82,10 +82,7 @@ public abstract class Building
 
     public void upgrade()
     {
-        if (level < World.getVillage().getMap().getTownHall().getLevel())
             level++;
-        else
-            throw new UnavailableUpgradeException(this);
     }
 
     public void decreaseStrength(int amount)

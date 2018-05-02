@@ -94,12 +94,16 @@ public class Village
         spendResource(cost);
     }
 
-    public void upgradeBuilding(Building building) throws NotEnoughResourceException, NoAvailableBuilderException
+    public void upgradeBuilding(Building building) throws NotEnoughResourceException, NoAvailableBuilderException, UnavailableUpgradeException
     {
         Resource cost = BuildingValues.getBuildingInfo(building.getType()).getBuildCost();
         Resource available = getResources();
         if (available.isLessThanOrEqual(cost))
             throw new NotEnoughResourceException(available, cost);
+        if (building.getLevel() == getMap().getTownHall().getLevel())
+            throw new UnavailableUpgradeException(building);
+        if (building.getType() == Camp.BUILDING_TYPE)
+            throw new UnavailableUpgradeException(building);
         constructionManager.upgrade(building);
         spendResource(cost);
     }
