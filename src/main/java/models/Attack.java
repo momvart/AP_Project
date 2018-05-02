@@ -1,5 +1,6 @@
 package models;
 
+import exceptions.SoldierNotFoundException;
 import models.buildings.DefenseType;
 import models.buildings.DefensiveTower;
 import models.soldiers.Healer;
@@ -8,7 +9,10 @@ import utils.PathFinder;
 import models.soldiers.SoldierCollection;
 import utils.Point;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -151,6 +155,22 @@ public class Attack
     public List<Soldier> getSoldiersInRange(Point location, int range)
     {
         return getAllDeployedUnits().filter(soldier -> getDistance(location, soldier.getLocation()) <= range).collect(Collectors.toList());
+    }
+
+    public Soldier getNearestSoldier(Point location, int range) throws SoldierNotFoundException
+    {
+        try
+        {
+            Soldier s = getAllDeployedUnits().min(Comparator.comparing(soldier -> getDistance(soldier.getLocation(), location))).get();
+            if (getDistance(location, s.getLocation()) <= range)
+                return s;
+            else
+                throw new SoldierNotFoundException("No soldier in this range", "SoldierNotFound");
+        }
+        catch (NoSuchElementException ex)
+        {
+            throw new SoldierNotFoundException("No soldier in this range", "SoldierNotFound");
+        }
     }
 
     private double getDistance(Point source, Point destination)

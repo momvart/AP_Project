@@ -1,5 +1,6 @@
 package models.buildings;
 
+import exceptions.SoldierNotFoundException;
 import menus.BuildingInfoSubmenu;
 import menus.Menu;
 import models.Attack;
@@ -40,8 +41,16 @@ public abstract class DefensiveTower extends Building
 
     public void attack(Attack attack)
     {
-        List<Soldier> soldiersInRange = attack.getSoldiersInRange(this.location, range);
-        soldiersInRange.forEach(soldier -> soldier.decreaseHealth(damagePower));
+        try
+        {
+            Soldier nearestSoldier = attack.getNearestSoldier(location, range);
+            nearestSoldier.decreaseHealth(damagePower);
+        }
+        catch (SoldierNotFoundException e)
+        {
+            //do nothing.
+        }
+
     }
 
     @Override

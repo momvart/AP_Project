@@ -10,12 +10,6 @@ public class ArcherTower extends DefensiveTower
         super(location, buildingNum);
     }
 
-    @Override
-    public void attack(Attack attack)
-    {
-
-    }
-
     public static final int BUILDING_TYPE = 8;
 
     @Override
