@@ -2,10 +2,13 @@ package models.soldiers;
 
 import models.Attack;
 import models.buildings.Building;
+import utils.Point;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+
+import static java.util.Collections.min;
 
 public class GeneralAttackHelper extends AttackHelper
 
@@ -43,7 +46,11 @@ public class GeneralAttackHelper extends AttackHelper
 
     private boolean isTargetInRange()
     {
-        return euclidianDistance(target.getLocation(), getSoldierLocation()) <= getRange();
+        if (target != null)
+        {
+            return euclidianDistance(target.getLocation(), getSoldierLocation()) <= getRange();
+        }
+        return true;//TODO‌ bad smell of redandent code of escaping compile error.in fact the code shouldn't reach here because we set the target first then we come up to move or fight
     }
 
     @Override
@@ -67,25 +74,99 @@ public class GeneralAttackHelper extends AttackHelper
 
     private Building getNearestBuilding()
     {
-        if (attack.getMap().getBuildings() != null)
+//        if (attack.getMap().getBuildings() != null)
+//        {
+//            ArrayList<Building> buildings = attack.getMap().getBuildings();
+//            ArrayList<Point> locations = new ArrayList<>();
+//            for (Building building : buildings)
+//            {
+//                locations.add(building.getLocation());
+//            }
+//            Point startPoint = getSoldierLocation();
+//            Point point = getSoldierLocation();
+//            HashMap<Point , Double> buildingLocationsInRange = new HashMap<>();
+//            for (int i = 1; i < getRange() ; i += 2)
+//            {
+//                if (Math.abs(point.getX() - startPoint.getX()) > getRange() || point.getY() - startPoint.getY() > getRange())
+//                {
+//                    break;
+//                }
+//                double radius;
+//                for (int j = 0; j < i ; j++)
+//                {
+//                    up(point);
+//                    radius = euclidianDistance(startPoint , point);
+//                    if (locations.contains(point))
+//                    {
+//                        buildingLocationsInRange.put(point , radius);
+//                    }
+//                }
+//                for (int j = 0; j < i; j++)
+//                {
+//                    right(point);
+//                    radius = euclidianDistance(startPoint , point);
+//                    if (locations.contains(point))
+//                    {
+//                        buildingLocationsInRange.put(point , radius);
+//                    }
+//                }
+//                for (int j = 0; j < i + 1 ; j++)
+//                {
+//                    down(point);
+//                    radius = euclidianDistance(startPoint , point);
+//                    if (locations.contains(point))
+//                    {
+//                        buildingLocationsInRange.put(point , radius);
+//                    }
+//                }
+//                for (int j = 0; j < i + 1 ; j++)
+//                {
+//                    left(point);
+//                    radius = euclidianDistance(startPoint , point);
+//                    if (locations.contains(point))
+//                    {
+//                        buildingLocationsInRange.put(point , radius);
+//                    }
+//                }
+//            }
+//
+//
+//        }
+        ArrayList<Building> buildings = super.attack.getMap().getBuildings();
+        ArrayList<Double> distances = new ArrayList<>();
+        for (Building building : buildings)
         {
-            ArrayList<Building> buildings = attack.getMap().getBuildings();
-            ArrayList<Double> distances = new ArrayList<>();
-            for (Building building : buildings)
+            distances.add(euclidianDistance(building.getLocation(), getSoldierLocation()));
+        }
+        double minimumDistance = min(distances);
+        for (Building building : buildings)
+        {
+            if (euclidianDistance(building.getLocation(), getSoldierLocation()) == minimumDistance)
             {
-                distances.add(euclidianDistance(building.getLocation(), getSoldierLocation()));
-            }
-            Collections.sort(distances);
-
-            for (Building building : buildings)
-            {
-                if (euclidianDistance(building.getLocation(), getSoldierLocation()) == distances.get(0))
-                {
-                    return building;
-                }
+                return building;
             }
         }
         return null;
+    }
+
+    private void left(Point point)
+    {
+        point.setX(point.getX() - 1);
+    }
+
+    private void down(Point point)
+    {
+        point.setY(point.getY() + 1);
+    }
+
+    private void right(Point point)
+    {
+        point.setX(point.getX() + 1);
+    }
+
+    private void up(Point point)
+    {
+        point.setY(point.getY() - 1);
     }
 
     public Building getBestFavouriteTarget()
@@ -111,7 +192,7 @@ public class GeneralAttackHelper extends AttackHelper
             {
                 for (int i = 0; i < manhatanianDistances.size(); i++)
                 {
-                    if (manhatanianDistance(favoutriteTarget.getLocation(), super.getSoldierLocation()) == manhatanianDistances.get(i))
+                    if (manhatanianDistance(favoutriteTarget.getLocation(), super.getSoldierLocation()).equals(manhatanianDistances.get(i)))
                     {
                         if (isTargetReachable(favoutriteTarget) && isntTargetTooFar(favoutriteTarget))
                         {

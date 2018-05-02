@@ -57,8 +57,8 @@ public abstract class AttackHelper
         removeSoldierIfDead();
         if (soldier != null && isSoldierDeployed)
         {
-            move();
             setTarget();
+            move();
             fire();
         }
     }

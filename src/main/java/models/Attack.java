@@ -1,23 +1,25 @@
 package models;
 
+import exceptions.ConsoleException;
+import exceptions.FilledCellException;
+import exceptions.NotEnoughSoldierException;
 import exceptions.SoldierNotFoundException;
-import models.buildings.DefenseType;
 import models.buildings.DefensiveTower;
 import models.soldiers.Healer;
 import models.soldiers.Soldier;
-import utils.PathFinder;
 import models.soldiers.SoldierCollection;
+import utils.PathFinder;
 import utils.Point;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Attack
 {
+    private final int MAX_SOLDIERS_IN‌_A_GREED = 5;
     private SoldierCollection soldiers = new SoldierCollection();
     private Resource claimedResource;
     private AttackMap map;
@@ -52,11 +54,38 @@ public class Attack
         });
     }
 
-    public void putUnits(int unitType, int count, Point location)
+    public void putUnits(int unitType, int numberOfSoldiers, Point location) throws ConsoleException
     {
-        List<Soldier> available = getUnitsInToBeDeployed(unitType).collect(Collectors.toList());
-        if (available.size() >= count)
-            available.forEach(soldier -> putUnit(soldier, location));
+        if (isValid(location))
+        {
+            List<Soldier> available = getUnitsInToBeDeployed(unitType).collect(Collectors.toList());
+            if (MAX_SOLDIERS_IN‌_A_GREED - numberOfSoldiersIn(location) < numberOfSoldiers)
+            {
+                throw new FilledCellException(location);
+            }
+            else if (available == null || available.size() < numberOfSoldiers)
+            {
+                throw new NotEnoughSoldierException(unitType, available == null ? 0 : available.size(), numberOfSoldiers);
+            }
+            else
+            {
+                for (int i = 0; i < numberOfSoldiers; i++)
+                {
+                    putUnit(available.get(i), location);
+                }
+            }
+        }
+        //else throw new InvalidInitialLocationException
+    }
+
+    private boolean isValid(Point location)
+    {
+        return location.getY() == 0 || location.getY() == 29 || location.getX() == 0 || location.getX() == 29;//TODO 0 , 29 could be changed later on.they are representing the edges of the 30x30 map‌
+    }
+
+    private int numberOfSoldiersIn(Point location)
+    {
+        return 0;//TODO‌ to be implemented later on.
     }
 
     private void putUnit(Soldier soldier, Point location)
