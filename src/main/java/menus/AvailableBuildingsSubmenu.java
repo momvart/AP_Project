@@ -6,6 +6,7 @@ import models.World;
 import models.buildings.Building;
 import models.buildings.BuildingInfo;
 import models.buildings.BuildingValues;
+import models.buildings.TownHall;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,6 +26,7 @@ public class AvailableBuildingsSubmenu extends Submenu implements IBuildingMenu
     {
         Resource availableResource = World.sCurrentGame.getVillage().getResources();
         items = BuildingValues.getInfos().stream()
+                .filter(info -> info.getType() != TownHall.BUILDING_TYPE)
                 .filter(info -> info.getBuildCost().isLessThanOrEqual(availableResource))
                 .sorted(Comparator.comparing(BuildingInfo::getName))
                 .map(AvailableBuildingItem::new)

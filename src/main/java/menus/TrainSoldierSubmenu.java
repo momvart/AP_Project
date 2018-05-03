@@ -1,5 +1,6 @@
 package menus;
 
+import models.World;
 import models.buildings.Barracks;
 import models.buildings.Building;
 import models.soldiers.SoldierInfo;
@@ -12,17 +13,16 @@ import java.util.stream.Collectors;
 public class TrainSoldierSubmenu extends Submenu implements IBuildingMenu
 {
     private Barracks barracks;
-    private int availableElixir;
 
-    public TrainSoldierSubmenu(ParentMenu parent, Barracks barracks, int availableElixir)
+    public TrainSoldierSubmenu(ParentMenu parent, Barracks barracks)
     {
-        super(Id.BARRACKS_TRAIN_SOLDIER, "Build soldiers", parent);
+        super(Id.BARRACKS_TRAIN_SOLDIER, "Build Soldiers", parent);
         this.barracks = barracks;
-        this.availableElixir = availableElixir;
     }
 
     private void setItems()
     {
+        int availableElixir = World.getVillage().getResources().getElixir();
         items = SoldierValues.getInfos().stream()
                 .sorted(Comparator.comparingInt(SoldierInfo::getType))
                 .map(info -> new TrainSoldierItem(info.getType(), info.getMinBarracksLevel() > barracks.getLevel() ? -1 : availableElixir / info.getBrewCost().getElixir()))

@@ -32,7 +32,7 @@ public class Camp extends VillageBuilding
     }
 
     @Override
-    public void upgrade()
+    public void upgrade() throws UnavailableUpgradeException
     {
         throw new UnavailableUpgradeException(this);
     }

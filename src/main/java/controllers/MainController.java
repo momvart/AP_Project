@@ -29,6 +29,10 @@ public class MainController implements ICommandManager
             {
                 manageCommand(theView.getCommand());
             }
+            catch (ConsoleRuntimeException ex)
+            {
+                theView.showError(ex);
+            }
             catch (ConsoleException ex)
             {
                 theView.showError(ex);

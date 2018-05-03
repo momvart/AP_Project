@@ -74,6 +74,8 @@ public class Menu
 
         public static final int DEFENSIVE_TARGET_INFO = 0x1511;
 
+        public static final int MINE_MINE = 0x1620;
+
         public static final int ATTACK_MAIN_MENU = 0x5000;
         public static final int ATTACK_LOAD_MAP = 0x5001;
         public static final int ATTACK_LOAD_MAP_ITEM = 0x5002;

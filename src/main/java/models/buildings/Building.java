@@ -80,9 +80,9 @@ public abstract class Building
         this.buildStatus = buildStatus;
     }
 
-    public void upgrade()
+    public void upgrade() throws UnavailableUpgradeException
     {
-            level++;
+        level++;
     }
 
     public void decreaseStrength(int amount)

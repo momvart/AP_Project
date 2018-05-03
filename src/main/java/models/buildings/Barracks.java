@@ -57,7 +57,7 @@ public class Barracks extends VillageBuilding
     public BuildingSubmenu getMenu(ParentMenu parent)
     {
         BuildingSubmenu menu = super.getMenu(parent);
-        menu.insertItem(new TrainSoldierSubmenu(menu, this, World.getVillage().getResources().getElixir()))
+        menu.insertItem(new TrainSoldierSubmenu(menu, this))
                 .insertItem(new Menu(Menu.Id.BARRACKS_STATUS, "Status"));
         return menu;
     }

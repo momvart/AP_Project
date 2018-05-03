@@ -1,5 +1,9 @@
 package models.buildings;
 
+import exceptions.UnavailableUpgradeException;
+import menus.BuildingSubmenu;
+import menus.Menu;
+import menus.ParentMenu;
 import models.World;
 import utils.Point;
 
@@ -32,7 +36,7 @@ public abstract class Mine extends VillageBuilding
     }
 
     @Override
-    public void upgrade()
+    public void upgrade() throws UnavailableUpgradeException
     {
         super.upgrade();
         double newResourceAdd = resourceAddPerDeltaT * 1.6;
@@ -54,5 +58,12 @@ public abstract class Mine extends VillageBuilding
     public int getMinedResources()
     {
         return minedResources;
+    }
+
+    @Override
+    public BuildingSubmenu getMenu(ParentMenu parent)
+    {
+        return super.getMenu(parent)
+                .insertItem(Menu.Id.MINE_MINE, "Mine");
     }
 }

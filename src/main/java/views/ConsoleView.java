@@ -1,6 +1,7 @@
 package views;
 
 import exceptions.ConsoleException;
+import exceptions.ConsoleRuntimeException;
 
 import java.util.Scanner;
 
@@ -34,6 +35,12 @@ public class ConsoleView
     }
 
     public void showError(ConsoleException ex)
+    {
+        System.out.println(ex.getMessage());
+        System.err.println(ex.getDatailedMessage());
+    }
+
+    public void showError(ConsoleRuntimeException ex)
     {
         System.out.println(ex.getMessage());
         System.err.println(ex.getDatailedMessage());
