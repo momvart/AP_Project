@@ -1,9 +1,6 @@
 package models;
 
-import exceptions.ConsoleException;
-import exceptions.FilledCellException;
-import exceptions.NotEnoughSoldierException;
-import exceptions.SoldierNotFoundException;
+import exceptions.*;
 import models.buildings.DefensiveTower;
 import models.soldiers.Healer;
 import models.soldiers.Soldier;
@@ -56,26 +53,25 @@ public class Attack
 
     public void putUnits(int unitType, int numberOfSoldiers, Point location) throws ConsoleException
     {
-        if (isValid(location))
+        if (!isValid(location))
+            throw new ConsoleRuntimeException("Invalid location.", location + " is not a marginal location.", new IllegalArgumentException("Invalid location"));
+
+        List<Soldier> available = getUnitsInToBeDeployed(unitType).collect(Collectors.toList());
+        if (MAX_SOLDIERS_IN‌_A_GREED - numberOfSoldiersIn(location) < numberOfSoldiers)
         {
-            List<Soldier> available = getUnitsInToBeDeployed(unitType).collect(Collectors.toList());
-            if (MAX_SOLDIERS_IN‌_A_GREED - numberOfSoldiersIn(location) < numberOfSoldiers)
+            throw new FilledCellException(location);
+        }
+        else if (available == null || available.size() < numberOfSoldiers)
+        {
+            throw new NotEnoughSoldierException(unitType, available == null ? 0 : available.size(), numberOfSoldiers);
+        }
+        else
+        {
+            for (int i = 0; i < numberOfSoldiers; i++)
             {
-                throw new FilledCellException(location);
-            }
-            else if (available == null || available.size() < numberOfSoldiers)
-            {
-                throw new NotEnoughSoldierException(unitType, available == null ? 0 : available.size(), numberOfSoldiers);
-            }
-            else
-            {
-                for (int i = 0; i < numberOfSoldiers; i++)
-                {
-                    putUnit(available.get(i), location);
-                }
+                putUnit(available.get(i), location);
             }
         }
-        //else throw new InvalidInitialLocationException
     }
 
     private boolean isValid(Point location)

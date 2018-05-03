@@ -59,6 +59,13 @@ public abstract class Soldier
         this.attackHelper = new GeneralAttackHelper(attack, this);
     }
 
+    public boolean isParticipating(Attack attack)
+    {
+        if (this.attackHelper == null)
+            return false;
+        return this.attackHelper.attack == attack;
+    }
+
     public Point getLocation()
     {
         return location;

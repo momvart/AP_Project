@@ -127,4 +127,9 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
         showAllSoldiersStatus();
         showAllTowersStatus();
     }
+
+    public void viewMapState()
+    {
+
+    }
 }

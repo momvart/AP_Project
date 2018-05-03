@@ -147,12 +147,12 @@ public class AttackController implements IMenuClickListener, ICommandManager
                 int soldierType = SoldierValues.getTypeByName(m.group("type"));
                 try
                 {
-                    theAttack.addUnits(World.getVillage().selectUnit(soldierType, Integer.parseInt(m.group("count"))));
+                    theAttack.addUnits(World.getVillage().selectUnit(soldierType, Integer.parseInt(m.group("count")), theAttack));
                 }
                 catch (NotEnoughSoldierException ex)
                 {
                     theView.showError(ex);
-                    World.getVillage().selectUnit(soldierType, -1);
+                    theAttack.addUnits(World.getVillage().selectUnit(soldierType, ex.getCurrent(), theAttack));
                 }
             }
             catch (ConsoleException ex)

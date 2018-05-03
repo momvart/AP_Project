@@ -150,15 +150,15 @@ public class Village
         return soldiers.getAllSoldiers();
     }
 
-    public List<Soldier> selectUnit(int soldierType, int count) throws NotEnoughSoldierException
+    public List<Soldier> selectUnit(int soldierType, int count, Attack attack) throws NotEnoughSoldierException
     {
-        int size = getSoldiers(soldierType).size();
-        if (size < count)
-            throw new NotEnoughSoldierException(soldierType, size, count);
-        if (count == -1)
-            return getSoldiers(soldierType);
-        else
-            return getSoldiers(soldierType).subList(0, count);
+        List<Soldier> freeSoldiers = getSoldiers(soldierType).stream()
+                .filter(soldier -> !soldier.isParticipating(attack))
+                .limit(count).collect(Collectors.toList());
+
+        if (count > freeSoldiers.size())
+            throw new NotEnoughSoldierException(soldierType, freeSoldiers.size(), count);
+        return freeSoldiers;
     }
 
     public int getCampsCapacity()
