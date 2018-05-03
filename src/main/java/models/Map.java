@@ -49,6 +49,10 @@ public class Map
         return size;
     }
 
+    public int getWidth() {return size.getWidth();}
+
+    public int getHeight() {return size.getHeight();}
+
     public Resource getResources()
     {
         return resources;

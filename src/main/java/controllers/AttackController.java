@@ -129,6 +129,8 @@ public class AttackController implements IMenuClickListener, ICommandManager
                 theView.showAllAll();
             else if (command.matches("(?i)quit\\s+attack"))
                 quitAttack();
+            else if (command.equalsIgnoreCase("showmap"))
+                theView.viewMapStatus();
             else
                 throw ex;
         }

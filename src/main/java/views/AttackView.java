@@ -128,8 +128,15 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
         showAllTowersStatus();
     }
 
-    public void viewMapState()
+    public void viewMapStatus()
     {
-
+        for (int j = 0; j < theAttack.getMap().getHeight(); j++)
+        {
+            for (int i = 0; i < theAttack.getMap().getWidth(); i++)
+            {
+                System.out.printf("%c%d\t", theAttack.getMap().isEmpty(i, j) ? '-' : '#', theAttack.numberOfSoldiersIn(i, j));
+            }
+            System.out.print('\n');
+        }
     }
 }

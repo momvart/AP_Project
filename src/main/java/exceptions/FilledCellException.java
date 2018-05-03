@@ -6,6 +6,11 @@ public class FilledCellException extends ConsoleRuntimeException
 {
     public FilledCellException(Point location)
     {
-        super("Cell doesn't any space.", "Cell doesn't any space: " + location.toString());
+        this(location, "");
+    }
+
+    public FilledCellException(Point location, String message)
+    {
+        super("Cell doesn't have enough space", "Cell doesn't have enough space: " + location.toString() + "\t" + message);
     }
 }

@@ -1,18 +1,12 @@
 package models;
 
 import exceptions.*;
-import models.buildings.DefensiveTower;
-import models.soldiers.Healer;
-import models.soldiers.Soldier;
-import models.soldiers.SoldierCollection;
-import utils.PathFinder;
-import utils.Point;
+import models.buildings.*;
+import models.soldiers.*;
+import utils.*;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.*;
+import java.util.stream.*;
 
 public class Attack
 {
@@ -21,13 +15,17 @@ public class Attack
     private Resource claimedResource;
     private AttackMap map;
     private int turn;
-    public SoldierCollection soldiersOnMap = new SoldierCollection();
+
+    private SoldierCollection soldiersOnMap = new SoldierCollection();
+    private SoldierCoordinatedCollection soldiersOnLocations;
+
     private PathFinder pathFinder = new PathFinder();
 
     public Attack(AttackMap map)
     {
         this.map = map;
         claimedResource = new Resource(0, 0);
+        soldiersOnLocations = new SoldierCoordinatedCollection(map.getSize());
     }
 
 
@@ -51,23 +49,24 @@ public class Attack
         });
     }
 
-    public void putUnits(int unitType, int numberOfSoldiers, Point location) throws ConsoleException
+    public void putUnits(int unitType, int count, Point location) throws ConsoleException
     {
         if (!isValid(location))
             throw new ConsoleRuntimeException("Invalid location.", location + " is not a marginal location.", new IllegalArgumentException("Invalid location"));
 
         List<Soldier> available = getUnitsInToBeDeployed(unitType).collect(Collectors.toList());
-        if (MAX_SOLDIERS_IN‌_A_GREED - numberOfSoldiersIn(location) < numberOfSoldiers)
+        int current = numberOfSoldiersIn(location);
+        if (MAX_SOLDIERS_IN‌_A_GREED - current < count)
         {
-            throw new FilledCellException(location);
+            throw new FilledCellException(location, "Current: " + current);
         }
-        else if (available == null || available.size() < numberOfSoldiers)
+        else if (available == null || available.size() < count)
         {
-            throw new NotEnoughSoldierException(unitType, available == null ? 0 : available.size(), numberOfSoldiers);
+            throw new NotEnoughSoldierException(unitType, available == null ? 0 : available.size(), count);
         }
         else
         {
-            for (int i = 0; i < numberOfSoldiers; i++)
+            for (int i = 0; i < count; i++)
             {
                 putUnit(available.get(i), location);
             }
@@ -79,9 +78,14 @@ public class Attack
         return location.getY() == 0 || location.getY() == 29 || location.getX() == 0 || location.getX() == 29;//TODO 0 , 29 could be changed later on.they are representing the edges of the 30x30 map‌
     }
 
-    private int numberOfSoldiersIn(Point location)
+    public int numberOfSoldiersIn(int x, int y)
     {
-        return 0;//TODO‌ to be implemented later on.
+        return soldiersOnLocations.getSoldiers(x, y).size();
+    }
+
+    public int numberOfSoldiersIn(Point location)
+    {
+        return numberOfSoldiersIn(location.getX(), location.getY());
     }
 
     private void putUnit(Soldier soldier, Point location)
@@ -91,6 +95,7 @@ public class Attack
             soldier.setLocation(location);
             soldier.getAttackHelper().setSoldierIsDeployed(true);
             soldiersOnMap.addSoldier(soldier);
+            soldiersOnLocations.push(soldier, location);
         }
     }
 
@@ -202,5 +207,55 @@ public class Attack
     {
         return Math.sqrt((source.getX() - destination.getX()) * (source.getX() - destination.getX()) +
                 (source.getY() - destination.getY()) * (source.getY() - destination.getY()));
+    }
+
+
+    private static class SoldierCoordinatedCollection
+    {
+        private ArrayList<LinkedList<Soldier>> soldiers;
+
+        private Size size;
+
+        public SoldierCoordinatedCollection(Size mapSize)
+        {
+            this.size = mapSize;
+            soldiers = Stream.<LinkedList<Soldier>>generate(LinkedList::new).limit(size.getWidth() * size.getHeight()).collect(Collectors.toCollection(ArrayList::new));
+        }
+
+        public List<Soldier> getSoldiers(int x, int y)
+        {
+            return soldiers.get(y * size.getWidth() + x);
+        }
+
+        public List<Soldier> getSoldiers(Point location)
+        {
+            return getSoldiers(location.getX(), location.getY());
+        }
+
+        public void push(Soldier soldier, int x, int y)
+        {
+            getSoldiers(x, y).add(soldier);
+        }
+
+        public void push(Soldier soldier, Point location)
+        {
+            push(soldier, location.getX(), location.getY());
+        }
+
+        public boolean pull(Soldier soldier, int x, int y)
+        {
+            return getSoldiers(x, y).remove(soldier);
+        }
+
+        public boolean pull(Soldier soldier, Point location)
+        {
+            return pull(soldier, location.getX(), location.getY());
+        }
+
+        public void move(Soldier soldier, Point from, Point to)
+        {
+            pull(soldier, from);
+            push(soldier, to);
+        }
     }
 }
