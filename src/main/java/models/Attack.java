@@ -24,7 +24,6 @@ public class Attack
     private SoldierCollection soldiersOnMap = new SoldierCollection();
     private SoldierCoordinatedCollection soldiersOnLocations;
 
-
     private PathFinder pathFinder = new PathFinder();
 
     public Attack(AttackMap map)
@@ -34,10 +33,6 @@ public class Attack
         soldiersOnLocations = new SoldierCoordinatedCollection(map.getSize());
     }
 
-    public void displayMove(Soldier soldier, Point init, Point finl)
-    {
-        soldiersOnLocations.move(soldier, init, finl);
-    }
     public List<Point> getSoldierPath(Point start, Point target)
     {
         return pathFinder.getSoldierPath(start, target);
@@ -153,10 +148,7 @@ public class Attack
         return claimedResource;
     }
 
-    public void addToClaimedResource(Resource resource)
-    {
-        claimedResource.increase(resource);
-    }
+
     public Stream<Soldier> getUnits(int unitType)
     {
         return soldiers.getSoldiers(unitType).stream()
@@ -224,6 +216,16 @@ public class Attack
     {
         return Math.sqrt((source.getX() - destination.getX()) * (source.getX() - destination.getX()) +
                 (source.getY() - destination.getY()) * (source.getY() - destination.getY()));
+    }
+
+    public void addToClaimedResource(Resource destroyResource)
+    {
+        claimedResource.increase(destroyResource);
+    }
+
+    public void displayMove(Soldier soldier, Point soldierLocation, Point pointToGo)
+    {
+        soldiersOnLocations.move(soldier, soldierLocation, pointToGo);
     }
 
     private static class SoldierCoordinatedCollection
@@ -366,4 +368,5 @@ public class Attack
             return soldierPath;
         }
     }
+
 }
