@@ -115,29 +115,29 @@ public class GeneralAttackHelper extends AttackHelper
     public Building getBestFavouriteTarget()
     {
         ArrayList<Building> favoutriteTargets = new ArrayList<>();
-        ArrayList<Building> towers = getAliveBuildings();
-        for (Building tower : towers)
+        ArrayList<Building> buildings = getAliveBuildings();
+        for (Building building : buildings)
         {
-            if (Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(c -> c.isInstance(tower)))
+            if (Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(c -> c.isInstance(building)))
             {
-                favoutriteTargets.add(tower);
+                favoutriteTargets.add(building);
             }
         }
-        ArrayList<Integer> manhatanianDistances = new ArrayList<>();
+        ArrayList<Double> euclidianDistances = new ArrayList<>();
         if (favoutriteTargets.size() != 0)
         {
             for (Building favoutriteTarget : favoutriteTargets)
             {
-                manhatanianDistances.add(manhatanianDistance(favoutriteTarget.getLocation(), super.getSoldierLocation()));
+                euclidianDistances.add(euclidianDistance(favoutriteTarget.getLocation(), super.getSoldierLocation()));
             }
-            Collections.sort(manhatanianDistances);
-            for (Building favoutriteTarget : favoutriteTargets)
+            Collections.sort(euclidianDistances);
+            for (int i = 0; i < euclidianDistances.size(); i++)
             {
-                for (int i = 0; i < manhatanianDistances.size(); i++)
+                for (Building favoutriteTarget : favoutriteTargets)
                 {
-                    if (manhatanianDistance(favoutriteTarget.getLocation(), super.getSoldierLocation()).equals(manhatanianDistances.get(i)))
+                    if (Math.abs(euclidianDistance(favoutriteTarget.getLocation(), super.getSoldierLocation()) - euclidianDistances.get(i)) < 0.01)
                     {
-                        if (isTargetReachable(favoutriteTarget) && isntTargetTooFar(favoutriteTarget))
+                        if (isTargetReachable(favoutriteTarget))
                         {
                             return favoutriteTarget;
                         }
@@ -146,11 +146,6 @@ public class GeneralAttackHelper extends AttackHelper
             }
         }
         return null;
-    }
-
-    private boolean isntTargetTooFar(Building favoutriteTarget)
-    {
-        return manhatanianDistance(getSoldierLocation(), favoutriteTarget.getLocation()) < 24;//TODO to be manipulated for increasing the performance
     }
 
     private boolean isTargetReachable(Building favouriteTarget)

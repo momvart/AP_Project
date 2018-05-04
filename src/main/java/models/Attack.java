@@ -2,7 +2,6 @@ package models;
 
 import exceptions.*;
 import models.buildings.DefensiveTower;
-import models.soldiers.Healer;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierCollection;
 import utils.MapCellNode;
@@ -121,7 +120,6 @@ public class Attack
         soldiersOnMap.getAllSoldiers()
                 .filter(soldier -> !soldier.getAttackHelper().isDead())
                 .forEach(soldier -> soldier.getAttackHelper().passTurn());
-
         turn++;
     }
 
