@@ -13,6 +13,7 @@ public class Attack
     private final int MAX_SOLDIERS_IN‌_A_GREED = 5;
     private SoldierCollection soldiers = new SoldierCollection();
     private Resource claimedResource;
+    private int claimedScore;
     private AttackMap map;
     private int turn;
 
@@ -28,14 +29,15 @@ public class Attack
         soldiersOnLocations = new SoldierCoordinatedCollection(map.getSize());
     }
 
-    public List<Point> getSoldierPath(Point start, Point target)
+
+    public Resource getClaimedResource()
     {
-        return pathFinder.getSoldierPath(start, target);
+        return claimedResource;
     }
 
-    public void mapInfo()
+    public int getClaimedScore()
     {
-
+        return claimedScore;
     }
 
     public void addUnit(Soldier soldier)
@@ -111,36 +113,11 @@ public class Attack
 
     public void passTurn()
     {
-        ageHealersOnMap();
-        killAgedHealers();
         soldiersOnMap.getAllSoldiers()
                 .filter(soldier -> !soldier.getAttackHelper().isDead())
                 .forEach(soldier -> soldier.getAttackHelper().passTurn());
 
         turn++;
-    }
-
-
-    private void killAgedHealers()
-    {
-        getDeployedUnits(Healer.SOLDIER_TYPE).forEach(soldier ->
-        {
-            Healer healer = (Healer)soldier;
-            if (healer.getTimeTillDie() <= 0)
-            {
-                healer.getAttackHelper().setDead(true);
-            }
-        });
-    }
-
-    private void ageHealersOnMap()
-    {
-        getDeployedUnits(Healer.SOLDIER_TYPE).forEach(soldier -> ((Healer)soldier).ageOneDeltaT());
-    }
-
-    public Resource getClaimedResource()
-    {
-        return claimedResource;
     }
 
 
@@ -211,6 +188,11 @@ public class Attack
     {
         return Math.sqrt((source.getX() - destination.getX()) * (source.getX() - destination.getX()) +
                 (source.getY() - destination.getY()) * (source.getY() - destination.getY()));
+    }
+
+    public List<Point> getSoldierPath(Point start, Point target)
+    {
+        return pathFinder.getSoldierPath(start, target);
     }
 
     private static class SoldierCoordinatedCollection

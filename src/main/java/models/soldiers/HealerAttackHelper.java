@@ -23,10 +23,34 @@ public class HealerAttackHelper extends AttackHelper
     private final ArrayList<Point> points = new ArrayList<>(Arrays.asList(point1, point2, point3, point4, point5, point6, point7, point8, point9));
     private Point destination;
 
+    private int timeTillDie = 10;
+
+    public void ageOneDeltaT()
+    {
+        if (timeTillDie > 0)
+        {
+            timeTillDie--;
+        }
+    }
+
+    public int getTimeTillDie()
+    {
+        return timeTillDie;
+    }
+
 
     public HealerAttackHelper(Attack attack, Healer healer)
     {
         super(attack, healer);
+    }
+
+    @Override
+    public void passTurn()
+    {
+        ageOneDeltaT();
+        if (timeTillDie <= 0)
+            isDead = true;
+        super.passTurn();
     }
 
     @Override
@@ -111,7 +135,6 @@ public class HealerAttackHelper extends AttackHelper
         }
         return numberOfSoldiersInRange;
     }
-
 
 
     private ArrayList<Soldier> getSoldiersInRange()

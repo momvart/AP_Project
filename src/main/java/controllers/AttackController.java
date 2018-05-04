@@ -170,7 +170,8 @@ public class AttackController implements IMenuClickListener, ICommandManager
 
     private void quitAttack()
     {
-
+        theAttack.quitAttack();
+        theView.showAttackEndMessage();
     }
 
     private void openMap(Path path) throws MyJsonException, MyIOException

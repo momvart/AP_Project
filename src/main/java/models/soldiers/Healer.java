@@ -5,8 +5,6 @@ import models.Attack;
 
 public class Healer extends Soldier
 {
-    private int timeTillDie = 10;
-
     public Healer(int level)
     {
         super(level);
@@ -17,19 +15,6 @@ public class Healer extends Soldier
     public int getType()
     {
         return 6;
-    }
-
-    public void ageOneDeltaT()
-    {
-        if (timeTillDie > 0)
-        {
-            timeTillDie--;
-        }
-    }
-
-    public int getTimeTillDie()
-    {
-        return timeTillDie;
     }
 
     @Override

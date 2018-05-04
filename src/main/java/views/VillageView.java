@@ -63,7 +63,7 @@ public class VillageView extends ConsoleMenuContainerView
                 showSoldierTrainingsStatus(((Barracks)((IBuildingMenu)currentMenu).getBuilding()).getTrainingManager().getRecruits());
                 break;
             case Menu.Id.CAMP_CAPACITY_INFO:
-                showCampsCapacityInfo((Camp)((IBuildingMenu)currentMenu).getBuilding());
+                showCampsCapacityInfo();
                 break;
             case Menu.Id.CAMP_SOLDIERS:
                 showAvailableSoldiers();
@@ -158,9 +158,9 @@ public class VillageView extends ConsoleMenuContainerView
             System.out.println(r.toString());
     }
 
-    public void showCampsCapacityInfo(Camp camp)
+    public void showCampsCapacityInfo()
     {
-        System.out.printf("Your camp capacity is %d / %d\n", village.getAllSoldiers().count(), camp.getCapacity());
+        System.out.printf("Your camp capacity is %d / %d\n", village.getAllSoldiers().count(), village.getCampsCapacity());
     }
 
     public void showAvailableSoldiers()

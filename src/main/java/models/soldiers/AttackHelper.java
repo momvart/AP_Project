@@ -9,7 +9,7 @@ public abstract class AttackHelper
     protected Attack attack;
     protected Soldier soldier;
     private boolean isSoldierDeployed = false;
-    private boolean isDead = false;
+    protected boolean isDead = false;
 
     public AttackHelper(Attack attack, Soldier soldier)
     {
@@ -70,6 +70,7 @@ public abstract class AttackHelper
             soldier = null;
         }
     }
+
     public abstract void move();
 
     public abstract void fire();

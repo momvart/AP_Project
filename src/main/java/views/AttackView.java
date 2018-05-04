@@ -128,6 +128,14 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
         showAllTowersStatus();
     }
 
+    public void showAttackEndMessage()
+    {
+        System.out.printf("The wat ended with %d golds, %d elixir and %d scores achieved!\n",
+                theAttack.getClaimedResource().getGold(),
+                theAttack.getClaimedResource().getElixir(),
+                theAttack.getClaimedScore());
+    }
+
     public void viewMapStatus()
     {
         for (int j = 0; j < theAttack.getMap().getHeight(); j++)
