@@ -140,9 +140,14 @@ public class Map
         buildingsList.forEach(this::addBuilding);
     }
 
-    public Building[][] getArrayMap()
+    public Building getBuildingAt(int x, int y)
     {
-        return map;
+        return map[x][y];
+    }
+
+    public Building getBuildingAt(Point location)
+    {
+        return getBuildingAt(location.getX(), location.getY());
     }
 
     public ArrayList<Building> getBuildings()
