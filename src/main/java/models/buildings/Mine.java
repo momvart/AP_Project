@@ -45,7 +45,8 @@ public abstract class Mine extends VillageBuilding
 
     public void passTurn()
     {
-        minedResources += resourceAddPerDeltaT;
+        if (getBuildStatus().equals(BuildStatus.BUILT))
+            minedResources += resourceAddPerDeltaT;
     }
 
     protected void setResourceAddPerDeltaT(int resourceAddPerDeltaT)

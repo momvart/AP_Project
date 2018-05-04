@@ -1,4 +1,3 @@
-import models.Attack;
 import models.Map;
 import models.World;
 import models.buildings.ElixirMine;
@@ -13,6 +12,7 @@ public class PathFinderTest
     MapCellNode start;
     MapCellNode target;
 
+    //    PathFinder pathFinder;
     @org.junit.Before
     public void setUp() throws Exception
     {
@@ -49,7 +49,8 @@ public class PathFinderTest
         World.getVillage().getMap().addBuilding(new ElixirMine(new Point(18, 18), 15));
 
         start = new MapCellNode(new Point(0, 0), null, 0);
-        target = new MapCellNode(new Point(23, 23), null, 0);
+        target = new MapCellNode(new Point(7, 7), null, 0);
+//        pathFinder = new PathFinder();
     }
 
     @org.junit.After
@@ -60,9 +61,11 @@ public class PathFinderTest
     @org.junit.Test
     public void findPath()
     {
-        for (int i = 0; i < 10000; i++)
+        for (int i = 0; i < 1; i++)
         {
-//            List<MapCellNode> path = findPath(World.getVillage().getMap(), start, target);
+//            List<Point> soldierPath = pathFinder.getSoldierPath(World.getVillage().getMap(), start.getPoint(), target.getPoint());
+//            for( Point point : soldierPath)
+//                System.out.println(point.toString());
         }
     }
 

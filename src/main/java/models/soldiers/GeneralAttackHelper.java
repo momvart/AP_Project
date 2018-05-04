@@ -1,11 +1,8 @@
 package models.soldiers;
 
 import models.Attack;
-import models.Map;
-import models.PathFinder;
 import models.buildings.Building;
 import utils.Point;
-import utils.Size;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,15 +19,6 @@ public class GeneralAttackHelper extends AttackHelper
     public GeneralAttackHelper(Attack attack, Soldier soldier)
     {
         super(attack, soldier);
-    }
-
-    public static void main(String[] args)
-    {
-        PathFinder pathFinder = new PathFinder();
-        Point point = pathFinder.getSoldierPath(new Map(new Size(30, 30)), new Point(0, 0), new Point(5, 5)).get(1);
-        System.out.println(point.getX());
-        System.out.println(point.getY());
-
     }
 
     @Override
@@ -220,12 +208,11 @@ public class GeneralAttackHelper extends AttackHelper
     @Override
     public void move()
     {
-        PathFinder pathFinder = new PathFinder();
         if (soldier != null && !soldier.getAttackHelper().isDead())
         {
             if (!isTargetInRange())
             {
-                List<Point> soldierPath = pathFinder.getSoldierPath(attack.getMap(), getSoldierLocation(), target.getLocation());
+                List<Point> soldierPath = attack.getSoldierPath(getSoldierLocation(), target.getLocation());
                 Point pointToGo = soldierPath.get(0);
                 int i;
                 for (i = 0; i < soldierPath.size(); i++)
