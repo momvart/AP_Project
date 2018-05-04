@@ -1,9 +1,8 @@
 package models.soldiers;
 
 import exceptions.NotEnoughCampCapacityException;
+import exceptions.SoldierNotAddedToCampException;
 import models.World;
-
-import java.util.ArrayList;
 
 public class Recruit
 {
@@ -13,7 +12,6 @@ public class Recruit
     private int trainedCount;
     private int level;
     private int soldierBrewTimeDecrease;
-    private ArrayList<Soldier> armyQueue = new ArrayList<>();
     private boolean isTraining = false;
 
     public Recruit(int soldierType, int count, int level, int soldierBrewTimeDecrease)
@@ -28,11 +26,6 @@ public class Recruit
     public int getSoldierType()
     {
         return soldierType;
-    }
-
-    public ArrayList getArmyQueue()
-    {
-        return armyQueue;
     }
 
     public SoldierInfo getSoldierInfo() { return SoldierValues.getSoldierInfo(soldierType); }
@@ -78,7 +71,7 @@ public class Recruit
         startTurn = World.getVillage().getTurn() - 1;
     }
 
-    public void finishSoldier()
+    public void finishSoldier() throws SoldierNotAddedToCampException
     {
         this.trainedCount += 1;
         try
@@ -87,25 +80,11 @@ public class Recruit
         }
         catch (NotEnoughCampCapacityException ex)
         {
-            armyQueue.add(SoldierFactory.createSoldierByTypeID(soldierType, level));
+            throw new SoldierNotAddedToCampException("soldier not added to the camp", "SoldierNotAddedToCamp"
+                    , SoldierFactory.createSoldierByTypeID(soldierType, level));
         }
 
-    }
 
-    public void addSoldiersInQueueToArmy()
-    {
-        while (armyQueue.size() != 0)
-        {
-            try
-            {
-                World.getVillage().addSoldier(armyQueue.get(0));
-                armyQueue.remove(0);
-            }
-            catch (NotEnoughCampCapacityException ex)
-            {
-                break;
-            }
-        }
     }
 
     public boolean checkCompleteFinish()

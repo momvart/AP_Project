@@ -13,7 +13,9 @@ public class BuildingAdapter implements JsonSerializer<Building>, JsonDeserializ
     public Building deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
     {
         Class cls = BuildingValues.getBuildingClass(json.getAsJsonObject().get(TYPE_FIELD_NAME).getAsInt());
-        return context.deserialize(json, cls);
+        Building building = context.deserialize(json, cls);
+        building.ensureLevel();
+        return building;
     }
 
     @Override

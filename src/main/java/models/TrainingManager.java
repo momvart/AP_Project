@@ -1,7 +1,11 @@
 package models;
 
+import exceptions.NotEnoughCampCapacityException;
+import exceptions.SoldierNotAddedToCampException;
 import models.buildings.Barracks;
 import models.soldiers.Recruit;
+import models.soldiers.Soldier;
+import models.soldiers.SoldierFactory;
 
 import java.util.ArrayList;
 
@@ -9,6 +13,7 @@ public class TrainingManager
 {
     private ArrayList<Recruit> recruits = new ArrayList<>();
     private long barracksId;
+    private ArrayList<Soldier> armyQueue = new ArrayList<>();
 
     public TrainingManager()
     {
@@ -42,15 +47,38 @@ public class TrainingManager
         {
             if (!recruits.get(0).isTraining())
                 recruits.get(0).setTraining(true);
-            if (recruits.get(0).getArmyQueue().size() != 0)
-                recruits.get(0).addSoldiersInQueueToArmy();
+            if (armyQueue.size() != 0)
+                addSoldiersInQueueToArmy();
             if (recruits.get(0).isCurrentFinished())
             {
-                recruits.get(0).finishSoldier();
+                try
+                {
+                    recruits.get(0).finishSoldier();
+                }
+                catch (SoldierNotAddedToCampException ex)
+                {
+                    armyQueue.add(ex.getSoldier());
+                }
                 if (recruits.get(0).checkCompleteFinish())
                 {
                     recruits.remove(0);
                 }
+            }
+        }
+    }
+
+    private void addSoldiersInQueueToArmy()
+    {
+        while (armyQueue.size() != 0)
+        {
+            try
+            {
+                World.getVillage().addSoldier(SoldierFactory.createSoldierByTypeID(armyQueue.get(0).getSoldierInfo().getType(), armyQueue.get(0).getLevel()));
+                armyQueue.remove(0);
+            }
+            catch (NotEnoughCampCapacityException ex)
+            {
+                break;
             }
         }
     }
