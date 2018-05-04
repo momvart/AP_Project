@@ -46,7 +46,7 @@ public abstract class Soldier
 
     public int getDamage()
     {
-        return SoldierValues.getSoldierInfo(this.getType()).getInitialDamage() + level - 1;
+        return SoldierValues.getSoldierInfo(this.getType()).getInitialDamage() + level;
     }
 
     public SoldierInfo getSoldierInfo()
@@ -89,7 +89,7 @@ public abstract class Soldier
 
     private int getInitialHelthOfUnitThisLevel()
     {
-        return SoldierValues.getSoldierInfo(this.getType()).getInitialDamage() + (level - 1) * 5;//TODO levels are supposed starting from 1
+        return SoldierValues.getSoldierInfo(this.getType()).getInitialDamage() + (level) * 5;
     }
 
     public void increaseHealth(int amount)

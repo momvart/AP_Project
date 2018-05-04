@@ -1,24 +1,29 @@
 package models;
 
 import exceptions.*;
-import models.buildings.*;
-import models.soldiers.*;
-import utils.*;
+import models.buildings.DefensiveTower;
+import models.soldiers.Healer;
+import models.soldiers.Soldier;
+import models.soldiers.SoldierCollection;
+import utils.MapCellNode;
+import utils.Point;
+import utils.Size;
 
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Attack
 {
     private final int MAX_SOLDIERS_IN‌_A_GREED = 5;
     private SoldierCollection soldiers = new SoldierCollection();
     private Resource claimedResource;
-    private int claimedScore;
     private AttackMap map;
     private int turn;
 
     private SoldierCollection soldiersOnMap = new SoldierCollection();
     private SoldierCoordinatedCollection soldiersOnLocations;
+
 
     private PathFinder pathFinder = new PathFinder();
 
@@ -29,15 +34,18 @@ public class Attack
         soldiersOnLocations = new SoldierCoordinatedCollection(map.getSize());
     }
 
-
-    public Resource getClaimedResource()
+    public void displayMove(Soldier soldier, Point init, Point finl)
     {
-        return claimedResource;
+        soldiersOnLocations.move(soldier, init, finl);
+    }
+    public List<Point> getSoldierPath(Point start, Point target)
+    {
+        return pathFinder.getSoldierPath(start, target);
     }
 
-    public int getClaimedScore()
+    public void mapInfo()
     {
-        return claimedScore;
+
     }
 
     public void addUnit(Soldier soldier)
@@ -113,6 +121,8 @@ public class Attack
 
     public void passTurn()
     {
+        ageHealersOnMap();
+        killAgedHealers();
         soldiersOnMap.getAllSoldiers()
                 .filter(soldier -> !soldier.getAttackHelper().isDead())
                 .forEach(soldier -> soldier.getAttackHelper().passTurn());
@@ -121,6 +131,32 @@ public class Attack
     }
 
 
+    private void killAgedHealers()
+    {
+        getDeployedUnits(Healer.SOLDIER_TYPE).forEach(soldier ->
+        {
+            Healer healer = (Healer)soldier;
+            if (healer.getTimeTillDie() <= 0)
+            {
+                healer.getAttackHelper().setDead(true);
+            }
+        });
+    }
+
+    private void ageHealersOnMap()
+    {
+        getDeployedUnits(Healer.SOLDIER_TYPE).forEach(soldier -> ((Healer)soldier).ageOneDeltaT());
+    }
+
+    public Resource getClaimedResource()
+    {
+        return claimedResource;
+    }
+
+    public void addToClaimedResource(Resource resource)
+    {
+        claimedResource.increase(resource);
+    }
     public Stream<Soldier> getUnits(int unitType)
     {
         return soldiers.getSoldiers(unitType).stream()
@@ -188,11 +224,6 @@ public class Attack
     {
         return Math.sqrt((source.getX() - destination.getX()) * (source.getX() - destination.getX()) +
                 (source.getY() - destination.getY()) * (source.getY() - destination.getY()));
-    }
-
-    public List<Point> getSoldierPath(Point start, Point target)
-    {
-        return pathFinder.getSoldierPath(start, target);
     }
 
     private static class SoldierCoordinatedCollection
@@ -335,5 +366,4 @@ public class Attack
             return soldierPath;
         }
     }
-
 }

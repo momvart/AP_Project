@@ -4,7 +4,6 @@ import exceptions.UnavailableUpgradeException;
 import menus.BuildingInfoSubmenu;
 import menus.BuildingSubmenu;
 import menus.ParentMenu;
-import models.World;
 import utils.Point;
 
 public abstract class Building
@@ -58,6 +57,11 @@ public abstract class Building
     public boolean isDestroyed()
     {
         return destroyed;
+    }
+
+    public void setDestroyed(boolean destroyed)
+    {
+        this.destroyed = destroyed;
     }
 
     public int getLevel()
