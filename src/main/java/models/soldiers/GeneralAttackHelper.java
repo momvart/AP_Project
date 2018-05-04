@@ -12,7 +12,6 @@ import java.util.List;
 import static java.util.Collections.min;
 
 public class GeneralAttackHelper extends AttackHelper
-
 {
     private Building target;
 
@@ -26,7 +25,7 @@ public class GeneralAttackHelper extends AttackHelper
     {
         if (soldier != null && !soldier.getAttackHelper().isDead())
         {
-            if (target != null)
+            if (target != null && !target.isDestroyed() && target.getStrength() > 0)
             {
                 if (isTargetInRange())
                 {
@@ -46,14 +45,13 @@ public class GeneralAttackHelper extends AttackHelper
 
     private boolean isTargetInRange()
     {
-
-        if (target != null)
+        if (target != null && !target.isDestroyed() && target.getStrength() > 0)
         {
             if (Math.pow(target.getLocation().getX() - getSoldierLocation().getX(), 2) + Math.pow(target.getLocation().getY() - getSoldierLocation().getY(), 2) == 2)
             {
                 return true;
             }
-            return euclidianDistance(target.getLocation(), getSoldierLocation()) <= getRange();
+            return euclidianDistance(target.getLocation(), getSoldierLocation()) - getRange() < 0.001;
         }
         return true;//TODO‌ bad smell of redandent code of escaping compile error.in fact the code shouldn't reach here because we set the target first then we come up to move or fight
     }
@@ -75,24 +73,25 @@ public class GeneralAttackHelper extends AttackHelper
                 }
             }
         }
-        System.out.println("x of target is :" + target.getLocation().getX());
-        System.out.println("y of target is :" + target.getLocation().getY());
     }
 
     private Building getNearestBuilding()
     {
         ArrayList<Building> buildings = getAliveBuildings();
-        ArrayList<Double> distances = new ArrayList<>();
-        for (Building building : buildings)
+        if (buildings != null && buildings.size() != 0)
         {
-            distances.add(euclidianDistance(building.getLocation(), getSoldierLocation()));
-        }
-        double minimumDistance = min(distances);
-        for (Building building : buildings)
-        {
-            if (Math.abs(euclidianDistance(building.getLocation(), getSoldierLocation()) - minimumDistance) < 0.01)
+            ArrayList<Double> distances = new ArrayList<>();
+            for (Building building : buildings)
             {
-                return building;
+                distances.add(euclidianDistance(building.getLocation(), getSoldierLocation()));
+            }
+            double minimumDistance = min(distances);
+            for (Building building : buildings)
+            {
+                if (Math.abs(euclidianDistance(building.getLocation(), getSoldierLocation()) - minimumDistance) < 0.01)
+                {
+                    return building;
+                }
             }
         }
         return null;
@@ -159,25 +158,28 @@ public class GeneralAttackHelper extends AttackHelper
     {
         if (soldier != null && !soldier.getAttackHelper().isDead())
         {
-            if (!isTargetInRange())
+            if (target != null && target.getStrength() > 0 && !target.isDestroyed())
             {
-                List<Point> soldierPath = attack.getSoldierPath(getSoldierLocation(), target.getLocation());
-                Point pointToGo = soldierPath.get(soldierPath.size() - 1);
-
-                int i;
-                for (i = soldierPath.size() - 1; i >= 0; i--)
+                if (!isTargetInRange())
                 {
-                    if (i != soldierPath.size() - 1)
+                    List<Point> soldierPath = attack.getSoldierPath(getSoldierLocation(), target.getLocation());
+                    Point pointToGo = soldierPath.get(soldierPath.size() - 1);
+
+                    int i;
+                    for (i = soldierPath.size() - 1; i >= 0; i--)
                     {
-                        pointToGo = soldierPath.get(i + 1);
+                        if (i != soldierPath.size() - 1)
+                        {
+                            pointToGo = soldierPath.get(i + 1);
+                        }
+                        if (euclidianDistance(soldierPath.get(i), getSoldierLocation()) > soldier.getSpeed())
+                        {
+                            break;
+                        }
                     }
-                    if (euclidianDistance(soldierPath.get(i), getSoldierLocation()) > soldier.getSpeed())
-                    {
-                        break;
-                    }
+                    attack.displayMove(soldier, getSoldierLocation(), pointToGo);
+                    soldier.setLocation(pointToGo);
                 }
-                attack.displayMove(soldier, getSoldierLocation(), pointToGo);
-                soldier.setLocation(pointToGo);
             }
         }
     }
