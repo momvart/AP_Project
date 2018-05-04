@@ -1,12 +1,16 @@
 package models.soldiers;
 
 import models.Attack;
+import models.Map;
+import models.PathFinder;
 import models.buildings.Building;
 import utils.Point;
+import utils.Size;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static java.util.Collections.min;
 
@@ -20,16 +24,13 @@ public class GeneralAttackHelper extends AttackHelper
         super(attack, soldier);
     }
 
-    @Override
-    public void move()
+    public static void main(String[] args)
     {
-        if (soldier != null && !soldier.getAttackHelper().isDead())
-        {
-            if (!isTargetInRange())
-            {
-                //TODO‌ to be done by the code Mahdi is working on.
-            }
-        }
+        PathFinder pathFinder = new PathFinder();
+        Point point = pathFinder.getSoldierPath(new Map(new Size(30, 30)), new Point(0, 0), new Point(5, 5)).get(1);
+        System.out.println(point.getX());
+        System.out.println(point.getY());
+
     }
 
     @Override
@@ -214,5 +215,32 @@ public class GeneralAttackHelper extends AttackHelper
     {
         //attack.getArrayMap().isReachable();
         return true;
+    }
+
+    @Override
+    public void move()
+    {
+        PathFinder pathFinder = new PathFinder();
+        if (soldier != null && !soldier.getAttackHelper().isDead())
+        {
+            if (!isTargetInRange())
+            {
+                List<Point> soldierPath = pathFinder.getSoldierPath(attack.getMap(), getSoldierLocation(), target.getLocation());
+                Point pointToGo = soldierPath.get(0);
+                int i;
+                for (i = 0; i < soldierPath.size(); i++)
+                {
+                    if (i != 0)
+                    {
+                        pointToGo = soldierPath.get(i - 1);
+                    }
+                    if (euclidianDistance(soldierPath.get(i), getSoldierLocation()) > soldier.getSpeed())
+                    {
+                        break;
+                    }
+                }
+                soldier.setLocation(pointToGo);
+            }
+        }
     }
 }

@@ -73,7 +73,8 @@ public abstract class Soldier
 
     public void setLocation(Point location)
     {
-        this.location = location;
+        this.location.setX(location.getX());
+        this.location.setY(location.getY());
     }
 
     public void setAttackHelper(AttackHelper attackHelper)
@@ -94,5 +95,10 @@ public abstract class Soldier
     public void increaseHealth(int amount)
     {
         this.health = Math.min(this.getHealth() + amount, getInitialHelthOfUnitThisLevel());
+    }
+
+    public int getSpeed()
+    {
+        return SoldierValues.getSoldierInfo(getType()).getSpeed();
     }
 }
