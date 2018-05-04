@@ -14,12 +14,9 @@ import java.util.stream.Collectors;
 
 public class AvailableBuildingsSubmenu extends Submenu implements IBuildingMenu
 {
-    private Village village;
-
-    public AvailableBuildingsSubmenu(ParentMenu parent, Village village)
+    public AvailableBuildingsSubmenu(ParentMenu parent)
     {
         super(Id.TH_AVAILABLE_BUILDINGS, "Available buildings", parent);
-        this.village = village;
     }
 
     private void setItems()

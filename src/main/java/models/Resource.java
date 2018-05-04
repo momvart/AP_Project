@@ -5,8 +5,8 @@ import java.util.Comparator;
 
 public class Resource implements Comparable<Resource>
 {
-    int gold;
-    int elixir;
+    private int gold;
+    private int elixir;
 
     public Resource(int gold, int elixir)
     {
@@ -101,12 +101,15 @@ public class Resource implements Comparable<Resource>
             return (goldPrior ? gold > o.gold : elixir > o.elixir) ? 1 : -1;
     }
 
-    public boolean isGreaterThanOrEqual(Resource o)
+    public boolean isGreaterThanOrEqual(Resource r)
     {
-        return gold >= o.gold && elixir >= o.elixir;
+        return gold >= r.gold && elixir >= r.elixir;
     }
 
-    public boolean isLessThanOrEqual(Resource o) {return gold <= o.gold && elixir <= o.elixir;}
+    public boolean isLessThanOrEqual(Resource r) {return gold <= r.gold && elixir <= r.elixir;}
 
-
+    public boolean isLessThan(Resource r)
+    {
+        return !isGreaterThanOrEqual(r);
+    }
 }

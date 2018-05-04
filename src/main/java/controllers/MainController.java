@@ -23,11 +23,12 @@ public class MainController implements ICommandManager
 
     public void start()
     {
-        while (true)
+        String command;
+        while (!(command = theView.getCommand()).equalsIgnoreCase("end"))
         {
             try
             {
-                manageCommand(theView.getCommand());
+                manageCommand(command);
             }
             catch (ConsoleRuntimeException ex)
             {

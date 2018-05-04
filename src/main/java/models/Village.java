@@ -88,8 +88,9 @@ public class Village
     {
         Resource cost = BuildingValues.getBuildingInfo(buildingType).getBuildCost();
         Resource available = getResources();
-        if (available.isLessThanOrEqual(cost))
+        if (available.isLessThan(cost))
             throw new NotEnoughResourceException(available, cost);
+
         constructionManager.construct(buildingType, location);
         spendResource(cost);
     }
@@ -98,12 +99,14 @@ public class Village
     {
         Resource cost = BuildingValues.getBuildingInfo(building.getType()).getBuildCost();
         Resource available = getResources();
-        if (available.isLessThanOrEqual(cost))
+        if (available.isLessThan(cost))
             throw new NotEnoughResourceException(available, cost);
+
         if (building.getLevel() == getMap().getTownHall().getLevel() && building.getType() != TownHall.BUILDING_TYPE)
-            throw new UnavailableUpgradeException(building);
+            throw new UnavailableUpgradeException(building, UnavailableUpgradeException.Reason.REACHED_TH);
         if (building.getType() == Camp.BUILDING_TYPE)
-            throw new UnavailableUpgradeException(building);
+            throw new UnavailableUpgradeException(building, UnavailableUpgradeException.Reason.IMPOSSIBLE);
+
         constructionManager.upgrade(building);
         spendResource(cost);
     }

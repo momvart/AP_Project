@@ -34,7 +34,7 @@ public class Camp extends VillageBuilding
     @Override
     public void upgrade() throws UnavailableUpgradeException
     {
-        throw new UnavailableUpgradeException(this);
+        throw new UnavailableUpgradeException(this, UnavailableUpgradeException.Reason.IMPOSSIBLE);
     }
 
     @Override

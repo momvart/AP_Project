@@ -91,7 +91,7 @@ public class VillageController implements IMenuClickListener, ICommandManager
                 break;
                 case Menu.Id.MINE_MINE:
                 {
-                    ((Mine)((IBuildingMenu)theView.getCurrentMenu()).getBuilding()).mine();
+                    mineMine((Mine)((IBuildingMenu)theView.getCurrentMenu()).getBuilding());
                 }
                 break;
             }
@@ -106,12 +106,16 @@ public class VillageController implements IMenuClickListener, ICommandManager
         }
     }
 
-    private void trainSoldier(TrainSoldierItem item) throws NotEnoughResourceException
+    private void trainSoldier(TrainSoldierItem item) throws NotEnoughResourceException, BuildingInConstructionException
     {
+        Barracks barracks = (Barracks)((TrainSoldierSubmenu)theView.getCurrentMenu()).getBuilding();
+        if (barracks.getBuildStatus() == BuildStatus.IN_CONSTRUCTION)
+            throw new BuildingInConstructionException(barracks);
         DialogResult result = theView.showSoldierTrainCountDialog();
         if (result.getResultCode() != DialogResultCode.YES)
             return;
-        ((Barracks)((TrainSoldierSubmenu)theView.getCurrentMenu()).getBuilding()).trainSoldier(item.getSoldierType(), (int)result.getData(NumberInputDialog.KEY_NUMBER));
+
+        barracks.trainSoldier(item.getSoldierType(), (int)result.getData(NumberInputDialog.KEY_NUMBER));
     }
 
     private void constructBuilding(BuildingInfo info) throws NotEnoughResourceException, NoAvailableBuilderException
@@ -135,12 +139,21 @@ public class VillageController implements IMenuClickListener, ICommandManager
         theVillage.construct(info.getType(), location);
     }
 
-    private void upgradeBuilding(Building building) throws NotEnoughResourceException, NoAvailableBuilderException, UnavailableUpgradeException
+    private void upgradeBuilding(Building building) throws ConsoleException, ConsoleRuntimeException
     {
+        if (building.getBuildStatus() == BuildStatus.IN_CONSTRUCTION)
+            throw new BuildingInConstructionException(building);
         Resource cost = building.getBuildingInfo().getUpgradeCost();
         if (theView.showUpgradeDialog(building.getName(), cost).getResultCode() != DialogResultCode.YES)
             return;
 
         World.getVillage().upgradeBuilding(building);
+    }
+
+    private void mineMine(Mine mine) throws BuildingInConstructionException
+    {
+        if (mine.getBuildStatus() == BuildStatus.IN_CONSTRUCTION)
+            throw new BuildingInConstructionException(mine);
+        mine.mine();
     }
 }

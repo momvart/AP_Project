@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class TownHall extends VillageBuilding
 {
-    ArrayList<Builder> builders = new ArrayList<>();
+    private ArrayList<Builder> builders = new ArrayList<>();
 
     public TownHall(Point location, int buildingNum)
     {
@@ -70,7 +70,7 @@ public class TownHall extends VillageBuilding
     public BuildingSubmenu getMenu(ParentMenu parent)
     {
         BuildingSubmenu menu = super.getMenu(parent);
-        menu.insertItem(new AvailableBuildingsSubmenu(menu, World.sCurrentGame.getVillage()))
+        menu.insertItem(new AvailableBuildingsSubmenu(menu))
                 .insertItem(new Menu(Menu.Id.TH_STATUS, "Status"));
         return menu;
     }
