@@ -75,8 +75,7 @@ public class GeneralAttackHelper extends AttackHelper
                 }
             }
         }
-        System.out.println("x of target is :" + target.getLocation().getX());
-        System.out.println("y of target is :" + target.getLocation().getY());
+        System.err.println("target: " + target.getLocation().toString());
     }
 
     private Building getNearestBuilding()

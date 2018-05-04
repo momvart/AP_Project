@@ -138,13 +138,21 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
 
     public void viewMapStatus()
     {
+        for (int j = 0; j < theAttack.getMap().getWidth(); j++)
+            System.out.print(" ―");
+        System.out.print('\n');
         for (int j = 0; j < theAttack.getMap().getHeight(); j++)
         {
+            System.out.print('|');
             for (int i = 0; i < theAttack.getMap().getWidth(); i++)
             {
-                System.out.printf("%c%d\t", theAttack.getMap().isEmpty(i, j) ? '-' : (theAttack.getMap().getBuildingAt(i, j).isDestroyed() ? '$' : '#'), theAttack.numberOfSoldiersIn(i, j));
+                int soldierCount = theAttack.numberOfSoldiersIn(i, j);
+                System.out.print((theAttack.getMap().isEmpty(i, j) ? ' ' : (theAttack.getMap().getBuildingAt(i, j).isDestroyed() ? '$' : '#')) + (soldierCount == 0 ? " " : Integer.toString(soldierCount)));
             }
+            System.out.print('|');
             System.out.print('\n');
         }
+        for (int j = 0; j < theAttack.getMap().getWidth(); j++)
+            System.out.print(" ―");
     }
 }
