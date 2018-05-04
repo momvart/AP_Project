@@ -1,18 +1,15 @@
+import models.Attack;
 import models.Map;
 import models.World;
 import models.buildings.ElixirMine;
 import models.buildings.GoldMine;
 import utils.MapCellNode;
-import utils.PathFinder;
 import utils.Point;
 
 import java.util.List;
 
-import org.junit.*;
-
 public class PathFinderTest
 {
-    PathFinder pathFinder;
     MapCellNode start;
     MapCellNode target;
 
@@ -51,8 +48,6 @@ public class PathFinderTest
         World.getVillage().getMap().addBuilding(new ElixirMine(new Point(17, 18), 14));
         World.getVillage().getMap().addBuilding(new ElixirMine(new Point(18, 18), 15));
 
-        PathFinder pathFinder = new PathFinder();
-        this.pathFinder = pathFinder;
         start = new MapCellNode(new Point(0, 0), null, 0);
         target = new MapCellNode(new Point(23, 23), null, 0);
     }
@@ -67,7 +62,7 @@ public class PathFinderTest
     {
         for (int i = 0; i < 10000; i++)
         {
-            List<MapCellNode> path = pathFinder.findPath(World.getVillage().getMap(), start, target);
+//            List<MapCellNode> path = findPath(World.getVillage().getMap(), start, target);
         }
     }
 
