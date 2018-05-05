@@ -31,6 +31,16 @@ public class Point
         this.y = y;
     }
 
+    public static double euclideanDistance(Point p1, Point p2)
+    {
+        return Math.sqrt(euclideanDistance2nd(p1, p2));
+    }
+
+    public static double euclideanDistance2nd(Point p1, Point p2)
+    {
+        return Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2);
+    }
+
     @Override
     public boolean equals(Object obj)
     {

@@ -1,7 +1,7 @@
 [
   {
     "type": 1,
-    "name": "Gaurdian",
+    "name": "Guardian",
     "brewCost": {
       "gold": 0,
       "elixir": 50

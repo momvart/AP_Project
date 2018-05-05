@@ -91,6 +91,18 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
                 tower.getStrength()); //TODO: check if strength is correct
     }
 
+    private void showNonTowerStatus(Building building)
+    {
+        if (building instanceof DefensiveTower)
+            return;
+        System.err.printf("%s: level = %d in (%d, %d) health = %d\n",
+                building.getBuildingInfo().getName(),
+                building.getLevel(),
+                building.getLocation().getX(),
+                building.getLocation().getY(),
+                building.getStrength());
+    }
+
     public void showTowersStatus(int towerType)
     {
         theAttack.getTowers(towerType).forEach(this::showTowerStatus);
@@ -99,6 +111,7 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
     public void showAllTowersStatus()
     {
         theAttack.getAllTowers().forEach(this::showTowerStatus);
+        theAttack.getMap().getBuildings().forEach(this::showNonTowerStatus);
     }
 
     private void showSoldierStatus(Soldier soldier)
@@ -147,12 +160,29 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
             for (int i = 0; i < theAttack.getMap().getWidth(); i++)
             {
                 int soldierCount = theAttack.numberOfSoldiersIn(i, j);
-                System.out.print((theAttack.getMap().isEmpty(i, j) ? ' ' : (theAttack.getMap().getBuildingAt(i, j).isDestroyed() ? '$' : '#')) + (soldierCount == 0 ? " " : Integer.toString(soldierCount)));
+                if (!theAttack.getMap().isEmpty(i, j))
+                {
+                    Building building = theAttack.getMap().getBuildingAt(i, j);
+                    if (building.isDestroyed())
+                        System.out.print('$');
+                    else if (building instanceof Storage || building instanceof Mine)
+                        System.out.print('*');
+                    else if (building instanceof DefensiveTower)
+                        System.out.print('#');
+                    else if (building instanceof TownHall)
+                        System.out.print('@');
+                    else
+                        System.out.print('&');
+                }
+                else
+                    System.out.print(' ');
+                System.out.print(soldierCount == 0 ? " " : Integer.toString(soldierCount));
             }
             System.out.print('|');
             System.out.print('\n');
         }
         for (int j = 0; j < theAttack.getMap().getWidth(); j++)
             System.out.print(" ―");
+        System.out.print('\n');
     }
 }

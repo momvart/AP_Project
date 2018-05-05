@@ -42,11 +42,6 @@ public abstract class AttackHelper
         return SoldierValues.getSoldierInfo(soldier.getType()).getRange();
     }
 
-    public double euclidianDistance(Point location1, Point location2)
-    {
-        return Math.sqrt(Math.pow(location1.getX() - location2.getX(), 2) + Math.pow(location1.getY() - location2.getY(), 2));
-    }
-
     public Integer manhatanianDistance(Point location1, Point location2)
     {
         return Math.abs(location1.getX() - location2.getX()) + Math.abs(location1.getY() - location2.getY());

@@ -126,7 +126,7 @@ public class HealerAttackHelper extends AttackHelper
         {
             if (soldier != null && !soldier.getAttackHelper().isDead())
             {
-                if (euclidianDistance(soldier.getLocation(), point) <= getRange())
+                if (Point.euclideanDistance(soldier.getLocation(), point) <= getRange())
                 {
                     numberOfSoldiersInRange++;
                 }
@@ -145,7 +145,7 @@ public class HealerAttackHelper extends AttackHelper
         {
             if (soldier != null && !soldier.getAttackHelper().isDead())
             {
-                if (euclidianDistance(soldier.getLocation(), getSoldierLocation()) <= getRange())
+                if (Point.euclideanDistance(soldier.getLocation(), getSoldierLocation()) <= getRange())
                 {
                     soldiersInRange.add(soldier);
                 }
