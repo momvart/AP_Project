@@ -42,6 +42,8 @@ public abstract class Soldier
     public void decreaseHealth(int amount)
     {
         health = Math.max(health - amount, 0);
+        if(health == 0 )
+            attackHelper.isDead = true;
     }
 
     public int getDamage()

@@ -4,11 +4,12 @@ import models.Attack;
 import models.buildings.Building;
 import utils.Point;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.Collections.min;
 
 public class GeneralAttackHelper extends AttackHelper
 
@@ -50,7 +51,8 @@ public class GeneralAttackHelper extends AttackHelper
             double distance2nd = Point.euclideanDistance2nd(target.getLocation(), getSoldierLocation());
             return distance2nd == 2 || Math.sqrt(distance2nd) <= getRange();
         }
-        return true;//TODO‌ bad smell of redandent code of escaping compile error.in fact the code shouldn't reach here because we set the target first then we come up to move or fight
+        return true;
+        //TODO‌ bad smell of redundant code of escaping compile error.in fact the code shouldn't reach here because we set the target first then we come up to move or fight
     }
 
     @Override
@@ -60,14 +62,6 @@ public class GeneralAttackHelper extends AttackHelper
         {
             if (target == null || target.getStrength() <= 0 || target.isDestroyed())
             {
-//                if (getBestFavouriteTarget() != null)
-//                {
-//                    target = getBestFavouriteTarget();
-//                }
-//                else
-//                {
-//                    target = getNearestBuilding();
-//                }
                 target = getNearestBuilding();
                 if (target != null)
                     System.err.println("new target: " + target.getName() + " at: " + target.getLocation().toString());
@@ -79,20 +73,6 @@ public class GeneralAttackHelper extends AttackHelper
 
     private Building getNearestBuilding()
     {
-//        ArrayList<Building> buildings = getAliveBuildings();
-//        ArrayList<Double> distances = new ArrayList<>();
-//        for (Building building : buildings)
-//        {
-//            distances.add(Point.euclideanDistance(building.getLocation(), getSoldierLocation()));
-//        }
-//        double minimumDistance = min(distances);
-//        for (Building building : buildings)
-//        {
-//            if (Math.abs(Point.euclideanDistance(building.getLocation(), getSoldierLocation()) - minimumDistance) < 0.01)
-//            {
-//                return building;
-//            }
-//        }
 
         ArrayList<Building> aliveBuildings = getAliveBuildings()
                 .sorted(Comparator.comparingDouble(building -> Point.euclideanDistance2nd(building.getLocation(), getSoldierLocation())))
@@ -120,58 +100,12 @@ public class GeneralAttackHelper extends AttackHelper
 
     public Stream<Building> getAliveBuildings()
     {
-//        ArrayList<Building> buildings = super.attack.getMap().getBuildings();
-//        ArrayList<Building> aliveBuildings = new ArrayList<>();
-//        for (Building building : buildings)
-//        {
-//            if (!building.isDestroyed() && building.getStrength() > 0)
-//            {
-//                aliveBuildings.add(building);
-//            }
-//        }
-//        return aliveBuildings;
         return attack.getMap().getBuildings().stream().filter(building -> !building.isDestroyed());
-    }
-
-    public Building getBestFavouriteTarget()
-    {
-//        ArrayList<Building> favoutriteTargets = new ArrayList<>();
-//        ArrayList<Building> buildings = getAliveBuildings();
-//        for (Building building : buildings)
-//        {
-//            if (Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(c -> c.isInstance(building)))
-//            {
-//                favoutriteTargets.add(building);
-//            }
-//        }
-//        ArrayList<Double> euclidianDistances = new ArrayList<>();
-//        if (favoutriteTargets.size() != 0)
-//        {
-//            for (Building favoutriteTarget : favoutriteTargets)
-//            {
-//                euclidianDistances.add(euclidianDistance(favoutriteTarget.getLocation(), super.getSoldierLocation()));
-//            }
-//            Collections.sort(euclidianDistances);
-//            for (int i = 0; i < euclidianDistances.size(); i++)
-//            {
-//                for (Building favoutriteTarget : favoutriteTargets)
-//                {
-//                    if (Math.abs(euclidianDistance(favoutriteTarget.getLocation(), super.getSoldierLocation()) - euclidianDistances.get(i)) < 0.01)
-//                    {
-//                        if (isTargetReachable(favoutriteTarget))
-//                        {
-//                            return favoutriteTarget;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-
-        return null;
     }
 
     private boolean isTargetReachable(Building favouriteTarget)
     {
+        // TODO: 5/6/18 must be done as soon as possible
         //attack.getArrayMap().isReachable();
         return true;
     }

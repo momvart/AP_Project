@@ -90,7 +90,7 @@ public class Attack
 
     public int numberOfSoldiersIn(int x, int y)
     {
-        return soldiersOnLocations.getSoldiers(x, y).size();
+        return (int)soldiersOnLocations.getSoldiers(x, y).stream().filter(soldier -> !soldier.getAttackHelper().isDead()).count();
     }
 
     public int numberOfSoldiersIn(Point location)
@@ -120,6 +120,11 @@ public class Attack
         soldiersOnMap.getAllSoldiers()
                 .filter(soldier -> !soldier.getAttackHelper().isDead())
                 .forEach(soldier -> soldier.getAttackHelper().passTurn());
+
+        map.getAllDefensiveTowers().stream()
+                .filter(defensiveTower -> !defensiveTower.isDestroyed())
+                .forEach(defensiveTower -> defensiveTower.attack(this));
+
         turn++;
     }
 
@@ -282,8 +287,7 @@ public class Attack
                 for (int i = -1; i <= 1; i++)
                     for (int j = -1; j <= 1; j++)
                         if (!(i == 0 && j == 0) &&
-                                (map.isEmpty(x + i, y + j) || (target.getX() == x + i && target.getY() == y + j)) &&
-                                numberOfSoldiersIn(x + i, y + j) < 5)
+                                (map.isEmpty(x + i, y + j) || (target.getX() == x + i && target.getY() == y + j)))
                         {
                             MapCellNode child = nodes[x + i][y + j];
                             if (child == null)
