@@ -97,7 +97,7 @@ public class GeneralAttackHelper extends AttackHelper
 
     private boolean isTargetReachable(Building favouriteTarget)
     {
-        return !(attack.getSoldierPath(soldier.getLocation(), favouriteTarget.getLocation()) == null);
+        return !(attack.getSoldierPath(soldier.getLocation(), favouriteTarget.getLocation(), soldier.getMoveType() == MoveType.AIR) == null);
     }
 
     @Override
