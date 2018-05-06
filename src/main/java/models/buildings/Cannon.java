@@ -10,7 +10,7 @@ import java.util.List;
 public class Cannon extends DefensiveTower
 {
     public static final int DEFENSIVE_TOWER_TYPE = 9;
-
+    private static final int SECOND_RANGE = 2;
     public Cannon(Point location, int buildingNum)
     {
         super(location, buildingNum);
@@ -22,7 +22,7 @@ public class Cannon extends DefensiveTower
         List<Soldier> soldiersInRange = null;
         try
         {
-            soldiersInRange = attack.getSoldiersInRange(this.location, getRange());
+            soldiersInRange = attack.getSoldiersInRange(this.location, getRange(), SECOND_RANGE);
             soldiersInRange.forEach(soldier -> soldier.decreaseHealth(this.getDamagePower()));
         }
         catch (SoldierNotFoundException e)

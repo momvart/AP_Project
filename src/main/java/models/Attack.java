@@ -181,15 +181,20 @@ public class Attack
         return map;
     }
 
-    public List<Soldier> getSoldiersInRange(Point location, int range) throws SoldierNotFoundException
+    public List<Soldier> getSoldiersInRange(Point location, int range, int secondRange) throws SoldierNotFoundException
     {
         List<Soldier> soldiers = null;
         soldiers = soldiersOnLocations.getSoldiers(getNearestSoldier(location, range));
-        List<Soldier> secondSoldiers = soldiersOnLocations.getSoldiers(getNearestSoldier(soldiers.get(0).getLocation(), range - 2));
-        soldiers.addAll(secondSoldiers);
-        if (soldiers != null)
+        try
+        {
+            List<Soldier> secondSoldiers = soldiersOnLocations.getSoldiers(getNearestSoldier(soldiers.get(0).getLocation(), secondRange));
+            soldiers.addAll(secondSoldiers);
+        }
+        catch (SoldierNotFoundException ex)
+        {
             return soldiers;
-        else throw new SoldierNotFoundException("Soldier not found", "SoldierNotFound");
+        }
+        return soldiers;
     }
 
     public Point getNearestSoldier(Point location, int range) throws SoldierNotFoundException
@@ -199,15 +204,15 @@ public class Attack
         int x = location.getX();
         int y = location.getY();
         outer:
-        for (int k = 0; k < range; k++)
-            for (int i = -1; x + i + (i >= 0 ? k : -k) >= 0 && x + i + (i >= 0 ? k : -k) < map.getSize().getWidth() && i <= 1; i++)
-                for (int j = -1; y + j + (j >= 0 ? k : -k) >= 0 && y + j + (j >= 0 ? k : -k) < map.getSize().getHeight() && j <= 1; j++)
+        for (int k = 1; k <= range; k++)
+            for (int i = -1; x + k * i >= 0 && x + k * i < map.getSize().getWidth() && i <= 1; i++)
+                for (int j = -1; y + k * j >= 0 && y + k * j < map.getSize().getHeight() && j <= 1; j++)
                 {
                     if (i == 0 && j == 0)
                         continue;
-                    if (numberOfSoldiersIn(x + i + (i >= 0 ? k : -k), y + j + (j >= 0 ? k : -k)) > 0)
+                    if (numberOfSoldiersIn(x + k * i, y + k * j) > 0)
                     {
-                        point = new Point(x + i + (i >= 0 ? k : -k), y + j + (j >= 0 ? k : -k));
+                        point = new Point(x + k * i, y + k * j);
                         if (Point.euclideanDistance2nd(point, location) > Point.euclideanDistance2nd(min, location))
                             break outer;
                         else

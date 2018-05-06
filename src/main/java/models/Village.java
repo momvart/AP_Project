@@ -2,11 +2,15 @@ package models;
 
 import exceptions.*;
 import models.buildings.*;
-import models.soldiers.*;
-import utils.*;
+import models.soldiers.Soldier;
+import models.soldiers.SoldierCollection;
+import utils.Point;
+import utils.Size;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Village
 {
@@ -113,6 +117,7 @@ public class Village
 
     ///endregion
 
+    //region Turns
     public int getTurn()
     {
         return turn;
@@ -129,7 +134,9 @@ public class Village
             constructionManager.checkConstructions();
         }
     }
+    //endregion
 
+    //region Soldiers
     public void setupSoldiers(Iterable<Soldier> soldierList)
     {
         soldiers = new SoldierCollection();
@@ -176,4 +183,5 @@ public class Village
     {
         return (int)getAllSoldiers().count();
     }
+    //endregion
 }
