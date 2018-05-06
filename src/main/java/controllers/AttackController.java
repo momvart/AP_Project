@@ -107,7 +107,10 @@ public class AttackController implements IMenuClickListener, ICommandManager
         {
             Matcher m;
             if (command.matches("(?i)start\\s+select"))
+            {
                 startSelectingUnits();
+                theView.viewMapStatus();
+            }
             else if ((m = ConsoleUtilities.getMatchedCommand(PUT_UNIT_PATTERN, command)) != null)
             {
                 Point location = new Point(Integer.parseInt(m.group("x")), Integer.parseInt(m.group("y")));
@@ -115,6 +118,12 @@ public class AttackController implements IMenuClickListener, ICommandManager
             }
             else if (command.matches("(?i)go\\s+next\\s+turn"))
                 theAttack.passTurn();
+            else if ((m = ConsoleUtilities.getMatchedCommand("turn\\s+(\\d+)", command)) != null)
+            {
+                int count = Integer.parseInt(m.group(1));
+                for (int i = 0; i < count; i++)
+                    theAttack.passTurn();
+            }
             else if (command.matches("(?i)status\\s+resources"))
                 theView.showResourcesStatus();
             else if ((m = ConsoleUtilities.getMatchedCommand("(?i)status\\s+unit\\s+(?<type>\\w+)", command)) != null)
@@ -136,8 +145,13 @@ public class AttackController implements IMenuClickListener, ICommandManager
         }
     }
 
-    private void startSelectingUnits()
+
+    private boolean unitsSelected = false;
+
+    private void startSelectingUnits() throws ConsoleException
     {
+        if (unitsSelected)
+            throw new ConsoleException("You have already selected your units.", "You can only select units once in an attack.");
         String command;
         while (!(command = theView.getCommand()).matches("(?i)end\\s+select"))
             try
@@ -161,6 +175,7 @@ public class AttackController implements IMenuClickListener, ICommandManager
             {
                 theView.showError(ex);
             }
+        unitsSelected = true;
     }
 
     private void putUnits(int soldierType, int count, Point location) throws ConsoleException

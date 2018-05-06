@@ -9,7 +9,7 @@ public class ElixirStorage extends Storage
     public ElixirStorage(Point location, int buildingNum)
     {
         super(location, buildingNum);
-        capacity = DEFAULT_CAPACITY;
+        ensureLevel();
     }
 
     public static final int BUILDING_TYPE = 4;

@@ -17,7 +17,7 @@ public class UnavailableUpgradeException extends ConsoleRuntimeException
 
     public UnavailableUpgradeException(Building building, Reason reason)
     {
-        super("Can't upgrade this building", "Can't upgrade " + building.getName() + "because " +
+        super("Can't upgrade this building", "Can't upgrade " + building.getName() + " because " +
                 (reason == Reason.IMPOSSIBLE ? "it is not upgradable at all." : "it has reached the town hall level."));
     }
 }

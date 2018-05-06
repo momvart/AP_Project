@@ -208,7 +208,7 @@ public class Attack
                     if (numberOfSoldiersIn(x + i + (i >= 0 ? k : -k), y + j + (j >= 0 ? k : -k)) > 0)
                     {
                         point = new Point(x + i + (i >= 0 ? k : -k), y + j + (j >= 0 ? k : -k));
-                        if (getDistance(point, location) > getDistance(min, location))
+                        if (Point.euclideanDistance2nd(point, location) > Point.euclideanDistance2nd(min, location))
                             break outer;
                         else
                             min = new Point(point.getX(), point.getY());
@@ -217,12 +217,6 @@ public class Attack
         if (!min.equals(new Point(-30, -30)))
             return min;
         else throw new SoldierNotFoundException("Soldier not found", "SoldierNotFound");
-    }
-
-    private double getDistance(Point source, Point destination)
-    {
-        return Math.sqrt((source.getX() - destination.getX()) * (source.getX() - destination.getX()) +
-                (source.getY() - destination.getY()) * (source.getY() - destination.getY()));
     }
 
     public void addToClaimedResource(Resource destroyResource)

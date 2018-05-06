@@ -35,7 +35,7 @@
     "initialStrength": 200,
     "ustginc": 0,
     "metadata": {
-      "RAPDT": 10
+      "RAPDT": 5
     },
     "infoType": 0
   },
@@ -51,6 +51,9 @@
     "destroyResource": {
       "gold": 200,
       "elixir": 0
+    },
+    "metadata": {
+      "initcap": 500
     },
     "initialStrength": 300,
     "ustginc": 0,
@@ -68,6 +71,9 @@
     "destroyResource": {
       "gold": 200,
       "elixir": 0
+    },
+    "metadata": {
+      "initcap": 20
     },
     "initialStrength": 300,
     "ustginc": 0,

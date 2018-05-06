@@ -7,7 +7,9 @@ import utils.Point;
 
 public abstract class Storage extends VillageBuilding
 {
-    int capacity;
+    private final String INITIAL_CAPACITY_KEY = "initcap";
+
+    protected int capacity;
 
     public Storage(Point location, int buildingNum)
     {
@@ -25,6 +27,13 @@ public abstract class Storage extends VillageBuilding
         super.upgrade();
         double newCapacity = capacity * 1.6;
         capacity = (int)newCapacity;
+    }
+
+    @Override
+    public void ensureLevel()
+    {
+        super.ensureLevel();
+        capacity = (int)(Math.pow(1.6, level) * (double)getBuildingInfo().getMetadata(INITIAL_CAPACITY_KEY));
     }
 
     @Override
