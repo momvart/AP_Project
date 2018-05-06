@@ -16,10 +16,7 @@ public class GoldMine extends Mine
     @Override
     public void mine()
     {
-        Resource free = Resource.subtract(World.getVillage().getTotalResourceCapacity(), World.getVillage().getResources());
-        int toSend = Math.min(free.getGold(), minedResources);
-        World.getVillage().getResources().increase(new Resource(toSend, 0));
-        minedResources -= toSend;
+        minedResources -= World.getVillage().addResource(new Resource(minedResources, 0)).getGold();
     }
 
     public static final int BUILDING_TYPE = 1;

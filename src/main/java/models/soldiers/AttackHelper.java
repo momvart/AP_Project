@@ -44,11 +44,6 @@ public abstract class AttackHelper
         return SoldierValues.getSoldierInfo(soldier.getType()).getRange();
     }
 
-    public Integer manhatanianDistance(Point location1, Point location2)
-    {
-        return Math.abs(location1.getX() - location2.getX()) + Math.abs(location1.getY() - location2.getY());
-    }
-
     public void passTurn()
     {
         removeSoldierIfDead();

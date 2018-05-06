@@ -63,6 +63,11 @@ public class Village
         return new Resource(gold, elixir);
     }
 
+    public Resource getResourceFreeCapacity()
+    {
+        return Resource.subtract(getTotalResourceCapacity(), getResources());
+    }
+
     public void spendResource(Resource toSpend) throws NotEnoughResourceException
     {
         try
@@ -73,6 +78,20 @@ public class Village
         {
             throw new NotEnoughResourceException(getResources(), toSpend);
         }
+    }
+
+    /**
+     * Adds a certain amount of resource to the village.
+     * If there is not enough space the remaining will be ignored.
+     *
+     * @param toAdd
+     */
+    public Resource addResource(Resource toAdd)
+    {
+        Resource free = getResourceFreeCapacity();
+        Resource added = new Resource(Math.min(free.getGold(), toAdd.getGold()), Math.min(free.getElixir(), toAdd.getElixir()));
+        getResources().increase(added);
+        return added;
     }
     ///endregion
 
@@ -148,6 +167,11 @@ public class Village
         if (getCampsCapacity() <= getSoldiersCount())
             throw new NotEnoughCampCapacityException();
         soldiers.addSoldier(soldier);
+    }
+
+    public SoldierCollection getSoldiers()
+    {
+        return soldiers;
     }
 
     public ArrayList<Soldier> getSoldiers(int soldierType)

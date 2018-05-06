@@ -56,7 +56,7 @@ public class HealerAttackHelper extends AttackHelper
     @Override
     public void move()
     {
-        System.out.println("destination x:" + destination.getX() + "y:" + destination.getY());
+        System.err.println("destination x:" + destination.getX() + "y:" + destination.getY());
         if (soldier != null && isSoldierDeployed() && !soldier.getAttackHelper().isDead())
         {
             if (destination != null)

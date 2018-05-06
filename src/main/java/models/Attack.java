@@ -6,6 +6,7 @@ import models.buildings.DefensiveTower;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierCollection;
+import models.soldiers.SoldierValues;
 import utils.MapCellNode;
 import utils.Point;
 import utils.Size;
@@ -13,6 +14,7 @@ import utils.Size;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Attack
 {
@@ -39,6 +41,8 @@ public class Attack
     {
         return soldiersOnLocations;
     }
+
+    public void addScore(int score) { this.claimedScore += score; }
 
     public int getClaimedScore()
     {
@@ -102,14 +106,7 @@ public class Attack
 
     public int numberOfSoldiersIn(int x, int y, MoveType moveType)
     {
-        try
-        {
-            return (int)soldiersOnLocations.getSoldiers(x, y, moveType).count();
-        }
-        catch (Exception ex)
-        {
-            return 0;
-        }
+        return (int)soldiersOnLocations.getSoldiers(x, y, moveType).count();
     }
 
     public int numberOfSoldiersIn(Point location)
@@ -188,7 +185,10 @@ public class Attack
 
     public void quitAttack()
     {
-
+        for (int i = 1; i < SoldierValues.SOLDIER_TYPES_COUNT; i++)
+            World.getVillage().getSoldiers(i).removeIf(soldier -> soldier.getAttackHelper().isDead());
+        World.getVillage().addResource(claimedResource);
+        World.sCurrentGame.addScore(claimedScore);
     }
 
     public AttackMap getMap()
@@ -288,13 +288,15 @@ public class Attack
 
         public Stream<Soldier> getSoldiers(int x, int y, MoveType moveType)
         {
-            Iterator<Soldier> iterator = null;
-
+            if (getSoldiers(x, y).size() == 0)
+                return Stream.empty();
+            Iterator<Soldier> iterator;
             if (moveType == MoveType.GROUND)
                 iterator = getSoldiers(x, y).iterator();
             else
                 iterator = getSoldiers(x, y).descendingIterator();
-            return Stream.generate(iterator::next).filter(soldier -> soldier.getMoveType() == moveType);
+            return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false)
+                    .filter(soldier -> soldier.getMoveType() == moveType);
         }
 
         public void push(Soldier soldier, int x, int y)
