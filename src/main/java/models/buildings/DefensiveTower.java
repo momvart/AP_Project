@@ -43,8 +43,9 @@ public abstract class DefensiveTower extends Building
     {
         try
         {
-            Soldier nearestSoldier = attack.getNearestSoldier(location, range);
-            nearestSoldier.decreaseHealth(damagePower);
+            Point soldierPoint = attack.getNearestSoldier(location, range);
+            List<Soldier> soldiers = attack.getSoldiersOnLocations().getSoldiers(soldierPoint);
+            soldiers.get(0).decreaseHealth(damagePower);
         }
         catch (SoldierNotFoundException e)
         {

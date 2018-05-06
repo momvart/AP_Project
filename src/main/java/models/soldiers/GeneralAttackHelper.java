@@ -25,9 +25,7 @@ public class GeneralAttackHelper extends AttackHelper
     public void fire()
     {
         if (soldier != null && !soldier.getAttackHelper().isDead())
-        {
             if (target != null)
-            {
                 if (isTargetInRange())
                 {
                     if (target.getStrength() > 0 && !target.isDestroyed())
@@ -40,8 +38,6 @@ public class GeneralAttackHelper extends AttackHelper
                         attack.addToClaimedResource(target.getBuildingInfo().getDestroyResource());
                     }
                 }
-            }
-        }
     }
 
     private boolean isTargetInRange()
@@ -59,7 +55,6 @@ public class GeneralAttackHelper extends AttackHelper
     public void setTarget()
     {
         if (soldier != null && !soldier.getAttackHelper().isDead())
-        {
             if (target == null || target.getStrength() <= 0 || target.isDestroyed())
             {
                 target = getNearestBuilding();
@@ -68,7 +63,6 @@ public class GeneralAttackHelper extends AttackHelper
                 else
                     System.err.println("no target found.");
             }
-        }
     }
 
     private Building getNearestBuilding()
@@ -105,16 +99,13 @@ public class GeneralAttackHelper extends AttackHelper
 
     private boolean isTargetReachable(Building favouriteTarget)
     {
-        // TODO: 5/6/18 must be done as soon as possible
-        //attack.getArrayMap().isReachable();
-        return true;
+        return !(attack.getSoldierPath(soldier.getLocation(), favouriteTarget.getLocation()) == null);
     }
 
     @Override
     public void move()
     {
         if (soldier != null && !soldier.getAttackHelper().isDead())
-        {
             if (!isTargetInRange())
             {
                 List<Point> soldierPath = attack.getSoldierPath(getSoldierLocation(), target.getLocation());
@@ -124,17 +115,12 @@ public class GeneralAttackHelper extends AttackHelper
                 for (i = soldierPath.size() - 1; i >= 0; i--)
                 {
                     if (i != soldierPath.size() - 1)
-                    {
                         pointToGo = soldierPath.get(i + 1);
-                    }
                     if (Point.euclideanDistance(soldierPath.get(i), getSoldierLocation()) > soldier.getSpeed())
-                    {
                         break;
-                    }
                 }
                 attack.displayMove(soldier, getSoldierLocation(), pointToGo);
                 soldier.setLocation(pointToGo);
             }
-        }
     }
 }

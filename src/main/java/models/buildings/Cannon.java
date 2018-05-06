@@ -1,5 +1,6 @@
 package models.buildings;
 
+import exceptions.SoldierNotFoundException;
 import models.Attack;
 import models.soldiers.Soldier;
 import utils.Point;
@@ -18,8 +19,16 @@ public class Cannon extends DefensiveTower
     @Override
     public void attack(Attack attack)
     {
-        List<Soldier> soldiersInRange = attack.getSoldiersInRange(this.location, getRange());
-        soldiersInRange.forEach(soldier -> soldier.decreaseHealth(this.getDamagePower()));
+        List<Soldier> soldiersInRange = null;
+        try
+        {
+            soldiersInRange = attack.getSoldiersInRange(this.location, getRange());
+            soldiersInRange.forEach(soldier -> soldier.decreaseHealth(this.getDamagePower()));
+        }
+        catch (SoldierNotFoundException e)
+        {
+            //do nothing
+        }
     }
 
     @Override

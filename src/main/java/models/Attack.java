@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 public class Attack
 {
-    private final int MAX_SOLDIERS_IN‌_A_GREED = 5;
+    private final int MAX_SOLDIER_IN_CELL = 5;
     private SoldierCollection soldiers = new SoldierCollection();
     private Resource claimedResource;
     private int claimedScore;
@@ -31,6 +31,11 @@ public class Attack
         this.map = map;
         claimedResource = new Resource(0, 0);
         soldiersOnLocations = new SoldierCoordinatedCollection(map.getSize());
+    }
+
+    public SoldierCoordinatedCollection getSoldiersOnLocations()
+    {
+        return soldiersOnLocations;
     }
 
     public int getClaimedScore()
@@ -66,7 +71,7 @@ public class Attack
 
         List<Soldier> available = getUnitsInToBeDeployed(unitType).collect(Collectors.toList());
         int current = numberOfSoldiersIn(location);
-        if (MAX_SOLDIERS_IN‌_A_GREED - current < count)
+        if (MAX_SOLDIER_IN_CELL - current < count)
         {
             throw new FilledCellException(location, "Current: " + current);
         }
@@ -176,25 +181,42 @@ public class Attack
         return map;
     }
 
-    public List<Soldier> getSoldiersInRange(Point location, int range)
+    public List<Soldier> getSoldiersInRange(Point location, int range) throws SoldierNotFoundException
     {
-        return getAllDeployedUnits().filter(soldier -> getDistance(location, soldier.getLocation()) <= range).collect(Collectors.toList());
+        List<Soldier> soldiers = null;
+        soldiers = soldiersOnLocations.getSoldiers(getNearestSoldier(location, range));
+        List<Soldier> secondSoldiers = soldiersOnLocations.getSoldiers(getNearestSoldier(soldiers.get(0).getLocation(), range - 2));
+        soldiers.addAll(secondSoldiers);
+        if (soldiers != null)
+            return soldiers;
+        else throw new SoldierNotFoundException("Soldier not found", "SoldierNotFound");
     }
 
-    public Soldier getNearestSoldier(Point location, int range) throws SoldierNotFoundException
+    public Point getNearestSoldier(Point location, int range) throws SoldierNotFoundException
     {
-        try
-        {
-            Soldier s = getAllDeployedUnits().min(Comparator.comparing(soldier -> getDistance(soldier.getLocation(), location))).get();
-            if (getDistance(location, s.getLocation()) <= range)
-                return s;
-            else
-                throw new SoldierNotFoundException("No soldier in this range", "SoldierNotFound");
-        }
-        catch (NoSuchElementException ex)
-        {
-            throw new SoldierNotFoundException("No soldier in this range", "SoldierNotFound");
-        }
+        Point min = new Point(-30, -30);
+        Point point;
+        int x = location.getX();
+        int y = location.getY();
+        outer:
+        for (int k = 0; k < range; k++)
+            for (int i = -1; x + i + (i >= 0 ? k : -k) >= 0 && x + i + (i >= 0 ? k : -k) < map.getSize().getWidth() && i <= 1; i++)
+                for (int j = -1; y + j + (j >= 0 ? k : -k) >= 0 && y + j + (j >= 0 ? k : -k) < map.getSize().getHeight() && j <= 1; j++)
+                {
+                    if (i == 0 && j == 0)
+                        continue;
+                    if (numberOfSoldiersIn(x + i + (i >= 0 ? k : -k), y + j + (j >= 0 ? k : -k)) > 0)
+                    {
+                        point = new Point(x + i + (i >= 0 ? k : -k), y + j + (j >= 0 ? k : -k));
+                        if (getDistance(point, location) > getDistance(min, location))
+                            break outer;
+                        else
+                            min = new Point(point.getX(), point.getY());
+                    }
+                }
+        if (!min.equals(new Point(-30, -30)))
+            return min;
+        else throw new SoldierNotFoundException("Soldier not found", "SoldierNotFound");
     }
 
     private double getDistance(Point source, Point destination)
@@ -213,7 +235,7 @@ public class Attack
         soldiersOnLocations.move(soldier, soldierLocation, pointToGo);
     }
 
-    private static class SoldierCoordinatedCollection
+    public static class SoldierCoordinatedCollection
     {
         private ArrayList<LinkedList<Soldier>> soldiers;
 
