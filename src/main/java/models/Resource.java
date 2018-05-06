@@ -112,4 +112,9 @@ public class Resource implements Comparable<Resource>
     {
         return !isGreaterThanOrEqual(r);
     }
+
+    public static Resource subtract(Resource left, Resource right)
+    {
+        return new Resource(left.gold - right.gold, left.elixir - right.elixir);
+    }
 }

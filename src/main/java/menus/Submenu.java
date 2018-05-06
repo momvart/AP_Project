@@ -34,14 +34,14 @@ public class Submenu extends ParentMenu
     public ArrayList<String> getItems()
     {
         ArrayList<String> retVal = super.getItems();
-        retVal.add(String.format(Menu.sItemNamePattern, items.size() + 1, "back"));
+        retVal.add(String.format(Menu.sItemNamePattern, 0, "back"));
         return retVal;
     }
 
     @Override
     public void handleCommand(String command, IMenuContainer container) throws InvalidCommandException
     {
-        if (command.equals(Integer.toString(items.size() + 1)) || command.equalsIgnoreCase("back"))
+        if (command.equals(Integer.toString(0)) || command.equalsIgnoreCase("back"))
             container.setCurrentMenu(parent, true);
         else
             super.handleCommand(command, container);

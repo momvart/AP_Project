@@ -15,11 +15,14 @@ public class ElixirMine extends Mine
     @Override
     public void mine()
     {
-        World.getVillage().getResources().increase(new Resource( 0,minedResources));
-        minedResources = 0;
+        Resource free = Resource.subtract(World.getVillage().getTotalResourceCapacity(), World.getVillage().getResources());
+        int toSend = Math.min(free.getElixir(), minedResources);
+        World.getVillage().getResources().increase(new Resource(0, toSend));
+        minedResources -= toSend;
     }
 
     public static final int BUILDING_TYPE = 2;
+
     @Override
     public int getType()
     {

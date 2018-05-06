@@ -11,6 +11,11 @@ public abstract class Storage extends VillageBuilding
 
     protected int capacity;
 
+    /**
+     * Used for attack and claiming resources.
+     */
+    private transient int currentAmount = -1;
+
     public Storage(Point location, int buildingNum)
     {
         super(location, buildingNum);
@@ -19,6 +24,11 @@ public abstract class Storage extends VillageBuilding
     public int getCapacity()
     {
         return capacity;
+    }
+
+    public int getCurrentAmount()
+    {
+        return currentAmount;
     }
 
     @Override

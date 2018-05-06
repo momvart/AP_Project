@@ -8,9 +8,13 @@ import models.Attack;
 import models.AttackMap;
 import models.World;
 import models.buildings.Building;
+import models.buildings.ElixirStorage;
+import models.buildings.GoldStorage;
+import models.buildings.Storage;
 import models.soldiers.SoldierValues;
 import serialization.AttackMapGlobalAdapter;
 import serialization.BuildingGlobalAdapter;
+import serialization.StorageGlobalAdapter;
 import utils.ConsoleUtilities;
 import utils.ICommandManager;
 import utils.Point;
@@ -196,6 +200,8 @@ public class AttackController implements IMenuClickListener, ICommandManager
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(AttackMap.class, new AttackMapGlobalAdapter())
                     .registerTypeAdapter(Building.class, new BuildingGlobalAdapter())
+                    .registerTypeAdapter(GoldStorage.class, new StorageGlobalAdapter<>(GoldStorage.class))
+                    .registerTypeAdapter(ElixirStorage.class, new StorageGlobalAdapter<>(ElixirStorage.class))
                     .create();
 
             AttackMap map = gson.fromJson(reader, AttackMap.class);
