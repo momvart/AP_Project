@@ -56,11 +56,17 @@ public class HealerAttackHelper extends AttackHelper
     @Override
     public void move()
     {
+        System.out.println("destination x:" + destination.getX() + "y:" + destination.getY());
         if (soldier != null && isSoldierDeployed() && !soldier.getAttackHelper().isDead())
         {
-            changeDestinationIfNeeded();
-            Point pointToGo = getPointToGo(destination);
-            soldier.setLocation(pointToGo);
+            if (destination != null)
+            {
+                Point pointToGo = getPointToGo(destination);
+                //System.out.println("healer point to go x:" + pointToGo.getX() + "healer point to go y:" + pointToGo.getY());
+                attack.displayMove(soldier, getSoldierLocation(), pointToGo);
+                soldier.setLocation(pointToGo);
+            }
+
         }
     }
 
@@ -83,6 +89,8 @@ public class HealerAttackHelper extends AttackHelper
     public void setTarget()
     {
         targets = getSoldiersInRange();
+        changeDestinationIfNeeded();
+
     }
 
     private Point getSoldiersConcentrationPoint()
@@ -105,7 +113,14 @@ public class HealerAttackHelper extends AttackHelper
     {
         Point shouldISwitchTo = getSoldiersConcentrationPoint();
         int shouldISwitchToNumber = countNumberOfSoldiersAround(shouldISwitchTo);
-        if (countNumberOfSoldiersAround(destination) <= (0.7 * shouldISwitchToNumber))
+        if (destination != null)
+        {
+            if (countNumberOfSoldiersAround(destination) <= (0.7 * shouldISwitchToNumber))
+            {
+                destination = shouldISwitchTo;
+            }
+        }
+        else
         {
             destination = shouldISwitchTo;
         }
@@ -116,15 +131,20 @@ public class HealerAttackHelper extends AttackHelper
         int numberOfSoldiersInRange = 0;
         List<Soldier> soldiers = attack.getAllDeployedUnits().collect(Collectors.toList());
         if (soldiers != null && soldiers.size() != 0)
+            /*System.out.println("number of soldiers is :" + soldiers.size());*/
         {
             for (Soldier soldier : soldiers)
             {
-                if (soldier != null && isSoldierDeployed() && !soldier.getAttackHelper().isDead())
+                if (soldier != null && isSoldierDeployed() && !soldier.getAttackHelper().isDead() && isSoldierDeployed() && soldier.getType() != 6)//TODO note that 6 is the type of healer
                 {
-                    if (Point.euclideanDistance(soldier.getLocation(), point) - getRange() < 0.01)
+                    if (soldier.getLocation() != null)
                     {
-                        numberOfSoldiersInRange++;
+                        if (Point.euclideanDistance(soldier.getLocation(), point) - getRange() < 0.01)
+                        {
+                            numberOfSoldiersInRange++;
+                        }
                     }
+
                 }
 
             }
@@ -141,7 +161,7 @@ public class HealerAttackHelper extends AttackHelper
         {
             for (Soldier soldier : soldiers)
             {
-                if (soldier != null && !soldier.getAttackHelper().isDead())
+                if (soldier != null && !soldier.getAttackHelper().isDead() && isSoldierDeployed() && soldier.getType() != 6) //TODO ‌note that 6 is the type of healer
                 {
                     if (Point.euclideanDistance(soldier.getLocation(), getSoldierLocation()) - getRange() < 0.01)
                     {
