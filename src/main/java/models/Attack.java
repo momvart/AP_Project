@@ -22,7 +22,7 @@ public class Attack
     private AttackMap map;
     private int turn;
 
-    //private SoldierCollection soldiersOnMap = new SoldierCollection();
+    private SoldierCollection soldiersOnMap = new SoldierCollection();
     private SoldierCoordinatedCollection soldiersOnLocations;
 
     private PathFinder pathFinder = new PathFinder();
