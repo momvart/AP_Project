@@ -71,7 +71,7 @@ public abstract class AttackHelper
 
     protected Point getPointToGo(Point destination)
     {
-        List<Point> soldierPath = attack.getSoldierPath(getSoldierLocation(), destination);
+        List<Point> soldierPath = attack.getSoldierPath(getSoldierLocation(), destination, soldier.getMoveType() == MoveType.AIR);
         Point pointToGo = soldierPath.get(soldierPath.size() - 1);
 
         int i;

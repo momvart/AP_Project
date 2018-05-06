@@ -1,6 +1,7 @@
 package models;
 
 import exceptions.*;
+import models.buildings.DefenseType;
 import models.buildings.DefensiveTower;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
@@ -44,9 +45,9 @@ public class Attack
         return claimedScore;
     }
 
-    public List<Point> getSoldierPath(Point start, Point target)
+    public List<Point> getSoldierPath(Point start, Point target, boolean isFlying)
     {
-        return pathFinder.getSoldierPath(start, target);
+        return pathFinder.getSoldierPath(start, target, isFlying);
     }
 
 
@@ -97,6 +98,18 @@ public class Attack
     public int numberOfSoldiersIn(int x, int y)
     {
         return (int)soldiersOnLocations.getSoldiers(x, y).stream().filter(soldier -> !soldier.getAttackHelper().isDead()).count();
+    }
+
+    public int numberOfSoldiersIn(int x, int y, MoveType moveType)
+    {
+        try
+        {
+            return (int)soldiersOnLocations.getSoldiers(x, y, moveType).count();
+        }
+        catch (Exception ex)
+        {
+            return 0;
+        }
     }
 
     public int numberOfSoldiersIn(Point location)
@@ -183,13 +196,13 @@ public class Attack
         return map;
     }
 
-    public List<Soldier> getSoldiersInRange(Point location, int range, int secondRange) throws SoldierNotFoundException
+    public List<Soldier> getSoldiersInRange(Point location, int range, int secondRange, DefenseType defenseType) throws SoldierNotFoundException
     {
         List<Soldier> soldiers = null;
-        soldiers = soldiersOnLocations.getSoldiers(getNearestSoldier(location, range));
+        soldiers = soldiersOnLocations.getSoldiers(getNearestSoldier(location, range, defenseType));
         try
         {
-            List<Soldier> secondSoldiers = soldiersOnLocations.getSoldiers(getNearestSoldier(soldiers.get(0).getLocation(), secondRange));
+            List<Soldier> secondSoldiers = soldiersOnLocations.getSoldiers(getNearestSoldier(soldiers.get(0).getLocation(), secondRange, defenseType));
             soldiers.addAll(secondSoldiers);
         }
         catch (SoldierNotFoundException ex)
@@ -199,8 +212,9 @@ public class Attack
         return soldiers;
     }
 
-    public Point getNearestSoldier(Point location, int range) throws SoldierNotFoundException
+    public Point getNearestSoldier(Point location, int range, DefenseType defenseType) throws SoldierNotFoundException
     {
+        MoveType moveType = defenseType == DefenseType.AIR ? MoveType.AIR : defenseType == DefenseType.GROUND ? MoveType.GROUND : null;
         Point min = new Point(-30, -30);
         Point point;
         int x = location.getX();
@@ -212,14 +226,23 @@ public class Attack
                 {
                     if (i == 0 && j == 0)
                         continue;
-                    if (numberOfSoldiersIn(x + k * i, y + k * j) > 0)
-                    {
-                        point = new Point(x + k * i, y + k * j);
-                        if (Point.euclideanDistance2nd(point, location) > Point.euclideanDistance2nd(min, location))
-                            break outer;
-                        else
-                            min = new Point(point.getX(), point.getY());
-                    }
+                    if (moveType != null)
+                        if (numberOfSoldiersIn(x + k * i, y + k * j, moveType) > 0)
+                        {
+                            point = new Point(x + k * i, y + k * j);
+                            if (Point.euclideanDistance2nd(point, location) > Point.euclideanDistance2nd(min, location))
+                                break outer;
+                            else
+                                min = new Point(point.getX(), point.getY());
+                        }
+                        else if (numberOfSoldiersIn(x + k * i, y + k * j) > 0)
+                        {
+                            point = new Point(x + k * i, y + k * j);
+                            if (Point.euclideanDistance2nd(point, location) > Point.euclideanDistance2nd(min, location))
+                                break outer;
+                            else
+                                min = new Point(point.getX(), point.getY());
+                        }
                 }
         if (!min.equals(new Point(-30, -30)))
             return min;
@@ -260,11 +283,17 @@ public class Attack
 
         public Stream<Soldier> getSoldiers(Point location, MoveType moveType)
         {
+            return getSoldiers(location.getX(), location.getY(), moveType);
+        }
+
+        public Stream<Soldier> getSoldiers(int x, int y, MoveType moveType)
+        {
             Iterator<Soldier> iterator = null;
+
             if (moveType == MoveType.GROUND)
-                iterator = getSoldiers(location.getX(), location.getY()).iterator();
+                iterator = getSoldiers(x, y).iterator();
             else
-                iterator = getSoldiers(location.getX(), location.getY()).descendingIterator();
+                iterator = getSoldiers(x, y).descendingIterator();
             return Stream.generate(iterator::next).filter(soldier -> soldier.getMoveType() == moveType);
         }
 
@@ -304,7 +333,7 @@ public class Attack
         private static final int DIAGONAL_COST = 14;
 
 
-        private List<MapCellNode> findPath(MapCellNode start, MapCellNode target)
+        private List<MapCellNode> findPath(MapCellNode start, MapCellNode target, boolean isFlying)
         {
 
             MapCellNode[][] nodes = new MapCellNode[map.getSize().getWidth()][map.getSize().getHeight()];
@@ -323,7 +352,7 @@ public class Attack
                 for (int i = -1; i <= 1; i++)
                     for (int j = -1; j <= 1; j++)
                         if (!(i == 0 && j == 0) &&
-                                (map.isEmpty(x + i, y + j) || (target.getX() == x + i && target.getY() == y + j)))
+                                ((map.isEmpty(x + i, y + j) || isFlying) || (target.getX() == x + i && target.getY() == y + j)))
                         {
                             MapCellNode child = nodes[x + i][y + j];
                             if (child == null)
@@ -378,11 +407,11 @@ public class Attack
             return (int)Math.sqrt((node.getX() - target.getX()) * (node.getX() - target.getX()) + (node.getY() - target.getY()) * (node.getY() - target.getY())) * 10;
         }
 
-        public List<Point> getSoldierPath(Point soldierLocation, Point buildingLocation)
+        public List<Point> getSoldierPath(Point soldierLocation, Point buildingLocation, boolean isFlying)
         {
             MapCellNode soldier = new MapCellNode(soldierLocation, null, 0);
             MapCellNode building = new MapCellNode(buildingLocation, null, 0);
-            List<MapCellNode> path = findPath(soldier, building);
+            List<MapCellNode> path = findPath(soldier, building, isFlying);
             List<Point> soldierPath = new ArrayList<>(path.size());
             for (MapCellNode aPath : path) soldierPath.add(aPath.getPoint());
             return soldierPath;
