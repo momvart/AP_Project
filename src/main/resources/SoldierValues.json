@@ -12,7 +12,8 @@
     "favouriteTargets": [],
     "initialHealth": 100,
     "initialDamage": 10,
-    "minBarracksLevel": 0
+    "minBarracksLevel": 0,
+    "moveType": "GROUND"
   },
   {
     "type": 2,
@@ -34,7 +35,8 @@
     ],
     "initialHealth": 500,
     "initialDamage": 30,
-    "minBarracksLevel": 0
+    "minBarracksLevel": 0,
+    "moveType": "GROUND"
   },
   {
     "type": 3,
@@ -49,7 +51,8 @@
     "favouriteTargets": [],
     "initialHealth": 700,
     "initialDamage": 30,
-    "minBarracksLevel": 2
+    "minBarracksLevel": 2,
+    "moveType": "AIR"
   },
   {
     "type": 4,
@@ -68,7 +71,8 @@
     ],
     "initialHealth": 100,
     "initialDamage": 10,
-    "minBarracksLevel": 0
+    "minBarracksLevel": 0,
+    "moveType": "GROUND"
   },
   {
     "type": 5,
@@ -87,7 +91,8 @@
     ],
     "initialHealth": 100,
     "initialDamage": 50,
-    "minBarracksLevel": 0
+    "minBarracksLevel": 0,
+    "moveType": "GROUND"
   },
   {
     "type": 6,
@@ -102,6 +107,7 @@
     "favouriteTargets": [],
     "initialHealth": -1,
     "initialDamage": 25,
-    "minBarracksLevel": 0
+    "minBarracksLevel": 0,
+    "moveType": "AIR"
   }
 ]
