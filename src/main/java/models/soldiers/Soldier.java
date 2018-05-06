@@ -43,7 +43,7 @@ public abstract class Soldier
     {
         health = Math.max(health - amount, 0);
         if (health == 0)
-            attackHelper.isDead = true;
+            attackHelper.setDead(true);
     }
 
     public int getDamage()
@@ -94,9 +94,9 @@ public abstract class Soldier
         this.health = getInitialHelthOfUnitThisLevel();
     }
 
-    private int getInitialHelthOfUnitThisLevel()
+    public int getInitialHelthOfUnitThisLevel()
     {
-        return SoldierValues.getSoldierInfo(this.getType()).getInitialDamage() + (level) * 5;
+        return SoldierValues.getSoldierInfo(this.getType()).getInitialHealth() + (level) * 5;
     }
 
     public void increaseHealth(int amount)

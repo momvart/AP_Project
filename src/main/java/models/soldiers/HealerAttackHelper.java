@@ -62,11 +62,9 @@ public class HealerAttackHelper extends AttackHelper
             if (destination != null)
             {
                 Point pointToGo = getPointToGo(destination);
-                //System.out.println("healer point to go x:" + pointToGo.getX() + "healer point to go y:" + pointToGo.getY());
                 attack.displayMove(soldier, getSoldierLocation(), pointToGo);
                 soldier.setLocation(pointToGo);
             }
-
         }
     }
 
@@ -137,9 +135,9 @@ public class HealerAttackHelper extends AttackHelper
             {
                 if (soldier != null && isSoldierDeployed() && !soldier.getAttackHelper().isDead() && isSoldierDeployed() && soldier.getType() != 6)//TODO note that 6 is the type of healer
                 {
-                    if (soldier.getLocation() != null)
+                    if (soldier.getLocation() != null && soldier.getLocation().getX() >= 0 && soldier.getLocation().getY() >= 0)
                     {
-                        if (Point.euclideanDistance(soldier.getLocation(), point) - getRange() < 0.01)
+                        if (Point.euclideanDistance(soldier.getLocation(), point) - 10 < 0.01)
                         {
                             numberOfSoldiersInRange++;
                         }
