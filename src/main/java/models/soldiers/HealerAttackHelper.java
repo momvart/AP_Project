@@ -114,7 +114,7 @@ public class HealerAttackHelper extends AttackHelper
     private int countNumberOfSoldiersAround(Point point)
     {
         int numberOfSoldiersInRange = 0;
-        List<Soldier> soldiers = attack.getAllDeployedUnits().collect(Collectors.toList());
+        List<Soldier> soldiers = attack.getDeployedAliveUnits().collect(Collectors.toList());
         if (soldiers != null && soldiers.size() != 0)
         {
             for (Soldier soldier : soldiers)
@@ -136,7 +136,7 @@ public class HealerAttackHelper extends AttackHelper
     private ArrayList<Soldier> getSoldiersInRange()
     {
         ArrayList<Soldier> soldiersInRange = new ArrayList<>();
-        List<Soldier> soldiers = attack.getAllDeployedUnits().collect(Collectors.toList());
+        List<Soldier> soldiers = attack.getDeployedAliveUnits().collect(Collectors.toList());
         if (soldiers != null && soldiers.size() != 0)
         {
             for (Soldier soldier : soldiers)

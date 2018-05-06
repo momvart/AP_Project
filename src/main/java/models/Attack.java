@@ -2,6 +2,7 @@ package models;
 
 import exceptions.*;
 import models.buildings.DefensiveTower;
+import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierCollection;
 import utils.MapCellNode;
@@ -21,7 +22,7 @@ public class Attack
     private AttackMap map;
     private int turn;
 
-    private SoldierCollection soldiersOnMap = new SoldierCollection();
+    //private SoldierCollection soldiersOnMap = new SoldierCollection();
     private SoldierCoordinatedCollection soldiersOnLocations;
 
     private PathFinder pathFinder = new PathFinder();
@@ -109,7 +110,7 @@ public class Attack
         {
             soldier.setLocation(location);
             soldier.getAttackHelper().setSoldierIsDeployed(true);
-            soldiersOnMap.addSoldier(soldier);
+            //soldiersOnMap.addSoldier(soldier);
             soldiersOnLocations.push(soldier, location);
         }
     }
@@ -122,8 +123,7 @@ public class Attack
 
     public void passTurn()
     {
-        soldiersOnMap.getAllSoldiers()
-                .filter(soldier -> !soldier.getAttackHelper().isDead())
+        getDeployedAliveUnits()
                 .forEach(soldier -> soldier.getAttackHelper().passTurn());
 
         map.getAllDefensiveTowers().stream()
@@ -145,15 +145,17 @@ public class Attack
                 .filter(soldier -> soldier != null && !soldier.getAttackHelper().isDead());
     }
 
-    public Stream<Soldier> getDeployedUnits(int unitType)
+    public Stream<Soldier> getDeployedAliveUnits(int unitType)
     {
-        return soldiersOnMap.getSoldiers(unitType).stream()
-                .filter(soldier -> soldier != null && !soldier.getAttackHelper().isDead());
+        return getDeployedAliveUnits()
+                .filter(soldier -> soldier.getType() == unitType);
     }
 
-    public Stream<Soldier> getAllDeployedUnits()
+    public Stream<Soldier> getDeployedAliveUnits()
     {
-        return soldiersOnMap.getAllSoldiers().filter(soldier -> soldier != null && !soldier.getAttackHelper().isDead());
+        return soldiers.getAllSoldiers()
+                .filter(soldier -> soldier.getAttackHelper().isSoldierDeployed())
+                .filter(soldier -> !soldier.getAttackHelper().isDead());
     }
 
     public Stream<Soldier> getAllUnits()
@@ -246,7 +248,7 @@ public class Attack
             soldiers = Stream.<LinkedList<Soldier>>generate(LinkedList::new).limit(size.getWidth() * size.getHeight()).collect(Collectors.toCollection(ArrayList::new));
         }
 
-        public List<Soldier> getSoldiers(int x, int y)
+        public LinkedList<Soldier> getSoldiers(int x, int y)
         {
             return soldiers.get(y * size.getWidth() + x);
         }
@@ -256,9 +258,22 @@ public class Attack
             return getSoldiers(location.getX(), location.getY());
         }
 
+        public Stream<Soldier> getSoldiers(Point location, MoveType moveType)
+        {
+            Iterator<Soldier> iterator = null;
+            if (moveType == MoveType.GROUND)
+                iterator = getSoldiers(location.getX(), location.getY()).iterator();
+            else
+                iterator = getSoldiers(location.getX(), location.getY()).descendingIterator();
+            return Stream.generate(iterator::next).filter(soldier -> soldier.getMoveType() == moveType);
+        }
+
         public void push(Soldier soldier, int x, int y)
         {
-            getSoldiers(x, y).add(soldier);
+            if (soldier.getMoveType() == MoveType.GROUND)
+                getSoldiers(x, y).addFirst(soldier);
+            else
+                getSoldiers(x, y).addLast(soldier);
         }
 
         public void push(Soldier soldier, Point location)
@@ -268,7 +283,7 @@ public class Attack
 
         public boolean pull(Soldier soldier, int x, int y)
         {
-            return getSoldiers(x, y).remove(soldier);
+            return getSoldiers(x, y).removeFirstOccurrence(soldier);
         }
 
         public boolean pull(Soldier soldier, Point location)
