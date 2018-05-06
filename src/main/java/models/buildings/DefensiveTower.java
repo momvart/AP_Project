@@ -43,7 +43,7 @@ public abstract class DefensiveTower extends Building
     {
         try
         {
-            Point soldierPoint = attack.getNearestSoldier(location, range);
+            Point soldierPoint = attack.getNearestSoldier(location, range, getDefenseType());
             List<Soldier> soldiers = attack.getSoldiersOnLocations().getSoldiers(soldierPoint);
             soldiers.get(0).decreaseHealth(damagePower);
         }
@@ -54,6 +54,10 @@ public abstract class DefensiveTower extends Building
 
     }
 
+    public DefenseType getDefenseType()
+    {
+        return ((DefensiveTowerInfo)getBuildingInfo()).getTargetType();
+    }
     @Override
     public BuildingInfoSubmenu getInfoSubmenu()
     {

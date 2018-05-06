@@ -22,7 +22,7 @@ public class Cannon extends DefensiveTower
         List<Soldier> soldiersInRange = null;
         try
         {
-            soldiersInRange = attack.getSoldiersInRange(this.location, getRange(), SECOND_RANGE);
+            soldiersInRange = attack.getSoldiersInRange(this.location, getRange(), SECOND_RANGE, getDefenseType());
             soldiersInRange.forEach(soldier -> soldier.decreaseHealth(this.getDamagePower()));
         }
         catch (SoldierNotFoundException e)
