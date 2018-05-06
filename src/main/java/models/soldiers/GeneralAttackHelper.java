@@ -7,12 +7,10 @@ import utils.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GeneralAttackHelper extends AttackHelper
-
 {
     private Building target;
 
@@ -108,17 +106,7 @@ public class GeneralAttackHelper extends AttackHelper
         if (soldier != null && !soldier.getAttackHelper().isDead())
             if (!isTargetInRange())
             {
-                List<Point> soldierPath = attack.getSoldierPath(getSoldierLocation(), target.getLocation());
-                Point pointToGo = soldierPath.get(soldierPath.size() - 1);
-
-                int i;
-                for (i = soldierPath.size() - 1; i >= 0; i--)
-                {
-                    if (i != soldierPath.size() - 1)
-                        pointToGo = soldierPath.get(i + 1);
-                    if (Point.euclideanDistance(soldierPath.get(i), getSoldierLocation()) > soldier.getSpeed())
-                        break;
-                }
+                Point pointToGo = getPointToGo(target.getLocation());
                 attack.displayMove(soldier, getSoldierLocation(), pointToGo);
                 soldier.setLocation(pointToGo);
             }

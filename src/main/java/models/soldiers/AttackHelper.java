@@ -4,6 +4,8 @@ package models.soldiers;
 import models.Attack;
 import utils.Point;
 
+import java.util.List;
+
 public abstract class AttackHelper
 {
     protected Attack attack;
@@ -50,7 +52,7 @@ public abstract class AttackHelper
     public void passTurn()
     {
         removeSoldierIfDead();
-        if (soldier != null && isSoldierDeployed)
+        if (soldier != null && !isDead && isSoldierDeployed)
         {
             setTarget();
             move();
@@ -62,8 +64,25 @@ public abstract class AttackHelper
     {
         if (soldier.getHealth() <= 0)
         {
+            setDead(true);
             soldier = null;
         }
+    }
+
+    protected Point getPointToGo(Point destination)
+    {
+        List<Point> soldierPath = attack.getSoldierPath(getSoldierLocation(), destination);
+        Point pointToGo = soldierPath.get(soldierPath.size() - 1);
+
+        int i;
+        for (i = soldierPath.size() - 1; i >= 0; i--)
+        {
+            if (i != soldierPath.size() - 1)
+                pointToGo = soldierPath.get(i + 1);
+            if (Point.euclideanDistance(soldierPath.get(i), getSoldierLocation()) > soldier.getSpeed())
+                break;
+        }
+        return pointToGo;
     }
 
     public abstract void move();

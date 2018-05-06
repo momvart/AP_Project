@@ -49,17 +49,18 @@ public class HealerAttackHelper extends AttackHelper
     {
         ageOneDeltaT();
         if (timeTillDie <= 0)
-            isDead = true;
+            setDead(true);
         super.passTurn();
     }
 
     @Override
     public void move()
     {
-        if (soldier != null && !soldier.getAttackHelper().isDead())
+        if (soldier != null && isSoldierDeployed() && !soldier.getAttackHelper().isDead())
         {
             changeDestinationIfNeeded();
-            //TODO‌ in the path finding algorithm we should use the destination attribute in the roll of destination
+            Point pointToGo = getPointToGo(destination);
+            soldier.setLocation(pointToGo);
         }
     }
 
@@ -86,19 +87,11 @@ public class HealerAttackHelper extends AttackHelper
 
     private Point getSoldiersConcentrationPoint()
     {
-        Point output = new Point(0, 0);
-        int outputCountOfSoldiers = 0;
-        for (int i = 0; i < 9; i++)
+        Point output = points.get(0);
+        int outputCountOfSoldiers = countNumberOfSoldiersAround(output);
+        for (int i = 1; i < 9; i++)
         {
-            if (i == 0)
-            {
-                output = points.get(i);
-            }
             int soldierNumbers = countNumberOfSoldiersAround(points.get(i));
-            if (i == 0)
-            {
-                outputCountOfSoldiers = soldierNumbers;
-            }
             if (soldierNumbers > outputCountOfSoldiers)
             {
                 output = points.get(i);
@@ -122,16 +115,19 @@ public class HealerAttackHelper extends AttackHelper
     {
         int numberOfSoldiersInRange = 0;
         List<Soldier> soldiers = attack.getAllDeployedUnits().collect(Collectors.toList());
-        for (Soldier soldier : soldiers)
+        if (soldiers != null && soldiers.size() != 0)
         {
-            if (soldier != null && !soldier.getAttackHelper().isDead())
+            for (Soldier soldier : soldiers)
             {
-                if (Point.euclideanDistance(soldier.getLocation(), point) <= getRange())
+                if (soldier != null && isSoldierDeployed() && !soldier.getAttackHelper().isDead())
                 {
-                    numberOfSoldiersInRange++;
+                    if (Point.euclideanDistance(soldier.getLocation(), point) - getRange() < 0.01)
+                    {
+                        numberOfSoldiersInRange++;
+                    }
                 }
-            }
 
+            }
         }
         return numberOfSoldiersInRange;
     }
@@ -141,13 +137,16 @@ public class HealerAttackHelper extends AttackHelper
     {
         ArrayList<Soldier> soldiersInRange = new ArrayList<>();
         List<Soldier> soldiers = attack.getAllDeployedUnits().collect(Collectors.toList());
-        for (Soldier soldier : soldiers)
+        if (soldiers != null && soldiers.size() != 0)
         {
-            if (soldier != null && !soldier.getAttackHelper().isDead())
+            for (Soldier soldier : soldiers)
             {
-                if (Point.euclideanDistance(soldier.getLocation(), getSoldierLocation()) <= getRange())
+                if (soldier != null && !soldier.getAttackHelper().isDead())
                 {
-                    soldiersInRange.add(soldier);
+                    if (Point.euclideanDistance(soldier.getLocation(), getSoldierLocation()) - getRange() < 0.01)
+                    {
+                        soldiersInRange.add(soldier);
+                    }
                 }
             }
         }
