@@ -136,8 +136,8 @@
   {
     "targetType": "GROUND",
     "udmginc": 1,
-    "initialDamage": 20,
-    "attackRange": 10,
+    "initialDamage": 2,
+    "attackRange": 4,
     "type": 8,
     "name": "Archer tower",
     "buildCost": {
@@ -157,8 +157,8 @@
   {
     "targetType": "GROUND",
     "udmginc": 1,
-    "initialDamage": 20,
-    "attackRange": 13,
+    "initialDamage": 2,
+    "attackRange": 4,
     "type": 9,
     "name": "Cannon",
     "buildCost": {
@@ -178,8 +178,8 @@
   {
     "targetType": "AIR",
     "udmginc": 1,
-    "initialDamage": 20,
-    "attackRange": 10,
+    "initialDamage": 2,
+    "attackRange": 4,
     "type": 10,
     "name": "Air defense",
     "buildCost": {
@@ -199,8 +199,8 @@
   {
     "targetType": "BOTH",
     "udmginc": 1,
-    "initialDamage": 20,
-    "attackRange": 13,
+    "initialDamage": 2,
+    "attackRange": 5,
     "type": 11,
     "name": "Wizard tower",
     "buildCost": {

@@ -1,11 +1,7 @@
 package models.soldiers;
 
-import models.Builder;
 import models.Resource;
 import models.buildings.Building;
-import models.buildings.Wall;
-
-import java.lang.reflect.Type;
 
 public class SoldierInfo
 {
@@ -20,24 +16,11 @@ public class SoldierInfo
     private int initialHealth;
     private int initialDamage;
     private int minBarracksLevel;
+    private MoveType moveType;
 
     public SoldierInfo()
     {
 
-    }
-
-    public SoldierInfo(int type, String name, Resource brewCost, int brewTime, int speed, int range, int initialHealth, int initialDamage, int minBarracksLevel, Class<? extends Building>... favouriteTargets)
-    {
-        this.type = type;
-        this.name = name;
-        this.brewCost = brewCost;
-        this.brewTime = brewTime;
-        this.speed = speed;
-        this.range = range;
-        this.favouriteTargets = favouriteTargets;
-        this.initialHealth = initialHealth;
-        this.initialDamage = initialDamage;
-        this.minBarracksLevel = minBarracksLevel;
     }
 
     public int getType()
@@ -88,6 +71,11 @@ public class SoldierInfo
     public int getInitialDamage()
     {
         return initialDamage;
+    }
+
+    public MoveType getMoveType()
+    {
+        return moveType;
     }
 
     public int getMinBarracksLevel()
