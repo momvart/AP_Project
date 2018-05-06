@@ -42,13 +42,18 @@ public abstract class Soldier
     public void decreaseHealth(int amount)
     {
         health = Math.max(health - amount, 0);
-        if(health == 0 )
+        if (health == 0)
             attackHelper.isDead = true;
     }
 
     public int getDamage()
     {
-        return SoldierValues.getSoldierInfo(this.getType()).getInitialDamage() + level;
+        return getSoldierInfo().getInitialDamage() + level;
+    }
+
+    public MoveType getMoveType()
+    {
+        return getSoldierInfo().getMoveType();
     }
 
     public SoldierInfo getSoldierInfo()
