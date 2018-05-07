@@ -2,11 +2,6 @@ package models;
 
 import exceptions.*;
 import models.buildings.*;
-import models.soldiers.*;
-import utils.*;
-import models.buildings.Building;
-import models.buildings.DefensiveTower;
-import models.buildings.Storage;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierCollection;
@@ -16,7 +11,9 @@ import utils.Point;
 import utils.Size;
 
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Attack
 {
@@ -141,6 +138,7 @@ public class Attack
         {
             if (storage != null && gainedResourceFromStorageDestroying.get(storage) != null)
             {
+                System.out.println("storage type :" + storage.getType() + "gold :" + gainedResourceFromStorageDestroying.get(storage).getGold() + "elixir : " + gainedResourceFromStorageDestroying.get(storage).getElixir());
                 storage.decreaseCurrentAmount(gainedResourceFromStorageDestroying.get(storage).getElixir() + gainedResourceFromStorageDestroying.get(storage).getGold());
             }
         }

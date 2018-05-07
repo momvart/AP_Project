@@ -44,13 +44,16 @@ public class GeneralAttackHelper extends AttackHelper
                                 {
                                     Resource resourceClaimed = new Resource((int)Math.floor(1.0 * damageRael / (BuildingValues.getBuildingInfo(target.getType()).getInitialStrength() + target.getLevel() * 10) * storage.getCurrentAmount()), 0);// 10 may vary in the up and coming configs
                                     attack.addToClaimedResource(resourceClaimed);
+                                    //System.out.println("gold claimed amount:" + resourceClaimed.getGold());
                                     attack.addToGainedResourceOfStorageDesroying(storage, resourceClaimed);
+                                    break;
                                 }
                                 case 4:
                                 {
                                     Resource resourceClaimed = new Resource(0, (int)Math.floor(1.0 * damageRael / (BuildingValues.getBuildingInfo(target.getType()).getInitialStrength() + target.getLevel() * 10) * storage.getCurrentAmount()));// 10 may vary in the up and coming configs
                                     attack.addToClaimedResource(resourceClaimed); // 10 may vary in the up and coming configs
                                     attack.addToGainedResourceOfStorageDesroying(storage, resourceClaimed);
+                                    break;
                                 }
                             }
                         }
@@ -62,6 +65,7 @@ public class GeneralAttackHelper extends AttackHelper
                     if (target.getStrength() <= 0)
                     {
                         target.setDestroyed(true);
+                        attack.addScore(BuildingValues.getBuildingInfo(target.getType()).getDestroyScore());
                         attack.addToClaimedResource(target.getBuildingInfo().getDestroyResource());
                     }
                 }
