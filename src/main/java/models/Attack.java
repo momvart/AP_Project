@@ -1,26 +1,19 @@
 package models;
 
 import exceptions.*;
-import models.buildings.Building;
-import models.buildings.DefensiveTower;
-import models.soldiers.MoveType;
-import models.soldiers.Soldier;
-import models.soldiers.SoldierCollection;
-import models.soldiers.SoldierValues;
-import utils.MapCellNode;
-import utils.Point;
-import utils.Size;
+import models.buildings.*;
+import models.soldiers.*;
+import utils.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
+import java.util.stream.*;
 
 public class Attack
 {
     private final int MAX_SOLDIER_IN_CELL = 5;
     private SoldierCollection soldiers = new SoldierCollection();
     private Resource claimedResource;
+    private final Resource totalResource;
     private int claimedScore;
     private AttackMap map;
     private int turn;
@@ -31,6 +24,16 @@ public class Attack
     {
         this.map = map;
         claimedResource = new Resource(0, 0);
+
+        int totalGold = 0, totalElixir = 0;
+        for (Building storage : map.getBuildings(GoldStorage.BUILDING_TYPE))
+            totalGold += ((GoldStorage)storage).getCurrentAmount();
+        for (Building storage : map.getBuildings(ElixirStorage.BUILDING_TYPE))
+            totalElixir += ((ElixirStorage)storage).getCurrentAmount();
+
+        totalResource = new Resource(totalGold, totalElixir);
+        map.getAllBuildings().forEach(building -> totalResource.increase(building.getBuildingInfo().getDestroyResource()));
+
         soldiersOnLocations = new SoldierCoordinatedCollection(map.getSize());
     }
 
@@ -61,6 +64,12 @@ public class Attack
     {
         claimedResource.increase(destroyResource);
     }
+
+    public Resource getTotalResource()
+    {
+        return totalResource;
+    }
+
     //endregion
 
     public AttackMap getMap()

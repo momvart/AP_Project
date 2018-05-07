@@ -89,8 +89,8 @@
     "buildDuration": 100,
     "destroyScore": 8,
     "destroyResource": {
-      "gold": 200,
-      "elixir": 0
+      "gold": 1000,
+      "elixir": 500
     },
     "initialStrength": 1000,
     "ustginc": 500,

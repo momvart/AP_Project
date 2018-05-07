@@ -80,7 +80,8 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
         System.out.printf("Gold achieved: %d\nElixir achieved: %d\nGold remained in map: %d\nElixir remained in map: %d\n",
                 claimed.getGold(),
                 claimed.getElixir(),
-                0, 0);//TODO: get remained resources.
+                theAttack.getTotalResource().getGold() - claimed.getGold(),
+                theAttack.getTotalResource().getElixir() - claimed.getElixir());
     }
 
     private void showTowerStatus(DefensiveTower tower)
