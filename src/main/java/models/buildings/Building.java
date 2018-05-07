@@ -10,21 +10,21 @@ public abstract class Building
 {
     private int buildingNum = -1;
     protected Point location;
-    protected boolean destroyed = false;
+    protected transient boolean destroyed = false;
     protected int level;
-    protected int strength;
+    protected transient int strength;
     protected BuildStatus buildStatus = BuildStatus.BUILT;
 
     public Building()
     {
-
+        ensureLevel();
     }
 
     public Building(Point location, int buildingNum)
     {
+        this();
         this.location = location;
         this.buildingNum = buildingNum;
-        this.strength = BuildingValues.getBuildingInfo(getType()).getInitialStrength();
     }
 
     public long getId()

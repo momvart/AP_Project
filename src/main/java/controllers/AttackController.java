@@ -117,6 +117,8 @@ public class AttackController implements IMenuClickListener, ICommandManager
         }
         catch (InvalidCommandException ex)
         {
+            if (theAttack == null)
+                throw ex;
             Matcher m;
             if (command.matches("(?i)start\\s+select"))
             {

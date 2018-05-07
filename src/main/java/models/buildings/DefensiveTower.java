@@ -11,8 +11,8 @@ import java.util.List;
 
 public abstract class DefensiveTower extends Building
 {
-    private int damagePower;
-    private int range;
+    private transient int damagePower;
+    private transient int range;
 
     public DefensiveTower(Point location, int buildingNum)
     {

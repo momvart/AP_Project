@@ -15,7 +15,7 @@ public abstract class Mine extends VillageBuilding
 {
     private static final String RESOURCE_ADDPDT = "RAPDT";
 
-    protected int resourceAddPerDeltaT;
+    protected transient int resourceAddPerDeltaT;
     protected int minedResources;
 
     public Mine(Point location, int buildingNum)

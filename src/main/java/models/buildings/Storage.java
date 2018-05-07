@@ -7,7 +7,7 @@ import utils.Point;
 
 public abstract class Storage extends VillageBuilding
 {
-    private final String INITIAL_CAPACITY_KEY = "initcap";
+    private final static String INITIAL_CAPACITY_KEY = "initcap";
 
     protected int capacity;
 

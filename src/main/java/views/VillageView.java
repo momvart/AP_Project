@@ -184,8 +184,7 @@ public class VillageView extends ConsoleMenuContainerView
 
     public void showAttackInfo(DefensiveTower tower)
     {
-        //TODO: what's target?
-        System.out.println("Target: ");
+        System.out.println("Target: " + tower.getDefenseType().getPrintName());
         System.out.println("Damage: " + tower.getDamagePower());
         System.out.println("Damage Range: " + tower.getRange());
     }
