@@ -1,12 +1,20 @@
 package models;
 
 import exceptions.*;
-import models.buildings.*;
-import models.soldiers.*;
-import utils.*;
+import models.buildings.Building;
+import models.buildings.DefensiveTower;
+import models.soldiers.MoveType;
+import models.soldiers.Soldier;
+import models.soldiers.SoldierCollection;
+import models.soldiers.SoldierValues;
+import utils.MapCellNode;
+import utils.Point;
+import utils.Size;
 
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Attack
 {
@@ -213,25 +221,37 @@ public class Attack
         return getAllUnits().findAny().isPresent() && getAllUnits().allMatch(soldier -> soldier.getAttackHelper().isDead());
     }
 
-    public List<Soldier> getSoldiersInRange(Point location, int range, int secondRange, DefenseType defenseType) throws SoldierNotFoundException
+    public List<Soldier> getSoldiersInRange(Point location, int range, MoveType moveType) throws SoldierNotFoundException
     {
-        List<Soldier> soldiers = null;
-        soldiers = soldiersOnLocations.getSoldiers(getNearestSoldier(location, range, defenseType));
-        try
-        {
-            List<Soldier> secondSoldiers = soldiersOnLocations.getSoldiers(getNearestSoldier(soldiers.get(0).getLocation(), secondRange, defenseType));
-            soldiers.addAll(secondSoldiers);
-        }
-        catch (SoldierNotFoundException ex)
-        {
-            return soldiers;
-        }
+        List<Soldier> soldiers = new ArrayList<>();
+        Point point;
+        int x = location.getX();
+        int y = location.getY();
+        for (int k = 1; k <= range; k++)
+            for (int i = -1; x + k * i >= 0 && x + k * i < map.getSize().getWidth() && i <= 1; i++)
+                for (int j = -1; y + k * j >= 0 && y + k * j < map.getSize().getHeight() && j <= 1; j++)
+                {
+                    if (i == 0 && j == 0)
+                        continue;
+                    if (moveType != null)
+                    {
+                        if (numberOfSoldiersIn(x + k * i, y + k * j, moveType) > 0)
+                        {
+                            soldiers.addAll(soldiersOnLocations.getSoldiers(x + k * i, y + k * j, moveType).collect(Collectors.toList()));
+                        }
+                    }
+                    else if (numberOfSoldiersIn(x + k * i, y + k * j) > 0)
+                    {
+                        soldiers.addAll(soldiersOnLocations.getSoldiers(x + k * i, y + k * j));
+                    }
+                }
+        if (soldiers.isEmpty())
+            throw new SoldierNotFoundException("Soldier not found", "SoldierNotFound");
         return soldiers;
     }
 
-    public Point getNearestSoldier(Point location, int range, DefenseType defenseType) throws SoldierNotFoundException
+    public Point getNearestSoldier(Point location, int range, MoveType moveType) throws SoldierNotFoundException
     {
-        MoveType moveType = defenseType == DefenseType.AIR ? MoveType.AIR : defenseType == DefenseType.GROUND ? MoveType.GROUND : null;
         Point min = new Point(-30, -30);
         Point point;
         int x = location.getX();
@@ -244,6 +264,7 @@ public class Attack
                     if (i == 0 && j == 0)
                         continue;
                     if (moveType != null)
+                    {
                         if (numberOfSoldiersIn(x + k * i, y + k * j, moveType) > 0)
                         {
                             point = new Point(x + k * i, y + k * j);
@@ -252,16 +273,18 @@ public class Attack
                             else
                                 min = new Point(point.getX(), point.getY());
                         }
-                        else if (numberOfSoldiersIn(x + k * i, y + k * j) > 0)
-                        {
-                            point = new Point(x + k * i, y + k * j);
-                            if (Point.euclideanDistance2nd(point, location) > Point.euclideanDistance2nd(min, location))
-                                break outer;
-                            else
-                                min = new Point(point.getX(), point.getY());
-                        }
+                    }
+                    else if (numberOfSoldiersIn(x + k * i, y + k * j) > 0)
+                    {
+                        point = new Point(x + k * i, y + k * j);
+                        if (Point.euclideanDistance2nd(point, location) > Point.euclideanDistance2nd(min, location))
+                            break outer;
+                        else
+                            min = new Point(point.getX(), point.getY());
+                    }
+
                 }
-        if (!min.equals(new Point(-30, -30)))
+        if (!min.equals(new Point(-30, -30)) && Point.euclideanDistance(location, min) <= range)
             return min;
         else throw new SoldierNotFoundException("Soldier not found", "SoldierNotFound");
     }
@@ -302,6 +325,8 @@ public class Attack
         {
             if (getSoldiers(x, y).size() == 0)
                 return Stream.empty();
+            if (moveType == null)
+                return getSoldiers(x, y).stream();
             Iterator<Soldier> iterator;
             if (moveType == MoveType.GROUND)
                 iterator = getSoldiers(x, y).iterator();
