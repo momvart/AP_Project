@@ -69,10 +69,20 @@ public abstract class AttackHelper
 
     public void removeSoldierIfDead()
     {
-        if (health <= 0)
+        if (soldier.getType() != 6)//means that soldier isnt healer
         {
-            setDead(true);
-            soldier = null;
+            if (health <= 0)
+            {
+                setDead(true);
+                soldier = null;
+            }
+        }
+        else
+        {//soldier is healer
+            Healer healer = (Healer)soldier;
+            HealerAttackHelper healerAttackHelper = (HealerAttackHelper)healer.getAttackHelper();
+            if (healerAttackHelper.getTimeTillDie() <= 0)
+                setDead(true);
         }
     }
 
