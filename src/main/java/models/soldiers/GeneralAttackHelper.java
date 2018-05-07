@@ -71,6 +71,7 @@ public class GeneralAttackHelper extends AttackHelper
         if (target.getStrength() <= 0)
         {
             target.setDestroyed(true);
+            attack.addScore(target.getBuildingInfo().getDestroyScore());
             attack.addToClaimedResource(target.getBuildingInfo().getDestroyResource());
         }
 
