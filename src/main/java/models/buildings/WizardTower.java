@@ -23,7 +23,7 @@ public class WizardTower extends DefensiveTower
         try
         {
             soldiersInRange = attack.getSoldiersInRange(this.location, getRange(), SECOND_RANGE, getDefenseType());
-            soldiersInRange.forEach(soldier -> soldier.decreaseHealth(this.getDamagePower()));
+            soldiersInRange.forEach(soldier -> soldier.getAttackHelper().decreaseHealth(this.getDamagePower()));
         }
         catch (SoldierNotFoundException e)
         {

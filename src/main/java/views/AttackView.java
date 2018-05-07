@@ -1,12 +1,16 @@
 package views;
 
-import menus.*;
-import models.*;
+import menus.IMenuContainer;
+import menus.Menu;
+import models.Attack;
+import models.AttackMap;
+import models.Resource;
 import models.buildings.*;
-import models.soldiers.*;
-import views.dialogs.*;
+import models.soldiers.Soldier;
+import views.dialogs.DialogResult;
+import views.dialogs.TextInputDialog;
 
-import java.util.*;
+import java.util.Scanner;
 
 public class AttackView extends ConsoleMenuContainerView implements IMenuContainer
 {
@@ -124,7 +128,7 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
                 soldier.getLevel(),
                 soldier.getLocation().getX(),
                 soldier.getLocation().getY(),
-                soldier.getHealth());
+                soldier.getAttackHelper().getHealth());
     }
 
     public void showSoldiersStatus(int soldierType)

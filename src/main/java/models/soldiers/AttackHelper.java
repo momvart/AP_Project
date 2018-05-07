@@ -8,6 +8,7 @@ import java.util.List;
 
 public abstract class AttackHelper
 {
+    private int health;
     protected Attack attack;
     protected Soldier soldier;
     private boolean isSoldierDeployed = false;
@@ -17,6 +18,17 @@ public abstract class AttackHelper
     {
         this.attack = attack;
         this.soldier = soldier;
+        this.health = getInitialHelthOfUnitThisLevel();
+    }
+
+    public int getHealth()
+    {
+        return health;
+    }
+
+    public void setHealth(int health)
+    {
+        this.health = health;
     }
 
     public boolean isSoldierDeployed()
@@ -57,7 +69,7 @@ public abstract class AttackHelper
 
     public void removeSoldierIfDead()
     {
-        if (soldier.getHealth() <= 0)
+        if (health <= 0)
         {
             setDead(true);
             soldier = null;
@@ -79,6 +91,29 @@ public abstract class AttackHelper
         }
         return pointToGo;
     }
+
+    public void increaseHealth(int amount)
+    {
+        health = Math.min(this.getHealth() + amount, getInitialHelthOfUnitThisLevel());
+    }
+
+    public void decreaseHealth(int amount)
+    {
+        health = Math.max(health - amount, 0);
+        if (health <= 0)
+            setDead(true);
+    }
+
+    public void heal()
+    {
+        setHealth(getInitialHelthOfUnitThisLevel());
+    }
+
+    public int getInitialHelthOfUnitThisLevel()
+    {
+        return SoldierValues.getSoldierInfo(soldier.getType()).getInitialHealth() + (soldier.getLevel()) * 5;
+    }
+
 
     public abstract void move();
 
