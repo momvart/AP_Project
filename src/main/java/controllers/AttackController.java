@@ -29,11 +29,15 @@ import java.util.regex.Matcher;
 
 public class AttackController implements IMenuClickListener, ICommandManager
 {
+    private static final int MAX_ATTACK_TURN = 10000;
+
     private static final String SELECT_UNIT_PATTERN = "select\\s+(?<type>\\w+)\\s+(?<count>\\d+)";
     private static final String PUT_UNIT_PATTERN = "put\\s+(?<type>\\w+)\\s+(?<count>\\d+)\\s+in\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)";
 
     private AttackView theView;
     private Attack theAttack;
+
+    private boolean finished = false;
 
     public AttackController(AttackView view)
     {
@@ -49,6 +53,11 @@ public class AttackController implements IMenuClickListener, ICommandManager
         mainMenu.insertItem(new Menu(Menu.Id.ATTACK_MAIN_BACK, "back"));
         theView.setCurrentMenu(mainMenu, true);
         childCommandManager = theView;
+    }
+
+    public boolean isFinished()
+    {
+        return finished;
     }
 
     private void setTheAttack(Attack theAttack)
@@ -82,11 +91,10 @@ public class AttackController implements IMenuClickListener, ICommandManager
                 }
                 break;
                 case Menu.Id.ATTACK_MAIN_BACK:
-                    quitAttack();
+                    quitAttack(Attack.QuitReason.USER);
                     break;
                 case Menu.Id.ATTACK_MAP_ATTACK:
                 {
-                    //theAttack = new Attack();
                     theView.setCurrentMenu(null, false);
                 }
                 break;
@@ -121,12 +129,12 @@ public class AttackController implements IMenuClickListener, ICommandManager
                 putUnits(SoldierValues.getTypeByName(m.group("type")), Integer.parseInt(m.group("count")), location);
             }
             else if (command.matches("(?i)go\\s+next\\s+turn"))
-                theAttack.passTurn();
+                passTurn();
             else if ((m = ConsoleUtilities.getMatchedCommand("turn\\s+(\\d+)", command)) != null)
             {
                 int count = Integer.parseInt(m.group(1));
                 for (int i = 0; i < count; i++)
-                    theAttack.passTurn();
+                    passTurn();
             }
             else if (command.matches("(?i)status\\s+resources"))
                 theView.showResourcesStatus();
@@ -141,8 +149,8 @@ public class AttackController implements IMenuClickListener, ICommandManager
             else if (command.matches("(?i)status\\s+all"))
                 theView.showAllAll();
             else if (command.matches("(?i)quit\\s+attack"))
-                quitAttack();
-            else if (command.equalsIgnoreCase("showmap"))
+                quitAttack(Attack.QuitReason.USER);
+            else if (command.equalsIgnoreCase("showmap")) //Extension method for viewing map
                 theView.viewMapStatus();
             else
                 throw ex;
@@ -187,10 +195,25 @@ public class AttackController implements IMenuClickListener, ICommandManager
         theAttack.putUnits(soldierType, count, location);
     }
 
-    private void quitAttack()
+    private void passTurn()
     {
-        theAttack.quitAttack();
-        theView.showAttackEndMessage();
+        theAttack.passTurn();
+
+        if (theAttack.getTurn() >= MAX_ATTACK_TURN)
+            quitAttack(Attack.QuitReason.TURN);
+
+        if (theAttack.areBuildingsDestroyed())
+            quitAttack(Attack.QuitReason.MAP_DESTROYED);
+
+        if (theAttack.areSoldiersDead())
+            quitAttack(Attack.QuitReason.SOLDIERS_DIE);
+    }
+
+    private void quitAttack(Attack.QuitReason reason)
+    {
+        theAttack.quitAttack(reason);
+        theView.showAttackEndMessage(reason);
+        finished = true;
     }
 
     private void openMap(Path path) throws MyJsonException, MyIOException

@@ -62,7 +62,7 @@ public class HealerAttackHelper extends AttackHelper
             if (destination != null)
             {
                 Point pointToGo = getPointToGo(destination);
-                attack.displayMove(soldier, getSoldierLocation(), pointToGo);
+                attack.moveOnLocation(soldier, getSoldierLocation(), pointToGo);
                 soldier.setLocation(pointToGo);
             }
         }

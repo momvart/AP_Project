@@ -9,6 +9,7 @@ import utils.Size;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class Map
 {
@@ -99,16 +100,22 @@ public class Map
      */
     public boolean isEmptyForBuilding(int x, int y)
     {
-        if (x == 0 || y == 0)
-            return false;
-        if (x == size.getWidth() - 1 || y == size.getHeight() - 1)
-            return false;
-        return isEmpty(x, y);
+        return !isMarginal(x, y) && isEmpty(x, y);
     }
 
     public boolean isEmpty(int x, int y)
     {
         return isValid(x, y) && map[x][y] == null;
+    }
+
+    public boolean isMarginal(int x, int y)
+    {
+        return x == 0 || y == 0 || x == size.getWidth() - 1 || y == size.getHeight() - 1;
+    }
+
+    public boolean isMarginal(Point location)
+    {
+        return isMarginal(location.getX(), location.getY());
     }
 
     ///endregion
@@ -159,14 +166,14 @@ public class Map
         return retVal;
     }
 
-    public ArrayList<MySortedList<Long, Building>> getAllBuildings()
-    {
-        return buildings;
-    }
-
     public MySortedList<Long, Building> getBuildings(int buildingType)
     {
         return buildings.get(buildingType - 1);
+    }
+
+    public Stream<Building> getAllBuildings()
+    {
+        return buildings.stream().flatMap(list -> list.getValues().stream());
     }
 
     public <T extends Building> void forEachBuilding(Class<T> type, Consumer<T> consumer)

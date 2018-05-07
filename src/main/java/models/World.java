@@ -80,7 +80,7 @@ public class World
         loadGame(new Game()
         {{
             initialize();
-            getVillage().getResources().increase(2000, 2000);
+            getVillage().getResources().increase(10000, 2000);
         }});
     }
 

@@ -33,6 +33,9 @@ public class VillageController implements IMenuClickListener, ICommandManager
     @Override
     public void manageCommand(String command) throws ConsoleException
     {
+        if (childCommandManager instanceof AttackController)
+            if (((AttackController)childCommandManager).isFinished())
+                childCommandManager = theView;
         try
         {
             childCommandManager.manageCommand(command);

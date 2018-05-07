@@ -107,7 +107,7 @@ public class GeneralAttackHelper extends AttackHelper
             if (!isTargetInRange())
             {
                 Point pointToGo = getPointToGo(target.getLocation());
-                attack.displayMove(soldier, getSoldierLocation(), pointToGo);
+                attack.moveOnLocation(soldier, getSoldierLocation(), pointToGo);
                 soldier.setLocation(pointToGo);
             }
     }

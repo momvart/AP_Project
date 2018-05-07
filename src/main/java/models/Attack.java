@@ -1,20 +1,12 @@
 package models;
 
 import exceptions.*;
-import models.buildings.DefenseType;
-import models.buildings.DefensiveTower;
-import models.soldiers.MoveType;
-import models.soldiers.Soldier;
-import models.soldiers.SoldierCollection;
-import models.soldiers.SoldierValues;
-import utils.MapCellNode;
-import utils.Point;
-import utils.Size;
+import models.buildings.*;
+import models.soldiers.*;
+import utils.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
+import java.util.stream.*;
 
 public class Attack
 {
@@ -25,16 +17,19 @@ public class Attack
     private AttackMap map;
     private int turn;
 
-    private SoldierCollection soldiersOnMap = new SoldierCollection();
     private SoldierCoordinatedCollection soldiersOnLocations;
-
-    private PathFinder pathFinder = new PathFinder();
 
     public Attack(AttackMap map)
     {
         this.map = map;
         claimedResource = new Resource(0, 0);
         soldiersOnLocations = new SoldierCoordinatedCollection(map.getSize());
+    }
+
+    //region Turn, Score, Resource
+    public int getTurn()
+    {
+        return turn;
     }
 
     public SoldierCoordinatedCollection getSoldiersOnLocations()
@@ -49,12 +44,73 @@ public class Attack
         return claimedScore;
     }
 
-    public List<Point> getSoldierPath(Point start, Point target, boolean isFlying)
+    public Resource getClaimedResource()
     {
-        return pathFinder.getSoldierPath(start, target, isFlying);
+        return claimedResource;
     }
 
+    public void addToClaimedResource(Resource destroyResource)
+    {
+        claimedResource.increase(destroyResource);
+    }
+    //endregion
 
+    public AttackMap getMap()
+    {
+        return map;
+    }
+
+    public void passTurn()
+    {
+        getDeployedAliveUnits()
+                .forEach(soldier -> soldier.getAttackHelper().passTurn());
+
+        map.getAllDefensiveTowers().stream()
+                .filter(defensiveTower -> !defensiveTower.isDestroyed())
+                .forEach(defensiveTower -> defensiveTower.attack(this));
+
+        turn++;
+    }
+
+    public enum QuitReason
+    {
+        TURN,
+        USER,
+        MAP_DESTROYED,
+        SOLDIERS_DIE
+    }
+
+    public void quitAttack(QuitReason reason)
+    {
+        for (int i = 1; i < SoldierValues.SOLDIER_TYPES_COUNT; i++)
+            World.getVillage().getSoldiers(i).removeIf(soldier -> soldier.isParticipating(this) && soldier.getAttackHelper().isDead());
+        World.getVillage().addResource(claimedResource);
+        World.sCurrentGame.addScore(claimedScore);
+    }
+
+    //region Towers Management
+
+    public List<DefensiveTower> getAllTowers()
+    {
+        return map.getAllDefensiveTowers();
+    }
+
+    public List<DefensiveTower> getTowers(int towerType)
+    {
+        return map.getDefensiveTowers(towerType);
+    }
+
+    public boolean areBuildingsDestroyed()
+    {
+        return map.getAllBuildings().allMatch(Building::isDestroyed);
+    }
+    //endregion
+
+    //region Soldiers Management
+
+    /**
+     * Adds units to the list undeployed.
+     */
     public void addUnit(Soldier soldier)
     {
         soldiers.addSoldier(soldier);
@@ -63,40 +119,35 @@ public class Attack
 
     public void addUnits(List<Soldier> soldierList)
     {
-        soldierList.forEach(s ->
+        soldierList.forEach(this::addUnit);
+    }
+
+    private void putUnit(Soldier soldier, Point location)
+    {
+        if (map.isValid(location))
         {
-            soldiers.addSoldier(s);
-            s.participateIn(this);
-        });
+            soldier.setLocation(location);
+            soldier.getAttackHelper().setSoldierIsDeployed(true);
+            soldiersOnLocations.push(soldier, location);
+        }
     }
 
     public void putUnits(int unitType, int count, Point location) throws ConsoleException
     {
-        if (!isValid(location))
+        if (!map.isMarginal(location))
             throw new ConsoleRuntimeException("Invalid location.", location + " is not a marginal location.", new IllegalArgumentException("Invalid location"));
 
-        List<Soldier> available = getUnitsInToBeDeployed(unitType).collect(Collectors.toList());
-        int current = numberOfSoldiersIn(location);
-        if (MAX_SOLDIER_IN_CELL - current < count)
-        {
-            throw new FilledCellException(location, "Current: " + current);
-        }
-        else if (available == null || available.size() < count)
-        {
-            throw new NotEnoughSoldierException(unitType, available == null ? 0 : available.size(), count);
-        }
-        else
-        {
-            for (int i = 0; i < count; i++)
-            {
-                putUnit(available.get(i), location);
-            }
-        }
-    }
+        List<Soldier> available = getUnitsInToBeDeployed(unitType).limit(count).collect(Collectors.toList());
+        int current = numberOfSoldiersIn(location, SoldierValues.getSoldierInfo(unitType).getMoveType());
 
-    private boolean isValid(Point location)
-    {
-        return location.getY() == 0 || location.getY() == 29 || location.getX() == 0 || location.getX() == 29;//TODO 0 , 29 could be changed later on.they are representing the edges of the 30x30 map‌
+        if (MAX_SOLDIER_IN_CELL - current < count)
+            throw new FilledCellException(location, "Current: " + current);
+        else if (available == null || available.size() < count)
+            throw new NotEnoughSoldierException(unitType, available == null ? 0 : available.size(), count);
+        else
+            for (int i = 0; i < count; i++)
+                putUnit(available.get(i), location);
+
     }
 
     public int numberOfSoldiersIn(int x, int y)
@@ -114,42 +165,21 @@ public class Attack
         return numberOfSoldiersIn(location.getX(), location.getY());
     }
 
-    private void putUnit(Soldier soldier, Point location)
+    public int numberOfSoldiersIn(Point location, MoveType moveType)
     {
-        if (map.isValid(location))
-        {
-            soldier.setLocation(location);
-            soldier.getAttackHelper().setSoldierIsDeployed(true);
-            //soldiersOnMap.addSoldier(soldier);
-            soldiersOnLocations.push(soldier, location);
-        }
+        return (int)soldiersOnLocations.getSoldiers(location.getX(), location.getY(), moveType).count();
     }
 
-
+    /**
+     * @param unitType The soldier type that should be found.
+     * @return Soldiers that are not deployed yet
+     */
     public Stream<Soldier> getUnitsInToBeDeployed(int unitType)
     {
-        return getUnits(unitType).filter(s -> !s.getAttackHelper().isSoldierDeployed());
+        return soldiers.getSoldiers(unitType).stream().filter(s -> !s.getAttackHelper().isSoldierDeployed());
     }
 
-    public void passTurn()
-    {
-        getDeployedAliveUnits()
-                .forEach(soldier -> soldier.getAttackHelper().passTurn());
-
-        map.getAllDefensiveTowers().stream()
-                .filter(defensiveTower -> !defensiveTower.isDestroyed())
-                .forEach(defensiveTower -> defensiveTower.attack(this));
-
-        turn++;
-    }
-
-    public Resource getClaimedResource()
-    {
-        return claimedResource;
-    }
-
-
-    public Stream<Soldier> getUnits(int unitType)
+    public Stream<Soldier> getAliveUnits(int unitType)
     {
         return soldiers.getSoldiers(unitType).stream()
                 .filter(soldier -> soldier != null && !soldier.getAttackHelper().isDead());
@@ -168,32 +198,19 @@ public class Attack
                 .filter(soldier -> !soldier.getAttackHelper().isDead());
     }
 
+    public ArrayList<Soldier> getAllUnits(int unitType)
+    {
+        return soldiers.getSoldiers(unitType);
+    }
+
     public Stream<Soldier> getAllUnits()
     {
         return soldiers.getAllSoldiers();
     }
 
-    public List<DefensiveTower> getAllTowers()
+    public boolean areSoldiersDead()
     {
-        return map.getAllDefensiveTowers();
-    }
-
-    public List<DefensiveTower> getTowers(int towerType)
-    {
-        return map.getDefensiveTowers(towerType);
-    }
-
-    public void quitAttack()
-    {
-        for (int i = 1; i < SoldierValues.SOLDIER_TYPES_COUNT; i++)
-            World.getVillage().getSoldiers(i).removeIf(soldier -> soldier.getAttackHelper().isDead());
-        World.getVillage().addResource(claimedResource);
-        World.sCurrentGame.addScore(claimedScore);
-    }
-
-    public AttackMap getMap()
-    {
-        return map;
+        return getAllUnits().findAny().isPresent() && getAllUnits().allMatch(soldier -> soldier.getAttackHelper().isDead());
     }
 
     public List<Soldier> getSoldiersInRange(Point location, int range, int secondRange, DefenseType defenseType) throws SoldierNotFoundException
@@ -249,12 +266,7 @@ public class Attack
         else throw new SoldierNotFoundException("Soldier not found", "SoldierNotFound");
     }
 
-    public void addToClaimedResource(Resource destroyResource)
-    {
-        claimedResource.increase(destroyResource);
-    }
-
-    public void displayMove(Soldier soldier, Point soldierLocation, Point pointToGo)
+    public void moveOnLocation(Soldier soldier, Point soldierLocation, Point pointToGo)
     {
         soldiersOnLocations.move(soldier, soldierLocation, pointToGo);
     }
@@ -328,6 +340,15 @@ public class Attack
             push(soldier, to);
         }
     }
+    //endregion
+
+    //region Path Finding
+    private PathFinder pathFinder = new PathFinder();
+
+    public List<Point> getSoldierPath(Point start, Point target, boolean isFlying)
+    {
+        return pathFinder.getSoldierPath(start, target, isFlying);
+    }
 
     class PathFinder
     {
@@ -354,7 +375,7 @@ public class Attack
                 for (int i = -1; i <= 1; i++)
                     for (int j = -1; j <= 1; j++)
                         if (!(i == 0 && j == 0) &&
-                                ((map.isEmpty(x + i, y + j) || isFlying) || (target.getX() == x + i && target.getY() == y + j)))
+                                (((isFlying && map.isValid(x + i, y + j)) || map.isEmpty(x + i, y + j)) || (target.getX() == x + i && target.getY() == y + j)))
                         {
                             MapCellNode child = nodes[x + i][y + j];
                             if (child == null)
@@ -419,5 +440,7 @@ public class Attack
             return soldierPath;
         }
     }
+
+    //endregion
 
 }

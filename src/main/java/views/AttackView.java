@@ -83,7 +83,8 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
 
     private void showTowerStatus(DefensiveTower tower)
     {
-        System.out.printf("%s: level = %d in (%d, %d) health = %d\n",
+        System.out.printf("%s%s: level = %d in (%d, %d) health = %d\n",
+                tower.isDestroyed() ? "$$$" : "",
                 tower.getBuildingInfo().getName(),
                 tower.getLevel(),
                 tower.getLocation().getX(),
@@ -95,7 +96,8 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
     {
         if (building instanceof DefensiveTower)
             return;
-        System.err.printf("%s: level = %d in (%d, %d) health = %d\n",
+        System.err.printf("%s%s: level = %d in (%d, %d) health = %d\n",
+                building.isDestroyed() ? "$$$" : "",
                 building.getBuildingInfo().getName(),
                 building.getLevel(),
                 building.getLocation().getX(),
@@ -116,7 +118,8 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
 
     private void showSoldierStatus(Soldier soldier)
     {
-        System.out.printf("%s: level = %d in (%d, %d) with health = %d\n",
+        System.out.printf("%s%s: level = %d in (%d, %d) with health = %d\n",
+                soldier.getAttackHelper().isDead() ? "💀💀💀" : "",
                 soldier.getSoldierInfo().getName(),
                 soldier.getLevel(),
                 soldier.getLocation().getX(),
@@ -126,7 +129,7 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
 
     public void showSoldiersStatus(int soldierType)
     {
-        theAttack.getUnits(soldierType).forEach(this::showSoldierStatus);
+        theAttack.getAllUnits(soldierType).forEach(this::showSoldierStatus);
     }
 
     public void showAllSoldiersStatus()
@@ -141,12 +144,14 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
         showAllTowersStatus();
     }
 
-    public void showAttackEndMessage()
+    public void showAttackEndMessage(Attack.QuitReason quitReason)
     {
         System.out.printf("The wat ended with %d golds, %d elixir and %d scores achieved!\n",
                 theAttack.getClaimedResource().getGold(),
                 theAttack.getClaimedResource().getElixir(),
                 theAttack.getClaimedScore());
+
+        System.err.println(quitReason.toString());
     }
 
     public void viewMapStatus()
