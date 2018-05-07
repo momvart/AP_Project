@@ -4,16 +4,6 @@ import exceptions.*;
 import models.buildings.*;
 import models.soldiers.*;
 import utils.*;
-import models.buildings.Building;
-import models.buildings.DefensiveTower;
-import models.buildings.Storage;
-import models.soldiers.MoveType;
-import models.soldiers.Soldier;
-import models.soldiers.SoldierCollection;
-import models.soldiers.SoldierValues;
-import utils.MapCellNode;
-import utils.Point;
-import utils.Size;
 
 import java.util.*;
 import java.util.stream.*;
@@ -27,7 +17,7 @@ public class Attack
     private int claimedScore;
     private AttackMap map;
     private int turn;
-    private HashMap<Storage, Resource> gainedResourceFromStorageDestroying = new HashMap<>();
+    private HashMap<Storage, Resource> claimedResourceStorages = new HashMap<>();
 
     private SoldierCoordinatedCollection soldiersOnLocations;
 
@@ -73,13 +63,13 @@ public class Attack
 
     public void addToGainedResourceOfStorageDesroying(Storage storage, Resource resource)
     {
-        if (gainedResourceFromStorageDestroying.get(resource) != null)
+        if (claimedResourceStorages.get(storage) != null)
         {
-            gainedResourceFromStorageDestroying.put(storage, addTwo(gainedResourceFromStorageDestroying.get(resource), resource));
+            claimedResourceStorages.put(storage, addTwo(claimedResourceStorages.get(storage), resource));
         }
         else
         {
-            gainedResourceFromStorageDestroying.put(storage, resource);
+            claimedResourceStorages.put(storage, resource);
         }
     }
 
@@ -137,11 +127,11 @@ public class Attack
 
     private void decreaseLootFromDefenderStorages()
     {
-        for (Storage storage : gainedResourceFromStorageDestroying.keySet())
+        for (Storage storage : claimedResourceStorages.keySet())
         {
-            if (storage != null && gainedResourceFromStorageDestroying.get(storage) != null)
+            if (storage != null && claimedResourceStorages.get(storage) != null)
             {
-                storage.decreaseCurrentAmount(gainedResourceFromStorageDestroying.get(storage).getElixir() + gainedResourceFromStorageDestroying.get(storage).getGold());
+                storage.decreaseCurrentAmount(claimedResourceStorages.get(storage).getElixir() + claimedResourceStorages.get(storage).getGold());
             }
         }
     }

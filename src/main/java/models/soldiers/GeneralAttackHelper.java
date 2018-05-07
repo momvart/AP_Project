@@ -2,9 +2,7 @@ package models.soldiers;
 
 import models.Attack;
 import models.Resource;
-import models.buildings.Building;
-import models.buildings.BuildingValues;
-import models.buildings.Storage;
+import models.buildings.*;
 import utils.Point;
 
 import java.util.ArrayList;
@@ -25,46 +23,57 @@ public class GeneralAttackHelper extends AttackHelper
     @Override
     public void fire()
     {
-        if (soldier != null && !soldier.getAttackHelper().isDead())
-            if (target != null)
-                if (isTargetInRange())
-                {
-                    if (target.getStrength() > 0 && !target.isDestroyed())
-                    {
-                        if (target.getType() == 3 || target.getType() == 4)
-                        {
-                            Storage storage = (Storage)target;
-                            int initialStrength = storage.getStrength();
-                            storage.decreaseStrength(getDamage());
-                            int finalStrength = Math.max(storage.getStrength(), 0);
-                            int damageRael = initialStrength - finalStrength;
-                            switch (target.getType())
-                            {
-                                case 3:
-                                {
-                                    Resource resourceClaimed = new Resource((int)Math.floor(1.0 * damageRael / (BuildingValues.getBuildingInfo(target.getType()).getInitialStrength() + target.getLevel() * 10) * storage.getCurrentAmount()), 0);// 10 may vary in the up and coming configs
-                                    attack.addToClaimedResource(resourceClaimed);
-                                    attack.addToGainedResourceOfStorageDesroying(storage, resourceClaimed);
-                                }
-                                case 4:
-                                {
-                                    Resource resourceClaimed = new Resource(0, (int)Math.floor(1.0 * damageRael / (BuildingValues.getBuildingInfo(target.getType()).getInitialStrength() + target.getLevel() * 10) * storage.getCurrentAmount()));// 10 may vary in the up and coming configs
-                                    attack.addToClaimedResource(resourceClaimed); // 10 may vary in the up and coming configs
-                                    attack.addToGainedResourceOfStorageDesroying(storage, resourceClaimed);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            target.decreaseStrength(getDamage());
-                        }
-                    }
-                    if (target.getStrength() <= 0)
-                    {
-                        target.setDestroyed(true);
-                        attack.addToClaimedResource(target.getBuildingInfo().getDestroyResource());
-                    }
-                }
+        if (soldier == null || soldier.getAttackHelper().isDead())
+            return;
+        if (target == null)
+            return;
+        if (!isTargetInRange())
+            return;
+
+        if (target.getStrength() > 0 && !target.isDestroyed())
+        {
+            int initialStrength = target.getStrength();
+            target.decreaseStrength(getDamage());
+
+            if (target instanceof Storage)
+            {
+                Storage storage = (Storage)target;
+
+                int finalStrength = Math.max(storage.getStrength(), 0);
+                int damage = initialStrength - finalStrength;
+
+                int claimedAmount = finalStrength == 0 ? storage.getCurrentAmount() : (int)((float)storage.getCurrentAmount() * damage / initialStrength);
+
+                if (storage instanceof GoldStorage)
+                    attack.addToClaimedResource(new Resource(claimedAmount, 0));
+                else
+                    attack.addToClaimedResource(new Resource(0, claimedAmount));
+
+                storage.decreaseCurrentAmount(claimedAmount);
+//                switch (target.getType())
+//                {
+//                    case GoldStorage.BUILDING_TYPE:
+//                    {
+//                        Resource resourceClaimed = new Resource((int)Math.floor(1.0 * damageRael / (BuildingValues.getBuildingInfo(target.getType()).getInitialStrength() + target.getLevel() * 10) * storage.getCurrentAmount()), 0);// 10 may vary in the up and coming configs
+//                        attack.addToClaimedResource(resourceClaimed);
+//                        attack.addToGainedResourceOfStorageDesroying(storage, resourceClaimed);
+//                    }
+//                    case ElixirStorage.BUILDING_TYPE:
+//                    {
+//                        Resource resourceClaimed = new Resource(0, (int)Math.floor(1.0 * damageRael / (BuildingValues.getBuildingInfo(target.getType()).getInitialStrength() + target.getLevel() * 10) * storage.getCurrentAmount()));// 10 may vary in the up and coming configs
+//                        attack.addToClaimedResource(resourceClaimed); // 10 may vary in the up and coming configs
+//                        attack.addToGainedResourceOfStorageDesroying(storage, resourceClaimed);
+//                    }
+//                }
+            }
+        }
+
+        if (target.getStrength() <= 0)
+        {
+            target.setDestroyed(true);
+            attack.addToClaimedResource(target.getBuildingInfo().getDestroyResource());
+        }
+
     }
 
     private boolean isTargetInRange()
