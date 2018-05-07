@@ -89,7 +89,7 @@ public class HealerAttackHelper extends AttackHelper
             {
                 for (Soldier target : targets)
                 {
-                    System.out.println("healer healing building type:" + target.getType() + "in amount of" + getDamage());
+                    System.out.println("healer healing soldier type:" + target.getType() + "in amount of" + getDamage());
                     target.getAttackHelper().increaseHealth(getDamage());
                 }
             }

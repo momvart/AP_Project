@@ -3,6 +3,7 @@ package models;
 import exceptions.*;
 import models.buildings.Building;
 import models.buildings.DefensiveTower;
+import models.buildings.Storage;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierCollection;
@@ -24,6 +25,7 @@ public class Attack
     private int claimedScore;
     private AttackMap map;
     private int turn;
+    private HashMap<Storage, Resource> gainedResourceFromStorageDestroying = new HashMap<>();
 
     private SoldierCoordinatedCollection soldiersOnLocations;
 
@@ -56,6 +58,24 @@ public class Attack
     {
         return claimedResource;
     }
+
+    public void addToGainedResourceOfStorageDesroying(Storage storage, Resource resource)
+    {
+        if (gainedResourceFromStorageDestroying.get(resource) != null)
+        {
+            gainedResourceFromStorageDestroying.put(storage, addTwo(gainedResourceFromStorageDestroying.get(resource), resource));
+        }
+        else
+        {
+            gainedResourceFromStorageDestroying.put(storage, resource);
+        }
+    }
+
+    private Resource addTwo(Resource resource1, Resource resource2)
+    {
+        return new Resource(resource1.getGold() + resource2.getGold(), resource1.getElixir() + resource2.getElixir());
+    }
+
 
     public void addToClaimedResource(Resource destroyResource)
     {
@@ -93,7 +113,19 @@ public class Attack
         for (int i = 1; i < SoldierValues.SOLDIER_TYPES_COUNT; i++)
             World.getVillage().getSoldiers(i).removeIf(soldier -> soldier.isParticipating(this) && soldier.getAttackHelper().isDead());
         World.getVillage().addResource(claimedResource);
+        decreaseLootFromDefenderStorages();
         World.sCurrentGame.addScore(claimedScore);
+    }
+
+    private void decreaseLootFromDefenderStorages()
+    {
+        for (Storage storage : gainedResourceFromStorageDestroying.keySet())
+        {
+            if (storage != null && gainedResourceFromStorageDestroying.get(storage) != null)
+            {
+                storage.decreaseCurrentAmount(gainedResourceFromStorageDestroying.get(storage).getElixir() + gainedResourceFromStorageDestroying.get(storage).getGold());
+            }
+        }
     }
 
     //region Towers Management

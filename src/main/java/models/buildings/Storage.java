@@ -31,6 +31,12 @@ public abstract class Storage extends VillageBuilding
         return currentAmount;
     }
 
+    public void decreaseCurrentAmount(int amount)
+    {
+        currentAmount = Math.max(currentAmount - amount, 0);
+    }
+
+
     @Override
     public void upgrade()
     {
