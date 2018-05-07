@@ -62,8 +62,6 @@ public class HealerAttackHelper extends AttackHelper
     public void passTurn()
     {
         ageOneDeltaT();
-        if (timeTillDie <= 0)
-            setDead(true);
         super.passTurn();
     }
 
