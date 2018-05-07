@@ -68,6 +68,6 @@ public abstract class DefensiveTower extends Building
 
     public void showLog(Soldier soldier)
     {
-        System.err.format("%s attacked by %s with damage power of %d", soldier.getSoldierInfo().getName(), getName(), getDamagePower());
+        System.err.format("%s attacked by %s with damage power of %d\n", soldier.getSoldierInfo().getName(), getName(), getDamagePower());
     }
 }

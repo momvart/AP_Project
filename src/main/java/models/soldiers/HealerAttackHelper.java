@@ -145,7 +145,7 @@ public class HealerAttackHelper extends AttackHelper
         {
             for (Soldier soldier : soldiers)
             {
-                if (soldier != null && isSoldierDeployed() && !soldier.getAttackHelper().isDead() && isSoldierDeployed() && soldier.getType() != 6 && soldier.getType() != 3)//TODO note that 6 is the type of healer and 3 is the type of dragon 2 type of soldiers attacking in air
+                if (soldier != null && isSoldierDeployed() && !soldier.getAttackHelper().isDead() && soldier.getMoveType() == MoveType.GROUND)
                 {
                     if (soldier.getLocation() != null && soldier.getLocation().getX() >= 0 && soldier.getLocation().getY() >= 0)
                     {
@@ -171,7 +171,7 @@ public class HealerAttackHelper extends AttackHelper
         {
             for (Soldier soldier : soldiers)
             {
-                if (soldier != null && !soldier.getAttackHelper().isDead() && isSoldierDeployed() && soldier.getType() != 6 && soldier.getType() != 3) //TODO ‌note that 6 is the type of healer and 3 is the type of dragon 2 type of soldiers attacking in air
+                if (soldier != null && !soldier.getAttackHelper().isDead() && isSoldierDeployed() && soldier.getMoveType() == MoveType.GROUND)
                 {
                     if (Point.euclideanDistance(soldier.getLocation(), getSoldierLocation()) - getRange() < 0.01)
                     {

@@ -20,6 +20,6 @@ public class Healer extends Soldier
     @Override
     public void participateIn(Attack attack)
     {
-        setAttackHelper(new HealerAttackHelper(attack, this));
+        attackHelper = new HealerAttackHelper(attack, this);
     }
 }

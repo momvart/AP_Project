@@ -44,6 +44,16 @@ public abstract class Building
         return buildingNum;
     }
 
+    /**
+     * CAUTION: Don't change building num unless if you are deserializing or data is lost.
+     *
+     * @param buildingNum
+     */
+    public void setBuildingNum(int buildingNum)
+    {
+        this.buildingNum = buildingNum;
+    }
+
     public Point getLocation()
     {
         return location;

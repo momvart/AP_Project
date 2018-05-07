@@ -23,6 +23,7 @@ public class Village
     public void initialize()
     {
         map = new Map(new Size(30, 30));
+        map.initialize();
         constructionManager = new ConstructionManager();
         soldiers = new SoldierCollection();
     }

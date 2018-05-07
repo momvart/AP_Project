@@ -7,7 +7,7 @@ public abstract class Soldier
 {
     private int level;
     private Point location;
-    private AttackHelper attackHelper;
+    protected AttackHelper attackHelper;
 
     public Soldier()
     {
@@ -69,11 +69,6 @@ public abstract class Soldier
     {
         this.location.setX(location.getX());
         this.location.setY(location.getY());
-    }
-
-    public void setAttackHelper(AttackHelper attackHelper)
-    {
-        this.attackHelper = attackHelper;//TODO‌ note that this parts application is in healer participateIn method
     }
 
 

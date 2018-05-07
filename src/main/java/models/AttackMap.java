@@ -24,6 +24,8 @@ public class AttackMap extends Map
     @Override
     public void addBuilding(Building building)
     {
+        if (building.getBuildingNum() == 0)
+            building.setBuildingNum(getBuildings(building.getType()).size() + 1);
         super.addBuilding(building);
         if (building instanceof DefensiveTower)
             defensiveTowers.addValue((DefensiveTower)building);

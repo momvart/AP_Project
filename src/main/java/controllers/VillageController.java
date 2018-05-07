@@ -77,7 +77,6 @@ public class VillageController implements IMenuClickListener, ICommandManager
                 break;
                 case Menu.Id.TH_AVAILABLE_BUILDING_ITEM:
                 {
-                    //TODO: construct method should check for location to be empty
                     BuildingInfo info = ((AvailableBuildingItem)menu).getBuildingInfo();
                     constructBuilding(info);
                 }

@@ -41,7 +41,6 @@ public class Construction
 
     public void finishConstruction()
     {
-        // TODO: 5/2/18 Check this part
         getBuilding().setBuildStatus(BuildStatus.BUILT);
         if (constructMode.equals(ConstructMode.UPGRADE))
             getBuilding().upgrade();

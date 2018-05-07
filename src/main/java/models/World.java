@@ -76,7 +76,6 @@ public class World
 
     public static void newGame()
     {
-        //TODO: check value with document
         loadGame(new Game()
         {{
             initialize();
@@ -86,7 +85,6 @@ public class World
 
     public static void loadGame(Game game)
     {
-        //TODO: add additional settings
         sCurrentGame = game;
     }
 

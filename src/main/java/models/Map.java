@@ -28,8 +28,6 @@ public class Map
         this.size = size;
 
         setUpBuildingsLists(new ArrayList<>());
-
-        initialize();
     }
 
     public void initialize()
@@ -124,7 +122,7 @@ public class Map
 
     public void addBuilding(Building building) throws FilledCellException
     {
-        if (building.getBuildingNum() < 0)//TODO‌ NullpointerException is being thrown in here
+        if (building.getBuildingNum() < 0)
             throw new IllegalArgumentException("Building number is not valid.");
         if (!isValid(building.getLocation()))
             throw new IllegalArgumentException("Location is not valid.");

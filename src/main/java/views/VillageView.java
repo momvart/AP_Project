@@ -79,9 +79,16 @@ public class VillageView extends ConsoleMenuContainerView
         }
     }
 
+    @Override
+    public void setCurrentMenu(ParentMenu menu, boolean showNow)
+    {
+        super.setCurrentMenu(menu, showNow);
+        if (getCurrentMenu().getId() == Menu.Id.VILLAGE_MAIN_MENU)
+            showWhereAmI();
+    }
+
     public void showWhereAmI()
     {
-        //TODO: check if has more possibilities.
         if (currentMenu instanceof IBuildingMenu)
             System.out.printf("Your are in %s %d\n",
                     ((IBuildingMenu)currentMenu).getBuilding().getName(),
@@ -153,7 +160,6 @@ public class VillageView extends ConsoleMenuContainerView
 
     public void showSoldierTrainingsStatus(Iterable<Recruit> recruits)
     {
-        //TODO: needs to be sorted
         for (Recruit r : recruits)
             System.out.println(r.toString());
     }

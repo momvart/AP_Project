@@ -56,8 +56,6 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
         System.out.println("Gold: " + map.getResources().getElixir());
         System.out.println("Elixir: " + map.getResources().getGold());
 
-        //TODO: needs to be tested.
-
         int lastType = -1;
         if (map.getAllDefensiveTowers().size() > 0)
             lastType = map.getAllDefensiveTowers().get(0).getType();
@@ -93,7 +91,7 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
                 tower.getLevel(),
                 tower.getLocation().getX(),
                 tower.getLocation().getY(),
-                tower.getStrength()); //TODO: check if strength is correct
+                tower.getStrength());
     }
 
     private void showNonTowerStatus(Building building)
