@@ -4,16 +4,16 @@ import exceptions.UnavailableUpgradeException;
 import menus.BuildingInfoSubmenu;
 import menus.BuildingSubmenu;
 import menus.ParentMenu;
+import models.Attack;
 import utils.Point;
 
 public abstract class Building
 {
     private int buildingNum = -1;
     protected Point location;
-    protected transient boolean destroyed = false;
     protected int level;
-    protected transient int strength;
     protected BuildStatus buildStatus = BuildStatus.BUILT;
+    protected BuildingAttackHelper attackHelper;
 
     public Building()
     {
@@ -66,12 +66,12 @@ public abstract class Building
 
     public boolean isDestroyed()
     {
-        return destroyed;
+        return attackHelper.isDestroyed();
     }
 
     public void setDestroyed(boolean destroyed)
     {
-        this.destroyed = destroyed;
+        attackHelper.destroyed = destroyed;
     }
 
     public int getLevel()
@@ -81,12 +81,20 @@ public abstract class Building
 
     public int getStrength()
     {
-        return strength;
+        if (attackHelper != null)
+            return attackHelper.getStrength();
+        else
+            return getBuildingInfo().getInitialStrength() + getBuildingInfo().getUpgradeStrengthInc() * level;
     }
 
     public BuildStatus getBuildStatus()
     {
         return buildStatus;
+    }
+
+    public BuildingAttackHelper getAttackHelper()
+    {
+        return attackHelper;
     }
 
     public void setBuildStatus(BuildStatus buildStatus)
@@ -101,7 +109,7 @@ public abstract class Building
 
     public void decreaseStrength(int amount)
     {
-        this.strength -= amount;
+        attackHelper.decreaseStrength(amount);
     }
 
     public BuildingInfo getBuildingInfo()
@@ -115,7 +123,16 @@ public abstract class Building
      */
     public void ensureLevel()
     {
-        strength = getBuildingInfo().getInitialStrength() + getBuildingInfo().getUpgradeStrengthInc() * level;
+        //do nothing
+        // TODO: 6/6/18 :Mohammad Omidvar , check this method, remove redundant codes.
+    }
+
+    public void participateIn(Attack attack)
+    {
+        if (getType() <= 7)
+            attackHelper = new BuildingAttackHelper(this, attack);
+        else
+            attackHelper = new DefensiveTowerAttackHelper(this, attack);
     }
 
     public BuildingInfoSubmenu getInfoSubmenu() { return new BuildingInfoSubmenu(null); }

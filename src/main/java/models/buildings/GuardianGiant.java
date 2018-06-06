@@ -1,6 +1,5 @@
 package models.buildings;
 
-import models.Attack;
 import utils.Point;
 
 public class GuardianGiant extends DefensiveTower
@@ -10,11 +9,7 @@ public class GuardianGiant extends DefensiveTower
         super(location, buildingNum);
     }
 
-    @Override
-    public void attack(Attack attack)
-    {
 
-    }
 
     @Override
     public int getType()

@@ -2,11 +2,18 @@ package models;
 
 import exceptions.*;
 import models.buildings.*;
-import models.soldiers.*;
-import utils.*;
+import models.soldiers.MoveType;
+import models.soldiers.Soldier;
+import models.soldiers.SoldierCollection;
+import models.soldiers.SoldierValues;
+import utils.MapCellNode;
+import utils.Point;
+import utils.Size;
 
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Attack
 {
@@ -34,7 +41,7 @@ public class Attack
 
         totalResource = new Resource(totalGold, totalElixir);
         map.getAllBuildings().forEach(building -> totalResource.increase(building.getBuildingInfo().getDestroyResource()));
-
+        map.getAllBuildings().forEach(building -> building.participateIn(this));
         soldiersOnLocations = new SoldierCoordinatedCollection(map.getSize());
     }
 
@@ -101,9 +108,7 @@ public class Attack
         getDeployedAliveUnits()
                 .forEach(soldier -> soldier.getAttackHelper().passTurn());
 
-        map.getAllDefensiveTowers().stream()
-                .filter(defensiveTower -> !defensiveTower.isDestroyed())
-                .forEach(defensiveTower -> defensiveTower.attack(this));
+        map.getAllBuildings().forEach(building -> building.getAttackHelper().passTurn());
 
         turn++;
     }
