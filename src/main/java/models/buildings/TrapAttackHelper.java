@@ -20,4 +20,14 @@ public class TrapAttackHelper extends DefensiveTowerAttackHelper
         List<Soldier> soldiers = attack.getSoldiersOnLocations().getSoldiers(building.location);
         mainTargets.addAll(soldiers);
     }
+
+    @Override
+    public void attack()
+    {
+        if (mainTargets.size() != 0)
+        {
+            super.attack();
+            destroyed = true;
+        }
+    }
 }

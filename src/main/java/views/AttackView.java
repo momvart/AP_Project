@@ -175,6 +175,8 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
                         System.out.print('$');
                     else if (building instanceof Storage || building instanceof Mine)
                         System.out.print('*');
+                    else if (building instanceof GuardianGiant)
+                        System.out.print('G');
                     else if (building instanceof DefensiveTower)
                         System.out.print('#');
                     else if (building instanceof TownHall)

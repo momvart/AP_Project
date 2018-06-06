@@ -133,6 +133,16 @@ public class Map
         buildings.get(building.getType() - 1).addValue(building);
     }
 
+    public void changeBuildingCell(Building building, Point newPoint)
+    {
+        int lastX = building.getLocation().getX();
+        int lastY = building.getLocation().getY();
+        building.setLocation(newPoint);
+        map[lastX][lastY] = null;
+        map[newPoint.getX()][newPoint.getY()] = building;
+
+    }
+
     public void setUpBuildingsLists(Iterable<Building> buildingsList)
     {
         buildings = new ArrayList<>(BuildingValues.BUILDING_TYPES_COUNT);
