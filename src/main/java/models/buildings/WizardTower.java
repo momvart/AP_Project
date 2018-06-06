@@ -1,5 +1,6 @@
 package models.buildings;
 
+import models.Attack;
 import utils.Point;
 
 public class WizardTower extends DefensiveTower
@@ -15,5 +16,11 @@ public class WizardTower extends DefensiveTower
     public int getType()
     {
         return 11;
+    }
+
+    @Override
+    public void participateIn(Attack attack)
+    {
+        attackHelper = new AreaAttackHelper(this, attack);
     }
 }

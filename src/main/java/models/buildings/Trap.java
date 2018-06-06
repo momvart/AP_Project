@@ -1,5 +1,6 @@
 package models.buildings;
 
+import models.Attack;
 import utils.Point;
 
 public class Trap extends DefensiveTower
@@ -13,5 +14,11 @@ public class Trap extends DefensiveTower
     public int getType()
     {
         return 13;
+    }
+
+    @Override
+    public void participateIn(Attack attack)
+    {
+        attackHelper = new TrapAttackHelper(this, attack);
     }
 }

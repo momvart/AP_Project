@@ -1,5 +1,6 @@
 package models.buildings;
 
+import models.Attack;
 import utils.Point;
 
 public class Cannon extends DefensiveTower
@@ -16,5 +17,11 @@ public class Cannon extends DefensiveTower
     public int getType()
     {
         return 9;
+    }
+
+    @Override
+    public void participateIn(Attack attack)
+    {
+        attackHelper = new AreaAttackHelper(this, attack);
     }
 }

@@ -7,15 +7,13 @@ import utils.Point;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class DefensiveTowerAttackHelper extends BuildingAttackHelper
 {
 
-    private static final int SECOND_RANGE = 2;
-    private ArrayList<Soldier> mainTargets;
-    private ArrayList<Soldier> wholeTargets;
+    protected static final int SECOND_RANGE = 2;
+    protected ArrayList<Soldier> mainTargets;
+    protected ArrayList<Soldier> wholeTargets;
 
     public DefensiveTowerAttackHelper(Building building, Attack attack)
     {
@@ -40,41 +38,20 @@ public class DefensiveTowerAttackHelper extends BuildingAttackHelper
     public void attack()
     {
         DefensiveTower defensiveTower = (DefensiveTower)building;
-        if (mainTargets != null)
-            mainTargets.forEach(soldier -> soldier.getAttackHelper().decreaseHealth(defensiveTower.getDamagePower()));
-        if (wholeTargets != null)
-            wholeTargets.forEach(soldier -> soldier.getAttackHelper().decreaseHealth(defensiveTower.getDamagePower() - 1));
+        if (mainTargets != null && mainTargets.size() > 0)
+            mainTargets.get(0).getAttackHelper().decreaseHealth(defensiveTower.getDamagePower());
         mainTargets = null;
         wholeTargets = null;
-
+        // TODO: 6/6/18 don't change mainTargets and wholeTargets to null  each turn for some towers
     }
 
     public void setTarget()
     {
         DefensiveTower defensiveTower = (DefensiveTower)building;
-        if (defensiveTower.getType() == Cannon.DEFENSIVE_TOWER_TYPE || defensiveTower.getType() == WizardTower.DEFENSIVE_TOWER_TYPE)
-            try { setCanonTypeTowersTarget(defensiveTower); }
-            catch (SoldierNotFoundException ignored) { }
-        else
-            try { setTypicalTowersTarget(defensiveTower); }
-            catch (SoldierNotFoundException ignored) { }
-
+        try { setTypicalTowersTarget(defensiveTower); }
+        catch (SoldierNotFoundException ignored) { }
     }
 
-    private void setCanonTypeTowersTarget(DefensiveTower defensiveTower) throws SoldierNotFoundException
-    {
-        mainTargets = new ArrayList<>();
-        wholeTargets = new ArrayList<>();
-        List<Soldier> soldiersInRange = null;
-        Point soldier = attack.getNearestSoldier(defensiveTower.location, defensiveTower.getRange(), defensiveTower.getDefenseType().convertToMoveType());
-        Stream<Soldier> soldiers = attack.getSoldiersOnLocations().getSoldiers(soldier, defensiveTower.getDefenseType().convertToMoveType());
-        mainTargets.addAll(soldiers.collect(Collectors.toList()));
-        soldiersInRange = attack.getSoldiersInRange(defensiveTower.location, SECOND_RANGE, defensiveTower.getDefenseType().convertToMoveType());
-        // TODO: 6/6/18 Change Second range.
-        if (soldiersInRange != null)
-            wholeTargets.addAll(soldiersInRange);
-
-    }
 
     private void setTypicalTowersTarget(DefensiveTower defensiveTower) throws SoldierNotFoundException
     {
