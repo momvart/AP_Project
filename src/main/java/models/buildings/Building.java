@@ -64,16 +64,6 @@ public abstract class Building
         this.location = location;
     }
 
-    public boolean isDestroyed()
-    {
-        return attackHelper.isDestroyed();
-    }
-
-    public void setDestroyed(boolean destroyed)
-    {
-        attackHelper.destroyed = destroyed;
-    }
-
     public int getLevel()
     {
         return level;
@@ -107,11 +97,6 @@ public abstract class Building
         level++;
     }
 
-    public void decreaseStrength(int amount)
-    {
-        attackHelper.decreaseStrength(amount);
-    }
-
     public BuildingInfo getBuildingInfo()
     {
         return BuildingValues.getBuildingInfo(getType());
@@ -129,10 +114,7 @@ public abstract class Building
 
     public void participateIn(Attack attack)
     {
-        if (getType() <= 7)
-            attackHelper = new BuildingAttackHelper(this, attack);
-        else
-            attackHelper = new DefensiveTowerAttackHelper(this, attack);
+        attackHelper = new BuildingAttackHelper(this, attack);
     }
 
     public BuildingInfoSubmenu getInfoSubmenu() { return new BuildingInfoSubmenu(null); }

@@ -87,7 +87,7 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
     private void showTowerStatus(DefensiveTower tower)
     {
         System.out.printf("%s%s: level = %d in (%d, %d) health = %d\n",
-                tower.isDestroyed() ? "$$$" : "",
+                tower.getAttackHelper().isDestroyed() ? "$$$" : "",
                 tower.getBuildingInfo().getName(),
                 tower.getLevel(),
                 tower.getLocation().getX(),
@@ -100,7 +100,7 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
         if (building instanceof DefensiveTower)
             return;
         System.err.printf("%s%s: level = %d in (%d, %d) health = %d\n",
-                building.isDestroyed() ? "$$$" : "",
+                building.getAttackHelper().isDestroyed() ? "$$$" : "",
                 building.getBuildingInfo().getName(),
                 building.getLevel(),
                 building.getLocation().getX(),
@@ -171,7 +171,7 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
                 if (!theAttack.getMap().isEmpty(i, j))
                 {
                     Building building = theAttack.getMap().getBuildingAt(i, j);
-                    if (building.isDestroyed())
+                    if (building.getAttackHelper().isDestroyed())
                         System.out.print('$');
                     else if (building instanceof Storage || building instanceof Mine)
                         System.out.print('*');

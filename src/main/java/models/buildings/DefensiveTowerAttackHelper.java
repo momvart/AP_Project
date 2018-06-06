@@ -14,8 +14,8 @@ public class DefensiveTowerAttackHelper extends BuildingAttackHelper
 {
 
     private static final int SECOND_RANGE = 2;
-    ArrayList<Soldier> mainTargets;
-    ArrayList<Soldier> wholeTargets;
+    private ArrayList<Soldier> mainTargets;
+    private ArrayList<Soldier> wholeTargets;
 
     public DefensiveTowerAttackHelper(Building building, Attack attack)
     {
@@ -53,21 +53,11 @@ public class DefensiveTowerAttackHelper extends BuildingAttackHelper
     {
         DefensiveTower defensiveTower = (DefensiveTower)building;
         if (defensiveTower.getType() == Cannon.DEFENSIVE_TOWER_TYPE || defensiveTower.getType() == WizardTower.DEFENSIVE_TOWER_TYPE)
-            try
-            {
-                setCanonTypeTowersTarget(defensiveTower);
-            }
-            catch (SoldierNotFoundException ignored)
-            {
-            }
+            try { setCanonTypeTowersTarget(defensiveTower); }
+            catch (SoldierNotFoundException ignored) { }
         else
-            try
-            {
-                setTypicalTowersTarget(defensiveTower);
-            }
-            catch (SoldierNotFoundException ignored)
-            {
-            }
+            try { setTypicalTowersTarget(defensiveTower); }
+            catch (SoldierNotFoundException ignored) { }
 
     }
 

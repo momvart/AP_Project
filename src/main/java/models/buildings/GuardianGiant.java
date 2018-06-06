@@ -16,4 +16,6 @@ public class GuardianGiant extends DefensiveTower
     {
         return 14;
     }
+
+    //TODO: needs to override participateIn with a custom AttackHelper
 }

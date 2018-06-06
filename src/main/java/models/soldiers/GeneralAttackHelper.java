@@ -30,10 +30,10 @@ public class GeneralAttackHelper extends AttackHelper
         if (!isTargetInRange())
             return;
 
-        if (target.getStrength() > 0 && !target.isDestroyed())
+        if (target.getStrength() > 0 && !target.getAttackHelper().isDestroyed())
         {
             int initialStrength = target.getStrength();
-            target.decreaseStrength(getDamage());
+            target.getAttackHelper().decreaseStrength(getDamage());
 
             if (target instanceof Storage)
             {
@@ -70,7 +70,7 @@ public class GeneralAttackHelper extends AttackHelper
 
         if (target.getStrength() <= 0)
         {
-            target.setDestroyed(true);
+            //target.getAttackHelper().setDestroyed(true);
             attack.addScore(target.getBuildingInfo().getDestroyScore());
             attack.addToClaimedResource(target.getBuildingInfo().getDestroyResource());
         }
@@ -92,7 +92,7 @@ public class GeneralAttackHelper extends AttackHelper
     public void setTarget()
     {
         if (soldier != null && !soldier.getAttackHelper().isDead())
-            if (target == null || target.getStrength() <= 0 || target.isDestroyed())
+            if (target == null || target.getAttackHelper().getStrength() <= 0 || target.getAttackHelper().isDestroyed())
             {
                 target = getNearestBuilding();
                 if (target != null)
@@ -131,7 +131,7 @@ public class GeneralAttackHelper extends AttackHelper
 
     public Stream<Building> getAliveBuildings()
     {
-        return attack.getMap().getBuildings().stream().filter(building -> !building.isDestroyed());
+        return attack.getMap().getBuildings().stream().filter(building -> !building.getAttackHelper().isDestroyed());
     }
 
     private boolean isTargetReachable(Building favouriteTarget)

@@ -68,24 +68,6 @@ public class Attack
         return claimedResource;
     }
 
-    public void addToGainedResourceOfStorageDesroying(Storage storage, Resource resource)
-    {
-        if (claimedResourceStorages.get(storage) != null)
-        {
-            claimedResourceStorages.put(storage, addTwo(claimedResourceStorages.get(storage), resource));
-        }
-        else
-        {
-            claimedResourceStorages.put(storage, resource);
-        }
-    }
-
-    private Resource addTwo(Resource resource1, Resource resource2)
-    {
-        return new Resource(resource1.getGold() + resource2.getGold(), resource1.getElixir() + resource2.getElixir());
-    }
-
-
     public void addToClaimedResource(Resource destroyResource)
     {
         claimedResource.increase(destroyResource);
@@ -155,7 +137,7 @@ public class Attack
 
     public boolean areBuildingsDestroyed()
     {
-        return map.getAllBuildings().allMatch(Building::isDestroyed);
+        return map.getAllBuildings().allMatch(building -> building.getAttackHelper().isDestroyed());
     }
     //endregion
 

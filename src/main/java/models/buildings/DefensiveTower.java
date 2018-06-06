@@ -2,6 +2,7 @@ package models.buildings;
 
 import menus.BuildingInfoSubmenu;
 import menus.Menu;
+import models.Attack;
 import models.soldiers.Soldier;
 import utils.Point;
 
@@ -44,6 +45,12 @@ public abstract class DefensiveTower extends Building
     {
         return new BuildingInfoSubmenu(null)
                 .insertItem(Menu.Id.DEFENSIVE_TARGET_INFO, "Attack Info");
+    }
+
+    @Override
+    public void participateIn(Attack attack)
+    {
+        attackHelper = new DefensiveTowerAttackHelper(this, attack);
     }
 
     public void showLog(Soldier soldier)

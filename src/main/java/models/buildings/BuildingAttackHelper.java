@@ -5,7 +5,7 @@ import models.Attack;
 public class BuildingAttackHelper
 {
     protected Building building;
-    protected transient int strength;
+    protected int strength;
     protected boolean destroyed;
     protected Attack attack;
 
