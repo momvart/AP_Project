@@ -1,13 +1,15 @@
 package models.soldiers;
 
-import models.Attack;
+import models.attack.Attack;
+import models.attack.attackHelpers.SoldierAttackHelper;
+import models.attack.attackHelpers.GeneralSoldierAttackHelper;
 import utils.Point;
 
 public abstract class Soldier
 {
     private int level;
     private Point location;
-    protected AttackHelper attackHelper;
+    protected SoldierAttackHelper attackHelper;
 
     public Soldier()
     {
@@ -22,7 +24,7 @@ public abstract class Soldier
 
     public abstract int getType();
 
-    public AttackHelper getAttackHelper()
+    public SoldierAttackHelper getAttackHelper()
     {
         return attackHelper;
     }
@@ -50,14 +52,14 @@ public abstract class Soldier
 
     public void participateIn(Attack attack)
     {
-        this.attackHelper = new GeneralAttackHelper(attack, this);
+        this.attackHelper = new GeneralSoldierAttackHelper(attack, this);
     }
 
     public boolean isParticipating(Attack attack)
     {
         if (this.attackHelper == null)
             return false;
-        return this.attackHelper.attack == attack;
+        return this.attackHelper.getAttack() == attack;
     }
 
     public Point getLocation()

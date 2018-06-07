@@ -1,6 +1,7 @@
 package models;
 
 import exceptions.*;
+import models.attack.Attack;
 import models.buildings.*;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierCollection;

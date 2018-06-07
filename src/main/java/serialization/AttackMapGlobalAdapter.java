@@ -2,7 +2,7 @@ package serialization;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import models.AttackMap;
+import models.attack.AttackMap;
 import models.Resource;
 import models.buildings.Building;
 import utils.Size;

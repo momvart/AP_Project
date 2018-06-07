@@ -1,6 +1,7 @@
 package models.buildings;
 
-import models.Attack;
+import models.attack.Attack;
+import models.attack.attackHelpers.AreaAttackHelper;
 import utils.Point;
 
 public class Cannon extends DefensiveTower

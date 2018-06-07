@@ -1,6 +1,7 @@
 
 import com.google.gson.*;
 import models.*;
+import models.attack.AttackMap;
 import models.buildings.ArcherTower;
 import models.buildings.Building;
 import org.junit.*;

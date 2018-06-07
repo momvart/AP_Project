@@ -1,6 +1,7 @@
 package models.buildings;
 
-import models.Attack;
+import models.attack.Attack;
+import models.attack.attackHelpers.TrapAttackHelper;
 import utils.Point;
 
 public class Trap extends DefensiveTower

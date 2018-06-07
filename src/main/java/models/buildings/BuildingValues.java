@@ -15,6 +15,9 @@ public class BuildingValues
 {
     public static final int BUILDING_TYPES_COUNT = 14;
 
+    private static final Class[] sBuildingClasses = { GoldMine.class, ElixirMine.class, GoldStorage.class, ElixirStorage.class, TownHall.class, Barracks.class, Camp.class,
+            ArcherTower.class, Cannon.class, AirDefense.class, WizardTower.class, Wall.class, Trap.class, GuardianGiant.class };
+
     private static ArrayList<BuildingInfo> infos;
 
     public static void initialize(Path path) throws IOException
@@ -38,39 +41,6 @@ public class BuildingValues
 
     public static Class getBuildingClass(int type)
     {
-        switch (type)
-        {
-            case 1:
-                return GoldMine.class;
-            case 2:
-                return ElixirMine.class;
-            case 3:
-                return GoldStorage.class;
-            case 4:
-                return ElixirStorage.class;
-            case 5:
-                return TownHall.class;
-            case 6:
-                return Barracks.class;
-            case 7:
-                return Camp.class;
-            case 8:
-                return ArcherTower.class;
-            case 9:
-                return Cannon.class;
-            case 10:
-                return AirDefense.class;
-            case 11:
-                return WizardTower.class;
-            case 12:
-                //todo : wall implementation
-                return null;
-            case 13:
-                return Trap.class;
-            case 14:
-                return GuardianGiant.class;
-            default:
-                throw new IllegalArgumentException("Building type is not valid: " + type);
-        }
+        return sBuildingClasses[type - 1];
     }
 }

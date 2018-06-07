@@ -1,6 +1,8 @@
-package models;
+package models.attack;
 
 import exceptions.*;
+import models.Resource;
+import models.World;
 import models.buildings.*;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;

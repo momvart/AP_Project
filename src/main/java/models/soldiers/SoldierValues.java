@@ -52,14 +52,8 @@ public abstract class SoldierValues
     {
         for (Class cls : sSoldierClasses)
             if (cls.getSimpleName().equalsIgnoreCase(soldierType))
-                try
-                {
-                    return cls.getField("SOLDIER_TYPE").getInt(null);
-                }
-                catch (Exception ex)
-                {
-
-                }
+                try { return cls.getField("SOLDIER_TYPE").getInt(null); }
+                catch (Exception ex) { }
         throw new ConsoleRuntimeException("Invalid soldier type", "Invalid soldier type: " + soldierType);
     }
 }

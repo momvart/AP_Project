@@ -1,6 +1,7 @@
 package models.buildings;
 
-import models.Attack;
+import models.attack.Attack;
+import models.attack.attackHelpers.GuardianGiantAttackHelper;
 import utils.Point;
 
 public class GuardianGiant extends DefensiveTower

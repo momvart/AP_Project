@@ -1,28 +1,18 @@
 package controllers;
 
 import com.google.gson.*;
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import exceptions.*;
 import menus.*;
-import models.Attack;
-import models.AttackMap;
+import models.attack.*;
 import models.World;
-import models.buildings.Building;
-import models.buildings.ElixirStorage;
-import models.buildings.GoldStorage;
-import models.buildings.Storage;
+import models.buildings.*;
 import models.soldiers.SoldierValues;
-import serialization.AttackMapGlobalAdapter;
-import serialization.BuildingGlobalAdapter;
-import serialization.StorageGlobalAdapter;
-import utils.ConsoleUtilities;
-import utils.ICommandManager;
-import utils.Point;
+import serialization.*;
+import utils.*;
 import views.AttackView;
 import views.dialogs.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.regex.Matcher;

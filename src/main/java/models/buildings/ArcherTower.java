@@ -1,6 +1,5 @@
 package models.buildings;
 
-import models.Attack;
 import utils.Point;
 
 public class ArcherTower extends DefensiveTower

@@ -1,12 +1,13 @@
-package models.soldiers;
+package models.attack.attackHelpers;
 
 
-import models.Attack;
+import models.attack.Attack;
+import models.soldiers.*;
 import utils.Point;
 
 import java.util.List;
 
-public abstract class AttackHelper
+public abstract class SoldierAttackHelper
 {
     private int health;
     protected Attack attack;
@@ -14,11 +15,11 @@ public abstract class AttackHelper
     private boolean isSoldierDeployed = false;
     protected boolean isDead = false;
 
-    public AttackHelper(Attack attack, Soldier soldier)
+    public SoldierAttackHelper(Attack attack, Soldier soldier)
     {
         this.attack = attack;
         this.soldier = soldier;
-        this.health = getInitialHelthOfUnitThisLevel();
+        this.health = getInitialHealth();
     }
 
     public int getHealth()
@@ -56,6 +57,11 @@ public abstract class AttackHelper
         return SoldierValues.getSoldierInfo(soldier.getType()).getRange();
     }
 
+    public Attack getAttack()
+    {
+        return attack;
+    }
+
     public void passTurn()
     {
         removeSoldierIfDead();
@@ -67,22 +73,12 @@ public abstract class AttackHelper
         }
     }
 
-    public void removeSoldierIfDead()
+    protected void removeSoldierIfDead()
     {
-        if (soldier.getType() != 6)//means that soldier isnt healer
+        if (health <= 0)
         {
-            if (health <= 0)
-            {
-                setDead(true);
-                soldier = null;
-            }
-        }
-        else
-        {//soldier is healer
-            Healer healer = (Healer)soldier;
-            HealerAttackHelper healerAttackHelper = (HealerAttackHelper)healer.getAttackHelper();
-            if (healerAttackHelper.getTimeTillDie() <= 0)
-                setDead(true);
+            setDead(true);
+            soldier = null;
         }
     }
 
@@ -104,7 +100,7 @@ public abstract class AttackHelper
 
     public void increaseHealth(int amount)
     {
-        health = Math.min(this.getHealth() + amount, getInitialHelthOfUnitThisLevel());
+        health = Math.min(this.getHealth() + amount, getInitialHealth());
     }
 
     public void decreaseHealth(int amount)
@@ -114,16 +110,10 @@ public abstract class AttackHelper
             setDead(true);
     }
 
-    public void heal()
-    {
-        setHealth(getInitialHelthOfUnitThisLevel());
-    }
-
-    public int getInitialHelthOfUnitThisLevel()
+    private int getInitialHealth()
     {
         return SoldierValues.getSoldierInfo(soldier.getType()).getInitialHealth() + (soldier.getLevel()) * 5;
     }
-
 
     public abstract void move();
 

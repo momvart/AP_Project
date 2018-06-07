@@ -1,7 +1,8 @@
 package models.soldiers;
 
 
-import models.Attack;
+import models.attack.Attack;
+import models.attack.attackHelpers.HealerAttackHelper;
 
 public class Healer extends Soldier
 {

@@ -2,8 +2,8 @@ package views;
 
 import menus.IMenuContainer;
 import menus.Menu;
-import models.Attack;
-import models.AttackMap;
+import models.attack.Attack;
+import models.attack.AttackMap;
 import models.Resource;
 import models.buildings.*;
 import models.soldiers.Soldier;

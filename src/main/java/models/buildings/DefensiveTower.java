@@ -2,7 +2,9 @@ package models.buildings;
 
 import menus.BuildingInfoSubmenu;
 import menus.Menu;
-import models.Attack;
+import models.attack.Attack;
+import models.attack.attackHelpers.DefensiveTowerAttackHelper;
+import models.attack.attackHelpers.SingleTargetAttackHelper;
 import models.soldiers.Soldier;
 import utils.Point;
 
@@ -50,7 +52,7 @@ public abstract class DefensiveTower extends Building
     @Override
     public void participateIn(Attack attack)
     {
-        attackHelper = new DefensiveTowerAttackHelper(this, attack);
+        attackHelper = new SingleTargetAttackHelper(this, attack);
     }
 
     public void showLog(Soldier soldier)

@@ -1,8 +1,10 @@
-package models.soldiers;
+package models.attack.attackHelpers;
 
-import models.Attack;
+import models.attack.Attack;
 import models.Resource;
 import models.buildings.*;
+import models.soldiers.MoveType;
+import models.soldiers.Soldier;
 import utils.Point;
 
 import java.util.ArrayList;
@@ -11,11 +13,11 @@ import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class GeneralAttackHelper extends AttackHelper
+public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 {
     private Building target;
 
-    public GeneralAttackHelper(Attack attack, Soldier soldier)
+    public GeneralSoldierAttackHelper(Attack attack, Soldier soldier)
     {
         super(attack, soldier);
     }
@@ -50,21 +52,6 @@ public class GeneralAttackHelper extends AttackHelper
                     attack.addToClaimedResource(new Resource(0, claimedAmount));
 
                 storage.decreaseCurrentAmount(claimedAmount);
-//                switch (target.getType())
-//                {
-//                    case GoldStorage.BUILDING_TYPE:
-//                    {
-//                        Resource resourceClaimed = new Resource((int)Math.floor(1.0 * damageRael / (BuildingValues.getBuildingInfo(target.getType()).getInitialStrength() + target.getLevel() * 10) * storage.getCurrentAmount()), 0);// 10 may vary in the up and coming configs
-//                        attack.addToClaimedResource(resourceClaimed);
-//                        attack.addToGainedResourceOfStorageDesroying(storage, resourceClaimed);
-//                    }
-//                    case ElixirStorage.BUILDING_TYPE:
-//                    {
-//                        Resource resourceClaimed = new Resource(0, (int)Math.floor(1.0 * damageRael / (BuildingValues.getBuildingInfo(target.getType()).getInitialStrength() + target.getLevel() * 10) * storage.getCurrentAmount()));// 10 may vary in the up and coming configs
-//                        attack.addToClaimedResource(resourceClaimed); // 10 may vary in the up and coming configs
-//                        attack.addToGainedResourceOfStorageDesroying(storage, resourceClaimed);
-//                    }
-//                }
             }
         }
 
@@ -129,7 +116,7 @@ public class GeneralAttackHelper extends AttackHelper
     }
 
 
-    public Stream<Building> getAliveBuildings()
+    private Stream<Building> getAliveBuildings()
     {
         return attack.getMap().getBuildings().stream().filter(building -> !building.getAttackHelper().isDestroyed());
     }

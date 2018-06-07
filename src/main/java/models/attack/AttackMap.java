@@ -1,5 +1,7 @@
-package models;
+package models.attack;
 
+import models.Map;
+import models.Resource;
 import models.buildings.*;
 import utils.*;
 

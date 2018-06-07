@@ -4,7 +4,8 @@ import exceptions.UnavailableUpgradeException;
 import menus.BuildingInfoSubmenu;
 import menus.BuildingSubmenu;
 import menus.ParentMenu;
-import models.Attack;
+import models.attack.Attack;
+import models.attack.attackHelpers.BuildingAttackHelper;
 import utils.Point;
 
 public abstract class Building

@@ -1,6 +1,9 @@
-package models.soldiers;
+package models.attack.attackHelpers;
 
-import models.Attack;
+import models.attack.Attack;
+import models.soldiers.Healer;
+import models.soldiers.MoveType;
+import models.soldiers.Soldier;
 import utils.Point;
 
 import java.util.ArrayList;
@@ -8,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class HealerAttackHelper extends AttackHelper
+public class HealerAttackHelper extends SoldierAttackHelper
 {
     private ArrayList<Soldier> targets;
     private final int width;
@@ -63,6 +66,15 @@ public class HealerAttackHelper extends AttackHelper
     {
         ageOneDeltaT();
         super.passTurn();
+    }
+
+    @Override
+    protected void removeSoldierIfDead()
+    {
+        Healer healer = (Healer)soldier;
+        HealerAttackHelper healerAttackHelper = (HealerAttackHelper)healer.getAttackHelper();
+        if (healerAttackHelper.getTimeTillDie() <= 0)
+            setDead(true);
     }
 
     @Override

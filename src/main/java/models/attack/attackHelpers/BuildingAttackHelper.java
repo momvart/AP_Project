@@ -1,6 +1,7 @@
-package models.buildings;
+package models.attack.attackHelpers;
 
-import models.Attack;
+import models.attack.Attack;
+import models.buildings.Building;
 
 public class BuildingAttackHelper
 {
@@ -11,7 +12,7 @@ public class BuildingAttackHelper
 
     public BuildingAttackHelper(Building building, Attack attack)
     {
-        strength = building.getBuildingInfo().getInitialStrength() + building.getBuildingInfo().getUpgradeStrengthInc() * building.level;
+        strength = building.getBuildingInfo().getInitialStrength() + building.getBuildingInfo().getUpgradeStrengthInc() * building.getLevel();
         this.building = building;
         this.attack = attack;
     }
