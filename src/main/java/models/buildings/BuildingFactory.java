@@ -40,8 +40,7 @@ public class BuildingFactory
             case 11:
                 return new WizardTower(location, buildingNum);
             case 12:
-                //todo : wall implementation
-                return null;
+                return new Wall(location, buildingNum);
             case 13:
                 return new Trap(location, buildingNum);
             case 14:

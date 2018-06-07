@@ -20,11 +20,9 @@ public class GuardianGiantAttackHelper extends DefensiveTowerAttackHelper
     public void setTarget()
     {
         DefensiveTower defensiveTower = (DefensiveTower)building;
-        Point soldierPoint = null;
         mainTargets = new ArrayList<>();
         Optional<Soldier> min = attack.getDeployedAliveUnits().min(Comparator.comparingDouble(soldier -> Point.euclideanDistance2nd(soldier.getLocation(), defensiveTower.location)));
         min.ifPresent(soldier -> mainTargets.add(soldier));
-
     }
 
     @Override

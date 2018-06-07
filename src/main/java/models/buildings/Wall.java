@@ -2,7 +2,7 @@ package models.buildings;
 
 import utils.Point;
 
-public class Wall extends Building
+public class Wall extends VillageBuilding
 {
     public Wall(Point location, int buildingNum)
     {
