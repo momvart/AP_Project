@@ -2,8 +2,8 @@ package utils;
 
 public class Size
 {
-    int width;
-    int height;
+    private int width;
+    private int height;
 
     public Size(int width, int height)
     {
