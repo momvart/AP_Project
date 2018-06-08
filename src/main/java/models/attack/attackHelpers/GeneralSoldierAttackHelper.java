@@ -91,7 +91,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 
     private Building getNearestBuilding()
     {
-
         ArrayList<Building> aliveBuildings = getAliveBuildings()
                 .sorted(Comparator.comparingDouble(building -> Point.euclideanDistance2nd(building.getLocation(), getSoldierLocation())))
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -110,6 +109,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
         {
             return aliveBuildings.stream()
                     .filter(this::isTargetReachable)
+                    .filter(building -> building.getType() != Trap.BUILDING_TYPE) //canceling out the traps from the target choices
                     .findFirst()
                     .orElse(null);
         }

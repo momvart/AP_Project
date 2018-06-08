@@ -6,6 +6,7 @@ import utils.Point;
 
 public class Trap extends DefensiveTower
 {
+    public static final int BUILDING_TYPE = 13;
     public Trap(Point location, int buildingNum)
     {
         super(location, buildingNum);

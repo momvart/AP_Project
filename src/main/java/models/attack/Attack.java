@@ -174,7 +174,7 @@ public class Attack
         if (!map.isMarginal(location))
             throw new ConsoleRuntimeException("Invalid location.", location + " is not a marginal location.", new IllegalArgumentException("Invalid location"));
 
-        List<Soldier> available = getUnitsInToBeDeployed(unitType).limit(count).collect(Collectors.toList());
+        List<Soldier> available = getUnitsYetToBeDeployed(unitType).limit(count).collect(Collectors.toList());
         int current = numberOfSoldiersIn(location, SoldierValues.getSoldierInfo(unitType).getMoveType());
 
         if (MAX_SOLDIER_IN_CELL - current < count)
@@ -211,7 +211,7 @@ public class Attack
      * @param unitType The soldier type that should be found.
      * @return Soldiers that are not deployed yet
      */
-    public Stream<Soldier> getUnitsInToBeDeployed(int unitType)
+    public Stream<Soldier> getUnitsYetToBeDeployed(int unitType)
     {
         return soldiers.getSoldiers(unitType).stream().filter(s -> !s.getAttackHelper().isSoldierDeployed());
     }
