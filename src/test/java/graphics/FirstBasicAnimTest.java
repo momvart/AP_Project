@@ -46,6 +46,7 @@ public class FirstBasicAnimTest extends Application
                 imgs[i - 1] = new ImageDrawable(new Image(getClass().getClassLoader().getResourceAsStream("assets/soldiers/guardian/run/" + Integer.toString(i) + ".png")), 100, 100);
 
             FrameAnimationDrawable anim = new FrameAnimationDrawable(imgs, 0.5);
+            anim.setScale(-1, 1);
             drawer2.addAnimation("run", anim);
             drawer2.playAnimation("run");
             drawer2.setPosition(imgs[0].getSize().getWidth() / 2 + 100, imgs[0].getSize().getHeight() / 2);
@@ -58,6 +59,7 @@ public class FirstBasicAnimTest extends Application
                 imgs[i - 1] = new ImageDrawable(new Image(getClass().getClassLoader().getResourceAsStream("assets/soldiers/guardian/attack/" + Integer.toString(i) + ".png")), 100, 100);
 
             FrameAnimationDrawable anim = new FrameAnimationDrawable(imgs, 0.5);
+            anim.setRotation(180);
             drawer3.addAnimation("attack", anim);
             drawer3.playAnimation("attack");
             drawer3.setPosition(imgs[0].getSize().getWidth() / 2 + 200, imgs[0].getSize().getHeight() / 2);

@@ -1,11 +1,11 @@
 package graphics.drawers.drawables;
 
 import javafx.scene.canvas.GraphicsContext;
+import utils.PointF;
 
 public class FrameAnimationDrawable extends AnimationDrawable
 {
     private Drawable[] frames;
-    private double frameDuration;
 
     public FrameAnimationDrawable(Drawable[] frames, double duration)
     {
@@ -13,12 +13,7 @@ public class FrameAnimationDrawable extends AnimationDrawable
         if (frames.length == 0)
             throw new IllegalArgumentException("Frames cannot be empty.");
         this.frames = frames;
-        this.frameDuration = duration / frames.length;
-    }
-
-    public void setFrameDuration(double frameDuration)
-    {
-        this.frameDuration = frameDuration;
+        setPivot(new PointF(0, 0));
     }
 
     private int frameNum;
@@ -31,17 +26,14 @@ public class FrameAnimationDrawable extends AnimationDrawable
 
         super.update(deltaT);
 
-        if (timeStack >= frameDuration)
-        {
-            frameNum++;
+        if (timeStack >= getDuration())
             timeStack = 0;
-        }
-        if (frameNum == frames.length)
-            frameNum = 0;
+
+        frameNum = (int)(timeStack / getDuration() * frames.length);
     }
 
     @Override
-    public void draw(GraphicsContext gc)
+    public void onDraw(GraphicsContext gc)
     {
         frames[frameNum].draw(gc);
     }

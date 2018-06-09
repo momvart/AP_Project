@@ -22,13 +22,13 @@ public class ImageDrawable extends Drawable
     }
 
     @Override
-    public void draw(GraphicsContext gc)
+    public void onDraw(GraphicsContext gc)
     {
         if (img == null)
             return;
-        gc.save();
-        gc.translate(-getPivot().getX() * getSize().getWidth(), -getPivot().getY() * getSize().getHeight());
+        //gc.save();
+        //gc.translate(-getPivot().getX() * getSize().getWidth(), -getPivot().getY() * getSize().getHeight());
         gc.drawImage(img, 0, 0, getSize().getWidth(), getSize().getHeight());
-        gc.restore();
+        //gc.restore();
     }
 }
