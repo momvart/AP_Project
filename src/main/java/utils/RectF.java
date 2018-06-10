@@ -2,9 +2,9 @@ package utils;
 
 public class RectF
 {
-    private float x, y, width, height;
+    private double x, y, width, height;
 
-    public RectF(float x, float y, float width, float height)
+    public RectF(double x, double y, double width, double height)
     {
         this.x = x;
         this.y = y;
@@ -12,67 +12,67 @@ public class RectF
         this.height = height;
     }
 
-    public static RectF fromLTRB(float left, float top, float right, float bottom)
+    public static RectF fromLTRB(double left, double top, double right, double bottom)
     {
         return new RectF(Math.min(left, right), Math.min(top, bottom), Math.abs(right - left), Math.abs(bottom - top));
     }
 
-    public float getX()
+    public double getX()
     {
         return x;
     }
 
-    public void setX(float x)
+    public void setX(double x)
     {
         this.x = x;
     }
 
-    public float getY()
+    public double getY()
     {
         return y;
     }
 
-    public void setY(float y)
+    public void setY(double y)
     {
         this.y = y;
     }
 
-    public float getWidth()
+    public double getWidth()
     {
         return width;
     }
 
-    public void setWidth(float width)
+    public void setWidth(double width)
     {
         this.width = width;
     }
 
-    public float getHeight()
+    public double getHeight()
     {
         return height;
     }
 
-    public void setHeight(float height)
+    public void setHeight(double height)
     {
         this.height = height;
     }
 
-    public float getLeft()
+    public double getLeft()
     {
         return x;
     }
 
-    public float getRight()
+    public double getRight()
     {
         return x + width;
     }
 
-    public float getTop()
+    public double getTop()
     {
         return y;
     }
 
-    public float getBottom()
+    public double getBottom()
     {
         return y + height;
     }
@@ -85,7 +85,7 @@ public class RectF
                 && getBottom() >= other.getTop();
     }
 
-    public boolean intersectsWith(float x, float y, float width, float height)
+    public boolean intersectsWith(double x, double y, double width, double height)
     {
         return getRight() >= x
                 && getLeft() <= x + width
@@ -93,7 +93,7 @@ public class RectF
                 && getBottom() >= y;
     }
 
-    public boolean contains(float x, float y)
+    public boolean contains(double x, double y)
     {
         return x >= getLeft() && x <= getRight() && y >= getTop() && y <= getBottom();
     }

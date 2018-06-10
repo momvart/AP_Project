@@ -1,11 +1,11 @@
 package graphics;
 
 import graphics.drawers.Drawer;
-import graphics.drawers.drawables.IDrawable;
+import graphics.positioning.*;
 import javafx.scene.canvas.GraphicsContext;
-import utils.RectF;
+import utils.*;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class Layer implements IFrameUpdatable
 {
@@ -15,15 +15,33 @@ public class Layer implements IFrameUpdatable
     private ArrayList<Drawer> drawers = new ArrayList<>();
     private ArrayList<IFrameUpdatable> updatables = new ArrayList<>();
 
+    private PositioningSystem posSys;
+
     public Layer(int order, RectF bounds)
+    {
+        this(order, bounds, NormalPositioningSystem.getInstance());
+    }
+
+    public Layer(int order, RectF bounds, PositioningSystem posSys)
     {
         this.order = order;
         this.bounds = bounds;
+        this.posSys = posSys;
     }
 
     public int getOrder()
     {
         return order;
+    }
+
+    public PositioningSystem getPosSys()
+    {
+        return posSys;
+    }
+
+    public void setPosSys(PositioningSystem posSys)
+    {
+        this.posSys = posSys;
     }
 
     public void addObject(Drawer drawer)
@@ -33,6 +51,12 @@ public class Layer implements IFrameUpdatable
             updatables.add((IFrameUpdatable)drawer);
     }
 
+    public void removeObject(Drawer drawer)
+    {
+        drawers.remove(drawer);
+        if (drawer instanceof IFrameUpdatable)
+            updatables.remove(drawer);
+    }
 
     public void draw(GraphicsContext gc, RectF cameraBounds)
     {
@@ -41,6 +65,7 @@ public class Layer implements IFrameUpdatable
         RectF relBounds = new RectF(cameraBounds.getX() - bounds.getX(), cameraBounds.getY() - bounds.getY(), cameraBounds.getWidth(), cameraBounds.getHeight());
         drawers.stream()
                 .filter(d -> d.isVisible() && d.canBeVisibleIn(relBounds))
+                .sorted(Comparator.comparing(d -> posSys.convertY(d.getPosition()))) //TODO: not optimized
                 .forEach(d -> d.draw(gc));
         gc.restore();
     }

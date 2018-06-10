@@ -38,7 +38,10 @@ public class AnimationDrawer extends Drawer implements IFrameUpdatable
             super.draw(gc);
 
         gc.save();
-        gc.translate(getPosition().getX(), getPosition().getY());
+        if (getLayer() == null)
+            gc.translate(getPosition().getX(), getPosition().getY());
+        else
+            gc.translate(getLayer().getPosSys().convertX(getPosition()), getLayer().getPosSys().convertY(getPosition()));
         currentAnim.draw(gc);
         gc.restore();
     }

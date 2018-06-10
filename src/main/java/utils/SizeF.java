@@ -2,37 +2,31 @@ package utils;
 
 public class SizeF
 {
-    private float width;
-    private float height;
+    private double width;
+    private double height;
 
-    public SizeF(float width, float height)
+    public SizeF(double width, double height)
     {
         this.width = width;
         this.height = height;
     }
 
-    public SizeF(double width, double height)
-    {
-        this.width = (float)width;
-        this.height = (float)height;
-    }
-
-    public float getWidth()
+    public double getWidth()
     {
         return width;
     }
 
-    public void setWidth(float width)
+    public void setWidth(double width)
     {
         this.width = width;
     }
 
-    public float getHeight()
+    public double getHeight()
     {
         return height;
     }
 
-    public void setHeight(float height)
+    public void setHeight(double height)
     {
         this.height = height;
     }

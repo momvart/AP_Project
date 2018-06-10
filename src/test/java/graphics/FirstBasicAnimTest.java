@@ -2,10 +2,11 @@ package graphics;
 
 import graphics.drawers.*;
 import graphics.drawers.drawables.*;
+import graphics.positioning.*;
 import javafx.application.Application;
 import javafx.scene.*;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.image.Image;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import utils.*;
 
@@ -23,61 +24,41 @@ public class FirstBasicAnimTest extends Application
         Canvas canvas = new Canvas(400, 400);
         group.getChildren().add(canvas);
 
+        Button btn1 = new Button();
+        Button btn2 = new Button();
+        Button btn3 = new Button();
+        btn2.setLayoutX(100);
+        btn3.setLayoutX(200);
+        group.getChildren().add(btn1);
+        group.getChildren().add(btn2);
+        group.getChildren().add(btn3);
         GraphicHandler handler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, 400, 400));
         GameScene gameScene = new GameScene(new SizeF(400, 400));
-        Layer layer = new Layer(0, new RectF(0, 0, 400, 400));
+        PositioningSystem.sScale = 50;
+        Layer layer = new Layer(0, new RectF(0, 0, 400, 400), IsometricPositioningSystem.getInstance());
 
         AnimationDrawer drawer1 = new AnimationDrawer(new ImageDrawable(null));
         {
-            ImageDrawable[] imgs = new ImageDrawable[16];
-            for (int i = 1; i <= imgs.length; i++)
-                imgs[i - 1] = new ImageDrawable(new Image(getClass().getClassLoader().getResourceAsStream("assets/soldiers/guardian/idle/" + Integer.toString(i) + ".png")), 100, 100);
-
-            FrameAnimationDrawable anim = new FrameAnimationDrawable(imgs, 1);
+            FrameAnimationDrawable anim = GraphicsUtilities.createFrameAnimDrawableFrom(getClass().getClassLoader().getResource("assets/soldiers/guardian/idle").toURI(), 0.75, 100);
             drawer1.addAnimation("idle", anim);
+            drawer1.addAnimation("run", GraphicsUtilities.createFrameAnimDrawableFrom(getClass().getClassLoader().getResource("assets/soldiers/guardian/run").toURI(), 0.75, 100));
+            drawer1.addAnimation("attack", GraphicsUtilities.createFrameAnimDrawableFrom(getClass().getClassLoader().getResource("assets/soldiers/guardian/attack").toURI(), 0.75, 100));
             drawer1.playAnimation("idle");
-            drawer1.setPosition(imgs[0].getSize().getWidth() / 2, imgs[0].getSize().getHeight() / 2);
-            layer.addObject(drawer1);
+            drawer1.setPosition(0, 0);
+            drawer1.setLayer(layer);
+            btn1.setOnAction(event -> drawer1.playAnimation("idle"));
+            btn2.setOnAction(event -> drawer1.playAnimation("run"));
+            btn3.setOnAction(event -> drawer1.playAnimation("attack"));
         }
-        AnimationDrawer drawer2 = new AnimationDrawer(new ImageDrawable(null));
-        {
-            ImageDrawable[] imgs = new ImageDrawable[16];
-            for (int i = 1; i <= imgs.length; i++)
-                imgs[i - 1] = new ImageDrawable(new Image(getClass().getClassLoader().getResourceAsStream("assets/soldiers/guardian/run/" + Integer.toString(i) + ".png")), 100, 100);
-
-            FrameAnimationDrawable anim = new FrameAnimationDrawable(imgs, 0.5);
-            anim.setScale(-1, 1);
-            drawer2.addAnimation("run", anim);
-            drawer2.playAnimation("run");
-            drawer2.setPosition(imgs[0].getSize().getWidth() / 2 + 100, imgs[0].getSize().getHeight() / 2);
-            layer.addObject(drawer2);
-        }
-        AnimationDrawer drawer3 = new AnimationDrawer(new ImageDrawable(null));
-        {
-            ImageDrawable[] imgs = new ImageDrawable[12];
-            for (int i = 1; i <= imgs.length; i++)
-                imgs[i - 1] = new ImageDrawable(new Image(getClass().getClassLoader().getResourceAsStream("assets/soldiers/guardian/attack/" + Integer.toString(i) + ".png")), 100, 100);
-
-            FrameAnimationDrawable anim = new FrameAnimationDrawable(imgs, 0.5);
-            anim.setRotation(180);
-            drawer3.addAnimation("attack", anim);
-            drawer3.playAnimation("attack");
-            drawer3.setPosition(imgs[0].getSize().getWidth() / 2 + 200, imgs[0].getSize().getHeight() / 2);
-            layer.addObject(drawer3);
-        }
-        AnimationDrawer drawer4 = new AnimationDrawer(new ImageDrawable(null));
-        {
-            ImageDrawable[] imgs = new ImageDrawable[12];
-            for (int i = 1; i <= imgs.length; i++)
-                imgs[i - 1] = new ImageDrawable(new Image(getClass().getClassLoader().getResourceAsStream("assets/soldiers/guardian/die/" + Integer.toString(i) + ".png")), 100, 100);
-
-            FrameAnimationDrawable anim = new FrameAnimationDrawable(imgs, 1.5);
-            drawer4.addAnimation("die", anim);
-            drawer4.playAnimation("die");
-            drawer4.setPosition(imgs[0].getSize().getWidth() / 2 + 300, imgs[0].getSize().getHeight() / 2);
-            layer.addObject(drawer4);
-        }
-
+//        AnimationDrawer drawer5 = new AnimationDrawer(new ImageDrawable(null));
+//        {
+//            FrameAnimationDrawable anim = GraphicsUtilities.createFrameAnimDrawableFrom(getClass().getClassLoader().getResource("assets/soldiers/archer/idle").toURI(), 0.75, 100);
+//            anim.setScale(.75,.75);
+//            drawer5.addAnimation("idle", anim);
+//            drawer5.playAnimation("idle");
+//            drawer5.setPosition(1, 1);
+//            drawer5.setLayer(layer);
+//        }
 
         gameScene.addLayer(layer);
         handler.setScene(gameScene);

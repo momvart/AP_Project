@@ -1,5 +1,6 @@
 package graphics.drawers;
 
+import graphics.Layer;
 import graphics.drawers.drawables.Drawable;
 import javafx.scene.canvas.GraphicsContext;
 import utils.PointF;
@@ -12,12 +13,12 @@ public class Drawer
     private boolean visible = true;
     private PointF position = new PointF(0, 0);
 
+    private Layer layer;
 
     public Drawer(Drawable drawable)
     {
         this.drawable = drawable;
     }
-
 
     public PointF getPosition()
     {
@@ -37,7 +38,20 @@ public class Drawer
 
     public boolean canBeVisibleIn(RectF scene)
     {
-        return scene.intersectsWith(position.getX(), position.getY(), drawable.getSize().getWidth(), drawable.getSize().getHeight());
+        return scene.intersectsWith(position.getX(), position.getY(), drawable.getWidth(), drawable.getHeight());
+    }
+
+    public Layer getLayer()
+    {
+        return layer;
+    }
+
+    public void setLayer(Layer layer)
+    {
+        if (layer != null)
+            layer.removeObject(this);
+        this.layer = layer;
+        layer.addObject(this);
     }
 
     public void draw(GraphicsContext gc)
@@ -46,7 +60,10 @@ public class Drawer
             return;
 
         gc.save();
-        gc.translate(position.getX(), position.getY());
+        if (layer == null)
+            gc.translate(position.getX(), position.getY());
+        else
+            gc.translate(layer.getPosSys().convertX(position), layer.getPosSys().convertY(position));
         drawable.draw(gc);
         gc.restore();
     }
