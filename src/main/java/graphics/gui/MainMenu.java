@@ -96,7 +96,7 @@ public class MainMenu extends Application
         Layer soldierLayer = new Layer(1, new RectF(0, 0, width, height));
         soldierLayer.setPosSys(new PercentPositioningSystem(soldierLayer));
         idleSoldiers(soldierLayer, "guardian/4", 1.1f, 0.3f, 0.8f);
-        idleSoldiers(soldierLayer, "wallBreaker/3", 1, 0.2f, 0.9f);
+        idleSoldiers(soldierLayer, "wallBreaker/3", 1, 0.2f, 0.8f);
         //endregion
 
         //region menu buttons
@@ -191,7 +191,7 @@ public class MainMenu extends Application
             try
             {
                 soldier = GraphicsUtilities.createFrameAnimDrawableFrom
-                        (getClass().getClassLoader().getResource("assets/soldiers/" + folderNames + "/idle").toURI(), 0.5, 100);
+                        ("assets/soldiers/" + folderNames + "/idle", 0.5, 100);
             }
             catch (URISyntaxException ignored) { }
             soldier.setScale(scale, scale);

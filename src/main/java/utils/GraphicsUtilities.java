@@ -7,6 +7,7 @@ import javafx.scene.transform.Transform;
 
 import java.io.*;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.*;
 
 import java.util.*;
@@ -23,7 +24,23 @@ public class GraphicsUtilities
         return createFrameAnimDrawableFrom(new File(directory), duration, minSideDimen);
     }
 
+    public static FrameAnimationDrawable createFrameAnimDrawableFrom(String directoryPath, double duration, double minSideDimen) throws URISyntaxException
+    {
+        return createFrameAnimDrawableFrom(new File(GraphicsUtilities.class.getClassLoader().getResource(directoryPath).toURI()), duration, minSideDimen);
+    }
+
+    public static FrameAnimationDrawable createFrameAnimDrawableFrom(String directoryPath, double duration, double minSideDimen, double pivotX, double pivotY) throws URISyntaxException
+    {
+        return createFrameAnimDrawableFrom(new File(GraphicsUtilities.class.getClassLoader().getResource(directoryPath).toURI()),
+                duration, minSideDimen, pivotX, pivotY);
+    }
+
     public static FrameAnimationDrawable createFrameAnimDrawableFrom(File directory, double duration, double minSideDimen)
+    {
+        return createFrameAnimDrawableFrom(directory, duration, minSideDimen, 0, 0);
+    }
+
+    public static FrameAnimationDrawable createFrameAnimDrawableFrom(File directory, double duration, double minSideDimen, double pivotX, double pivotY)
     {
         List<File> files = Arrays.asList(directory.listFiles(File::isFile));
         files.sort(Comparator.comparing(File::getName));
@@ -32,8 +49,11 @@ public class GraphicsUtilities
             try
             {
                 frames[i] = new ImageDrawable(new Image(Files.newInputStream(Paths.get(files.get(i).toURI()))), minSideDimen);
+//                frames[i].setPivot(pivotX, pivotY);
             }
             catch (IOException ignored) {}
-        return new FrameAnimationDrawable(frames, duration);
+        FrameAnimationDrawable anim = new FrameAnimationDrawable(frames, duration);
+        anim.setPivot(pivotX, pivotY);
+        return anim;
     }
 }

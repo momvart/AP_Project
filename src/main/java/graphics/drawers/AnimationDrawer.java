@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class AnimationDrawer extends Drawer implements IFrameUpdatable
 {
-    private HashMap<String, AnimationDrawable> animations = new HashMap<>();
+    protected HashMap<String, AnimationDrawable> animations = new HashMap<>();
 
     private AnimationDrawable currentAnim;
 
@@ -31,17 +31,26 @@ public class AnimationDrawer extends Drawer implements IFrameUpdatable
         currentAnim = animations.get(name);
     }
 
+    public AnimationDrawable getCurrentAnim()
+    {
+        return currentAnim;
+    }
+
     @Override
     public void draw(GraphicsContext gc)
     {
         if (currentAnim == null)
+        {
             super.draw(gc);
+            return;
+        }
 
         gc.save();
         if (getLayer() == null)
             gc.translate(getPosition().getX(), getPosition().getY());
         else
             gc.translate(getLayer().getPosSys().convertX(getPosition()), getLayer().getPosSys().convertY(getPosition()));
+
         currentAnim.draw(gc);
         gc.restore();
     }

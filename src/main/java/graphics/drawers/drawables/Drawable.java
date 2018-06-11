@@ -2,12 +2,8 @@ package graphics.drawers.drawables;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Translate;
-import utils.GraphicsUtilities;
-import utils.PointF;
-import utils.SizeF;
+import javafx.scene.transform.*;
+import utils.*;
 
 public abstract class Drawable implements IDrawable
 {
@@ -78,7 +74,8 @@ public abstract class Drawable implements IDrawable
         gc.save();
         GraphicsUtilities.GCTransform(gc, translate);
         GraphicsUtilities.GCTransform(gc, rotate);
-        gc.transform(scale.getMxx(), 0, 0, scale.getMyy(), 0, 0);
+        GraphicsUtilities.GCTransform(gc, scale);
+
         gc.setFill(Color.BLACK);
         gc.setStroke(Color.BLACK);
     }

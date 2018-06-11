@@ -20,6 +20,16 @@ public class Drawer
         this.drawable = drawable;
     }
 
+    public Drawable getDrawable()
+    {
+        return drawable;
+    }
+
+    public void setDrawable(Drawable drawable)
+    {
+        this.drawable = drawable;
+    }
+
     public PointF getPosition()
     {
         return position;
@@ -64,7 +74,8 @@ public class Drawer
             gc.translate(position.getX(), position.getY());
         else
             gc.translate(layer.getPosSys().convertX(position), layer.getPosSys().convertY(position));
-        drawable.draw(gc);
+        if (drawable != null)
+            drawable.draw(gc);
         gc.restore();
     }
 }

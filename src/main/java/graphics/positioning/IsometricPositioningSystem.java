@@ -26,12 +26,12 @@ public class IsometricPositioningSystem extends PositioningSystem
     @Override
     public double convertX(PointF position)
     {
-        return scale * (position.getX() + position.getY()) * Cos30 + 100;
+        return scale * (position.getX() + position.getY() + 1 /* center of square */) * Cos30;
     }
 
     @Override
     public double convertY(PointF position)
     {
-        return scale * (-position.getX() + position.getY()) * Sin30 + 100;
+        return scale * (-position.getX() + position.getY()) * Sin30;
     }
 }

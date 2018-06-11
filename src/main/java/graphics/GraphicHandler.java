@@ -3,10 +3,14 @@ package graphics;
 import javafx.scene.canvas.GraphicsContext;
 import utils.RectF;
 
+import java.util.ArrayList;
+
 public class GraphicHandler implements IFrameUpdatable
 {
     private GraphicsContext gc;
     private GameScene scene;
+
+    private ArrayList<IFrameUpdatable> updatables = new ArrayList<>();
 
     public GraphicHandler(GraphicsContext gc, RectF camera)
     {
@@ -28,9 +32,16 @@ public class GraphicHandler implements IFrameUpdatable
         cameraBounds = newBounds;
     }
 
+
+    public void addUpdatable(IFrameUpdatable updatable)
+    {
+        updatables.add(updatable);
+    }
+
     @Override
     public void update(double deltaT)
     {
+        updatables.forEach(u -> u.update(deltaT));
         scene.update(deltaT);
         scene.draw(gc, cameraBounds);
     }

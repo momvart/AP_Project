@@ -42,18 +42,12 @@ public class MovingTest extends Application
         Layer lFloor = new Layer(0, new RectF(0, 0, 800, 800), IsometricPositioningSystem.getInstance());
         Image img1 = new Image(getClass().getClassLoader().getResourceAsStream("assets/floor/isometric1.png"));
         Image img2 = new Image(getClass().getClassLoader().getResourceAsStream("assets/floor/isometric2.png"));
-        {
-            ImageDrawable drawable = new ImageDrawable(img2, 10);
-            drawable.setPivot(.5, .5);
-            Drawer drawer = new Drawer(drawable);
-            drawer.setPosition(0, 0);
-            drawer.setLayer(lFloor);
-        }
         for (int i = 0; i < 30; i++)
             for (int j = 0; j < 30; j++)
             {
                 ImageDrawable drawable = new ImageDrawable((i + j) % 2 == 0 ? img1 : img2, PositioningSystem.sScale);
                 drawable.setPivot(.5, .5);
+//                drawable.setScale(.85, 1);
                 Drawer drawer = new Drawer(drawable);
                 drawer.setPosition(i, j);
                 drawer.setLayer(lFloor);
@@ -63,10 +57,18 @@ public class MovingTest extends Application
         Layer layer = new Layer(1, new RectF(0, 0, 800, 800), IsometricPositioningSystem.getInstance());
 
         SoldierGraphicHelper helper = new SoldierGraphicHelper(SoldierFactory.createSoldierByTypeID(Guardian.SOLDIER_TYPE, 1));
-        helper.getDrawer().setPosition(0, 0);
+        helper.getDrawer().setPosition(0, 5);
         helper.getDrawer().setLayer(layer);
         helper.moveTo(new PointF(0, 10));
-        helper.setMoveListener(position -> helper.getDrawer().playAnimation("idle"));
+        helper.setMoveListener(position ->
+        {
+            if (PointF.euclideanDistance(position, new PointF(0, 10)) < 0.01)
+                helper.moveTo(new PointF(5, 10));
+            else if (PointF.euclideanDistance(position, new PointF(5, 10)) < 0.01)
+                helper.moveTo(new PointF(0, 5));
+            else
+                helper.moveTo(new PointF(0, 10));
+        });
         handler.addUpdatable(helper);
 
         gameScene.addLayer(lFloor);
