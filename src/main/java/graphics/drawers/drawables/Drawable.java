@@ -20,9 +20,10 @@ public abstract class Drawable implements IDrawable
         return pivot;
     }
 
-    public void setPivot(PointF pivot)
+    public void setPivot(double x, double y)
     {
-        this.pivot = pivot;
+        this.pivot.setX(x);
+        this.pivot.setY(y);
         setPivots();
     }
 
@@ -73,7 +74,7 @@ public abstract class Drawable implements IDrawable
         gc.save();
         GraphicsUtilities.GCTransform(gc, translate);
         GraphicsUtilities.GCTransform(gc, rotate);
-        GraphicsUtilities.GCTransform(gc, scale);
+        //GraphicsUtilities.GCTransform(gc, scale);
 
         gc.setFill(Color.BLACK);
         gc.setStroke(Color.BLACK);

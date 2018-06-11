@@ -34,6 +34,11 @@ public class Layer implements IFrameUpdatable
         return order;
     }
 
+    public RectF getBounds()
+    {
+        return bounds;
+    }
+
     public PositioningSystem getPosSys()
     {
         return posSys;

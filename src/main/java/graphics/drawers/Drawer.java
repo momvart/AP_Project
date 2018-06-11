@@ -25,7 +25,7 @@ public class Drawer
         return position;
     }
 
-    public void setPosition(float x, float y)
+    public void setPosition(double x, double y)
     {
         position.setX(x);
         position.setY(y);

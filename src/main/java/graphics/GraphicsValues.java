@@ -9,7 +9,7 @@ public class GraphicsValues
         return scale;
     }
 
-    public static void setScale(float scale)
+    public static void setScale(double scale)
     {
         GraphicsValues.scale = scale;
         Fonts.initialize();

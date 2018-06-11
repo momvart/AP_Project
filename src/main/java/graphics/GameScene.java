@@ -1,6 +1,5 @@
 package graphics;
 
-import graphics.drawers.drawables.IDrawable;
 import javafx.scene.canvas.GraphicsContext;
 import utils.MySortedList;
 import utils.RectF;

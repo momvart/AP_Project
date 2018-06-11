@@ -13,7 +13,18 @@ public class FrameAnimationDrawable extends AnimationDrawable
         if (frames.length == 0)
             throw new IllegalArgumentException("Frames cannot be empty.");
         this.frames = frames;
-        setPivot(new PointF(0, 0));
+        setPivot(0, 0);
+    }
+
+    /**
+     * Pivots of all frames will be set
+     */
+    @Override
+    public void setPivot(double x, double y)
+    {
+        super.setPivot(x, y);
+        for (Drawable frame : frames)
+            frame.setPivot(x, y);
     }
 
     private int frameNum;

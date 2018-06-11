@@ -11,6 +11,7 @@ public class GraphicHandler implements IFrameUpdatable
     public GraphicHandler(GraphicsContext gc, RectF camera)
     {
         this.gc = gc;
+        this.gc.setTransform(GraphicsValues.getScale(), 0, 0, GraphicsValues.getScale(), 0, 0);
         updateCamera(camera);
     }
 

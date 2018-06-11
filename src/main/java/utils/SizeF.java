@@ -30,4 +30,10 @@ public class SizeF
     {
         this.height = height;
     }
+
+    @Override
+    public String toString()
+    {
+        return String.format("%f x %f", width, height);
+    }
 }

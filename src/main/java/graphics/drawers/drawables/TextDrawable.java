@@ -25,7 +25,7 @@ public class TextDrawable extends Drawable
     }
 
     @Override
-    public void setPivot(PointF pivot)
+    public void setPivot(double x, double y)
     {
         throw new UnsupportedOperationException();
     }

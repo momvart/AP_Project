@@ -36,6 +36,6 @@ public class ImageDrawable extends Drawable
     {
         if (img == null)
             return;
-        gc.drawImage(img, 0, 0, getWidth() * GraphicsValues.getScale(), getHeight() * GraphicsValues.getScale());
+        gc.drawImage(img, 0, 0, getWidth(), getHeight());
     }
 }
