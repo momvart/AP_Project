@@ -1,13 +1,11 @@
 package graphics.gui;
 
-import graphics.GameLooper;
-import graphics.GameScene;
-import graphics.GraphicHandler;
-import graphics.Layer;
+import graphics.*;
 import graphics.drawers.AnimationDrawer;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.FrameAnimationDrawable;
 import graphics.drawers.drawables.ImageDrawable;
+import graphics.positioning.PercentPositioningSystem;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -17,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -31,62 +30,82 @@ import java.net.URISyntaxException;
 
 public class MainMenu extends Application
 {
+    static Stage menu;
+
     @Override
     public void start(Stage stage) throws Exception
     {
         //region initiate
+        final double width = 1920 / 2;
+        final double height = 1080 / 2;
+        if (System.getProperty("os.name").equals("Linux"))
+            GraphicsValues.setScale(3);
 
         Group group = new Group();
-        Canvas canvas = new Canvas(1920, 1080);
+        Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);
+        StackPane root = new StackPane();
+        menu = stage;
 
-        GraphicHandler handler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, 1920, 1080));
-        GameScene gameScene = new GameScene(new SizeF(1920, 1080));
-        Layer layer = new Layer(0, new RectF(0, 0, 1920, 1080));
+        GraphicHandler handler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, width, height));
+        GameScene gameScene = new GameScene(new SizeF(width, height));
+        Layer layer = new Layer(0, new RectF(0, 0, width, height));
+        root.setPrefWidth(GraphicsValues.getScale() * width);
+        root.setPrefHeight(GraphicsValues.getScale() * height);
+        canvas.setWidth(width * GraphicsValues.getScale());
+        canvas.setHeight(height * GraphicsValues.getScale());
+        root.setAlignment(canvas, Pos.BOTTOM_LEFT);
 
         //endregion
 
         //region background
-        ImageView imageView = new ImageView(new Image("assets/menu/background/night.png"));
-        ImageDrawable imageDrawable = new ImageDrawable(imageView.getImage(), 1920, 1080);
-        Drawer drawer = new Drawer(imageDrawable);
-        drawer.setLayer(layer);
+        ImageView imgBackground = new ImageView(new Image("assets/menu/background/night.png"));
+        imgBackground.setFitWidth(root.getPrefWidth());
+        imgBackground.setFitHeight(root.getPrefHeight());
+        ImageDrawable background = new ImageDrawable(imgBackground.getImage(), width, height);
+        Drawer bgdrawer = new Drawer(background);
+        bgdrawer.setLayer(layer);
+        bgdrawer.setPosition(0, 0);
         //endregion
 
         //region flame,stones
-        Layer layer1 = new Layer(1, new RectF(0, 0, 1920, 1080));
-        AnimationDrawer flameDrawer = new AnimationDrawer(new ImageDrawable(null));
+        Layer lFlame = new Layer(2, new RectF(0, 0, width, height));
         {
-            ImageDrawable[] imgs = new ImageDrawable[6];
-            for (int i = 1; i <= 6; i++)
-                imgs[i - 1] = new ImageDrawable(new Image(getClass().getClassLoader().getResourceAsStream("assets/menu/flame/" + Integer.toString(i) + ".png")), 400, 400);
-            FrameAnimationDrawable animationDrawable = new FrameAnimationDrawable(imgs, 1);
-            flameDrawer.addAnimation("flame", animationDrawable);
-            flameDrawer.playAnimation("flame");
-            flameDrawer.setPosition(1920 / 3 - 200, 720);
-            flameDrawer.setLayer(layer1);
+            lFlame.setPosSys(new PercentPositioningSystem(lFlame));
+
+            ImageDrawable stones = new ImageDrawable(new Image("assets/menu/stones/1.png"), width / 10, width / 10);
+            stones.setPivot(0.5, 0.5);
+            Drawer stoneDrawer = new Drawer(stones);
+            stoneDrawer.setPosition(0.45, 0.9);
+            stoneDrawer.setLayer(lFlame);
+
+            AnimationDrawer flameDrawer = new AnimationDrawer(new ImageDrawable(null));
+            {
+                FrameAnimationDrawable anim = GraphicsUtilities.createFrameAnimDrawableFrom(getClass().getClassLoader().getResource("assets/menu/flame").toURI(), 1, 100);
+                anim.setPivot(0.5, 0.5);
+                flameDrawer.addAnimation("flame", anim);
+                flameDrawer.playAnimation("flame");
+                flameDrawer.setPosition(.45, .9);
+                flameDrawer.setLayer(lFlame);
+            }
+
         }
-
-        ImageDrawable stones = new ImageDrawable(new Image("assets/menu/stones/1.png"), 400, 400);
-        Drawer stoneDrawer = new Drawer(stones);
-        stoneDrawer.setPosition(1920 / 3 - 200, 670);
-        stoneDrawer.setLayer(layer1);
-
         //endregion
 
         //region soldiers
-        Layer soldierLayer = new Layer(2, new RectF(0, 0, 1920, 1080));
-        idleSoldiers(soldierLayer, "guardian", 4, 220, 600);
-        idleSoldiers(soldierLayer, "guardianLevel3", 4, 330, 700);
-
+        Layer soldierLayer = new Layer(1, new RectF(0, 0, width, height));
+        soldierLayer.setPosSys(new PercentPositioningSystem(soldierLayer));
+        idleSoldiers(soldierLayer, "guardian/4", 1.1f, 0.3f, 0.8f);
+        idleSoldiers(soldierLayer, "wallBreaker/3", 1, 0.2f, 0.9f);
         //endregion
 
         //region menu buttons
 
-        ImageDrawable woodenHanging = new ImageDrawable(new Image("assets/menu/woodenHanging/1.png"), 327 * 1.5, 568 * 1.5);
+        ImageDrawable woodenHanging = new ImageDrawable(new Image("assets/menu/woodenHanging/1.png"), width / 3, height * 0.8);
         Drawer woodenHangingDrawer = new Drawer(woodenHanging);
-        woodenHangingDrawer.setPosition(3 * 1920 / 4 - 327 / 3, 0);
-        woodenHangingDrawer.setLayer(layer1);
+        woodenHanging.setPivot(0.5, 0);
+        woodenHangingDrawer.setPosition(3 * width / 4, 0);
+        woodenHangingDrawer.setLayer(layer);
 
         VBox menuBox = new VBox();
         VBox quitBox = new VBox();
@@ -106,47 +125,47 @@ public class MainMenu extends Application
         Label quit = new Label("QUIT");
         quit.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
         {
-            stage.close();
+            Notifications.showQuitAlert("Are you sure?");
         });
-        initializeLabels(newGame, loadGame, multiPlayer, setting, aboutUs, quit);
+        initializeLabels(GraphicsValues.getScale(), width, height, newGame, loadGame, multiPlayer, setting, aboutUs, quit);
         handleMouseMovements(newGame, loadGame, multiPlayer, setting, aboutUs, quit);
         menuBox.getChildren().addAll(newGame, loadGame, multiPlayer, setting);
         quitBox.getChildren().addAll(aboutUs, quit);
-        setUpBox(menuBox, 200, 30);
-        setUpBox(quitBox, 600, 15);
+        setUpBox(menuBox, (float)(0.20 * height), (float)height / 34, width, height, GraphicsValues.getScale());
+        setUpBox(quitBox, (float)(0.61 * height), (float)height / 45, width, height, GraphicsValues.getScale());
         group.getChildren().addAll(menuBox, quitBox);
-
         //endregion
 
         //region show
         gameScene.addLayer(layer);
-        gameScene.addLayer(layer1);
+        gameScene.addLayer(lFlame);
         gameScene.addLayer(soldierLayer);
         handler.setScene(gameScene);
         new GameLooper(handler).start();
-        stage.setScene(new Scene(group, 1920, 1080));
+        stage.setScene(new Scene(group, width * GraphicsValues.getScale(), height * GraphicsValues.getScale()));
+        stage.setResizable(false);
         stage.show();
         //endregion
     }
 
-    private void setUpBox(VBox menuBox, int layoutY, int spacing)
+    private void setUpBox(VBox menuBox, float layoutY, float spacing, double width, double height, double scale)
     {
-        menuBox.setSpacing(spacing);
-        menuBox.setPrefWidth(327 * 1.5);
-        menuBox.setPrefHeight(300);
-        menuBox.setLayoutX(3 * 1920 / 4 - 327 / 3);
-        menuBox.setLayoutY(layoutY);
         menuBox.setAlignment(Pos.CENTER);
+        menuBox.setSpacing(spacing * scale);
+        menuBox.setPrefWidth(width / 3 * scale);
+        menuBox.setPrefHeight(0.21 * height * scale);
+        menuBox.setLayoutX(3 * width / 4 * scale - menuBox.getPrefWidth() / 2);
+        menuBox.setLayoutY(layoutY * scale);
     }
 
-    private void initializeLabels(Label... labels)
+    private void initializeLabels(double scale, double width, double height, Label... labels)
     {
         for (Label label : labels)
         {
-            label.setFont(Font.font("Ani", FontWeight.BOLD, 45));
+            label.setFont(Font.font("Ani", FontWeight.BOLD, 22.5 * scale));
             label.setTextFill(Color.SADDLEBROWN);
-            label.prefWidth(327 * 1.5);
-            label.prefHeight(100);
+            label.prefWidth(width / 3 * scale);
+            label.prefHeight(0.21 * height * scale);
         }
     }
 
@@ -181,5 +200,10 @@ public class MainMenu extends Application
             guardianAnimation.setPosition(x, y);
             guardianAnimation.setLayer(layer);
         }
+    }
+
+    public static void quit()
+    {
+        menu.close();
     }
 }
