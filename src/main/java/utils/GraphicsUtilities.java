@@ -42,6 +42,18 @@ public class GraphicsUtilities
 
     public static FrameAnimationDrawable createFrameAnimDrawableFrom(File directory, double duration, double minSideDimen, double pivotX, double pivotY)
     {
+        FrameAnimationDrawable anim = new FrameAnimationDrawable(createFramesFrom(directory, minSideDimen, pivotX, pivotY), duration);
+        anim.setPivot(pivotX, pivotY);
+        return anim;
+    }
+
+    public static ImageDrawable[] createFramesFrom(String directoryPath, double minSideDimen, double pivotX, double pivotY) throws URISyntaxException
+    {
+        return createFramesFrom(new File(GraphicsUtilities.class.getClassLoader().getResource(directoryPath).toURI()), minSideDimen, pivotX, pivotY);
+    }
+
+    public static ImageDrawable[] createFramesFrom(File directory, double minSideDimen, double pivotX, double pivotY)
+    {
         List<File> files = Arrays.asList(directory.listFiles(File::isFile));
         files.sort(Comparator.comparing(File::getName));
         ImageDrawable[] frames = new ImageDrawable[files.size()];
@@ -49,11 +61,9 @@ public class GraphicsUtilities
             try
             {
                 frames[i] = new ImageDrawable(new Image(Files.newInputStream(Paths.get(files.get(i).toURI()))), minSideDimen);
-//                frames[i].setPivot(pivotX, pivotY);
+                frames[i].setPivot(pivotX, pivotY);
             }
             catch (IOException ignored) {}
-        FrameAnimationDrawable anim = new FrameAnimationDrawable(frames, duration);
-        anim.setPivot(pivotX, pivotY);
-        return anim;
+        return frames;
     }
 }

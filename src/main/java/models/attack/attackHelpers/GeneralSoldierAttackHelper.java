@@ -6,6 +6,7 @@ import models.buildings.*;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import utils.Point;
+import utils.PointF;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -136,5 +137,17 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                 attack.moveOnLocation(soldier, getSoldierLocation(), pointToGo);
                 soldier.setLocation(pointToGo);
             }
+    }
+
+    @Override
+    public void onMoveFinished(PointF currentPos)
+    {
+
+    }
+
+    @Override
+    public void onReload()
+    {
+
     }
 }

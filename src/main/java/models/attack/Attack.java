@@ -166,6 +166,7 @@ public class Attack
             soldier.setLocation(location);
             soldier.getAttackHelper().setSoldierIsDeployed(true);
             soldiersOnLocations.push(soldier, location);
+            callOnSoldierPut(soldier);
         }
     }
 
@@ -395,6 +396,24 @@ public class Attack
         }
     }
     //endregion
+
+    //region Events
+
+    private IOnSoldierPutListener soldierPutListener;
+
+    public void setSoldierPutListener(IOnSoldierPutListener soldierPutListener)
+    {
+        this.soldierPutListener = soldierPutListener;
+    }
+
+    private void callOnSoldierPut(Soldier soldier)
+    {
+        if (soldierPutListener != null)
+            soldierPutListener.onSoldierPut(soldier);
+    }
+
+    //endregion
+
 
     //region Path Finding
     private PathFinder pathFinder = new PathFinder();

@@ -1,13 +1,14 @@
 package models.attack.attackHelpers;
 
 
+import graphics.helpers.*;
 import models.attack.Attack;
 import models.soldiers.*;
 import utils.Point;
 
 import java.util.List;
 
-public abstract class SoldierAttackHelper
+public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveFinishedListener
 {
     private int health;
     protected Attack attack;
@@ -129,5 +130,19 @@ public abstract class SoldierAttackHelper
     public void setDead(boolean dead)
     {
         isDead = dead;
+    }
+
+    private SoldierGraphicHelper graphicHelper;
+
+    public SoldierGraphicHelper getGraphicHelper()
+    {
+        return graphicHelper;
+    }
+
+    public void setGraphicHelper(SoldierGraphicHelper graphicHelper)
+    {
+        this.graphicHelper = graphicHelper;
+        graphicHelper.setReloadListener(this);
+        graphicHelper.setMoveListener(this);
     }
 }

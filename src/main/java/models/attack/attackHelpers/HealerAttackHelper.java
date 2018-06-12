@@ -5,6 +5,7 @@ import models.soldiers.Healer;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import utils.Point;
+import utils.PointF;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -193,5 +194,17 @@ public class HealerAttackHelper extends SoldierAttackHelper
             }
         }
         return soldiersInRange;
+    }
+
+    @Override
+    public void onMoveFinished(PointF currentPos)
+    {
+
+    }
+
+    @Override
+    public void onReload()
+    {
+
     }
 }

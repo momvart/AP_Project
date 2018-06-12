@@ -11,6 +11,11 @@ public class GameScene implements IFrameUpdatable
 
     private SizeF size;
 
+    public GameScene(double width, double height)
+    {
+        this(new SizeF(width, height));
+    }
+
     public GameScene(SizeF size)
     {
         layers = new MySortedList<>(Layer::getOrder);
@@ -24,7 +29,7 @@ public class GameScene implements IFrameUpdatable
 
     public void draw(GraphicsContext gc, RectF cameraBounds)
     {
-        gc.clearRect(0, 0, size.getWidth(), size.getHeight());
+        gc.clearRect(cameraBounds.getX(), cameraBounds.getY(), cameraBounds.getWidth(), cameraBounds.getHeight());
         layers.forEach(l -> l.draw(gc, cameraBounds));
     }
 

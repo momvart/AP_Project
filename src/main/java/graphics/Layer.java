@@ -69,7 +69,7 @@ public class Layer implements IFrameUpdatable
         gc.translate(bounds.getX(), bounds.getY());
         RectF relBounds = new RectF(cameraBounds.getX() - bounds.getX(), cameraBounds.getY() - bounds.getY(), cameraBounds.getWidth(), cameraBounds.getHeight());
         drawers.stream()
-                .filter(d -> d.isVisible() && d.canBeVisibleIn(relBounds))
+                .filter(d -> d.isVisible()/* && d.canBeVisibleIn(bounds)*/ && d.canBeVisibleIn(relBounds))
                 .sorted(Comparator.comparing(d -> posSys.convertY(d.getPosition()))) //TODO: not optimized
                 .forEach(d -> d.draw(gc));
         gc.restore();

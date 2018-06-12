@@ -16,7 +16,8 @@ public class SoldierGraphicHelper extends GraphicHelper
     public SoldierGraphicHelper(Soldier soldier) throws URISyntaxException
     {
         this.soldier = soldier;
-        drawer = new SoldierDrawer(soldier.getType());
+        drawer = new SoldierDrawer(soldier);
+        drawer.setPosition(soldier.getLocation().getX(), soldier.getLocation().getY());
     }
 
     public SoldierDrawer getDrawer()
@@ -24,14 +25,34 @@ public class SoldierGraphicHelper extends GraphicHelper
         return drawer;
     }
 
-    private boolean isMoving;
+
+    public enum Status
+    {
+        IDLE,
+        MOVING,
+        ATTACKING
+    }
+
+    private Status status;
+
+    public Status getStatus()
+    {
+        return status;
+    }
+
+    public void makeIdle()
+    {
+        status = Status.IDLE;
+        drawer.playAnimation(SoldierDrawer.IDLE);
+    }
+
     private PointF moveDest;
     private double moveLineSin, moveLineCos;
     private IOnMoveFinishedListener moveListener;
 
     public void moveTo(PointF dest)
     {
-        isMoving = true;
+        status = Status.MOVING;
         moveDest = dest;
         drawer.playAnimation(SoldierDrawer.RUN);
 
@@ -45,7 +66,7 @@ public class SoldierGraphicHelper extends GraphicHelper
 
     private void doMoving(double deltaT)
     {
-        if (!isMoving)
+        if (status != Status.MOVING)
             return;
 
         double distance = PointF.euclideanDistance(moveDest, drawer.getPosition());
@@ -63,7 +84,7 @@ public class SoldierGraphicHelper extends GraphicHelper
 
     private void onMoveFinished()
     {
-        isMoving = false;
+        makeIdle();
         drawer.setPosition(moveDest.getX(), moveDest.getY());
         if (moveListener != null)
             moveListener.onMoveFinished(drawer.getPosition());
@@ -74,10 +95,24 @@ public class SoldierGraphicHelper extends GraphicHelper
         this.moveListener = moveListener;
     }
 
+    public void attack()
+    {
+        status = Status.ATTACKING;
+        drawer.playAnimation(SoldierDrawer.ATTACK);
+    }
+
+
     @Override
     public void update(double deltaT)
     {
         super.update(deltaT);
         doMoving(deltaT);
+    }
+
+    @Override
+    protected void callOnReload()
+    {
+        if (status != Status.MOVING)
+            super.callOnReload();
     }
 }

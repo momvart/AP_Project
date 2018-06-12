@@ -4,8 +4,10 @@ import utils.PointF;
 
 public class IsometricPositioningSystem extends PositioningSystem
 {
-    private static final double Sin30 = 0.5f;
-    private static final double Cos30 = 0.866f;
+    private static final double angle = 37;
+
+    private static final double ANG_SIN = Math.sin(angle * Math.PI / 180);
+    private static final double ANG_COS = Math.cos(angle * Math.PI / 180);
 
     private static IsometricPositioningSystem instance;
 
@@ -26,12 +28,12 @@ public class IsometricPositioningSystem extends PositioningSystem
     @Override
     public double convertX(PointF position)
     {
-        return scale * (position.getX() + position.getY() + 1 /* center of square */) * Cos30;
+        return scale * (position.getX() + position.getY() + 1 /* center of square */) * ANG_COS;
     }
 
     @Override
     public double convertY(PointF position)
     {
-        return scale * (-position.getX() + position.getY()) * Sin30;
+        return scale * (-position.getX() + position.getY()) * ANG_SIN;
     }
 }

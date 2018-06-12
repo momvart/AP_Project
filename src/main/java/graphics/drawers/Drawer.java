@@ -48,7 +48,7 @@ public class Drawer
 
     public boolean canBeVisibleIn(RectF scene)
     {
-        return scene.intersectsWith(position.getX(), position.getY(), drawable.getWidth(), drawable.getHeight());
+        return scene.intersectsWith(layer.getPosSys().convertX(position) + drawable.getTranslate().getX(), layer.getPosSys().convertY(position) + drawable.getTranslate().getY(), drawable.getWidth(), drawable.getHeight());
     }
 
     public Layer getLayer()

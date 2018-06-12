@@ -8,7 +8,7 @@ public abstract class GraphicHelper implements IFrameUpdatable
     private double reloadDuration;
     private IOnReloadListener reloadListener;
 
-    private void callOnReload()
+    protected void callOnReload()
     {
         if (reloadListener != null)
             reloadListener.onReload();
