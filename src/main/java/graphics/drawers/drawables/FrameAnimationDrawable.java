@@ -8,34 +8,18 @@ public class FrameAnimationDrawable extends AnimationDrawable
 
     public FrameAnimationDrawable(Drawable[] frames, double duration)
     {
+        this(frames, duration, 0, 0);
+    }
+
+    public FrameAnimationDrawable(Drawable[] frames, double duration, double pivotX, double pivotY)
+    {
         super(duration);
         if (frames.length == 0)
             throw new IllegalArgumentException("Frames cannot be empty.");
         this.frames = frames;
         this.setSize(frames[0].getWidth(), frames[0].getHeight());
+        setPivot(pivotX, pivotY);
     }
-
-    /**
-     * Pivots of all frames will be set
-     */
-    @Override
-    public void setPivot(double x, double y)
-    {
-        super.setPivot(x, y);
-        for (Drawable frame : frames)
-            frame.setPivot(x, y);
-    }
-
-//    /**
-//     * Alpha of all frames will be set
-//     */
-//    @Override
-//    public void setAlpha(double alpha)
-//    {
-//        super.setAlpha(alpha);
-//        for (Drawable frame : frames)
-//            frame.setAlpha(alpha);
-//    }
 
     public Drawable getFrame(int index)
     {

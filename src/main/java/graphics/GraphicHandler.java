@@ -1,5 +1,6 @@
 package graphics;
 
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import utils.RectF;
@@ -49,6 +50,11 @@ public class GraphicHandler implements IFrameUpdatable
 
     public void handleMouseClick(MouseEvent event)
     {
-        scene.handleMouseClick(event.getX() + cameraBounds.getX(), event.getY() + cameraBounds.getY(), event);
+        try
+        {
+            Point2D point = gc.getTransform().inverseTransform(event.getX(), event.getY());
+            scene.handleMouseClick(point.getX(), point.getY(), event);
+        }
+        catch (Exception ex) {}
     }
 }

@@ -50,7 +50,7 @@ public class GraphicsValues
         {
             frames.put(animKey + level, GraphicsUtilities.createFramesFrom(
                     getSoldierAssetsPath(soldierType) + "/" + level + "/" + animKey.toLowerCase(),
-                    50, 0.5, 1));
+                    50, 0, 0));
         }
 
         return frames.get(animKey + level);

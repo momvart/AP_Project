@@ -3,6 +3,7 @@ package graphics.drawers;
 import graphics.Layer;
 import graphics.drawers.drawables.Drawable;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import utils.PointF;
@@ -48,9 +49,35 @@ public class Drawer
         return visible;
     }
 
-    public boolean canBeVisibleIn(RectF scene)
+    public void setVisible(boolean visible)
     {
-        return scene.intersectsWith(layer.getPosSys().convertX(position) + drawable.getTranslate().getX(), layer.getPosSys().convertY(position) + drawable.getTranslate().getY(), drawable.getWidth(), drawable.getHeight());
+        this.visible = visible;
+    }
+
+    public RectF getBounds()
+    {
+        return new RectF(layer.getPosSys().convertX(position), layer.getPosSys().convertY(position), drawable.getWidth(), drawable.getHeight());
+    }
+
+    public boolean canBeVisibleIn(RectF scene) //TODO: has bug
+    {
+        return scene.intersectsWith(layer.getPosSys().convertX(position) + drawable.getTranslate().getX(),
+                layer.getPosSys().convertY(position) + drawable.getTranslate().getY(),
+                drawable.getWidth(),
+                drawable.getHeight());
+    }
+
+    public boolean containsPoint(double x, double y)
+    {
+        try
+        {
+            Point2D newPoint = drawable.getTranslate().inverseTransform(x - layer.getPosSys().convertX(position), y - layer.getPosSys().convertY(position));
+            newPoint = drawable.getRotate().inverseTransform(newPoint);
+            newPoint = drawable.getScale().inverseTransform(newPoint);
+            return newPoint.getX() >= 0 && newPoint.getY() >= 0 && newPoint.getX() <= drawable.getWidth() && newPoint.getY() <= drawable.getHeight();
+        }
+        catch (Exception ignored) {}
+        return false;
     }
 
     public Layer getLayer()
@@ -102,10 +129,5 @@ public class Drawer
         if (drawable != null)
             drawable.draw(gc);
         gc.restore();
-    }
-
-    public void setVisible(boolean visible)
-    {
-        this.visible = visible;
     }
 }
