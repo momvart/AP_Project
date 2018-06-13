@@ -1,7 +1,6 @@
 package graphics.drawers.drawables;
 
 import javafx.scene.canvas.GraphicsContext;
-import utils.PointF;
 
 public class FrameAnimationDrawable extends AnimationDrawable
 {
@@ -13,6 +12,7 @@ public class FrameAnimationDrawable extends AnimationDrawable
         if (frames.length == 0)
             throw new IllegalArgumentException("Frames cannot be empty.");
         this.frames = frames;
+        this.setSize(frames[0].getWidth(), frames[0].getHeight());
     }
 
     /**
@@ -21,9 +21,21 @@ public class FrameAnimationDrawable extends AnimationDrawable
     @Override
     public void setPivot(double x, double y)
     {
+        super.setPivot(x, y);
         for (Drawable frame : frames)
             frame.setPivot(x, y);
     }
+
+//    /**
+//     * Alpha of all frames will be set
+//     */
+//    @Override
+//    public void setAlpha(double alpha)
+//    {
+//        super.setAlpha(alpha);
+//        for (Drawable frame : frames)
+//            frame.setAlpha(alpha);
+//    }
 
     public Drawable getFrame(int index)
     {
@@ -40,15 +52,26 @@ public class FrameAnimationDrawable extends AnimationDrawable
 
         super.update(deltaT);
 
-        if (timeStack >= getDuration())
-            timeStack = 0;
-
         frameNum = (int)(timeStack / getDuration() * frames.length);
+    }
+
+    @Override
+    protected void onPreDraw(GraphicsContext gc)
+    {
+        frames[frameNum].onPreDraw(gc);
+        super.onPreDraw(gc);
     }
 
     @Override
     public void onDraw(GraphicsContext gc)
     {
-        frames[frameNum].draw(gc);
+        frames[frameNum].onDraw(gc);
+    }
+
+    @Override
+    protected void onPostDraw(GraphicsContext gc)
+    {
+        super.onPostDraw(gc);
+        frames[frameNum].onPostDraw(gc);
     }
 }

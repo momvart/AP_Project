@@ -10,6 +10,8 @@ public abstract class Drawable implements IDrawable
     private PointF pivot = new PointF(0f, 0f);
     private SizeF size = new SizeF(0, 0);
 
+    private double alpha = 1;
+
     private Translate translate = new Translate();
     private Scale scale = new Scale();
     private Rotate rotate = new Rotate();
@@ -39,6 +41,16 @@ public abstract class Drawable implements IDrawable
         setPivots();
     }
 
+    public double getAlpha()
+    {
+        return alpha;
+    }
+
+    public void setAlpha(double alpha)
+    {
+        this.alpha = alpha;
+    }
+
     public double getWidth()
     {
         return size.getWidth();
@@ -54,8 +66,10 @@ public abstract class Drawable implements IDrawable
         rotate.setPivotX(pivot.getX() * getWidth());
         rotate.setPivotY(pivot.getY() * getHeight());
 
-        scale.setPivotX(rotate.getPivotX());
-        scale.setPivotY(rotate.getPivotY());
+//        scale.setPivotX(rotate.getPivotX());
+//        scale.setPivotY(rotate.getPivotY());
+        scale.setPivotX(0.5 * getWidth());
+        scale.setPivotY(0.5 * getHeight());
     }
 
     public Translate getTranslate()
@@ -83,6 +97,7 @@ public abstract class Drawable implements IDrawable
 
         gc.setFill(Color.BLACK);
         gc.setStroke(Color.BLACK);
+        gc.setGlobalAlpha(alpha);
     }
 
     protected abstract void onDraw(GraphicsContext gc);

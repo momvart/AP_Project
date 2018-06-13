@@ -36,6 +36,11 @@ public class AnimationDrawer extends Drawer implements IFrameUpdatable
         return currentAnim;
     }
 
+    public HashMap<String, AnimationDrawable> getAnimations()
+    {
+        return animations;
+    }
+
     @Override
     public void draw(GraphicsContext gc)
     {

@@ -1,10 +1,17 @@
-package graphics.drawers.drawables;
+package graphics.drawers.drawables.animators;
 
 import graphics.IFrameUpdatable;
-import javafx.scene.canvas.GraphicsContext;
+import graphics.drawers.drawables.Drawable;
+import javafx.animation.FadeTransition;
 
-public abstract class AnimationDrawable extends Drawable implements IFrameUpdatable
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
+public abstract class Animator implements IFrameUpdatable
 {
+    private ArrayList<Drawable> targets = new ArrayList<>();
     private boolean paused;
 
     private boolean reversible;
@@ -12,9 +19,27 @@ public abstract class AnimationDrawable extends Drawable implements IFrameUpdata
     protected double timeStack;
     private double duration;
 
-    public AnimationDrawable(double duration)
+
+    public Animator(double duration, Drawable... targets)
     {
+        this(duration, false, targets);
+    }
+
+    public Animator(double duration, boolean reversible, Drawable... targets)
+    {
+        this(duration, reversible, Arrays.asList(targets));
+    }
+
+    public Animator(double duration, boolean reversible, Collection<Drawable> targets)
+    {
+        this.reversible = reversible;
         this.duration = duration;
+        this.targets = new ArrayList<>(targets);
+    }
+
+    public ArrayList<Drawable> getTargets()
+    {
+        return targets;
     }
 
     public boolean isPaused()
@@ -43,6 +68,7 @@ public abstract class AnimationDrawable extends Drawable implements IFrameUpdata
         this.duration = duration;
     }
 
+    @Override
     public void update(double deltaT)
     {
         if (isPaused())
@@ -70,5 +96,4 @@ public abstract class AnimationDrawable extends Drawable implements IFrameUpdata
             }
         }
     }
-
 }

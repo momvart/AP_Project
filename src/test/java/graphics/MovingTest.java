@@ -1,7 +1,9 @@
 package graphics;
 
 import graphics.drawers.Drawer;
+import graphics.drawers.drawables.Drawable;
 import graphics.drawers.drawables.ImageDrawable;
+import graphics.drawers.drawables.animators.AlphaAnimator;
 import graphics.gui.AttackStage;
 import graphics.helpers.GraphicHelper;
 import graphics.helpers.SoldierGraphicHelper;
@@ -21,6 +23,8 @@ import models.soldiers.SoldierFactory;
 import utils.PointF;
 import utils.RectF;
 import utils.SizeF;
+
+import java.util.stream.Collectors;
 
 public class MovingTest extends Application
 {
@@ -82,18 +86,21 @@ public class MovingTest extends Application
         });
         handler.addUpdatable(helper);
 
+        AlphaAnimator animator = new AlphaAnimator(1, true, helper.getDrawer().getAnimations().values().stream().map(animationDrawable -> (Drawable)animationDrawable).collect(Collectors.toList()), 0.5, 1);
+        animator.start();
+        handler.addUpdatable(animator);
+
         SoldierGraphicHelper helper2 = new SoldierGraphicHelper(SoldierFactory.createSoldierByTypeID(Guardian.SOLDIER_TYPE, 2));
         helper2.getDrawer().setPosition(8, 6);
         helper2.getDrawer().setLayer(layer);
-        helper2.makeIdle();
+//        helper2.makeIdle();
+        helper2.moveTo(new PointF(6, 6));
         helper2.setMoveListener(position ->
         {
-            if (PointF.euclideanDistance(position, new PointF(10, 10)) < 0.01)
-                helper2.moveTo(new PointF(5, 10));
-            else if (PointF.euclideanDistance(position, new PointF(5, 10)) < 0.01)
-                helper2.moveTo(new PointF(5, 5));
-            else
-                helper2.moveTo(new PointF(10, 10));
+            if (PointF.euclideanDistance(position, new PointF(6, 6)) < 0.01)
+                helper2.moveTo(new PointF(8, 6));
+            else if (PointF.euclideanDistance(position, new PointF(8, 6)) < 0.01)
+                helper2.moveTo(new PointF(6, 6));
         });
         handler.addUpdatable(helper2);
 
