@@ -11,6 +11,12 @@ public class PointF
         this.y = y;
     }
 
+    public PointF(Point point)
+    {
+        this.x = (double)point.getX();
+        this.y = (double)point.getY();
+    }
+
     public double getX()
     {
         return x;

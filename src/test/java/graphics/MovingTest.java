@@ -50,23 +50,22 @@ public class MovingTest extends Application
 
         PositioningSystem.sScale = 50;
         Layer lFloor = new Layer(0, new RectF(0, 0, 1200, 800), IsometricPositioningSystem.getInstance());
-        Image img1 = new Image(getClass().getClassLoader().getResourceAsStream("assets/floor/isometric1.png"));
-        Image img2 = new Image(getClass().getClassLoader().getResourceAsStream("assets/floor/isometric2.png"));
+        Image img1 = new Image(getClass().getClassLoader().getResourceAsStream("assets/soldiers/guardian/1/attack/001.png"));
+        Image img2 = new Image(getClass().getClassLoader().getResourceAsStream("assets/soldiers/guardian/1/attack/001.png"));
         for (int i = 0; i < 15; i++)
             for (int j = 0; j < 15; j++)
             {
-                ImageDrawable drawable = new ImageDrawable((i + j) % 2 == 0 ? img1 : img2, 61);
-                drawable.setPivot(.5, .5);
-//                drawable.setScale(.85, 1);
-                Drawer drawer = new Drawer(drawable);
-                drawer.setPosition(i, j);
-                drawer.setLayer(lFloor);
+                ImageDrawable drawable = new ImageDrawable((0 + 0) % 2 == 0 ? img1 : img2, 61);
+                drawable.setPivot(.5, 1);
+             //   drawable.setScale(.85, 1);
+                Drawer drawer1 = new Drawer(drawable);
+                drawer1.setPosition(i , j);
+                drawer1.setLayer(lFloor);
             }
-
 
         Layer layer = new Layer(2, new RectF(0, 0, 1200, 800), IsometricPositioningSystem.getInstance());
 
-        ImageDrawable building = new ImageDrawable(new Image(getClass().getClassLoader().getResourceAsStream("assets/buildings/townhall/10/001.png")), 80);
+        ImageDrawable building = new ImageDrawable(new Image(getClass().getClassLoader().getResourceAsStream("assets/soldiers/guardian/1/attack/001.png")), 80);
         building.setPivot(.5, .7);
         Drawer drawer = new Drawer(building);
         drawer.setPosition(7, 7);
@@ -115,6 +114,5 @@ public class MovingTest extends Application
 
         primaryStage.setScene(new Scene(group, 1200, 800));
         primaryStage.show();
-
     }
 }

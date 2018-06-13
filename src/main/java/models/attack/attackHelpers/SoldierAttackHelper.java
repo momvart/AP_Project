@@ -3,9 +3,12 @@ package models.attack.attackHelpers;
 
 import graphics.helpers.*;
 import models.attack.Attack;
+import models.buildings.Building;
 import models.soldiers.*;
 import utils.Point;
+import utils.PointF;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
 public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveFinishedListener
@@ -14,9 +17,10 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
     protected Attack attack;
     protected Soldier soldier;
     private boolean isSoldierDeployed = false;
+
     protected boolean isDead = false;
 
-    public SoldierAttackHelper(Attack attack, Soldier soldier)
+    public SoldierAttackHelper(Attack attack, Soldier soldier) throws URISyntaxException
     {
         this.attack = attack;
         this.soldier = soldier;
@@ -145,4 +149,5 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         graphicHelper.setReloadListener(this);
         graphicHelper.setMoveListener(this);
     }
+
 }

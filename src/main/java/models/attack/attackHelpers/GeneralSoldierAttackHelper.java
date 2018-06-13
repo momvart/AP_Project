@@ -8,6 +8,7 @@ import models.soldiers.Soldier;
 import utils.Point;
 import utils.PointF;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -18,9 +19,14 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 {
     private Building target;
 
-    public GeneralSoldierAttackHelper(Attack attack, Soldier soldier)
+    public GeneralSoldierAttackHelper(Attack attack, Soldier soldier) throws URISyntaxException
     {
         super(attack, soldier);
+    }
+
+    public Building getTarget()
+    {
+        return target;
     }
 
     @Override
@@ -62,7 +68,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
             attack.addScore(target.getBuildingInfo().getDestroyScore());
             attack.addToClaimedResource(target.getBuildingInfo().getDestroyResource());
         }
-
     }
 
     private boolean isTargetInRange()
@@ -138,16 +143,66 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                 soldier.setLocation(pointToGo);
             }
     }
+    //graphic phase
+    private IonDecampListener decampListener;
+
+    private IonSoldierDieListener onSoldierDieListener;
+
+    public IonDecampListener getDecampListener()
+    {
+        return decampListener;
+    }
+
+    private  boolean readyToFireTarget = false;
+
+    public void setDecampListener(IonDecampListener decampListener)
+    {
+        this.decampListener = decampListener;
+    }
+
+    public IonSoldierDieListener getOnSoldierDieListener()
+    {
+        return onSoldierDieListener;
+    }
+
+    public void setOnSoldierDieListener(IonSoldierDieListener onSoldierDieListener)
+    {
+        this.onSoldierDieListener = onSoldierDieListener;
+    }
 
     @Override
     public void onMoveFinished(PointF currentPos)
     {
-
+        readyToFireTarget = true;
     }
+
+
 
     @Override
     public void onReload()
     {
+        if (readyToFireTarget)
+        {
+            if (isSoldierDeployed() && (soldier == null || isDead || getHealth() <= 0))
+            {
+                onSoldierDieListener.onSoldierDie();
+            }
+            else if(soldier != null && isSoldierDeployed() && !isDead && getHealth() > 0 )
+            {
+                if (target == null || target.getStrength() <= 0 || target.getAttackHelper().isDestroyed())
+                {
+                    readyToFireTarget = false;
+                    setTarget();
+                    onDecamp();
+                    return;
+                }
+                fire();
+            }
+        }
+    }
 
+    private void onDecamp()
+    {
+        decampListener.onDecamp();
     }
 }

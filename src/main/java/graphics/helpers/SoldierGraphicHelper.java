@@ -2,22 +2,36 @@ package graphics.helpers;
 
 import graphics.drawers.SoldierDrawer;
 import graphics.positioning.PositioningSystem;
+import models.attack.attackHelpers.*;
+import models.soldiers.Healer;
 import models.soldiers.Soldier;
+import utils.Point;
 import utils.PointF;
 
 import java.net.URISyntaxException;
 
-public class SoldierGraphicHelper extends GraphicHelper
+public class SoldierGraphicHelper extends GraphicHelper implements IonDecampListener, IonSoldierDieListener
 {
-    private Soldier soldier;
+    protected Soldier soldier;
 
     private SoldierDrawer drawer;
+
+    protected PointF moveDest;
+    private double moveLineSin, moveLineCos;
+    private boolean isSoldierHealer = false;
+
+    private IOnMoveFinishedListener moveListener;
+
 
     public SoldierGraphicHelper(Soldier soldier) throws URISyntaxException
     {
         this.soldier = soldier;
         drawer = new SoldierDrawer(soldier);
         drawer.setPosition(soldier.getLocation().getX(), soldier.getLocation().getY());
+        if (soldier.getType() == Healer.SOLDIER_TYPE)
+        {
+            isSoldierHealer = true;
+        }
     }
 
     public SoldierDrawer getDrawer()
@@ -26,13 +40,15 @@ public class SoldierGraphicHelper extends GraphicHelper
     }
 
 
+
     public enum Status
     {
         IDLE,
-        MOVING,
-        ATTACKING
-    }
+        DIE,
+        RUN,
+        ATTACKING;
 
+    }
     private Status status;
 
     public Status getStatus()
@@ -46,15 +62,29 @@ public class SoldierGraphicHelper extends GraphicHelper
         drawer.playAnimation(SoldierDrawer.IDLE);
     }
 
-    private PointF moveDest;
-    private double moveLineSin, moveLineCos;
-    private IOnMoveFinishedListener moveListener;
+
+    private void makeAttacking()
+    {
+        status = Status.ATTACKING;
+        drawer.playAnimation(SoldierDrawer.ATTACK);
+    }
+
+    private void makeDie()
+    {
+        status = Status.DIE;
+        drawer.playAnimation(SoldierDrawer.DIE);
+    }
+
+    private void makeRun()
+    {
+        status = Status.RUN;
+        drawer.playAnimation(SoldierDrawer.RUN);
+    }
 
     public void moveTo(PointF dest)
     {
-        status = Status.MOVING;
+        makeRun();
         moveDest = dest;
-        drawer.playAnimation(SoldierDrawer.RUN);
 
         double distance = PointF.euclideanDistance(dest, drawer.getPosition());
         moveLineSin = (dest.getY() - drawer.getPosition().getY()) / distance;
@@ -66,7 +96,7 @@ public class SoldierGraphicHelper extends GraphicHelper
 
     private void doMoving(double deltaT)
     {
-        if (status != Status.MOVING)
+        if (status != Status.RUN)
             return;
 
         double distance = PointF.euclideanDistance(moveDest, drawer.getPosition());
@@ -97,10 +127,8 @@ public class SoldierGraphicHelper extends GraphicHelper
 
     public void attack()
     {
-        status = Status.ATTACKING;
-        drawer.playAnimation(SoldierDrawer.ATTACK);
+        makeAttacking();
     }
-
 
     @Override
     public void update(double deltaT)
@@ -112,7 +140,54 @@ public class SoldierGraphicHelper extends GraphicHelper
     @Override
     protected void callOnReload()
     {
-        if (status != Status.MOVING)
+        if (status == Status.IDLE || status == Status.ATTACKING)
+        {
+            makeAttacking();
             super.callOnReload();
+        }
+    }
+
+    @Override
+    public void onDecamp()
+    {
+        if (soldier.getAttackHelper().isDead())
+        {
+            makeDie();
+        }
+        else
+        {
+            if (!isSoldierHealer)
+            {
+                GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
+                Point newDest = gsah.getTarget().getLocation();
+                if (newDest != null)
+                {
+                    moveTo(new PointF(newDest));
+                }
+                else
+                {
+                    makeIdle();
+                }
+            }
+            else
+            {
+                HealerAttackHelper hah = (HealerAttackHelper)soldier.getAttackHelper();
+                Point newDest = hah.getDestination();
+                if (newDest != null)
+                {
+                    moveTo(new PointF(newDest));
+                }
+                else
+                {
+                    makeIdle();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onSoldierDie()
+    {
+        makeDie();
     }
 }

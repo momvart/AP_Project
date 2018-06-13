@@ -7,6 +7,7 @@ import models.soldiers.Soldier;
 import utils.Point;
 import utils.PointF;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,7 +46,7 @@ public class HealerAttackHelper extends SoldierAttackHelper
     }
 
 
-    public HealerAttackHelper(Attack attack, Healer healer)
+    public HealerAttackHelper(Attack attack, Healer healer) throws URISyntaxException
     {
         super(attack, healer);
         width = attack.getMap().getWidth();
@@ -60,6 +61,11 @@ public class HealerAttackHelper extends SoldierAttackHelper
         point8 = new Point(width / 2, 5 * height / 6);
         point9 = new Point(5 * width / 6, 5 * height / 6);
         points = new ArrayList<>(Arrays.asList(point1, point2, point3, point4, point5, point6, point7, point8, point9));
+    }
+
+    public Point getDestination()
+    {
+        return destination;
     }
 
     @Override
@@ -199,12 +205,55 @@ public class HealerAttackHelper extends SoldierAttackHelper
     @Override
     public void onMoveFinished(PointF currentPos)
     {
+        //do nothing
+    }
 
+    private IonSoldierDieListener soldierDieListener;
+
+    private IonDecampListener decampListener;
+
+    public IonSoldierDieListener getSoldierDieListener()
+    {
+        return soldierDieListener;
+    }
+
+    public void setSoldierDieListener(IonSoldierDieListener soldierDieListener)
+    {
+        this.soldierDieListener = soldierDieListener;
+    }
+
+    public IonDecampListener getDecampListener()
+    {
+        return decampListener;
+    }
+
+    public void setDecampListener(IonDecampListener decampListener)
+    {
+        this.decampListener = decampListener;
     }
 
     @Override
     public void onReload()
     {
+        if (isSoldierDeployed() && (soldier == null || isDead || getHealth() <= 0))
+        {
+            soldierDieListener.onSoldierDie();
+        }
+        else if(soldier != null && isSoldierDeployed() && !isDead && getHealth() > 0 )
+        {
+            setTarget();
+            fire();
+            Point oldDest = destination;
+            changeDestinationIfNeeded();
+            if (destination != oldDest)
+            {
+                onDecamp();
+            }
+        }
+    }
 
+    private void onDecamp()
+    {
+        decampListener.onDecamp();
     }
 }

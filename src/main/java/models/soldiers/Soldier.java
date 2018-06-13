@@ -5,6 +5,8 @@ import models.attack.attackHelpers.SoldierAttackHelper;
 import models.attack.attackHelpers.GeneralSoldierAttackHelper;
 import utils.Point;
 
+import java.net.URISyntaxException;
+
 public abstract class Soldier
 {
     private int level;
@@ -50,7 +52,7 @@ public abstract class Soldier
         return SoldierValues.getSoldierInfo(this.getType());
     }
 
-    public void participateIn(Attack attack)
+    public void participateIn(Attack attack) throws URISyntaxException
     {
         this.attackHelper = new GeneralSoldierAttackHelper(attack, this);
     }
