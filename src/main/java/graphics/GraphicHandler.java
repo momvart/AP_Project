@@ -1,6 +1,7 @@
 package graphics;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import utils.RectF;
 
 import java.util.ArrayList;
@@ -44,5 +45,10 @@ public class GraphicHandler implements IFrameUpdatable
         updatables.forEach(u -> u.update(deltaT));
         scene.update(deltaT);
         scene.draw(gc, cameraBounds);
+    }
+
+    public void handleMouseClick(MouseEvent event)
+    {
+        scene.handleMouseClick(event.getX() + cameraBounds.getX(), event.getY() + cameraBounds.getY(), event);
     }
 }

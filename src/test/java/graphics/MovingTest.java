@@ -39,10 +39,12 @@ public class MovingTest extends Application
         World.initialize();
         Group group = new Group();
         Canvas canvas = new Canvas(1200, 800);
+
         group.getChildren().add(canvas);
 
         GraphicHandler handler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, 1200, 800));
         GameScene gameScene = new GameScene(new SizeF(1200, 800));
+        canvas.setOnMouseClicked(handler::handleMouseClick);
 
         handler.updateCamera(new RectF(0, -400, 1200, 800));
 
@@ -68,12 +70,13 @@ public class MovingTest extends Application
         building.setPivot(.5, .7);
         Drawer drawer = new Drawer(building);
         drawer.setPosition(7, 7);
+        drawer.setClickListener(event -> System.out.println("Salam"));
         drawer.setLayer(layer);
-
 
         SoldierGraphicHelper helper = new SoldierGraphicHelper(SoldierFactory.createSoldierByTypeID(Guardian.SOLDIER_TYPE, 1));
         helper.getDrawer().setPosition(0, 5);
         helper.getDrawer().setLayer(layer);
+        helper.getDrawer().setClickListener(event -> System.out.println("Soldier"));
         helper.moveTo(new PointF(0, 10));
         helper.setMoveListener(position ->
         {

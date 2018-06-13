@@ -1,6 +1,7 @@
 package graphics;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import utils.MySortedList;
 import utils.RectF;
 import utils.SizeF;
@@ -37,5 +38,12 @@ public class GameScene implements IFrameUpdatable
     public void update(double deltaT)
     {
         layers.forEach(l -> l.update(deltaT));
+    }
+
+    public void handleMouseClick(double x, double y, MouseEvent event)
+    {
+        for (int i = layers.size() - 1; i >= 0; i--)
+            if (layers.getByIndex(i).handleMouseClick(x, y, event))
+                break;
     }
 }

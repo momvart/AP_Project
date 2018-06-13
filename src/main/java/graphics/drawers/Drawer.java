@@ -2,7 +2,9 @@ package graphics.drawers;
 
 import graphics.Layer;
 import graphics.drawers.drawables.Drawable;
+import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import utils.PointF;
 import utils.RectF;
 
@@ -62,6 +64,29 @@ public class Drawer
             layer.removeObject(this);
         this.layer = layer;
         layer.addObject(this);
+    }
+
+    private boolean clickable = false;
+
+    public boolean isClickable()
+    {
+        return clickable;
+    }
+
+    private EventHandler<MouseEvent> clickListener;
+
+    public void setClickListener(EventHandler<MouseEvent> clickListener)
+    {
+        this.clickListener = clickListener;
+        clickable = clickListener != null;
+        if (layer != null)
+            layer.addClickable(this);
+    }
+
+    public void callOnClick(MouseEvent event)
+    {
+        if (clickListener != null)
+            clickListener.handle(event);
     }
 
     public void draw(GraphicsContext gc)

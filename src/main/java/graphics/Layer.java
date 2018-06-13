@@ -3,6 +3,7 @@ package graphics;
 import graphics.drawers.Drawer;
 import graphics.positioning.*;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import utils.*;
 
 import java.util.*;
@@ -54,6 +55,8 @@ public class Layer implements IFrameUpdatable
         drawers.add(drawer);
         if (drawer instanceof IFrameUpdatable)
             updatables.add((IFrameUpdatable)drawer);
+        if (drawer.isClickable())
+            addClickable(drawer);
     }
 
     public void removeObject(Drawer drawer)
@@ -61,6 +64,25 @@ public class Layer implements IFrameUpdatable
         drawers.remove(drawer);
         if (drawer instanceof IFrameUpdatable)
             updatables.remove(drawer);
+    }
+
+    private HashSet<Drawer> clickables = new HashSet<>();
+
+    public void addClickable(Drawer clickable)
+    {
+        clickables.add(clickable);
+    }
+
+    public boolean handleMouseClick(double x, double y, MouseEvent event)
+    {
+        RectF mousePoint = new RectF(x - bounds.getX(), y - bounds.getY(), 0, 0);
+        for (Drawer clickable : clickables)
+            if (clickable.canBeVisibleIn(mousePoint))
+            {
+                clickable.callOnClick(event);
+                return true;
+            }
+        return false;
     }
 
     public void draw(GraphicsContext gc, RectF cameraBounds)
