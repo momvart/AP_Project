@@ -75,9 +75,8 @@ public class Layer implements IFrameUpdatable
 
     public boolean handleMouseClick(double x, double y, MouseEvent event)
     {
-        RectF mousePoint = new RectF(x - bounds.getX(), y - bounds.getY(), 0, 0);
         for (Drawer clickable : clickables)
-            if (clickable.canBeVisibleIn(mousePoint))
+            if (clickable.containsPoint(x - bounds.getX(), y - bounds.getY()))
             {
                 clickable.callOnClick(event);
                 return true;

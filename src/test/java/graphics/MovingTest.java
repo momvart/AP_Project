@@ -36,20 +36,23 @@ public class MovingTest extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
+        GraphicsValues.setScale(1);
         World.initialize();
         Group group = new Group();
+        double width = 600;
+        double height = 400;
         Canvas canvas = new Canvas(1200, 800);
 
         group.getChildren().add(canvas);
 
-        GraphicHandler handler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, 1200, 800));
-        GameScene gameScene = new GameScene(new SizeF(1200, 800));
+        GraphicHandler handler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, canvas.getWidth(), canvas.getHeight()));
+        GameScene gameScene = new GameScene(new SizeF(canvas.getWidth(), canvas.getHeight()));
         canvas.setOnMouseClicked(handler::handleMouseClick);
 
-        handler.updateCamera(new RectF(0, -400, 1200, 800));
+        handler.updateCamera(new RectF(0, -400, canvas.getWidth(), canvas.getHeight()));
 
         PositioningSystem.sScale = 50;
-        Layer lFloor = new Layer(0, new RectF(0, 0, 1200, 800), IsometricPositioningSystem.getInstance());
+        Layer lFloor = new Layer(0, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
         Image img1 = new Image(getClass().getClassLoader().getResourceAsStream("assets/floor/isometric1.png"));
         Image img2 = new Image(getClass().getClassLoader().getResourceAsStream("assets/floor/isometric2.png"));
         for (int i = 0; i < 15; i++)
@@ -57,17 +60,17 @@ public class MovingTest extends Application
             {
                 ImageDrawable drawable = new ImageDrawable((i + j) % 2 == 0 ? img1 : img2, 61);
                 drawable.setPivot(.5, .5);
-//                drawable.setScale(.85, 1);
                 Drawer drawer = new Drawer(drawable);
                 drawer.setPosition(i, j);
                 drawer.setLayer(lFloor);
             }
 
 
-        Layer layer = new Layer(2, new RectF(0, 0, 1200, 800), IsometricPositioningSystem.getInstance());
+        Layer layer = new Layer(2, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
 
         ImageDrawable building = new ImageDrawable(new Image(getClass().getClassLoader().getResourceAsStream("assets/buildings/townhall/10/001.png")), 80);
         building.setPivot(.5, .7);
+        building.setRotation(45);
         Drawer drawer = new Drawer(building);
         drawer.setPosition(7, 7);
         drawer.setClickListener(event -> System.out.println("Salam"));
@@ -113,7 +116,7 @@ public class MovingTest extends Application
 
         new GameLooper(handler).start();
 
-        primaryStage.setScene(new Scene(group, 1200, 800));
+        primaryStage.setScene(new Scene(group, canvas.getWidth(), canvas.getHeight()));
         primaryStage.show();
 
     }

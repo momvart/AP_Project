@@ -66,15 +66,23 @@ public abstract class Drawable implements IDrawable
         rotate.setPivotX(pivot.getX() * getWidth());
         rotate.setPivotY(pivot.getY() * getHeight());
 
-//        scale.setPivotX(rotate.getPivotX());
-//        scale.setPivotY(rotate.getPivotY());
-        scale.setPivotX(0.5 * getWidth());
-        scale.setPivotY(0.5 * getHeight());
+        scale.setPivotX(rotate.getPivotX());
+        scale.setPivotY(rotate.getPivotY());
     }
 
     public Translate getTranslate()
     {
         return translate;
+    }
+
+    public Rotate getRotate()
+    {
+        return rotate;
+    }
+
+    public Scale getScale()
+    {
+        return scale;
     }
 
     public void setRotation(double angle)

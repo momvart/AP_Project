@@ -11,11 +11,13 @@ public class AnimationDrawer extends Drawer implements IFrameUpdatable
 {
     protected HashMap<String, AnimationDrawable> animations = new HashMap<>();
 
+    private Drawable baseDrawable;
     private AnimationDrawable currentAnim;
 
-    public AnimationDrawer(Drawable baseDrawer)
+    public AnimationDrawer(Drawable baseDrawable)
     {
-        super(baseDrawer);
+        super(baseDrawable);
+        this.baseDrawable = baseDrawable;
     }
 
     public void addAnimation(String name, AnimationDrawable anim)
@@ -25,10 +27,11 @@ public class AnimationDrawer extends Drawer implements IFrameUpdatable
 
     public void playAnimation(String name)
     {
-        name = name.toLowerCase();
-        if (!animations.containsKey(name))
-            throw new IllegalArgumentException("Name is not valid.");
-        currentAnim = animations.get(name);
+        currentAnim = animations.get(name.toLowerCase());
+        if (currentAnim != null)
+            setDrawable(currentAnim);
+        else
+            setDrawable(baseDrawable);
     }
 
     public AnimationDrawable getCurrentAnim()
@@ -39,25 +42,6 @@ public class AnimationDrawer extends Drawer implements IFrameUpdatable
     public HashMap<String, AnimationDrawable> getAnimations()
     {
         return animations;
-    }
-
-    @Override
-    public void draw(GraphicsContext gc)
-    {
-        if (currentAnim == null)
-        {
-            super.draw(gc);
-            return;
-        }
-
-        gc.save();
-        if (getLayer() == null)
-            gc.translate(getPosition().getX(), getPosition().getY());
-        else
-            gc.translate(getLayer().getPosSys().convertX(getPosition()), getLayer().getPosSys().convertY(getPosition()));
-
-        currentAnim.draw(gc);
-        gc.restore();
     }
 
     @Override
