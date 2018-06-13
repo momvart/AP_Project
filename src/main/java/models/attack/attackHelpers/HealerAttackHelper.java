@@ -7,7 +7,6 @@ import models.soldiers.Soldier;
 import utils.Point;
 import utils.PointF;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +45,7 @@ public class HealerAttackHelper extends SoldierAttackHelper
     }
 
 
-    public HealerAttackHelper(Attack attack, Healer healer) throws URISyntaxException
+    public HealerAttackHelper(Attack attack, Healer healer)
     {
         super(attack, healer);
         width = attack.getMap().getWidth();
@@ -208,26 +207,26 @@ public class HealerAttackHelper extends SoldierAttackHelper
         //do nothing
     }
 
-    private IonSoldierDieListener soldierDieListener;
+    private IOnSoldierDieListener soldierDieListener;
 
-    private IonDecampListener decampListener;
+    private IOnDecampListener decampListener;
 
-    public IonSoldierDieListener getSoldierDieListener()
+    public IOnSoldierDieListener getSoldierDieListener()
     {
         return soldierDieListener;
     }
 
-    public void setSoldierDieListener(IonSoldierDieListener soldierDieListener)
+    public void setSoldierDieListener(IOnSoldierDieListener soldierDieListener)
     {
         this.soldierDieListener = soldierDieListener;
     }
 
-    public IonDecampListener getDecampListener()
+    public IOnDecampListener getDecampListener()
     {
         return decampListener;
     }
 
-    public void setDecampListener(IonDecampListener decampListener)
+    public void setDecampListener(IOnDecampListener decampListener)
     {
         this.decampListener = decampListener;
     }

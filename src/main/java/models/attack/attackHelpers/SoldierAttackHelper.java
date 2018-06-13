@@ -20,7 +20,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     protected boolean isDead = false;
 
-    public SoldierAttackHelper(Attack attack, Soldier soldier) throws URISyntaxException
+    public SoldierAttackHelper(Attack attack, Soldier soldier)
     {
         this.attack = attack;
         this.soldier = soldier;

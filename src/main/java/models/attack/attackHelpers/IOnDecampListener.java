@@ -1,6 +1,6 @@
 package models.attack.attackHelpers;
 
-public interface IonDecampListener
+public interface IOnDecampListener
 {
     void onDecamp();
 }

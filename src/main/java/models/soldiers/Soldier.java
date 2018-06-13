@@ -52,7 +52,7 @@ public abstract class Soldier
         return SoldierValues.getSoldierInfo(this.getType());
     }
 
-    public void participateIn(Attack attack) throws URISyntaxException
+    public void participateIn(Attack attack)
     {
         this.attackHelper = new GeneralSoldierAttackHelper(attack, this);
     }

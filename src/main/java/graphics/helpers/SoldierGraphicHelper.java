@@ -10,7 +10,7 @@ import utils.PointF;
 
 import java.net.URISyntaxException;
 
-public class SoldierGraphicHelper extends GraphicHelper implements IonDecampListener, IonSoldierDieListener
+public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampListener, IOnSoldierDieListener
 {
     protected Soldier soldier;
 
@@ -38,7 +38,6 @@ public class SoldierGraphicHelper extends GraphicHelper implements IonDecampList
     {
         return drawer;
     }
-
 
 
     public enum Status
@@ -123,11 +122,6 @@ public class SoldierGraphicHelper extends GraphicHelper implements IonDecampList
     public void setMoveListener(IOnMoveFinishedListener moveListener)
     {
         this.moveListener = moveListener;
-    }
-
-    public void attack()
-    {
-        makeAttacking();
     }
 
     @Override

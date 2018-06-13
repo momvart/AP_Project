@@ -8,7 +8,6 @@ import models.soldiers.Soldier;
 import utils.Point;
 import utils.PointF;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -19,7 +18,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 {
     private Building target;
 
-    public GeneralSoldierAttackHelper(Attack attack, Soldier soldier) throws URISyntaxException
+    public GeneralSoldierAttackHelper(Attack attack, Soldier soldier)
     {
         super(attack, soldier);
     }
@@ -144,28 +143,28 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
             }
     }
     //graphic phase
-    private IonDecampListener decampListener;
+    private IOnDecampListener decampListener;
 
-    private IonSoldierDieListener onSoldierDieListener;
+    private IOnSoldierDieListener onSoldierDieListener;
 
-    public IonDecampListener getDecampListener()
+    public IOnDecampListener getDecampListener()
     {
         return decampListener;
     }
 
     private  boolean readyToFireTarget = false;
 
-    public void setDecampListener(IonDecampListener decampListener)
+    public void setDecampListener(IOnDecampListener decampListener)
     {
         this.decampListener = decampListener;
     }
 
-    public IonSoldierDieListener getOnSoldierDieListener()
+    public IOnSoldierDieListener getOnSoldierDieListener()
     {
         return onSoldierDieListener;
     }
 
-    public void setOnSoldierDieListener(IonSoldierDieListener onSoldierDieListener)
+    public void setOnSoldierDieListener(IOnSoldierDieListener onSoldierDieListener)
     {
         this.onSoldierDieListener = onSoldierDieListener;
     }
