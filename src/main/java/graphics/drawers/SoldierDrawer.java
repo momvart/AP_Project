@@ -16,9 +16,7 @@ public class SoldierDrawer extends AnimationDrawer
     public SoldierDrawer(Soldier soldier) throws URISyntaxException
     {
         super(null);
-        FrameAnimationDrawable anim = new FrameAnimationDrawable(GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), IDLE), 1);
-        anim.setPivot(0.5, 1);
-        addAnimation(IDLE, anim);
+        addAnimation(IDLE, new FrameAnimationDrawable(GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), IDLE), 1));
         addAnimation(RUN, new FrameAnimationDrawable(GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), RUN), 0.5));
         addAnimation(ATTACK, new FrameAnimationDrawable(GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), ATTACK), 0.5));
         addAnimation(DIE, new FrameAnimationDrawable(GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), DIE), 1));
