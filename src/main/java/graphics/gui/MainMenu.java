@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import models.World;
 import utils.GraphicsUtilities;
 import utils.RectF;
 import utils.SizeF;
@@ -39,7 +40,7 @@ public class MainMenu extends Application
         final double width = 1920 / 2;
         final double height = 1080 / 2;
         if (System.getProperty("os.name").equals("Linux"))
-            GraphicsValues.setScale(3);
+            GraphicsValues.setScale(4);
 
         Group group = new Group();
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
@@ -54,7 +55,11 @@ public class MainMenu extends Application
         root.setPrefHeight(GraphicsValues.getScale() * height);
         canvas.setWidth(width * GraphicsValues.getScale());
         canvas.setHeight(height * GraphicsValues.getScale());
+        stage.setWidth(width * GraphicsValues.getScale());
+        stage.setHeight(height * GraphicsValues.getScale());
         root.setAlignment(canvas, Pos.BOTTOM_LEFT);
+        World.initialize();
+        World.newGame();
 
         //endregion
 
@@ -136,8 +141,19 @@ public class MainMenu extends Application
         group.getChildren().addAll(menuBox, quitBox);
         //endregion
 
+        // region bars
+        Layer menu = new Layer(3, new RectF(0, 0, width, height));
+        GVillageView gVillageView = new GVillageView(menu, width, height);
+        gVillageView.showTopBar();
+        gVillageView.showInfoBar("showMap");
+        gVillageView.showLeftBar();
+        gVillageView.showRightBar();
+
+        //endregion
+
         //region show
         gameScene.addLayer(layer);
+        gameScene.addLayer(menu);
         gameScene.addLayer(lFlame);
         gameScene.addLayer(soldierLayer);
         handler.setScene(gameScene);

@@ -78,4 +78,9 @@ public class Drawer
             drawable.draw(gc);
         gc.restore();
     }
+
+    public void setVisible(boolean visible)
+    {
+        this.visible = visible;
+    }
 }
