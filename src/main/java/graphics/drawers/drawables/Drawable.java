@@ -2,6 +2,7 @@ package graphics.drawers.drawables;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.transform.*;
 import utils.*;
 
@@ -11,6 +12,8 @@ public abstract class Drawable implements IDrawable
     private SizeF size = new SizeF(0, 0);
 
     private double alpha = 1;
+
+    private Paint fill = Color.BLACK;
 
     private Translate translate = new Translate();
     private Scale scale = new Scale();
@@ -53,10 +56,10 @@ public abstract class Drawable implements IDrawable
 
     public double getWidth()
     {
-        return size.getWidth();
+        return getSize().getWidth();
     }
 
-    public double getHeight() { return size.getHeight(); }
+    public double getHeight() { return getSize().getHeight(); }
 
     private void setPivots()
     {
@@ -96,6 +99,11 @@ public abstract class Drawable implements IDrawable
         scale.setY(y);
     }
 
+    public void setFill(Paint fill)
+    {
+        this.fill = fill;
+    }
+
     protected void onPreDraw(GraphicsContext gc)
     {
         gc.save();
@@ -103,7 +111,7 @@ public abstract class Drawable implements IDrawable
         GraphicsUtilities.GCTransform(gc, rotate);
         GraphicsUtilities.GCTransform(gc, scale);
 
-        gc.setFill(Color.BLACK);
+        gc.setFill(fill);
         gc.setStroke(Color.BLACK);
         gc.setGlobalAlpha(alpha);
     }

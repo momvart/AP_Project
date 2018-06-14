@@ -5,20 +5,15 @@ import javafx.scene.paint.Paint;
 
 public class VProgressbarDrawable extends Drawable
 {
-    private Paint fill;
     private Paint stroke;
 
     private double progress;
 
     public VProgressbarDrawable(Paint fill)
     {
-        this.fill = fill;
+        setFill(fill);
     }
 
-    public void setFill(Paint fill)
-    {
-        this.fill = fill;
-    }
 
     public void setStroke(Paint stroke)
     {
@@ -41,7 +36,6 @@ public class VProgressbarDrawable extends Drawable
     @Override
     protected void onDraw(GraphicsContext gc)
     {
-        gc.setFill(fill);
         gc.fillRect(0, 0, getWidth() * progress, getHeight());
         gc.setStroke(stroke);
         gc.strokeRoundRect(0, 0, getWidth(), getHeight(), 2, 2);

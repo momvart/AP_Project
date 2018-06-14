@@ -1,10 +1,13 @@
 package graphics.gui;
 
+import graphics.GraphicsValues;
 import graphics.Layer;
 import graphics.drawers.Drawer;
+import graphics.drawers.LayerDrawer;
 import graphics.drawers.MenuDrawer;
 import graphics.drawers.drawables.Drawable;
 import graphics.drawers.drawables.ImageDrawable;
+import graphics.drawers.drawables.RoundRectDrawable;
 import graphics.drawers.drawables.bars.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -16,7 +19,9 @@ import menus.Menu;
 import menus.ParentMenu;
 import models.World;
 import models.buildings.Building;
+import utils.GraphicsUtilities;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class GraphicView
@@ -173,6 +178,35 @@ public class GraphicView
             drawers[i].setPosition(width - boxWidth / 2, height / 2 + (i - soldiersTypeCount / 2 + (soldiersTypeCount % 2 == 1 ? 0 : 0.5)) * height / 15);
             drawers[i].setLayer(layer);
         }
+    }
+
+    public void showRightBar2()
+    {
+        final double cellSize = 50;
+        final double padding = 5;
+
+        int soldiersTypeCount = 5;
+
+        LayerDrawer drawer = new LayerDrawer();
+
+        Drawable bg = new RoundRectDrawable(cellSize + 2 * padding, (cellSize + padding) * soldiersTypeCount + padding, 10, Color.rgb(0, 0, 0, .6));
+        drawer.getDrawers().add(new Drawer(bg));
+
+        for (int i = 0; i < soldiersTypeCount; i++)
+        {
+            try
+            {
+                ImageDrawable img = GraphicsUtilities.createImageDrawable("assets/soldiers/guardian/1/idle/001.png", cellSize, cellSize);
+                img.setPivot(.5, .5);
+                Drawer d = new Drawer(img);
+                d.setPosition(bg.getWidth() / 2, (i) * (cellSize + padding) + (cellSize / 2 + padding));
+                drawer.getDrawers().add(d);
+            }
+            catch (URISyntaxException ex) {}
+        }
+
+        drawer.setPosition(width - cellSize - 2 * padding, (height - bg.getHeight()) / 2);
+        drawer.setLayer(layer);
     }
 
 
