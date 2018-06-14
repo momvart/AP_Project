@@ -40,7 +40,7 @@ public class MainMenu extends Application
         final double width = 1920 / 2;
         final double height = 1080 / 2;
         if (System.getProperty("os.name").equals("Linux"))
-            GraphicsValues.setScale(4);
+            GraphicsValues.setScale(3);
 
         Group group = new Group();
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
@@ -55,11 +55,12 @@ public class MainMenu extends Application
         root.setPrefHeight(GraphicsValues.getScale() * height);
         canvas.setWidth(width * GraphicsValues.getScale());
         canvas.setHeight(height * GraphicsValues.getScale());
+        canvas.setOnMouseClicked(handler::handleMouseClick);
         stage.setWidth(width * GraphicsValues.getScale());
         stage.setHeight(height * GraphicsValues.getScale());
         root.setAlignment(canvas, Pos.BOTTOM_LEFT);
+
         World.initialize();
-        World.newGame();
 
         //endregion
 
@@ -69,8 +70,8 @@ public class MainMenu extends Application
         imgBackground.setFitHeight(root.getPrefHeight());
         ImageDrawable background = new ImageDrawable(imgBackground.getImage(), width, height);
         Drawer bgdrawer = new Drawer(background);
-        bgdrawer.setLayer(layer);
         bgdrawer.setPosition(0, 0);
+        bgdrawer.setLayer(layer);
         //endregion
 
         //region flame,stones
@@ -141,25 +142,14 @@ public class MainMenu extends Application
         group.getChildren().addAll(menuBox, quitBox);
         //endregion
 
-        // region bars
-        Layer menu = new Layer(3, new RectF(0, 0, width, height));
-        GVillageView gVillageView = new GVillageView(menu, width, height);
-        gVillageView.showTopBar();
-        gVillageView.showInfoBar("showMap");
-        gVillageView.showLeftBar();
-        gVillageView.showRightBar();
-
-        //endregion
-
         //region show
         gameScene.addLayer(layer);
-        gameScene.addLayer(menu);
         gameScene.addLayer(lFlame);
         gameScene.addLayer(soldierLayer);
         handler.setScene(gameScene);
         new GameLooper(handler).start();
         stage.setScene(new Scene(group, width * GraphicsValues.getScale(), height * GraphicsValues.getScale()));
-        stage.setResizable(false);
+        stage.setResizable(true);
         stage.show();
         //endregion
     }
