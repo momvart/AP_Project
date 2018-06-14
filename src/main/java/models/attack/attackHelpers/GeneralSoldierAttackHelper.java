@@ -8,6 +8,7 @@ import models.soldiers.Soldier;
 import utils.Point;
 import utils.PointF;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -18,9 +19,11 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 {
     private Building target;
 
-    public GeneralSoldierAttackHelper(Attack attack, Soldier soldier)
+    public GeneralSoldierAttackHelper(Attack attack, Soldier soldier) throws URISyntaxException
     {
         super(attack, soldier);
+        this.setDecampListener(getGraphicHelper());
+        this.setOnSoldierDieListener(getGraphicHelper());
     }
 
     public Building getTarget()
@@ -180,17 +183,17 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     @Override
     public void onReload()
     {
+        if (isSoldierDeployed() && (soldier == null || isDead || getHealth() <= 0))
+        {
+            onSoldierDieListener.onSoldierDie();
+            return;
+        }
         if (readyToFireTarget)
         {
-            if (isSoldierDeployed() && (soldier == null || isDead || getHealth() <= 0))
-            {
-                onSoldierDieListener.onSoldierDie();
-            }
-            else if(soldier != null && isSoldierDeployed() && !isDead && getHealth() > 0 )
+            if(soldier != null && isSoldierDeployed() && !isDead && getHealth() > 0 )
             {
                 if (target == null || target.getStrength() <= 0 || target.getAttackHelper().isDestroyed())
                 {
-                    readyToFireTarget = false;
                     setTarget();
                     onDecamp();
                     return;
@@ -202,6 +205,10 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 
     private void onDecamp()
     {
-        decampListener.onDecamp();
+        readyToFireTarget = false;
+        if (decampListener != null)
+        {
+            decampListener.onDecamp();
+        }
     }
 }

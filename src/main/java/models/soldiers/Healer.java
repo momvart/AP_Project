@@ -4,6 +4,8 @@ package models.soldiers;
 import models.attack.Attack;
 import models.attack.attackHelpers.HealerAttackHelper;
 
+import java.net.URISyntaxException;
+
 public class Healer extends Soldier
 {
     public Healer(int level)

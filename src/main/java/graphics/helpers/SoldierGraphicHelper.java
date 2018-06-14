@@ -2,6 +2,7 @@ package graphics.helpers;
 
 import graphics.drawers.SoldierDrawer;
 import graphics.positioning.PositioningSystem;
+import models.attack.Attack;
 import models.attack.attackHelpers.*;
 import models.soldiers.Healer;
 import models.soldiers.Soldier;
@@ -10,6 +11,8 @@ import utils.PointF;
 
 import java.net.URISyntaxException;
 
+import static java.lang.Math.round;
+
 public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampListener, IOnSoldierDieListener
 {
     protected Soldier soldier;
@@ -17,7 +20,6 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
     private SoldierDrawer drawer;
 
     protected PointF moveDest;
-    private double moveLineSin, moveLineCos;
     private boolean isSoldierHealer = false;
 
     private IOnMoveFinishedListener moveListener;
@@ -27,10 +29,19 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
     {
         this.soldier = soldier;
         drawer = new SoldierDrawer(soldier);
+        //note that reload listeners are all set when instantiating from the attackHelper.assuming that we create the soldier the attackHelper and the graphicHelper coincidly.
+        setReloadDuration(.7);//TODO‌ yet to be decided!! consider that we've got attack animation playing in the reload method. so we should decide this duration equal to attack animation playDuration in order of smoothness of graphic
         drawer.setPosition(soldier.getLocation().getX(), soldier.getLocation().getY());
+        status = Status.RUN;
         if (soldier.getType() == Healer.SOLDIER_TYPE)
         {
             isSoldierHealer = true;
+            HealerAttackHelper hah = (HealerAttackHelper)soldier.getAttackHelper();
+            moveTo(new PointF(hah.getDestination()));
+        }else
+        {
+            GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
+            moveTo(new PointF(gsah.getTarget().getLocation()));
         }
     }
 
@@ -84,11 +95,6 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
     {
         makeRun();
         moveDest = dest;
-
-        double distance = PointF.euclideanDistance(dest, drawer.getPosition());
-        moveLineSin = (dest.getY() - drawer.getPosition().getY()) / distance;
-        moveLineCos = (dest.getX() - drawer.getPosition().getX()) / distance;
-
         PositioningSystem ps = getDrawer().getLayer().getPosSys();
         drawer.getCurrentAnim().setScale(ps.convertX(dest) < ps.convertX(drawer.getPosition()) ? -1 : 1, 1);
     }
@@ -97,18 +103,21 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
     {
         if (status != Status.RUN)
             return;
-
+        Point nextPoint  = soldier.getAttackHelper().getPointToGo(getPoint(moveDest) , deltaT);
         double distance = PointF.euclideanDistance(moveDest, drawer.getPosition());
-        double step = soldier.getSoldierInfo().getSpeed() * deltaT;
-
-        if (distance < 0.01 || distance < step)
+        double stepDistance = Point.euclideanDistance(getPoint(drawer.getPosition()), nextPoint);
+        //TODO‌ this kind of approach also yields the collapse with buildings except we settle on a decent and high game lopping cycle period!!
+        if (distance < 0.01 || distance < stepDistance)
         {
             onMoveFinished();
             return;
         }
 
-        drawer.setPosition(drawer.getPosition().getX() + step * moveLineCos,
-                drawer.getPosition().getY() + step * moveLineSin);
+        drawer.setPosition(nextPoint.getX() , nextPoint.getY());
+    }
+    private Point getPoint(PointF pointF)
+    {
+        return new Point((int)round(pointF.getX()) , (int)round(pointF.getY()));
     }
 
     private void onMoveFinished()
@@ -144,7 +153,7 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
     @Override
     public void onDecamp()
     {
-        if (soldier.getAttackHelper().isDead())
+        if (soldier.getAttackHelper().isDead() || soldier == null || soldier.getAttackHelper().getHealth() <= 0)
         {
             makeDie();
         }

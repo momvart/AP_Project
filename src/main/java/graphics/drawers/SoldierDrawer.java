@@ -22,6 +22,4 @@ public class SoldierDrawer extends AnimationDrawer
         addAnimation(DIE, new FrameAnimationDrawable(GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), DIE), 1, 0.5, 1));
         setDrawable(((FrameAnimationDrawable)animations.get(IDLE)).getFrame(0));
     }
-
-
 }

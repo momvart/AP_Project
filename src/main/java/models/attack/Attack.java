@@ -12,6 +12,7 @@ import utils.MapCellNode;
 import utils.Point;
 import utils.Size;
 
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -152,6 +153,7 @@ public class Attack
     {
         soldiers.addSoldier(soldier);
         soldier.participateIn(this);
+
     }
 
     public void addUnits(List<Soldier> soldierList)

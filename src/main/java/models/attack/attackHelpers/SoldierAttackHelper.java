@@ -20,11 +20,12 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     protected boolean isDead = false;
 
-    public SoldierAttackHelper(Attack attack, Soldier soldier)
+    public SoldierAttackHelper(Attack attack, Soldier soldier) throws URISyntaxException
     {
         this.attack = attack;
         this.soldier = soldier;
         this.health = getInitialHealth();
+        setGraphicHelper(new SoldierGraphicHelper(soldier));
     }
 
     public int getHealth()
@@ -87,7 +88,12 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         }
     }
 
-    protected Point getPointToGo(Point destination)
+    public Point getPointToGo(Point destination)
+    {
+        return getPointToGo(destination , 1);
+    }
+
+    public Point getPointToGo(Point destination, double deltaT)
     {
         List<Point> soldierPath = attack.getSoldierPath(getSoldierLocation(), destination, soldier.getMoveType() == MoveType.AIR);
         Point pointToGo = soldierPath.get(soldierPath.size() - 1);
@@ -97,7 +103,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         {
             if (i != soldierPath.size() - 1)
                 pointToGo = soldierPath.get(i + 1);
-            if (Point.euclideanDistance(soldierPath.get(i), getSoldierLocation()) > soldier.getSpeed())
+            if (Point.euclideanDistance(soldierPath.get(i), getSoldierLocation()) > soldier.getSpeed() * deltaT)
                 break;
         }
         return pointToGo;
@@ -136,6 +142,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         isDead = dead;
     }
 
+    //graphic
     private SoldierGraphicHelper graphicHelper;
 
     public SoldierGraphicHelper getGraphicHelper()
@@ -149,5 +156,4 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         graphicHelper.setReloadListener(this);
         graphicHelper.setMoveListener(this);
     }
-
 }
