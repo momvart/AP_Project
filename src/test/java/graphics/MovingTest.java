@@ -4,11 +4,8 @@ import graphics.drawers.Drawer;
 import graphics.drawers.drawables.Drawable;
 import graphics.drawers.drawables.ImageDrawable;
 import graphics.drawers.drawables.animators.AlphaAnimator;
-import graphics.gui.AttackStage;
-import graphics.helpers.GraphicHelper;
 import graphics.helpers.SoldierGraphicHelper;
 import graphics.positioning.IsometricPositioningSystem;
-import graphics.positioning.NormalPositioningSystem;
 import graphics.positioning.PositioningSystem;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -17,7 +14,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import models.World;
-import models.attack.Attack;
 import models.soldiers.Guardian;
 import models.soldiers.SoldierFactory;
 import utils.PointF;
@@ -25,7 +21,6 @@ import utils.RectF;
 import utils.SizeF;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class MovingTest extends Application
 {
@@ -69,8 +64,6 @@ public class MovingTest extends Application
                 if (i == 0 || j == 0 || i == 29 || j == 29)
                     alphaTargets.add(drawable);
             }
-
-
         AlphaAnimator animator = new AlphaAnimator(1, true, alphaTargets, 0.5, 1);
         animator.start();
         handler.addUpdatable(animator);

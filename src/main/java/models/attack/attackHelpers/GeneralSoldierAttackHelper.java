@@ -1,14 +1,16 @@
 package models.attack.attackHelpers;
 
-import models.attack.Attack;
 import models.Resource;
-import models.buildings.*;
+import models.attack.Attack;
+import models.buildings.Building;
+import models.buildings.GoldStorage;
+import models.buildings.Storage;
+import models.buildings.Trap;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import utils.Point;
 import utils.PointF;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -22,8 +24,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     public GeneralSoldierAttackHelper(Attack attack, Soldier soldier)
     {
         super(attack, soldier);
-        this.setDecampListener(getGraphicHelper());
-        this.setOnSoldierDieListener(getGraphicHelper());
     }
 
     public Building getTarget()

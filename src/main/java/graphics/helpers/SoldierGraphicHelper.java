@@ -2,8 +2,10 @@ package graphics.helpers;
 
 import graphics.drawers.SoldierDrawer;
 import graphics.positioning.PositioningSystem;
-import models.attack.Attack;
-import models.attack.attackHelpers.*;
+import models.attack.attackHelpers.GeneralSoldierAttackHelper;
+import models.attack.attackHelpers.HealerAttackHelper;
+import models.attack.attackHelpers.IOnDecampListener;
+import models.attack.attackHelpers.IOnSoldierDieListener;
 import models.soldiers.Healer;
 import models.soldiers.Soldier;
 import utils.Point;
@@ -32,21 +34,52 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
         {
             drawer = new SoldierDrawer(soldier);
         }
-        catch (Exception ignore) {}
-        //note that reload listeners are all set when instantiating from the attackHelper.assuming that we create the soldier the attackHelper and the graphicHelper coincidly.
+        catch (URISyntaxException e)
+        {
+            e.printStackTrace();
+        }
+
         setReloadDuration(.7);//TODO‌ yet to be decided!! consider that we've got attack animation playing in the reload method. so we should decide this duration equal to attack animation playDuration in order of smoothness of graphic
+
+        //initiating the initial states
         drawer.setPosition(soldier.getLocation().getX(), soldier.getLocation().getY());
         status = Status.RUN;
+        settingUpListeners();
+        triggeringTheSoldier();
+    }
+
+    private void triggeringTheSoldier()
+    {
         if (soldier.getType() == Healer.SOLDIER_TYPE)
         {
             isSoldierHealer = true;
             HealerAttackHelper hah = (HealerAttackHelper)soldier.getAttackHelper();
+            hah.setTarget();
             moveTo(new PointF(hah.getDestination()));
         }
         else
         {
             GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
+            gsah.setTarget();
             moveTo(new PointF(gsah.getTarget().getLocation()));
+        }
+    }
+
+    private void settingUpListeners()
+    {
+        setMoveListener(soldier.getAttackHelper());
+        setReloadListener(soldier.getAttackHelper());
+        if (isSoldierHealer)
+        {
+            HealerAttackHelper hah = (HealerAttackHelper)soldier.getAttackHelper();
+            hah.setDecampListener(this);
+            hah.setSoldierDieListener(this);
+        }
+        else
+        {
+            GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
+            gsah.setOnSoldierDieListener(this);
+            gsah.setDecampListener(this);
         }
     }
 

@@ -1,9 +1,11 @@
 package models.attack.attackHelpers;
 
+import graphics.helpers.DefensiveTowerGraphicHelper;
+import graphics.helpers.IOnReloadListener;
 import models.attack.Attack;
 import models.buildings.Building;
 
-public class BuildingAttackHelper
+public class BuildingAttackHelper implements IOnReloadListener
 {
     protected Building building;
     protected int strength;
@@ -48,4 +50,17 @@ public class BuildingAttackHelper
             destroyed = true;
     }
 
+    //graphics
+    DefensiveTowerGraphicHelper bgh;
+
+    public void setBgh(DefensiveTowerGraphicHelper bgh)
+    {
+        this.bgh = bgh;
+    }
+
+    @Override
+    public void onReload()
+    {
+
+    }
 }

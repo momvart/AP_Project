@@ -1,14 +1,15 @@
 package models.attack.attackHelpers;
 
 
-import graphics.helpers.*;
+import graphics.helpers.IOnMoveFinishedListener;
+import graphics.helpers.IOnReloadListener;
+import graphics.helpers.SoldierGraphicHelper;
 import models.attack.Attack;
-import models.buildings.Building;
-import models.soldiers.*;
+import models.soldiers.MoveType;
+import models.soldiers.Soldier;
+import models.soldiers.SoldierValues;
 import utils.Point;
-import utils.PointF;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveFinishedListener
@@ -25,7 +26,6 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         this.attack = attack;
         this.soldier = soldier;
         this.health = getInitialHealth();
-        setGraphicHelper(new SoldierGraphicHelper(soldier));
     }
 
     public int getHealth()

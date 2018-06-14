@@ -1,8 +1,11 @@
 package models.attack.attackHelpers;
 
 import exceptions.SoldierNotFoundException;
+import graphics.helpers.DefenseKind;
 import models.attack.Attack;
 import models.buildings.DefensiveTower;
+import models.soldiers.Soldier;
+import models.soldiers.SoldierInjuryReport;
 import utils.Point;
 
 import java.util.ArrayList;
@@ -28,8 +31,34 @@ public class SingleTargetAttackHelper extends DefensiveTowerAttackHelper
     public void attack()
     {
         if (mainTargets != null && mainTargets.size() > 0)
-            mainTargets.get(0).getAttackHelper().decreaseHealth(getTower().getDamagePower());
+        {
+            Soldier targetSoldier = mainTargets.get(0);
+            int initialHealth = targetSoldier.getAttackHelper().getHealth();
+
+            targetSoldier.getAttackHelper().decreaseHealth(getTower().getDamagePower());
+
+            int finalHealth = Math.max(0, targetSoldier.getAttackHelper().getHealth());
+            ArrayList<SoldierInjuryReport> soldierInjuryReports = new ArrayList<>();
+            soldierInjuryReports.add(new SoldierInjuryReport(targetSoldier, initialHealth, finalHealth));
+            fireListener.onFire(targetSoldier.getLocation(), DefenseKind.SINGLETARGET, soldierInjuryReports, null);
+        }
+
         mainTargets = null;
         // TODO: 6/6/18 don't change mainTargets and wholeTargets to null  each turn for some towers
+    }
+
+    @Override
+    public void onReload()
+    {
+        if (!destroyed)
+        {
+            try { setTarget(); }
+            catch (SoldierNotFoundException ignored) {}
+            attack();
+        }
+        else
+        {
+            destroyListener.onDestroy();
+        }
     }
 }
