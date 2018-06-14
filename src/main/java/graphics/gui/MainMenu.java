@@ -37,6 +37,9 @@ public class MainMenu extends Application
     public void start(Stage stage) throws Exception
     {
         //region initiate
+
+        GraphicsValues.setScale(1.5);
+
         final double width = 1920 / 2;
         final double height = 1080 / 2;
         if (System.getProperty("os.name").equals("Linux"))
@@ -48,7 +51,7 @@ public class MainMenu extends Application
         StackPane root = new StackPane();
         menu = stage;
 
-        GraphicHandler handler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, width, height));
+        GraphicHandler handler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, width * GraphicsValues.getScale(), height * GraphicsValues.getScale()));
         GameScene gameScene = new GameScene(new SizeF(width, height));
         Layer layer = new Layer(0, new RectF(0, 0, width, height));
         root.setPrefWidth(GraphicsValues.getScale() * width);
@@ -147,7 +150,7 @@ public class MainMenu extends Application
         GraphicView gv = new GraphicView(menu, width, height);
         gv.showLeftBar();
         gv.showTopBar();
-        gv.showRightBar();
+        gv.showRightBar2();
 
         //region show
         gameScene.addLayer(layer);

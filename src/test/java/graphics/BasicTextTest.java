@@ -11,6 +11,7 @@ import javafx.scene.paint.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import menus.Menu;
 import utils.*;
 
 public class BasicTextTest extends Application
@@ -33,9 +34,16 @@ public class BasicTextTest extends Application
 
         Fonts.initialize();
 
-        Drawer drawer = new Drawer(new TextDrawable("Salam", Color.BLACK, Font.font(20)));
-        drawer.setPosition(1, 2);
+        TextDrawable text = new TextDrawable("----", Color.BLACK, Font.font(20));
+        text.setPivot(.5, .5);
+        Drawer drawer = new Drawer(text);
+        drawer.setPosition(0, 2);
         drawer.setLayer(layer);
+
+        MenuItemDrawable menu = new MenuItemDrawable(new Menu(2, "Sajlam"), 100, 100);
+        Drawer drawerMenu = new Drawer(menu);
+        drawerMenu.setPosition(20, 10);
+        drawerMenu.setLayer(layer);
 
         VProgressbarDrawable progressbar = new VProgressbarDrawable(new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.GOLD), new Stop(1, Color.ORANGE)));
         Drawer drawer2 = new Drawer(progressbar);
