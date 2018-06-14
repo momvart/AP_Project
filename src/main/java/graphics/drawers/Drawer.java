@@ -6,6 +6,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import utils.GraphicsUtilities;
 import utils.PointF;
 import utils.RectF;
 
@@ -17,6 +19,8 @@ public class Drawer
     private PointF position = new PointF(0, 0);
 
     private Layer layer;
+
+    public Drawer() {}
 
     public Drawer(Drawable drawable)
     {
@@ -56,25 +60,29 @@ public class Drawer
 
     public RectF getBounds()
     {
-        return new RectF(layer.getPosSys().convertX(position), layer.getPosSys().convertY(position), drawable.getWidth(), drawable.getHeight());
+        return new RectF(layer.getPosSys().convertX(position), layer.getPosSys().convertY(position), getDrawable().getWidth(), getDrawable().getHeight());
     }
 
     public boolean canBeVisibleIn(RectF scene) //TODO: has bug
     {
-        return scene.intersectsWith(layer.getPosSys().convertX(position) + drawable.getTranslate().getX(),
-                layer.getPosSys().convertY(position) + drawable.getTranslate().getY(),
-                drawable.getWidth(),
-                drawable.getHeight());
+        if (getDrawable() == null)
+            return false;
+        return scene.intersectsWith(layer.getPosSys().convertX(position) + getDrawable().getTranslate().getX(),
+                layer.getPosSys().convertY(position) + getDrawable().getTranslate().getY(),
+                getDrawable().getWidth(),
+                getDrawable().getHeight());
     }
 
     public boolean containsPoint(double x, double y)
     {
+        if (getDrawable() == null)
+            return false;
         try
         {
-            Point2D newPoint = drawable.getTranslate().inverseTransform(x - layer.getPosSys().convertX(position), y - layer.getPosSys().convertY(position));
-            newPoint = drawable.getRotate().inverseTransform(newPoint);
-            newPoint = drawable.getScale().inverseTransform(newPoint);
-            return newPoint.getX() >= 0 && newPoint.getY() >= 0 && newPoint.getX() <= drawable.getWidth() && newPoint.getY() <= drawable.getHeight();
+            Point2D newPoint = getDrawable().getTranslate().inverseTransform(x - layer.getPosSys().convertX(position), y - layer.getPosSys().convertY(position));
+            newPoint = getDrawable().getRotate().inverseTransform(newPoint);
+            newPoint = getDrawable().getScale().inverseTransform(newPoint);
+            return newPoint.getX() >= 0 && newPoint.getY() >= 0 && newPoint.getX() <= getDrawable().getWidth() && newPoint.getY() <= getDrawable().getHeight();
         }
         catch (Exception ignored) {}
         return false;
@@ -116,18 +124,31 @@ public class Drawer
             clickListener.handle(event);
     }
 
-    public void draw(GraphicsContext gc)
+    protected void onPreDraw(GraphicsContext gc)
     {
-        if (!visible)
-            return;
-
         gc.save();
         if (layer == null)
             gc.translate(position.getX(), position.getY());
         else
             gc.translate(layer.getPosSys().convertX(position), layer.getPosSys().convertY(position));
-        if (drawable != null)
-            drawable.draw(gc);
+    }
+
+    protected void onDraw(GraphicsContext gc)
+    {
+        if (!visible || getDrawable() == null)
+            return;
+        getDrawable().draw(gc);
+    }
+
+    protected void onPostDraw(GraphicsContext gc)
+    {
         gc.restore();
+    }
+
+    public void draw(GraphicsContext gc)
+    {
+        onPreDraw(gc);
+        onDraw(gc);
+        onPostDraw(gc);
     }
 }

@@ -24,6 +24,7 @@ import utils.PointF;
 import utils.RectF;
 import utils.SizeF;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class MovingTest extends Application
@@ -36,11 +37,11 @@ public class MovingTest extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        GraphicsValues.setScale(1);
+        GraphicsValues.setScale(0.45);
         World.initialize();
         Group group = new Group();
-        double width = 600;
-        double height = 400;
+        double width = 1200;
+        double height = 800;
         Canvas canvas = new Canvas(1200, 800);
 
         group.getChildren().add(canvas);
@@ -49,28 +50,35 @@ public class MovingTest extends Application
         GameScene gameScene = new GameScene(new SizeF(canvas.getWidth(), canvas.getHeight()));
         canvas.setOnMouseClicked(handler::handleMouseClick);
 
-        handler.updateCamera(new RectF(0, -400, canvas.getWidth(), canvas.getHeight()));
+        handler.updateCamera(new RectF(0, -900, canvas.getWidth(), canvas.getHeight()));
 
         PositioningSystem.sScale = 50;
         Layer lFloor = new Layer(0, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
+
+        ArrayList<Drawable> alphaTargets = new ArrayList<>();
         Image img1 = new Image(getClass().getClassLoader().getResourceAsStream("assets/floor/isometric1.png"));
         Image img2 = new Image(getClass().getClassLoader().getResourceAsStream("assets/floor/isometric2.png"));
-        for (int i = 0; i < 15; i++)
-            for (int j = 0; j < 15; j++)
+        for (int i = 0; i < 30; i++)
+            for (int j = 0; j < 30; j++)
             {
                 ImageDrawable drawable = new ImageDrawable((i + j) % 2 == 0 ? img1 : img2, 61);
                 drawable.setPivot(.5, .5);
                 Drawer drawer = new Drawer(drawable);
                 drawer.setPosition(i, j);
                 drawer.setLayer(lFloor);
+                if (i == 0 || j == 0 || i == 29 || j == 29)
+                    alphaTargets.add(drawable);
             }
 
 
+        AlphaAnimator animator = new AlphaAnimator(1, true, alphaTargets, 0.5, 1);
+        animator.start();
+        handler.addUpdatable(animator);
+
         Layer layer = new Layer(2, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
 
-        ImageDrawable building = new ImageDrawable(new Image(getClass().getClassLoader().getResourceAsStream("assets/buildings/townhall/10/001.png")), 80);
+        ImageDrawable building = new ImageDrawable(new Image(getClass().getClassLoader().getResourceAsStream("assets/buildings/wizard tower/1/001.png")), 80);
         building.setPivot(.5, .7);
-        building.setRotation(45);
         Drawer drawer = new Drawer(building);
         drawer.setPosition(7, 7);
         drawer.setClickListener(event -> System.out.println("Salam"));
@@ -91,10 +99,6 @@ public class MovingTest extends Application
                 helper.moveTo(new PointF(0, 10));
         });
         handler.addUpdatable(helper);
-
-        AlphaAnimator animator = new AlphaAnimator(1, true, helper.getDrawer().getAnimations().values().stream().map(animationDrawable -> (Drawable)animationDrawable).collect(Collectors.toList()), 0.5, 1);
-        animator.start();
-        handler.addUpdatable(animator);
 
         SoldierGraphicHelper helper2 = new SoldierGraphicHelper(SoldierFactory.createSoldierByTypeID(Guardian.SOLDIER_TYPE, 2));
         helper2.getDrawer().setPosition(8, 6);

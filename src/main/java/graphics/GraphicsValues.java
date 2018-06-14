@@ -1,7 +1,8 @@
 package graphics;
 
-import graphics.drawers.drawables.FrameAnimationDrawable;
 import graphics.drawers.drawables.ImageDrawable;
+import graphics.positioning.IsometricPositioningSystem;
+import models.buildings.BuildingValues;
 import models.soldiers.SoldierValues;
 import utils.GraphicsUtilities;
 
@@ -12,6 +13,7 @@ import java.util.HashMap;
 
 public class GraphicsValues
 {
+    private static final String BUILDINGS_ASSETS_PATH = "assets/buildings";
     private static final String SOLDIERS_ASSETS_PATH = "assets/soldiers";
 
 
@@ -54,5 +56,22 @@ public class GraphicsValues
         }
 
         return frames.get(animKey + level);
+    }
+
+    private static HashMap<String, ImageDrawable> buildings;
+
+    public static ImageDrawable getBuildingImage(int buildingType, int level) throws URISyntaxException
+    {
+        if (buildings == null)
+            buildings = new HashMap<>();
+
+        String name = BuildingValues.getBuildingInfo(buildingType).getName().toLowerCase();
+        if (!buildings.containsKey(name + level))
+            buildings.put(name + level, GraphicsUtilities.createImageDrawable(String.format("%s/%s/%03d/001.png",
+                    BUILDINGS_ASSETS_PATH, name, level),
+                    IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2,
+                    IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2));
+
+        return buildings.get(name + level);
     }
 }

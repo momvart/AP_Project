@@ -17,7 +17,6 @@ public class LeftBarDrawable extends Bar
     protected void onDraw(GraphicsContext gc)
     {
         double boxWidth = 0.04 * width;
-        gc.setFill(Color.rgb(0, 0, 0, 0.6));
         double boxHeight;
         if (buildingTypesCount <= 15)
             boxHeight = buildingTypesCount * height / 15;

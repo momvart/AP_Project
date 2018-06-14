@@ -20,7 +20,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     protected boolean isDead = false;
 
-    public SoldierAttackHelper(Attack attack, Soldier soldier) throws URISyntaxException
+    public SoldierAttackHelper(Attack attack, Soldier soldier)
     {
         this.attack = attack;
         this.soldier = soldier;
@@ -90,7 +90,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     public Point getPointToGo(Point destination)
     {
-        return getPointToGo(destination , 1);
+        return getPointToGo(destination, 1);
     }
 
     public Point getPointToGo(Point destination, double deltaT)

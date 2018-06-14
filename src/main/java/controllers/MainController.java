@@ -2,6 +2,8 @@ package controllers;
 
 import com.google.gson.*;
 import exceptions.*;
+import graphics.gui.MapStage;
+import javafx.application.Platform;
 import models.*;
 import models.buildings.*;
 import utils.*;
@@ -76,6 +78,7 @@ public class MainController implements ICommandManager
 
     private void enterGame()
     {
+        Platform.runLater(() -> new MapStage(World.sCurrentGame.getVillage().getMap()).setUpAndShow());
         childCommandManager = new VillageController(new VillageView(theView.getScanner()));
     }
 

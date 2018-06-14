@@ -17,7 +17,8 @@ public class GraphicHandler implements IFrameUpdatable
     public GraphicHandler(GraphicsContext gc, RectF camera)
     {
         this.gc = gc;
-        this.gc.setTransform(GraphicsValues.getScale(), 0, 0, GraphicsValues.getScale(), 0, 0);
+        gc.save();
+        setScale(GraphicsValues.getScale());
         updateCamera(camera);
     }
 
@@ -26,12 +27,24 @@ public class GraphicHandler implements IFrameUpdatable
         this.scene = scene;
     }
 
+    private double scale = 1;
+
+    public void setScale(double scale)
+    {
+        gc.restore();
+        gc.transform(scale, 0, 0, scale, 0, 0);
+        gc.save();
+        this.scale = scale;
+    }
+
     private RectF cameraBounds = new RectF(0, 0, 0, 0);
 
     public void updateCamera(RectF newBounds)
     {
         gc.translate(cameraBounds.getX() - newBounds.getX(), cameraBounds.getY() - newBounds.getY());
         cameraBounds = newBounds;
+        cameraBounds.setWidth(cameraBounds.getWidth() * 1 / scale);
+        cameraBounds.setHeight(cameraBounds.getHeight() * 1 / scale);
     }
 
 

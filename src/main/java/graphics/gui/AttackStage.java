@@ -85,15 +85,10 @@ public class AttackStage extends Stage
 
     private void addSoldier(Soldier soldier)
     {
-        try
-        {
-            SoldierGraphicHelper helper = new SoldierGraphicHelper(soldier);
-            helper.makeIdle();
-            helper.getDrawer().setLayer(lObjects);
-            soldier.getAttackHelper().setGraphicHelper(helper);
-            handler.addUpdatable(helper);
-        }
-        catch (URISyntaxException e) { e.printStackTrace(); }
+        SoldierGraphicHelper helper = new SoldierGraphicHelper(soldier);
+        helper.makeIdle();
+        helper.getDrawer().setLayer(lObjects);
+        soldier.getAttackHelper().setGraphicHelper(helper);
+        handler.addUpdatable(helper);
     }
-
 }

@@ -14,7 +14,7 @@ public abstract class Building
     protected Point location;
     protected int level;
     protected BuildStatus buildStatus = BuildStatus.BUILT;
-    protected BuildingAttackHelper attackHelper;
+    protected transient BuildingAttackHelper attackHelper;
 
     public Building()
     {

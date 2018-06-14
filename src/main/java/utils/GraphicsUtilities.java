@@ -12,8 +12,12 @@ import java.nio.file.*;
 
 import java.util.*;
 
+import com.google.gson.*;
+
 public class GraphicsUtilities
 {
+    public static final String META_DATA_FILE_NAME = "METAD.json";
+
     public static void GCTransform(GraphicsContext gc, Transform transform)
     {
         gc.transform(transform.getMxx(), transform.getMyx(), transform.getMxy(), transform.getMyy(), transform.getTx(), transform.getTy());
@@ -60,10 +64,58 @@ public class GraphicsUtilities
         for (int i = 0; i < frames.length; i++)
             try
             {
-                frames[i] = new ImageDrawable(new Image(Files.newInputStream(Paths.get(files.get(i).toURI()))), minSideDimen);
+                frames[i] = new ImageDrawable(new Image(new FileInputStream(files.get(i))), minSideDimen);
                 frames[i].setPivot(pivotX, pivotY);
             }
             catch (IOException ignored) {}
         return frames;
     }
+
+    public static JsonObject fetchMetadata(File directory)
+    {
+        File metaFile = new File(directory.getAbsolutePath(), META_DATA_FILE_NAME);
+        if (metaFile.exists())
+        {
+            try (FileReader reader = new FileReader(metaFile))
+            {
+                return new JsonParser().parse(reader).getAsJsonObject();
+            }
+            catch (Exception e) { return null; }
+        }
+        else if (directory.getParent() != null)
+            return fetchMetadata(directory.getParentFile());
+        else
+            return null;
+    }
+
+    public static ImageDrawable createImageDrawable(String filePath, double width, double height) throws URISyntaxException
+    {
+        return createImageDrawable(new File(GraphicsUtilities.class.getClassLoader().getResource(filePath).toURI()), width, height);
+    }
+
+    public static ImageDrawable createImageDrawable(File file, double width, double height)
+    {
+        JsonObject meta = fetchMetadata(file.getParentFile());
+        double pivotX = 0, pivotY = 0;
+        if (meta != null)
+        {
+            if (meta.has("pivotX"))
+                pivotX = meta.get("pivotX").getAsDouble();
+            if (meta.has("pivotY"))
+                pivotY = meta.get("pivotY").getAsDouble();
+        }
+
+        try (FileInputStream reader = new FileInputStream(file))
+        {
+            ImageDrawable img = new ImageDrawable(new Image(reader), width, height);
+            img.setPivot(pivotX, pivotY);
+            return img;
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
 }

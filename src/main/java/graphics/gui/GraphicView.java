@@ -82,9 +82,9 @@ public class GraphicView
         if (lastDownDrawer != null)
             for (int i = 0; i < lastDownDrawer.length; i++)
                 lastDownDrawer[i].setVisible(false);
-        double columnsSpacing = DownBarDrawable.COLUMNS_SPACING_SCALE * width;
+        double columnsSpacing = BottomBarDrawable.COLUMNS_SPACING_SCALE * width;
         double tileSize = height / 10;
-        double boxHeight = DownBarDrawable.BOX_HEIGHT_SCALE * height;
+        double boxHeight = BottomBarDrawable.BOX_HEIGHT_SCALE * height;
         int size = menu.getItems().size();
         Drawable[] items = new Drawable[size];
         Drawer[] drawers = new Drawer[size];
@@ -103,7 +103,7 @@ public class GraphicView
             drawers[i].setLayer(layer);
         }
 
-        Drawable downBarDrawable = new DownBarDrawable(width, height, size);
+        Drawable downBarDrawable = new BottomBarDrawable(width, height, size);
         Drawer drawer = new Drawer(downBarDrawable);
         lastInfoBar = drawer;
         lastDownDrawer = drawers;

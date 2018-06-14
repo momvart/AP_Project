@@ -18,17 +18,29 @@ public class ImageDrawable extends Drawable
 
     public ImageDrawable(Image img, double width, double height)
     {
+        this(img, width, height, true);
+    }
+
+    public ImageDrawable(Image img, double width, double height, boolean preserveRatio)
+    {
         this.img = img;
-        this.setSize(width, height);
+        if (img == null)
+            return;
+        if (preserveRatio)
+        {
+            double ratio = img.getWidth() / img.getHeight();
+            if (ratio < width / height)
+                setSize(width, width / ratio);
+            else
+                setSize(ratio * height, height);
+        }
+        else
+            setSize(width, height);
     }
 
     public ImageDrawable(Image img, double minSideDimen)
     {
-        this.img = img;
-        if (img.getWidth() <= img.getHeight())
-            setSize(minSideDimen, img.getHeight() / img.getWidth() * minSideDimen);
-        else
-            setSize(img.getWidth() / img.getHeight() * minSideDimen, minSideDimen);
+        this(img, minSideDimen, minSideDimen);
     }
 
     @Override

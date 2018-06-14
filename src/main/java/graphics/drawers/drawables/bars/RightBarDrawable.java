@@ -17,7 +17,6 @@ public class RightBarDrawable extends Bar
     protected void onDraw(GraphicsContext gc)
     {
         double boxWidth = 0.04 * width;
-        gc.setFill(Color.rgb(0, 0, 0, 0.6));
         double boxHeight;
         boxHeight = soldiersTypeCount * height / 15;
         gc.fillRoundRect(width - boxWidth, height / 2 - boxHeight / 2, boxWidth, boxHeight, 10, 10);

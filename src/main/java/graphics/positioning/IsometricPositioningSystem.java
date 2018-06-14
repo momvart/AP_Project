@@ -6,8 +6,8 @@ public class IsometricPositioningSystem extends PositioningSystem
 {
     private static final double angle = 37;
 
-    private static final double ANG_SIN = Math.sin(angle * Math.PI / 180);
-    private static final double ANG_COS = Math.cos(angle * Math.PI / 180);
+    public static final double ANG_SIN = Math.sin(angle * Math.PI / 180);
+    public static final double ANG_COS = Math.cos(angle * Math.PI / 180);
 
     private static IsometricPositioningSystem instance;
 

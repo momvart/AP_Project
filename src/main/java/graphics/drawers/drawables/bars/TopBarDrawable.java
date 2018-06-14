@@ -22,19 +22,13 @@ public class TopBarDrawable extends Bar
     @Override
     protected void onDraw(GraphicsContext gc)
     {
-        //region topBar
-        gc.setFill(Color.rgb(0, 0, 0, 0.6));
         gc.fillRect(0, 0, width, HEIGHT_SCALE * height);
-        //endregion
 
-        //region time
         gc.setFont(Font.font("Dyuthi", FontWeight.BOLD, 10));
         gc.setFill(Color.WHITE);
         gc.setTextAlign(TextAlignment.CENTER);
         DateFormat df = new SimpleDateFormat("HH:mm");
         Calendar calobj = Calendar.getInstance();
         gc.fillText(df.format(calobj.getTime()), width / 2, height / 40);
-        //endregion
-
     }
 }

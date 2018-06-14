@@ -11,7 +11,7 @@ public abstract class Soldier
 {
     private int level;
     private Point location;
-    protected SoldierAttackHelper attackHelper;
+    protected transient SoldierAttackHelper attackHelper;
 
     public Soldier()
     {

@@ -25,10 +25,14 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
     private IOnMoveFinishedListener moveListener;
 
 
-    public SoldierGraphicHelper(Soldier soldier) throws URISyntaxException
+    public SoldierGraphicHelper(Soldier soldier)
     {
         this.soldier = soldier;
-        drawer = new SoldierDrawer(soldier);
+        try
+        {
+            drawer = new SoldierDrawer(soldier);
+        }
+        catch (Exception ignore) {}
         //note that reload listeners are all set when instantiating from the attackHelper.assuming that we create the soldier the attackHelper and the graphicHelper coincidly.
         setReloadDuration(.7);//TODO‌ yet to be decided!! consider that we've got attack animation playing in the reload method. so we should decide this duration equal to attack animation playDuration in order of smoothness of graphic
         drawer.setPosition(soldier.getLocation().getX(), soldier.getLocation().getY());
@@ -38,7 +42,8 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
             isSoldierHealer = true;
             HealerAttackHelper hah = (HealerAttackHelper)soldier.getAttackHelper();
             moveTo(new PointF(hah.getDestination()));
-        }else
+        }
+        else
         {
             GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
             moveTo(new PointF(gsah.getTarget().getLocation()));
@@ -59,6 +64,7 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
         ATTACKING;
 
     }
+
     private Status status;
 
     public Status getStatus()
@@ -103,7 +109,7 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
     {
         if (status != Status.RUN)
             return;
-        Point nextPoint  = soldier.getAttackHelper().getPointToGo(getPoint(moveDest) , deltaT);
+        Point nextPoint = soldier.getAttackHelper().getPointToGo(getPoint(moveDest), deltaT);
         double distance = PointF.euclideanDistance(moveDest, drawer.getPosition());
         double stepDistance = Point.euclideanDistance(getPoint(drawer.getPosition()), nextPoint);
         //TODO‌ this kind of approach also yields the collapse with buildings except we settle on a decent and high game lopping cycle period!!
@@ -113,11 +119,12 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
             return;
         }
 
-        drawer.setPosition(nextPoint.getX() , nextPoint.getY());
+        drawer.setPosition(nextPoint.getX(), nextPoint.getY());
     }
+
     private Point getPoint(PointF pointF)
     {
-        return new Point((int)round(pointF.getX()) , (int)round(pointF.getY()));
+        return new Point((int)round(pointF.getX()), (int)round(pointF.getY()));
     }
 
     private void onMoveFinished()

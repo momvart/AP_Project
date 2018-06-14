@@ -19,7 +19,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 {
     private Building target;
 
-    public GeneralSoldierAttackHelper(Attack attack, Soldier soldier) throws URISyntaxException
+    public GeneralSoldierAttackHelper(Attack attack, Soldier soldier)
     {
         super(attack, soldier);
         this.setDecampListener(getGraphicHelper());

@@ -18,7 +18,6 @@ public class InfoBarDrawable extends Bar
     @Override
     protected void onDraw(GraphicsContext gc)
     {
-        gc.setFill(Color.rgb(0, 0, 0, 0.6));
         int lines = textLines;
         double boxWidth = BOX_WIDTH_SCALE * width;
         double boxHeight = lines * LINE_SPACING_SCALE * height;
