@@ -44,7 +44,7 @@ public class GraphicMenuContainerView extends GraphicView implements IMenuContai
     @Override
     public void showCurrentMenu()
     {
-        villageView.showDownBar(currentMenu);
+        villageView.showBottomBar(currentMenu);
     }
 
     @Override

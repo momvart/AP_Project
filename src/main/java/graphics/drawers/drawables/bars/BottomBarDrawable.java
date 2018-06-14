@@ -9,10 +9,10 @@ public class BottomBarDrawable extends Bar
     public static final double COLUMNS_SPACING_SCALE = 0.05;
     public static final double BOX_HEIGHT_SCALE = 0.10;
 
-    public BottomBarDrawable(double width, double height, int text)
+    public BottomBarDrawable(double width, double height, int itemCount)
     {
         super(width, height);
-        this.itemCount = text;
+        this.itemCount = itemCount;
         setFill(Color.rgb(255, 255, 255, 0.6));
     }
 

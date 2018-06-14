@@ -2,6 +2,7 @@ package graphics.gui;
 
 import graphics.Layer;
 import graphics.drawers.Drawer;
+import graphics.drawers.MenuDrawer;
 import graphics.drawers.drawables.Drawable;
 import graphics.drawers.drawables.ImageDrawable;
 import graphics.drawers.drawables.bars.*;
@@ -41,9 +42,6 @@ public class GraphicView
     {
         Drawable topBar = new TopBarDrawable(width, height);
         Drawer drawer = new Drawer(topBar);
-        if (lastTopBar != null)
-            lastTopBar.setVisible(false);
-        lastTopBar = drawer;
         drawer.setLayer(layer);
         Drawable resources = new Drawable()
         {
@@ -75,45 +73,20 @@ public class GraphicView
         });
     }
 
-    public void showDownBar(ParentMenu menu)
+    public void showBottomBar(ParentMenu menu)
     {
-        if (lastInfoBar != null)
-            lastInfoBar.setVisible(false);
-        if (lastDownDrawer != null)
-            for (int i = 0; i < lastDownDrawer.length; i++)
-                lastDownDrawer[i].setVisible(false);
-        double columnsSpacing = BottomBarDrawable.COLUMNS_SPACING_SCALE * width;
-        double tileSize = height / 10;
-        double boxHeight = BottomBarDrawable.BOX_HEIGHT_SCALE * height;
-        int size = menu.getItems().size();
-        Drawable[] items = new Drawable[size];
-        Drawer[] drawers = new Drawer[size];
-        for (int i = 0; i < items.length; i++)
-        {
-            items[i] = new ImageDrawable(new Image("assets/soldiers/guardian/5/idle/001.png"), tileSize, tileSize);
-            items[i].setPivot(0.5, 0.5);
-            drawers[i] = new Drawer(items[i]);
-            drawers[i].setPosition(width / 2 + (i - size / 2 + (size % 2 == 1 ? 0 : 0.5)) * columnsSpacing, height - boxHeight / 2);
-            int j = i < (items.length - 1) ? i + 1 : 0;
-
-            drawers[i].setClickListener(mouseEvent ->
-            {
-                System.err.println(j + "clicked");
-            });
-            drawers[i].setLayer(layer);
-        }
-
-        Drawable downBarDrawable = new BottomBarDrawable(width, height, size);
-        Drawer drawer = new Drawer(downBarDrawable);
-        lastInfoBar = drawer;
-        lastDownDrawer = drawers;
+        Drawable bottomBarDrawable = new BottomBarDrawable(width, height, menu.getItems().size());
+        Drawer drawer = new Drawer(bottomBarDrawable);
+        MenuDrawable menuDrawable = new MenuDrawable(width, height, menu);
+        MenuDrawer menuDrawer = new MenuDrawer(menuDrawable);
+        menuDrawer.setLayer(layer);
         drawer.setLayer(layer);
     }
 
-    public void showDownBar(Building building)
+    public void showBottomBar(Building building)
     {
         BuildingSubmenu menu = building.getMenu(new ParentMenu(Menu.Id.VILLAGE_MAIN_MENU, ""));
-        showDownBar(menu);
+        showBottomBar(menu);
     }
 
     public void showInfoBar(String text)
@@ -173,7 +146,7 @@ public class GraphicView
             Building building;
             building = World.getVillage().getMap().getBuildings(buildingTypes.get(i)).getMin();
             drawers[i].setClickListener(mouseEvent ->
-                    showDownBar(building));
+                    showBottomBar(building));
             drawers[i].setLayer(layer);
         }
     }
