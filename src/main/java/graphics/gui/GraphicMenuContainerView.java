@@ -22,7 +22,7 @@ public class GraphicMenuContainerView extends GraphicView implements IMenuContai
     }
 
     @Override
-    public void onMenuItemClicked(Menu menu)
+    public void onItemClicked(Menu menu)
     {
         listeners.forEach(iMenuClickListener -> iMenuClickListener.onItemClicked(menu));
     }

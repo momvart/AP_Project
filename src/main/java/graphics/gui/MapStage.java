@@ -57,10 +57,9 @@ public class MapStage extends Stage
     {
         Group group = new Group();
 
+        GraphicsValues.setScale(.8);
         if (System.getProperty("os.name").equals("Linux"))
-            GraphicsValues.setScale(.6);
-        else
-            GraphicsValues.setScale(.2);
+            GraphicsValues.setScale(2);
 
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);

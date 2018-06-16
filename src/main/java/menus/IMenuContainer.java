@@ -1,9 +1,7 @@
 package menus;
 
-public interface IMenuContainer
+public interface IMenuContainer extends IMenuClickListener
 {
-    void onMenuItemClicked(Menu menu);
-
     void setCurrentMenu(ParentMenu menu, boolean showNow);
 
     ParentMenu getCurrentMenu();

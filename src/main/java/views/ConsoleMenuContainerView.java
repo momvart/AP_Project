@@ -30,7 +30,7 @@ public abstract class ConsoleMenuContainerView extends ConsoleView implements IM
     }
 
     @Override
-    public void onMenuItemClicked(Menu menu)
+    public void onItemClicked(Menu menu)
     {
         listeners.forEach(listener -> listener.onItemClicked(menu));
     }

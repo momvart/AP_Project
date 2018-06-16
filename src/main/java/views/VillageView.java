@@ -23,6 +23,7 @@ import java.util.Scanner;
 public class VillageView extends ConsoleMenuContainerView
 {
     private Village village;
+    private VillageStage villageStage;
 
     public VillageView(Scanner scanner)
     {
@@ -37,7 +38,13 @@ public class VillageView extends ConsoleMenuContainerView
         mainMenu.insertItem(new ShowBuildingsMenu(mainMenu))
                 .insertItem(Menu.Id.VILLAGE_RESOURCES, "resources");
         setCurrentMenu(mainMenu, false);
-        Platform.runLater(() -> new VillageStage(World.sCurrentGame.getVillage().getMap(), 1200, 900).setUpAndShow());
+
+        Platform.runLater(() ->
+        {
+            villageStage = new VillageStage(World.sCurrentGame.getVillage().getMap(), 1200, 900);
+            villageStage.setVillageView(this);
+            villageStage.setUpAndShow();
+        });
     }
 
     @Override
@@ -53,8 +60,8 @@ public class VillageView extends ConsoleMenuContainerView
         }
     }
 
-    @Override
-    public void onMenuItemClicked(Menu menu)
+
+    public void onItemClicked(Menu menu)
     {
         switch (menu.getId())
         {
@@ -86,7 +93,7 @@ public class VillageView extends ConsoleMenuContainerView
                 showAttackInfo((DefensiveTower)((IBuildingMenu)currentMenu).getBuilding());
                 break;
             default:
-                super.onMenuItemClicked(menu);
+                super.onItemClicked(menu);
         }
     }
 
@@ -111,21 +118,25 @@ public class VillageView extends ConsoleMenuContainerView
     public void showResources()
     {
         Resource resource = village.getResources();
-        System.out.println("Gold: " + resource.getGold());
-        System.out.println("Elixir: " + resource.getElixir());
-        System.out.println("Score: " + World.sCurrentGame.getScore());
+        StringBuilder s = new StringBuilder();
+        s.append("Gold: ").append(resource.getGold()).append("\n");
+        s.append("Elixir: ").append(resource.getElixir()).append("\n");
+        s.append("Score: ").append(World.sCurrentGame.getScore());
+        villageStage.showInfo(s.toString());
     }
 
     public void showBuildingOverallInfo(Building building)
     {
-        System.out.println("Level: " + building.getLevel());
-        System.out.println("Health: " + building.getStrength());
+        String s = String.format("Level: %d\nHealth: %d", building.getLevel(), building.getStrength());
+        villageStage.showInfo(s);
     }
 
     public void showUpgradeInfo(Building building)
     {
-        System.out.println("Upgrade Cost: " + building.getBuildingInfo().getBuildCost().toString(false));
+        String s = String.format("Upgrade Cost: %s", building.getBuildingInfo().getBuildCost().toString(false));
+        villageStage.showInfo(s);
     }
+
 
     public DialogResult showConstructDialog(String buildingName, Resource cost)
     {
@@ -159,10 +170,13 @@ public class VillageView extends ConsoleMenuContainerView
 
     public void showConstructionsStatus(List<Construction> constructions)
     {
+        StringBuilder s = new StringBuilder();
         constructions.stream()
                 .sorted(Comparator.comparing(c -> c.getBuildingInfo().getName()))
-                .forEach(c -> System.out.printf("%s %d\n", c.getBuildingInfo().getName(), c.getRemainingTurns()));
+                .forEach(c -> s.append(String.format("%s %d\n", c.getBuildingInfo().getName(), c.getRemainingTurns())));
+        villageStage.showInfo(s.toString());
     }
+
 
     public DialogResult showSoldierTrainCountDialog()
     {
@@ -171,38 +185,46 @@ public class VillageView extends ConsoleMenuContainerView
 
     public void showSoldierTrainingsStatus(Iterable<Recruit> recruits)
     {
+        StringBuilder s = new StringBuilder();
         for (Recruit r : recruits)
-            System.out.println(r.toString());
+            s.append(r.toString()).append("\n");
+        villageStage.showInfo(s.toString());
     }
 
     public void showCampsCapacityInfo()
     {
-        System.out.printf("Your camp capacity is %d / %d\n", village.getAllSoldiers().count(), village.getCampsCapacity());
+        String s = String.format("Your camp capacity is %d / %d\n", village.getAllSoldiers().count(), village.getCampsCapacity());
+        villageStage.showInfo(s);
     }
 
     public void showAvailableSoldiers()
     {
+        StringBuilder s = new StringBuilder();
         for (int i = 1; i <= SoldierValues.SOLDIER_TYPES_COUNT; i++)
             if (village.getSoldiers(i).size() > 0)
-                System.out.printf("%s x%d\n", SoldierValues.getSoldierInfo(i).getName(), village.getSoldiers(i).size());
+                s.append(String.format("%s x%d\n", SoldierValues.getSoldierInfo(i).getName(), village.getSoldiers(i).size()));
+        villageStage.showInfo(s.toString());
     }
 
     public void showStorageSourceInfo(Storage storage)
     {
         if (storage instanceof GoldStorage)
-            System.out.printf("Your %s storage is %d / %d loaded.\n", "gold",
+            villageStage.showInfo(String.format("Your %s storage is %d / %d loaded.\n", "gold",
                     village.getResources().getGold(),
-                    village.getTotalResourceCapacity().getGold());
+                    village.getTotalResourceCapacity().getGold()));
         else
-            System.out.printf("Your %s storage is %d / %d loaded.\n", "elixir",
+            villageStage.showInfo(String.format("Your %s storage is %d / %d loaded.\n", "elixir",
                     village.getResources().getElixir(),
-                    village.getTotalResourceCapacity().getElixir());
+                    village.getTotalResourceCapacity().getElixir()));
     }
 
     public void showAttackInfo(DefensiveTower tower)
     {
-        System.out.println("Target: " + tower.getDefenseType().getPrintName());
-        System.out.println("Damage: " + tower.getDamagePower());
-        System.out.println("Damage Range: " + tower.getRange());
+        StringBuilder s = new StringBuilder();
+        s.append("Target: ").append(tower.getDefenseType().getPrintName()).append("\n");
+        s.append("Damage: ").append(tower.getDamagePower()).append("\n");
+        s.append("Damage Range: ").append(tower.getRange());
+        villageStage.showInfo(s.toString());
     }
+
 }

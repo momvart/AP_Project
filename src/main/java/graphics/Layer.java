@@ -23,7 +23,7 @@ public class Layer implements IFrameUpdatable
 
     public Layer(int order, RectF bounds)
     {
-        this(order, bounds, NormalPositioningSystem.getInstance());
+        this(order, bounds, new NormalPositioningSystem(1));
     }
 
     public Layer(int order, RectF bounds, PositioningSystem posSys)
