@@ -12,7 +12,7 @@ public class Fonts
 
     public static void initialize()
     {
-        tiny = Font.loadFont(Font.class.getClassLoader().getResourceAsStream(FONT_PATH), 5);
+        tiny = Font.loadFont(Fonts.class.getClassLoader().getResourceAsStream(FONT_PATH), 5);
         small = Font.loadFont(Fonts.class.getClassLoader().getResourceAsStream(FONT_PATH), 10);
         medium = Font.loadFont(Fonts.class.getClassLoader().getResourceAsStream(FONT_PATH), 15);
         large = Font.loadFont(Fonts.class.getClassLoader().getResourceAsStream(FONT_PATH), 20);
