@@ -70,7 +70,7 @@ public class BuildingsTest extends Application
             for (int j = 1; j <= i; j++)
                 building.upgrade();
             Drawer drawer = new BuildingDrawer(building);
-            drawer.setClickListener(event -> System.out.println("Salam" + building.getLevel()));
+            drawer.setClickListener((sender, event) -> System.out.println("Salam" + building.getLevel()));
             drawer.setLayer(layer);
         }
 

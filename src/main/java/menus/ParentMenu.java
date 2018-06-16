@@ -31,6 +31,11 @@ public class ParentMenu extends Menu
         return retVal;
     }
 
+    public ArrayList<Menu> getMenuItems()
+    {
+        return items;
+    }
+
     public ParentMenu insertItem(int id, String text)
     {
         return insertItem(new Menu(id, text));

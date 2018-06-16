@@ -33,9 +33,17 @@ public class Submenu extends ParentMenu
     @Override
     public ArrayList<String> getItems()
     {
-        ArrayList<String> retVal = super.getItems();
+        ArrayList<String> retVal = new ArrayList<>(super.getItems());
         retVal.add(String.format(Menu.sItemNamePattern, 0, "back"));
         return retVal;
+    }
+
+    @Override
+    public ArrayList<Menu> getMenuItems()
+    {
+        ArrayList<Menu> items = new ArrayList<>(super.getMenuItems());
+        items.add(sBackItem);
+        return items;
     }
 
     @Override
@@ -46,4 +54,6 @@ public class Submenu extends ParentMenu
         else
             super.handleCommand(command, container);
     }
+
+    private static Menu sBackItem = new Menu(Id.BACK, "back", "back.png", false);
 }

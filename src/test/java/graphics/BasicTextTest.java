@@ -12,6 +12,10 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import menus.Menu;
+import menus.ParentMenu;
+import menus.ShowBuildingsMenu;
+import menus.Submenu;
+import models.World;
 import utils.*;
 
 public class BasicTextTest extends Application
@@ -29,6 +33,7 @@ public class BasicTextTest extends Application
         group.getChildren().add(canvas);
 
         GraphicHandler handler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, 400, 400));
+        canvas.setOnMouseClicked(handler::handleMouseClick);
         GameScene gameScene = new GameScene(new SizeF(400, 400));
         Layer layer = new Layer(0, new RectF(0, 0, 400, 400), new NormalPositioningSystem(10));
 
@@ -39,11 +44,6 @@ public class BasicTextTest extends Application
         Drawer drawer = new Drawer(text);
         drawer.setPosition(0, 2);
         drawer.setLayer(layer);
-
-        MenuItemDrawable menu = new MenuItemDrawable(new Menu(2, "Sajlam"), 100, 100);
-        Drawer drawerMenu = new Drawer(menu);
-        drawerMenu.setPosition(20, 10);
-        drawerMenu.setLayer(layer);
 
         VProgressbarDrawable progressbar = new VProgressbarDrawable(new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.GOLD), new Stop(1, Color.ORANGE)));
         Drawer drawer2 = new Drawer(progressbar);
@@ -61,6 +61,16 @@ public class BasicTextTest extends Application
         drawer3.setPosition(1, 15);
         drawer3.setLayer(layer);
 
+        MenuLayer lMenu = new MenuLayer(2, new RectF(0, 0, 400, 100));
+        ParentMenu mainMenu = new ParentMenu(Menu.Id.VILLAGE_MAIN_MENU, "");
+        Submenu submenu = new Submenu(2, "Submenu", mainMenu);
+        submenu.insertItem(3, "item");
+        mainMenu.insertItem(submenu)
+                .insertItem(Menu.Id.VILLAGE_RESOURCES, "resources");
+        lMenu.setCurrentMenu(mainMenu);
+        lMenu.setClickListener(menu1 -> System.out.println(menu1.getText()));
+
+        gameScene.addLayer(lMenu);
         gameScene.addLayer(layer);
         handler.setScene(gameScene);
 

@@ -74,13 +74,13 @@ public class MovingTest extends Application
         building.setPivot(.5, .7);
         Drawer drawer = new Drawer(building);
         drawer.setPosition(7, 7);
-        drawer.setClickListener(event -> System.out.println("Salam"));
+        drawer.setClickListener((sender, event) -> System.out.println("Salam"));
         drawer.setLayer(layer);
 
         SoldierGraphicHelper helper = new SoldierGraphicHelper(SoldierFactory.createSoldierByTypeID(Guardian.SOLDIER_TYPE, 1));
         helper.getDrawer().setPosition(0, 5);
         helper.getDrawer().setLayer(layer);
-        helper.getDrawer().setClickListener(event -> System.out.println("Soldier"));
+        helper.getDrawer().setClickListener((sender, event) -> System.out.println("Soldier"));
         helper.moveTo(new PointF(0, 10));
         helper.setMoveListener(position ->
         {

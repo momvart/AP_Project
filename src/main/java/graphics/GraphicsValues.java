@@ -70,7 +70,7 @@ public class GraphicsValues
             buildings.put(name + level, GraphicsUtilities.createImageDrawable(String.format("%s/%s/%03d/001.png",
                     BUILDINGS_ASSETS_PATH, name, level),
                     IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2,
-                    IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2));
+                    IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, false));
 
         return buildings.get(name + level);
     }

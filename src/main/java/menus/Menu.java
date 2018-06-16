@@ -6,18 +6,29 @@ public class Menu
 
     private int id;
     private String text;
+    private String iconPath;
     protected boolean clickable = true;
 
     public Menu(int id, String text)
     {
-        this.id = id;
-        this.text = text;
+        this(id, text, true);
     }
 
     public Menu(int id, String text, boolean clickable)
     {
+        this(id, text, "", clickable);
+    }
+
+    public Menu(int id, String text, String iconPath)
+    {
+        this(id, text, iconPath, true);
+    }
+
+    public Menu(int id, String text, String iconPath, boolean clickable)
+    {
         this.id = id;
         this.text = text;
+        this.iconPath = iconPath;
         this.clickable = clickable;
     }
 
@@ -41,6 +52,16 @@ public class Menu
         this.text = text;
     }
 
+    public String getIconPath()
+    {
+        return iconPath;
+    }
+
+    public void setIconPath(String iconPath)
+    {
+        this.iconPath = iconPath;
+    }
+
     public boolean isClickable()
     {
         return clickable;
@@ -48,6 +69,8 @@ public class Menu
 
     public static class Id
     {
+        public static final int BACK = -0x0001;
+
         public static final int VILLAGE_MAIN_MENU = 0x0000;
         public static final int VILLAGE_SHOW_BUILDINGS = 0x0100;
         public static final int VILLAGE_RESOURCES = 0x0001;

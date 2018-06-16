@@ -23,16 +23,29 @@ public class ImageDrawable extends Drawable
 
     public ImageDrawable(Image img, double width, double height, boolean preserveRatio)
     {
+        this(img, width, height, preserveRatio, false);
+    }
+
+    public ImageDrawable(Image img, double width, double height, boolean preserveRatio, boolean inside)
+    {
         this.img = img;
         if (img == null)
             return;
         if (preserveRatio)
         {
             double ratio = img.getWidth() / img.getHeight();
-            if (ratio < width / height)
-                setSize(width, width / ratio);
+            if (inside)
+                if (ratio > width / height)
+                    setSize(width, width / ratio);
+                else
+                    setSize(ratio * height, height);
             else
-                setSize(ratio * height, height);
+            {
+                if (ratio < width / height)
+                    setSize(width, width / ratio);
+                else
+                    setSize(ratio * height, height);
+            }
         }
         else
             setSize(width, height);

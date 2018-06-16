@@ -108,9 +108,9 @@ public class Drawer
         return clickable;
     }
 
-    private EventHandler<MouseEvent> clickListener;
+    private IDrawerClickListener clickListener;
 
-    public void setClickListener(EventHandler<MouseEvent> clickListener)
+    public void setClickListener(IDrawerClickListener clickListener)
     {
         this.clickListener = clickListener;
         clickable = clickListener != null;
@@ -121,7 +121,7 @@ public class Drawer
     public void callOnClick(MouseEvent event)
     {
         if (clickListener != null)
-            clickListener.handle(event);
+            clickListener.click(this, event);
     }
 
     protected void onPreDraw(GraphicsContext gc)

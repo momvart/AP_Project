@@ -38,6 +38,13 @@ public class AvailableBuildingsSubmenu extends Submenu implements IBuildingMenu
     }
 
     @Override
+    public ArrayList<Menu> getMenuItems()
+    {
+        setItems();
+        return super.getMenuItems();
+    }
+
+    @Override
     public Building getBuilding()
     {
         return ((BuildingSubmenu)parent).getBuilding();

@@ -72,7 +72,7 @@ public class GraphicView
         Drawer setDrawer = new Drawer(settings);
         resDrawer.setLayer(layer);
         setDrawer.setLayer(layer);
-        setDrawer.setClickListener(mouseEvent ->
+        setDrawer.setClickListener((sender, mouseEvent) ->
         {
             System.err.println("setting");
         });
@@ -150,7 +150,7 @@ public class GraphicView
             drawers[i].setPosition(boxWidth / 2, height / 2 + (i - buildingTypesCount / 2 + (buildingTypesCount % 2 == 1 ? 0 : 0.5)) * height / 15);
             Building building;
             building = World.getVillage().getMap().getBuildings(buildingTypes.get(i)).getMin();
-            drawers[i].setClickListener(mouseEvent ->
+            drawers[i].setClickListener((sender, mouseEvent) ->
                     showBottomBar(building));
             drawers[i].setLayer(layer);
         }
@@ -196,7 +196,7 @@ public class GraphicView
         {
             try
             {
-                ImageDrawable img = GraphicsUtilities.createImageDrawable("assets/soldiers/guardian/1/idle/001.png", cellSize, cellSize);
+                ImageDrawable img = GraphicsUtilities.createImageDrawable("assets/soldiers/guardian/1/idle/001.png", cellSize, cellSize, false);
                 img.setPivot(.5, .5);
                 Drawer d = new Drawer(img);
                 d.setPosition(bg.getWidth() / 2, (i) * (cellSize + padding) + (cellSize / 2 + padding));

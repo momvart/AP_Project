@@ -66,6 +66,13 @@ public class Layer implements IFrameUpdatable
             updatables.remove(drawer);
     }
 
+    public void removeAllObjects()
+    {
+        drawers.clear();
+        clickables.clear();
+        updatables.clear();
+    }
+
     private HashSet<Drawer> clickables = new HashSet<>();
 
     public void addClickable(Drawer clickable)

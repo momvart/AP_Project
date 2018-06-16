@@ -88,12 +88,12 @@ public class GraphicsUtilities
             return null;
     }
 
-    public static ImageDrawable createImageDrawable(String filePath, double width, double height) throws URISyntaxException
+    public static ImageDrawable createImageDrawable(String filePath, double width, double height, boolean inside) throws URISyntaxException
     {
-        return createImageDrawable(new File(GraphicsUtilities.class.getClassLoader().getResource(filePath).toURI()), width, height);
+        return createImageDrawable(new File(GraphicsUtilities.class.getClassLoader().getResource(filePath).toURI()), width, height, inside);
     }
 
-    public static ImageDrawable createImageDrawable(File file, double width, double height)
+    public static ImageDrawable createImageDrawable(File file, double width, double height, boolean inside)
     {
         JsonObject meta = fetchMetadata(file.getParentFile());
         double pivotX = 0, pivotY = 0;
@@ -107,7 +107,7 @@ public class GraphicsUtilities
 
         try (FileInputStream reader = new FileInputStream(file))
         {
-            ImageDrawable img = new ImageDrawable(new Image(reader), width, height);
+            ImageDrawable img = new ImageDrawable(new Image(reader), width, height, true, inside);
             img.setPivot(pivotX, pivotY);
             return img;
         }

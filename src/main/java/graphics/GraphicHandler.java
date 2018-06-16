@@ -68,6 +68,9 @@ public class GraphicHandler implements IFrameUpdatable
             Point2D point = gc.getTransform().inverseTransform(event.getX(), event.getY());
             scene.handleMouseClick(point.getX(), point.getY(), event);
         }
-        catch (Exception ex) {}
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 }

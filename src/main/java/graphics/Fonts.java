@@ -4,15 +4,17 @@ import javafx.scene.text.Font;
 
 public class Fonts
 {
+    private static final String FONT_PATH = "assets/fonts/Supercell.ttf";
+
     private static Font small;
     private static Font medium;
     private static Font large;
 
     public static void initialize()
     {
-        small = Font.font(GraphicsValues.getScale() * 10);
-        medium = Font.font(GraphicsValues.getScale() * 15);
-        large = Font.font(GraphicsValues.getScale() * 20);
+        small = Font.loadFont(Fonts.class.getClassLoader().getResourceAsStream(FONT_PATH), 10);
+        medium = Font.loadFont(Fonts.class.getClassLoader().getResourceAsStream(FONT_PATH), 15);
+        large = Font.loadFont(Fonts.class.getClassLoader().getResourceAsStream(FONT_PATH), 20);
     }
 
     public static Font getSmall()

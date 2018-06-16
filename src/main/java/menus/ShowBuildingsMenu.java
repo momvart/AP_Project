@@ -32,4 +32,11 @@ public class ShowBuildingsMenu extends Submenu
         setItems();
         return super.getItems();
     }
+
+    @Override
+    public ArrayList<Menu> getMenuItems()
+    {
+        setItems();
+        return super.getMenuItems();
+    }
 }
