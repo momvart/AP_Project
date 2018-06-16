@@ -53,7 +53,7 @@ public class ParentMenu extends Menu
         if (menu == null)
             throw new InvalidCommandException(command);
         if (menu.isClickable())
-            container.onMenuItemClicked(menu);
+            container.onItemClicked(menu);
         if (menu instanceof ParentMenu)
             container.setCurrentMenu((ParentMenu)menu, true);
     }

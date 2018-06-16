@@ -32,7 +32,7 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
     }
 
     @Override
-    public void onMenuItemClicked(Menu menu)
+    public void onItemClicked(Menu menu)
     {
         switch (menu.getId())
         {
@@ -42,7 +42,7 @@ public class AttackView extends ConsoleMenuContainerView implements IMenuContain
             }
             break;
             default:
-                super.onMenuItemClicked(menu);
+                super.onItemClicked(menu);
         }
     }
 

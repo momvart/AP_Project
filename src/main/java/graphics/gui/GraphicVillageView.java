@@ -40,7 +40,7 @@ public class GraphicVillageView extends GraphicMenuContainerView
     }
 
     @Override
-    public void onMenuItemClicked(Menu menu)
+    public void onItemClicked(Menu menu)
     {
         switch (menu.getId())
         {
@@ -72,7 +72,7 @@ public class GraphicVillageView extends GraphicMenuContainerView
                 showAttackInfo((DefensiveTower)((IBuildingMenu)currentMenu).getBuilding());
                 break;
             default:
-                super.onMenuItemClicked(menu);
+                super.onItemClicked(menu);
         }
     }
 
