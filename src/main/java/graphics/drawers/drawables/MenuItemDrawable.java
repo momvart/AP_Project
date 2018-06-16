@@ -6,8 +6,6 @@ import javafx.scene.paint.Color;
 import menus.Menu;
 import utils.GraphicsUtilities;
 
-import java.net.URISyntaxException;
-
 public class MenuItemDrawable extends Drawable
 {
     private static final String IconsPath = "assets/menu/icons/";
@@ -23,7 +21,7 @@ public class MenuItemDrawable extends Drawable
     {
         this.menu = menu;
 
-        this.background = new RoundRectDrawable(width, height, 10, Color.rgb(0, 0, 0, 0.6));
+        this.background = new RoundRectDrawable(width, height, 10, Color.rgb(0, 0, 0, 1));
         if (!menu.getIconPath().isEmpty())
             try
             {
@@ -34,7 +32,7 @@ public class MenuItemDrawable extends Drawable
         else
             this.icon = new ImageDrawable(null);
 
-        this.label = new TextDrawable(menu.getText().toUpperCase(), Fonts.getSmall());
+        this.label = new TextDrawable(menu.getText().toUpperCase(), Color.WHITE, Fonts.getTiny());
         this.label.setPivot(.5, .5);
 
         setSize(width, height);

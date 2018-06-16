@@ -148,13 +148,14 @@ public class MainMenu extends Application
 
         Layer menu = new Layer(4, new RectF(0, 0, width, height));
         GraphicView gv = new GraphicView(menu, width, height);
-        gv.showLeftBar();
         gv.showTopBar();
-        gv.showRightBar2();
+        gv.showLeftBar();
+        gv.showRightBar();
 
         //region show
         gameScene.addLayer(layer);
         gameScene.addLayer(menu);
+        gameScene.addLayer(gv.getLmenu());
         gameScene.addLayer(lFlame);
         gameScene.addLayer(soldierLayer);
         handler.setScene(gameScene);

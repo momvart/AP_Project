@@ -1,20 +1,27 @@
 package graphics;
 
 import graphics.drawers.Drawer;
+import graphics.drawers.drawables.Drawable;
 import graphics.drawers.drawables.MenuItemDrawable;
+import graphics.drawers.drawables.RoundRectDrawable;
 import graphics.positioning.PercentPositioningSystem;
 import javafx.scene.input.MouseEvent;
-import menus.*;
+import javafx.scene.paint.Color;
+import menus.IMenuClickListener;
+import menus.Menu;
+import menus.ParentMenu;
+import menus.Submenu;
 import utils.RectF;
 
 import java.util.ArrayList;
 
 public class MenuLayer extends Layer
 {
-    private static final double ItemCellSize = 100;
-
     private ParentMenu currentMenu;
     private IMenuClickListener clickListener;
+    private static final double ItemCellSize = 50;
+    private static final double ITEM_PADDING = 5;
+    private static final double BOX_HEIGHT_SCALE = 0.1;
 
     public MenuLayer(int order, RectF bounds)
     {
@@ -42,16 +49,21 @@ public class MenuLayer extends Layer
 
     private void updateMenu()
     {
-        removeAllObjects();
-
         ArrayList<Menu> items = currentMenu.getMenuItems();
+        removeAllObjects();
+        Drawable bg = new RoundRectDrawable((ItemCellSize + MenuLayer.ITEM_PADDING) * items.size() + ITEM_PADDING, ItemCellSize + 2 * ITEM_PADDING, 10, Color.rgb(0, 0, 0, 0.6));
+        bg.setPivot(0.5, 1);
+        Drawer bgDrawer = new Drawer(bg);
+        bgDrawer.setPosition(0.5, 1);
+        bgDrawer.setLayer(this);
         for (int i = 0; i < items.size(); i++)
         {
             Menu item = items.get(i);
             MenuItemDrawable drawable = new MenuItemDrawable(item, ItemCellSize, ItemCellSize);
             drawable.setPivot(0.5, 0.5);
             Drawer drawer = new Drawer(drawable);
-            drawer.setPosition(1.0 / (items.size() + 1) * (i + 1), 0.5);
+            double x = 0.5 + (i - items.size() / 2.0 + 0.5) * (ITEM_PADDING + 0.5) / 100;
+            drawer.setPosition(x, 1 - (ITEM_PADDING + 0.5) / 100);
             drawer.setClickListener(this::onMenuItemClick);
             drawer.setLayer(this);
         }
