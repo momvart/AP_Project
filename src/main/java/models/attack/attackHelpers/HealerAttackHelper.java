@@ -4,6 +4,7 @@ import models.attack.Attack;
 import models.soldiers.Healer;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
+import models.soldiers.SoldiersHealReport;
 import utils.Point;
 import utils.PointF;
 
@@ -98,20 +99,36 @@ public class HealerAttackHelper extends SoldierAttackHelper
         }
     }
 
+    IOnHealerHealListener onHealerHealListener;
+
+    public void setOnHealerHealListener(IOnHealerHealListener onHealerHealListener)
+    {
+        this.onHealerHealListener = onHealerHealListener;
+    }
+
     @Override
     public void fire()
     {
+        ArrayList<SoldiersHealReport> reports = new ArrayList<>();
         if (soldier != null && !soldier.getAttackHelper().isDead())
         {
             if (targets != null && targets.size() != 0)
             {
                 for (Soldier target : targets)
                 {
+                    int initialHealth = target.getAttackHelper().getHealth();
                     System.out.println("healer healing soldier type:" + target.getType() + "in amount of" + getDamage());
                     target.getAttackHelper().increaseHealth(getDamage());
+                    reports.add(new SoldiersHealReport(soldier, initialHealth, target.getAttackHelper().getHealth()));
                 }
+                callOnHeal(reports);
             }
         }
+    }
+
+    private void callOnHeal(ArrayList<SoldiersHealReport> reports)
+    {
+        onHealerHealListener.onHeal(reports);
     }
 
     @Override

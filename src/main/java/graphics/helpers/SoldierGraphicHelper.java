@@ -3,19 +3,18 @@ package graphics.helpers;
 import graphics.Layer;
 import graphics.drawers.SoldierDrawer;
 import graphics.positioning.PositioningSystem;
-import models.attack.attackHelpers.GeneralSoldierAttackHelper;
-import models.attack.attackHelpers.HealerAttackHelper;
-import models.attack.attackHelpers.IOnDecampListener;
-import models.attack.attackHelpers.IOnSoldierDieListener;
-import models.soldiers.Soldier;
+import models.attack.attackHelpers.*;
+import models.buildings.BuildingDestructionReport;
+import models.soldiers.*;
 import utils.Point;
 import utils.PointF;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import static java.lang.Math.floor;
 
-public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampListener, IOnSoldierDieListener
+public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampListener, IOnSoldierDieListener, IOnSoldierFireListener, IOnHealerHealListener
 {
     protected Soldier soldier;
 
@@ -61,12 +60,14 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
             HealerAttackHelper hah = (HealerAttackHelper)soldier.getAttackHelper();
             hah.setDecampListener(this);
             hah.setSoldierDieListener(this);
+            hah.setOnHealerHealListener(this);
         }
         else
         {
             GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
             gsah.setOnSoldierDieListener(this);
             gsah.setDecampListener(this);
+            gsah.setSoldierFireListener(this);
         }
     }
 
@@ -85,7 +86,7 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
 
     private void makeAttack()
     {
-        status = Status.ATTACK;
+        status = Status.ATTACK;//TODO ‌to be manipulated to specify the kind of attack of each soldier.
         drawer.playAnimation(SoldierDrawer.ATTACK);
     }
 
@@ -245,6 +246,54 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
             }
         }
     }
+
+    @Override
+    public void onSoldierFire(Point locationOfTarget, BuildingDestructionReport bdr)
+    {
+        if (soldier.getType() == WallBreaker.SOLDIER_TYPE)
+        {
+            onWallBreakerFire();
+        }
+        else if (soldier.getType() == Archer.SOLDIER_TYPE)
+        {
+            onArcherFire();
+        }
+        else if (soldier.getType() == Dragon.SOLDIER_TYPE)
+        {
+            onDragonFire();
+        }
+        else
+        {
+            onManToManFighterFire();
+        }
+    }
+
+    private void onManToManFighterFire()
+    {
+
+    }
+
+    private void onDragonFire()
+    {
+
+    }
+
+    private void onArcherFire()
+    {
+
+    }
+
+    private void onWallBreakerFire()
+    {
+
+    }
+
+    @Override
+    public void onHeal(ArrayList<SoldiersHealReport> reports)
+    {
+        //...
+    }
+
 
     public enum Status
     {

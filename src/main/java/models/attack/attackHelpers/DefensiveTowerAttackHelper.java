@@ -1,8 +1,8 @@
 package models.attack.attackHelpers;
 
 import exceptions.SoldierNotFoundException;
+import graphics.helpers.IOnDefenseFireListener;
 import graphics.helpers.IOnDestroyListener;
-import graphics.helpers.IOnFireListener;
 import models.attack.Attack;
 import models.buildings.DefensiveTower;
 import models.soldiers.Soldier;
@@ -41,15 +41,15 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper
     public abstract void attack();
 
     //graphcs
-    IOnFireListener fireListener;
+    IOnDefenseFireListener fireListener;
     IOnDestroyListener destroyListener;
 
-    public IOnFireListener getFireListener()
+    public IOnDefenseFireListener getFireListener()
     {
         return fireListener;
     }
 
-    public void setFireListener(IOnFireListener fireListener)
+    public void setFireListener(IOnDefenseFireListener fireListener)
     {
         this.fireListener = fireListener;
     }

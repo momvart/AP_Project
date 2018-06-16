@@ -1,5 +1,6 @@
 package graphics.helpers;
 
+import graphics.Layer;
 import graphics.drawers.BuildingDrawer;
 import models.attack.attackHelpers.DefensiveTowerAttackHelper;
 import models.buildings.Building;
@@ -9,7 +10,7 @@ import utils.Point;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-public class DefensiveTowerGraphicHelper extends GraphicHelper implements IOnFireListener, IOnDestroyListener
+public class DefensiveTowerGraphicHelper extends GraphicHelper implements IOnDefenseFireListener, IOnDestroyListener
 {
     Building building;
 
@@ -19,7 +20,7 @@ public class DefensiveTowerGraphicHelper extends GraphicHelper implements IOnFir
     State currentState = State.IDLE;
     IOnReloadListener reloadListener;
 
-    public DefensiveTowerGraphicHelper(Building building)
+    public DefensiveTowerGraphicHelper(Building building, Layer layer)
     {
         this.building = building;
         try
@@ -31,13 +32,13 @@ public class DefensiveTowerGraphicHelper extends GraphicHelper implements IOnFir
             e.printStackTrace();
         }
         setReloadDuration(1.5);
+        buildingDrawer.setLayer(layer);
 
-        //initiating the initial state
+
         buildingDrawer.setPosition(building.getLocation().getX(), building.getLocation().getY());
-        settingUpListeners();
     }
 
-    private void settingUpListeners()
+    private void setUpListeners()
     {
         setReloadListener(building.getAttackHelper());
         DefensiveTowerAttackHelper dtah = (DefensiveTowerAttackHelper)building.getAttackHelper();
@@ -48,31 +49,34 @@ public class DefensiveTowerGraphicHelper extends GraphicHelper implements IOnFir
     private void makeFire(Point location, DefenseKind defenseKind, ArrayList<SoldierInjuryReport> soldiersInjuredDirectly, ArrayList<SoldierInjuryReport> soldiersInjuredImplicitly)
     {
         currentState = State.FIRING;
-
+        //play fire animation
     }
 
     private void makeIdle()
     {
         currentState = State.IDLE;
+        //show image
     }
 
     private void makeDestroy()
     {
         currentState = State.DESTROYED;
+        //play destroying animation
     }
 
     @Override
     public void update(double deltaT)
     {
         super.update(deltaT);
-        if (currentState == State.FIRING)
-        {
-            bulletFlyContinue();
-        }
+        bulletFlyContinue();
     }
 
     private void bulletFlyContinue()
     {
+        if (currentState == State.FIRING)
+        {
+
+        }
         //TODO to be decided how to implement
         //if bullet reacher the destination the  status = IDLE
     }
@@ -87,7 +91,7 @@ public class DefensiveTowerGraphicHelper extends GraphicHelper implements IOnFir
     }
 
     @Override
-    public void onFire(Point targetLocation, DefenseKind defenseKind, ArrayList<SoldierInjuryReport> soldiersInjuredDirectly, ArrayList<SoldierInjuryReport> soldiersInjuredImplicitly)
+    public void onDefenseFire(Point targetLocation, DefenseKind defenseKind, ArrayList<SoldierInjuryReport> soldiersInjuredDirectly, ArrayList<SoldierInjuryReport> soldiersInjuredImplicitly)
     {
         makeFire(targetLocation, defenseKind, soldiersInjuredDirectly, soldiersInjuredImplicitly);
     }
