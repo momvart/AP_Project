@@ -1,6 +1,5 @@
 package graphics.gui;
 
-import com.sun.corba.se.impl.orbutil.graph.Graph;
 import graphics.*;
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
@@ -13,6 +12,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import models.Map;
+import models.buildings.Building;
 import utils.RectF;
 import utils.SizeF;
 
@@ -27,8 +27,8 @@ public class MapStage extends Stage
     private final Layer lFloor;
     private final Layer lObjects;
 
-    private final double width;
-    private final double height;
+    protected final double width;
+    protected final double height;
 
     public MapStage(Map map, double width, double height)
     {
@@ -58,7 +58,7 @@ public class MapStage extends Stage
     {
         Group group = new Group();
 
-        GraphicsValues.setScale(.2);
+        GraphicsValues.setScale(1);
 
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);
@@ -72,12 +72,14 @@ public class MapStage extends Stage
 
         addBuildings();
 
+        canvas.setOnMouseClicked(gHandler::handleMouseClick);
         gScene.addLayer(lFloor);
         gScene.addLayer(lObjects);
+
         gHandler.setScene(gScene);
 
         new GameLooper(gHandler).start();
-
+        preShow(group);
         setScene(new Scene(group));
         show();
     }
@@ -105,8 +107,16 @@ public class MapStage extends Stage
             {
                 BuildingDrawer drawer = new BuildingDrawer(building);
                 drawer.setLayer(lObjects);
+                drawer.setClickListener((sender, event) ->
+                {
+                    showBottomMenu(building);
+                });
             }
             catch (Exception ignored) { ignored.printStackTrace(); }
         });
     }
+
+    protected void preShow(Group group) {}
+
+    protected void showBottomMenu(Building building) {}
 }

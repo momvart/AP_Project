@@ -1,16 +1,17 @@
 package controllers;
 
-import com.google.gson.*;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonParseException;
 import exceptions.*;
-import graphics.gui.MapStage;
-import javafx.application.Platform;
-import models.*;
-import models.buildings.*;
-import utils.*;
+import models.World;
+import utils.ConsoleUtilities;
+import utils.ICommandManager;
 import views.ConsoleView;
 import views.VillageView;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.nio.file.*;
 import java.util.regex.Matcher;
 

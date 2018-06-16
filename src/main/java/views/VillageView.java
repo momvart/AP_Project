@@ -1,16 +1,24 @@
 package views;
 
 import exceptions.InvalidCommandException;
-import graphics.gui.MapStage;
+import graphics.gui.VillageStage;
 import javafx.application.Platform;
-import models.*;
-import models.Map;
-import models.buildings.*;
-import models.soldiers.*;
 import menus.*;
-import views.dialogs.*;
+import models.Map;
+import models.Resource;
+import models.Village;
+import models.World;
+import models.buildings.*;
+import models.soldiers.Recruit;
+import models.soldiers.SoldierValues;
+import views.dialogs.DialogResult;
+import views.dialogs.NumberInputDialog;
+import views.dialogs.SingleChoiceDialog;
+import views.dialogs.TextInputDialog;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
 
 public class VillageView extends ConsoleMenuContainerView
 {
@@ -29,7 +37,7 @@ public class VillageView extends ConsoleMenuContainerView
         mainMenu.insertItem(new ShowBuildingsMenu(mainMenu))
                 .insertItem(Menu.Id.VILLAGE_RESOURCES, "resources");
         setCurrentMenu(mainMenu, false);
-        Platform.runLater(() -> new MapStage(World.sCurrentGame.getVillage().getMap(), 2400, 1450).setUpAndShow());
+        Platform.runLater(() -> new VillageStage(World.sCurrentGame.getVillage().getMap(), 2400, 1450).setUpAndShow());
     }
 
     @Override

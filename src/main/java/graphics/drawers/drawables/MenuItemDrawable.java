@@ -21,7 +21,7 @@ public class MenuItemDrawable extends Drawable
     {
         this.menu = menu;
 
-        this.background = new RoundRectDrawable(width, height, 10, Color.rgb(0, 0, 0, 1));
+        this.background = new RoundRectDrawable(width, height, 10, Color.rgb(0, 0, 0, 0.6));
         if (!menu.getIconPath().isEmpty())
             try
             {

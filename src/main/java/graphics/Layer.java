@@ -1,12 +1,15 @@
 package graphics;
 
 import graphics.drawers.Drawer;
-import graphics.positioning.*;
+import graphics.positioning.NormalPositioningSystem;
+import graphics.positioning.PositioningSystem;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import utils.*;
+import utils.RectF;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
 
 public class Layer implements IFrameUpdatable
 {
@@ -38,6 +41,11 @@ public class Layer implements IFrameUpdatable
     public RectF getBounds()
     {
         return bounds;
+    }
+
+    public void setBounds(RectF bounds)
+    {
+        this.bounds = bounds;
     }
 
     public PositioningSystem getPosSys()
