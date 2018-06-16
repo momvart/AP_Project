@@ -1,19 +1,12 @@
 package graphics.gui;
 
-import graphics.Fonts;
-import graphics.GameLooper;
-import graphics.Layer;
-import graphics.MenuLayer;
-import graphics.MenuLayer.Orientation;
-import graphics.drawers.BuildingDrawer;
-import graphics.drawers.Drawer;
-import graphics.drawers.drawables.RoundRectDrawable;
-import graphics.drawers.drawables.TextDrawable;
+import graphics.*;
+import graphics.drawers.*;
+import graphics.drawers.drawables.*;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
-import menus.Menu;
-import menus.ParentMenu;
+import menus.*;
 import models.Map;
 import models.buildings.Building;
 import utils.RectF;
@@ -32,8 +25,8 @@ public class VillageStage extends MapStage
     public VillageStage(Map map, double width, double height)
     {
         super(map, width, height);
-        lmenu = new MenuLayer(6, new RectF(0, 0, width, height - CELL_SIZE), Orientation.HORIZONTAL);
-        linfo = new Layer(6, new RectF(0, 0, width, height));
+        lmenu = new MenuLayer(6, new RectF(0, 0, width, height - CELL_SIZE), MenuLayer.Orientation.HORIZONTAL);
+        linfo = new Layer(7, new RectF(0, 0, width, height));
     }
 
     public void setVillageView(VillageView villageView)
@@ -49,6 +42,17 @@ public class VillageStage extends MapStage
         canvas.setOnMouseClicked(gHandler::handleMouseClick);
         group.getChildren().add(canvas);
         showRightBar();
+
+
+        lmenu.setItemCellSize(CELL_SIZE);
+        lmenu.setClickListener(item ->
+        {
+            villageView.setCurrentMenu(lmenu.getCurrentMenu(), true);
+            villageView.onItemClicked(item);
+        });
+
+        gScene.addLayer(lmenu);
+        gScene.addLayer(linfo);
     }
 
     @Override
@@ -63,16 +67,13 @@ public class VillageStage extends MapStage
 
     public void showBottomMenu(Building building)
     {
-        lmenu.setItemCellSize(CELL_SIZE);
         lmenu.setCurrentMenu(building.getMenu(new ParentMenu(Menu.Id.VILLAGE_MAIN_MENU, "")));
-        lmenu.setClickListener(villageView);
-        gScene.addLayer(lmenu);
     }
 
     public void showRightBar()
     {
         double cellSize = height / 10;
-        MenuLayer rightBar = new MenuLayer(5, new RectF(width - cellSize, 0, cellSize, 0), Orientation.VERTICAL);
+        MenuLayer rightBar = new MenuLayer(5, new RectF(width - cellSize, 0, cellSize, 0), MenuLayer.Orientation.VERTICAL);
         rightBar.setItemCellSize(cellSize);
 
         gScene.addLayer(rightBar);
@@ -86,12 +87,11 @@ public class VillageStage extends MapStage
         drawer.setLayer(linfo);
         for (int i = 0; i < split.length; i++)
         {
-            TextDrawable text = new TextDrawable(split[i], Fonts.getMedium());
+            TextDrawable text = new TextDrawable(split[i], Color.WHITE, Fonts.getMedium());
             Drawer tdrawer = new Drawer(text);
-            tdrawer.setPosition(width / 4, i * LINE_SIZE);
+            tdrawer.setPosition(0, i * LINE_SIZE);
             tdrawer.setLayer(linfo);
         }
-        gScene.addLayer(linfo);
     }
 
 }
