@@ -37,7 +37,7 @@ public class MapStage extends Stage
         this.width = width;
         this.height = height;
 
-        PositioningSystem.sScale = 50;
+        PositioningSystem.sScale = 25;
 
         lFloor = new Layer(0, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
         lObjects = new Layer(1, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
@@ -59,6 +59,8 @@ public class MapStage extends Stage
         Group group = new Group();
 
         GraphicsValues.setScale(1);
+        if (System.getProperty("os.name").equals("Linux"))
+            GraphicsValues.setScale(3);
 
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);
@@ -107,16 +109,14 @@ public class MapStage extends Stage
             {
                 BuildingDrawer drawer = new BuildingDrawer(building);
                 drawer.setLayer(lObjects);
-                drawer.setClickListener((sender, event) ->
-                {
-                    showBottomMenu(building);
-                });
+                setUpBuildingDrawer(drawer);
             }
             catch (Exception ignored) { ignored.printStackTrace(); }
         });
     }
 
-    protected void preShow(Group group) {}
+    protected void setUpBuildingDrawer(BuildingDrawer drawer)
+    { }
 
-    protected void showBottomMenu(Building building) {}
+    protected void preShow(Group group) {}
 }

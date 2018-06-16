@@ -3,6 +3,7 @@ package graphics.gui;
 import graphics.GameLooper;
 import graphics.MenuLayer;
 import graphics.MenuLayer.Orientation;
+import graphics.drawers.BuildingDrawer;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import menus.Menu;
@@ -33,6 +34,15 @@ public class VillageStage extends MapStage
     }
 
     @Override
+    protected void setUpBuildingDrawer(BuildingDrawer drawer)
+    {
+        super.setUpBuildingDrawer(drawer);
+        drawer.setClickListener((sender, event) ->
+        {
+            showBottomMenu(drawer.getBuilding());
+        });
+    }
+
     public void showBottomMenu(Building building)
     {
         double cellSize = height / 10;
@@ -52,4 +62,6 @@ public class VillageStage extends MapStage
 
         gScene.addLayer(rightBar);
     }
+
+
 }
