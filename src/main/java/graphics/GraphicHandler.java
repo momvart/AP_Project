@@ -41,9 +41,10 @@ public class GraphicHandler implements IFrameUpdatable
 
     public void updateCamera(RectF newBounds)
     {
-        gc.translate(cameraBounds.getX() - newBounds.getX(), cameraBounds.getY() - newBounds.getY());
+        double ratio = 1 / scale;
+        gc.translate(cameraBounds.getX() * ratio - newBounds.getX(), cameraBounds.getY() * ratio - newBounds.getY());
         cameraBounds = newBounds;
-        cameraBounds.setWidth(cameraBounds.getWidth() * 1 / scale);
+        cameraBounds.setWidth(cameraBounds.getWidth() * ratio);
         cameraBounds.setHeight(cameraBounds.getHeight() * 1 / scale);
     }
 

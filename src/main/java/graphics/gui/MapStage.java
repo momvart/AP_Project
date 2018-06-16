@@ -1,5 +1,6 @@
 package graphics.gui;
 
+import com.sun.corba.se.impl.orbutil.graph.Graph;
 import graphics.*;
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
@@ -57,15 +58,15 @@ public class MapStage extends Stage
     {
         Group group = new Group();
 
-        GraphicsValues.setScale(0.45);
+        GraphicsValues.setScale(.2);
 
-        Canvas canvas = new Canvas(width, height);
+        Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);
 
         gHandler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, canvas.getWidth(), canvas.getHeight()));
         gScene = new GameScene(new SizeF(canvas.getWidth(), canvas.getHeight()));
 
-        gHandler.updateCamera(new RectF(0, -height, canvas.getWidth(), canvas.getHeight()));
+        gHandler.updateCamera(new RectF(-(width - PositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 30 * 2) / 2, -height / 2, canvas.getWidth(), canvas.getHeight()));
 
         setUpFloor();
 

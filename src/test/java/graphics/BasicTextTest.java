@@ -66,7 +66,7 @@ public class BasicTextTest extends Application
         drawer4.setPosition(0, 0);
         drawer4.setLayer(layer);
 
-        MenuLayer lMenu = new MenuLayer(2, new RectF(0, 0, 400, 100), MenuLayer.Orientation.HORIZONTAL);
+        MenuLayer lMenu = new MenuLayer(2, new RectF(0, 0, 400, 100), MenuLayer.Orientation.VERTICAL);
         lMenu.setItemCellSize(50);
         ParentMenu mainMenu = new ParentMenu(Menu.Id.VILLAGE_MAIN_MENU, "");
         Submenu submenu = new Submenu(2, "Submenu", mainMenu);
