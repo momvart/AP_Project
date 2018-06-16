@@ -63,7 +63,7 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
             }
         if ((mainTargets != null && mainTargets.size() != 0) || (wholeTargets != null && wholeTargets.size() != 0))
         {
-            fireListener.onFire(soldier, DefenseKind.AREASPLASH, soldiersInjuredDirectly, soldiersInjuredImplicitly);
+            fireListener.onFire(soldier, DefenseKind.AREA_SPLASH, soldiersInjuredDirectly, soldiersInjuredImplicitly);
         }
 
         mainTargets = null;

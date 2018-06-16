@@ -126,7 +126,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 
     private Stream<Building> getAliveBuildings()
     {
-        return attack.getMap().getBuildings().stream().filter(building -> !building.getAttackHelper().isDestroyed());
+        return attack.getMap().getBuildings().stream().filter(building -> !building.getAttackHelper().isDestroyed()).filter(building -> building.getAttackHelper().getStrength() > 0);
     }
 
     private boolean isTargetReachable(Building favouriteTarget)

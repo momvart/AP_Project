@@ -7,14 +7,13 @@ import models.attack.attackHelpers.GeneralSoldierAttackHelper;
 import models.attack.attackHelpers.HealerAttackHelper;
 import models.attack.attackHelpers.IOnDecampListener;
 import models.attack.attackHelpers.IOnSoldierDieListener;
-import models.soldiers.Healer;
 import models.soldiers.Soldier;
 import utils.Point;
 import utils.PointF;
 
 import java.net.URISyntaxException;
 
-import static java.lang.Math.round;
+import static java.lang.Math.floor;
 
 public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampListener, IOnSoldierDieListener
 {
@@ -28,13 +27,14 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
     private IOnMoveFinishedListener moveListener;
 
 
+    private int turn = 1;
+
     public SoldierGraphicHelper(Soldier soldier, Layer layer)
     {
         this.soldier = soldier;
         try
         {
             drawer = new SoldierDrawer(soldier);
-            drawer.setLayer(layer);
         }
         catch (URISyntaxException e)
         {
@@ -43,31 +43,16 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
 
         setReloadDuration(.7);//TODO‌ yet to be decided!! consider that we've got attack animation playing in the reload method. so we should decide this duration equal to attack animation playDuration in order of smoothness of graphic
 
-        //initiating the initial states
         drawer.setPosition(soldier.getLocation().getX(), soldier.getLocation().getY());
-        status = Status.RUN;
-        settingUpListeners();
-        triggeringTheSoldier();
+        drawer.setLayer(layer);
     }
 
-    private void triggeringTheSoldier()
+    public SoldierDrawer getDrawer()
     {
-        if (soldier.getType() == Healer.SOLDIER_TYPE)
-        {
-            isSoldierHealer = true;
-            HealerAttackHelper hah = (HealerAttackHelper)soldier.getAttackHelper();
-            hah.setTarget();
-            moveTo(new PointF(hah.getDestination()));
-        }
-        else
-        {
-            GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
-            gsah.setTarget();
-            moveTo(new PointF(gsah.getTarget().getLocation()));
-        }
+        return drawer;
     }
 
-    private void settingUpListeners()
+    public void setUpListeners()
     {
         setMoveListener(soldier.getAttackHelper());
         setReloadListener(soldier.getAttackHelper());
@@ -85,21 +70,6 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
         }
     }
 
-    public SoldierDrawer getDrawer()
-    {
-        return drawer;
-    }
-
-
-    public enum Status
-    {
-        IDLE,
-        DIE,
-        RUN,
-        ATTACKING;
-
-    }
-
     private Status status;
 
     public Status getStatus()
@@ -113,10 +83,9 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
         drawer.playAnimation(SoldierDrawer.IDLE);
     }
 
-
-    private void makeAttacking()
+    private void makeAttack()
     {
-        status = Status.ATTACKING;
+        status = Status.ATTACK;
         drawer.playAnimation(SoldierDrawer.ATTACK);
     }
 
@@ -132,7 +101,7 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
         drawer.playAnimation(SoldierDrawer.RUN);
     }
 
-    public void moveTo(PointF dest)
+    public void startJoggingToward(PointF dest)
     {
         makeRun();
         moveDest = dest;
@@ -140,32 +109,50 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
         drawer.getCurrentAnim().setScale(ps.convertX(dest) < ps.convertX(drawer.getPosition()) ? -1 : 1, 1);
     }
 
-    private void doMoving(double deltaT)
+    private void doReplacing(double deltaT)
     {
         if (status != Status.RUN)
             return;
-        Point nextPoint = soldier.getAttackHelper().getPointToGo(getPoint(moveDest), deltaT);
-        double distance = PointF.euclideanDistance(moveDest, drawer.getPosition());
-        double stepDistance = Point.euclideanDistance(getPoint(drawer.getPosition()), nextPoint);
-        //TODO‌ this kind of approach also yields the collapse with buildings except we settle on a decent and high game lopping cycle period!!
-        if (distance < 0.01 || distance < stepDistance)
+
+        Point veryCurrentPoint = getVeryPoint(drawer.getPosition());
+
+        Point nextPoint = soldier.getAttackHelper().getNextPathPoint(veryCurrentPoint, getVeryPoint(moveDest));
+        if (nextPoint == null)
         {
             onMoveFinished();
             return;
         }
 
-        drawer.setPosition(nextPoint.getX(), nextPoint.getY());
+        double distance = PointF.euclideanDistance(moveDest, drawer.getPosition());
+        double cos = (nextPoint.getX() - getVeryPoint(drawer.getPosition()).getX()) / distance;
+        double sin = (nextPoint.getY() - getVeryPoint(drawer.getPosition()).getY()) / distance;
+        double stepDistance = Point.euclideanDistance(veryCurrentPoint, nextPoint);
+
+        if (distance < 0.01 || distance < stepDistance)
+        {
+            onMoveFinished();
+            return;
+        }
+        PointF newPosition = new PointF(drawer.getPosition().getX() + cos * soldier.getSpeed() * deltaT, drawer.getPosition().getY() + sin * soldier.getSpeed() * deltaT);
+        if (floor(newPosition.getX()) != floor(soldier.getLocation().getX()) || floor(newPosition.getY()) != floor(soldier.getLocation().getY()))
+        {
+            soldier.setLocation(new Point((int)floor(drawer.getPosition().getX()), (int)floor(drawer.getPosition().getY())));
+        }
+        drawer.setPosition(newPosition.getX(), newPosition.getY());
     }
 
-    private Point getPoint(PointF pointF)
+    private Point getVeryPoint(PointF position)
     {
-        return new Point((int)round(pointF.getX()), (int)round(pointF.getY()));
+        return new Point((int)floor(position.getX()), (int)floor(position.getY()));
     }
+
+
 
     private void onMoveFinished()
     {
         makeIdle();
         drawer.setPosition(moveDest.getX(), moveDest.getY());
+        soldier.setLocation(getVeryPoint(moveDest));
         if (moveListener != null)
             moveListener.onMoveFinished(drawer.getPosition());
     }
@@ -179,16 +166,45 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
     public void update(double deltaT)
     {
         super.update(deltaT);
-        doMoving(deltaT);
+        doReplacing(deltaT);
     }
 
     @Override
     protected void callOnReload()
     {
-        if (status == Status.IDLE || status == Status.ATTACKING)
+        GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
+        if (turn == 1)
         {
-            makeAttacking();
+            triggerSoldier();
+            turn++;
+        }
+        if (status == Status.IDLE || status == Status.ATTACK)
+        {
+            makeAttack();
+            System.out.println("strength is :" + gsah.getTarget().getAttackHelper().getStrength());
             super.callOnReload();
+        }
+    }
+
+    private void triggerSoldier()
+    {
+        if (isSoldierHealer)
+        {
+            HealerAttackHelper hah = (HealerAttackHelper)soldier.getAttackHelper();
+            hah.setTarget();
+            if (hah.getDestination() != null)
+            {
+                startJoggingToward(new PointF(hah.getDestination()));
+            }
+        }
+        else
+        {
+            GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
+            gsah.setTarget();
+            if (gsah.getTarget() != null)
+            {
+                startJoggingToward(new PointF(gsah.getTarget().getLocation()));
+            }
         }
     }
 
@@ -207,7 +223,7 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
                 Point newDest = gsah.getTarget().getLocation();
                 if (newDest != null)
                 {
-                    moveTo(new PointF(newDest));
+                    startJoggingToward(new PointF(newDest));
                 }
                 else
                 {
@@ -220,7 +236,7 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
                 Point newDest = hah.getDestination();
                 if (newDest != null)
                 {
-                    moveTo(new PointF(newDest));
+                    startJoggingToward(new PointF(newDest));
                 }
                 else
                 {
@@ -228,6 +244,15 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
                 }
             }
         }
+    }
+
+    public enum Status
+    {
+        IDLE,
+        DIE,
+        RUN,
+        ATTACK;
+
     }
 
     @Override

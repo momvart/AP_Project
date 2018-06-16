@@ -40,7 +40,7 @@ public class SingleTargetAttackHelper extends DefensiveTowerAttackHelper
             int finalHealth = Math.max(0, targetSoldier.getAttackHelper().getHealth());
             ArrayList<SoldierInjuryReport> soldierInjuryReports = new ArrayList<>();
             soldierInjuryReports.add(new SoldierInjuryReport(targetSoldier, initialHealth, finalHealth));
-            fireListener.onFire(targetSoldier.getLocation(), DefenseKind.SINGLETARGET, soldierInjuryReports, null);
+            fireListener.onFire(targetSoldier.getLocation(), DefenseKind.SINGLE_TARGET, soldierInjuryReports, null);
         }
 
         mainTargets = null;

@@ -80,28 +80,28 @@ public class MovingTest extends Application
         SoldierGraphicHelper helper = new SoldierGraphicHelper(SoldierFactory.createSoldierByTypeID(Guardian.SOLDIER_TYPE, 1), layer);
         helper.getDrawer().setPosition(0, 5);
         helper.getDrawer().setClickListener((sender, event) -> System.out.println("Soldier"));
-        helper.moveTo(new PointF(0, 10));
+        helper.startJoggingToward(new PointF(0, 10));
         helper.setMoveListener(position ->
         {
             if (PointF.euclideanDistance(position, new PointF(0, 10)) < 0.01)
-                helper.moveTo(new PointF(5, 10));
+                helper.startJoggingToward(new PointF(5, 10));
             else if (PointF.euclideanDistance(position, new PointF(5, 10)) < 0.01)
-                helper.moveTo(new PointF(0, 5));
+                helper.startJoggingToward(new PointF(0, 5));
             else
-                helper.moveTo(new PointF(0, 10));
+                helper.startJoggingToward(new PointF(0, 10));
         });
         handler.addUpdatable(helper);
 
         SoldierGraphicHelper helper2 = new SoldierGraphicHelper(SoldierFactory.createSoldierByTypeID(Guardian.SOLDIER_TYPE, 2), layer);
         helper2.getDrawer().setPosition(8, 6);
 //        helper2.makeIdle();
-        helper2.moveTo(new PointF(6, 6));
+        helper2.startJoggingToward(new PointF(6, 6));
         helper2.setMoveListener(position ->
         {
             if (PointF.euclideanDistance(position, new PointF(6, 6)) < 0.01)
-                helper2.moveTo(new PointF(8, 6));
+                helper2.startJoggingToward(new PointF(8, 6));
             else if (PointF.euclideanDistance(position, new PointF(8, 6)) < 0.01)
-                helper2.moveTo(new PointF(6, 6));
+                helper2.startJoggingToward(new PointF(6, 6));
         });
         handler.addUpdatable(helper2);
 

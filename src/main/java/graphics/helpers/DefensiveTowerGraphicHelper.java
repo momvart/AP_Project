@@ -9,7 +9,7 @@ import utils.Point;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-public class DefensiveTowerGraphicHelper extends GraphicHelper implements IonFireListener, IonDestroyListener
+public class DefensiveTowerGraphicHelper extends GraphicHelper implements IOnFireListener, IOnDestroyListener
 {
     Building building;
 

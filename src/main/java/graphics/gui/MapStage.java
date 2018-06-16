@@ -12,7 +12,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import models.Map;
-import models.buildings.Building;
 import utils.RectF;
 import utils.SizeF;
 
@@ -58,9 +57,10 @@ public class MapStage extends Stage
     {
         Group group = new Group();
 
-        GraphicsValues.setScale(.8);
         if (System.getProperty("os.name").equals("Linux"))
-            GraphicsValues.setScale(3);
+            GraphicsValues.setScale(.6);
+        else
+            GraphicsValues.setScale(.2);
 
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);

@@ -1,6 +1,6 @@
 package graphics.helpers;
 
-public interface IonDestroyListener
+public interface IOnDestroyListener
 {
     void onDestroy();
 }
