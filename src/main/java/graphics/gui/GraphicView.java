@@ -34,7 +34,7 @@ public class GraphicView
         this.layer = layer;
         this.width = width;
         this.height = height;
-        lmenu = new MenuLayer(5, new RectF(0, 0, width, height));
+        lmenu = new MenuLayer(5, new RectF(0, height - 100, width, 100), MenuLayer.Orientation.HORIZONTAL);
     }
 
     public MenuLayer getLmenu()

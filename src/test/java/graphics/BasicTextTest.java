@@ -61,12 +61,19 @@ public class BasicTextTest extends Application
         drawer3.setPosition(1, 15);
         drawer3.setLayer(layer);
 
-        MenuLayer lMenu = new MenuLayer(2, new RectF(0, 0, 400, 100));
+        RoundRectDrawable tester = new RoundRectDrawable(400, 100, 10, Color.GREEN);
+        Drawer drawer4 = new Drawer(tester);
+        drawer4.setPosition(0, 0);
+        drawer4.setLayer(layer);
+
+        MenuLayer lMenu = new MenuLayer(2, new RectF(0, 0, 400, 100), MenuLayer.Orientation.HORIZONTAL);
+        lMenu.setItemCellSize(50);
         ParentMenu mainMenu = new ParentMenu(Menu.Id.VILLAGE_MAIN_MENU, "");
         Submenu submenu = new Submenu(2, "Submenu", mainMenu);
         submenu.insertItem(3, "item");
         mainMenu.insertItem(submenu)
-                .insertItem(Menu.Id.VILLAGE_RESOURCES, "resources");
+                .insertItem(Menu.Id.VILLAGE_RESOURCES, "resources")
+                .insertItem(4, "item 2");
         lMenu.setCurrentMenu(mainMenu);
         lMenu.setClickListener(menu1 -> System.out.println(menu1.getText()));
 

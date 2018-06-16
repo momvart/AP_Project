@@ -1,39 +1,37 @@
 package graphics;
 
 import graphics.drawers.Drawer;
-import graphics.drawers.drawables.Drawable;
 import graphics.drawers.drawables.MenuItemDrawable;
-import graphics.drawers.drawables.RoundRectDrawable;
-import graphics.positioning.PercentPositioningSystem;
+import graphics.positioning.NormalPositioningSystem;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import menus.IMenuClickListener;
-import menus.Menu;
-import menus.ParentMenu;
-import menus.Submenu;
+import menus.*;
 import utils.RectF;
 
 import java.util.ArrayList;
 
 public class MenuLayer extends Layer
 {
+    private double itemCellSize;
+
+    private static final double ItemPadding = 10;
+
     private ParentMenu currentMenu;
     private IMenuClickListener clickListener;
-    private static final double ItemCellSize = 50;
-    private static final double ITEM_PADDING = 5;
-    private static final double BOX_HEIGHT_SCALE = 0.1;
 
-    public MenuLayer(int order, RectF bounds)
+    public enum Orientation
     {
-        super(order, bounds);
-        this.setPosSys(new PercentPositioningSystem(this));
+        VERTICAL,
+        HORIZONTAL
     }
 
-    public MenuLayer(int order, RectF bounds, IMenuClickListener listener)
+    private Orientation orientation;
+
+    public MenuLayer(int order, RectF bounds, Orientation orientation)
     {
         super(order, bounds);
-        this.setPosSys(new PercentPositioningSystem(this));
-        this.clickListener = listener;
+        this.setPosSys(new NormalPositioningSystem(1));
+        this.orientation = orientation;
+        itemCellSize = (orientation == Orientation.VERTICAL ? bounds.getWidth() : bounds.getHeight()) - 2 * ItemPadding;
     }
 
     public ParentMenu getCurrentMenu()
@@ -47,23 +45,31 @@ public class MenuLayer extends Layer
         updateMenu();
     }
 
+    public void setItemCellSize(double itemCellSize)
+    {
+        this.itemCellSize = itemCellSize;
+    }
+
     private void updateMenu()
     {
-        ArrayList<Menu> items = currentMenu.getMenuItems();
         removeAllObjects();
-        Drawable bg = new RoundRectDrawable((ItemCellSize + MenuLayer.ITEM_PADDING) * items.size() + ITEM_PADDING, ItemCellSize + 2 * ITEM_PADDING, 10, Color.rgb(0, 0, 0, 0.6));
-        bg.setPivot(0.5, 1);
-        Drawer bgDrawer = new Drawer(bg);
-        bgDrawer.setPosition(0.5, 1);
-        bgDrawer.setLayer(this);
+
+        ArrayList<Menu> items = currentMenu.getMenuItems();
+
+        final double start = ((orientation == Orientation.VERTICAL ? getBounds().getHeight() : getBounds().getWidth())
+                - (itemCellSize + ItemPadding) * items.size()) / 2;
+
+
         for (int i = 0; i < items.size(); i++)
         {
             Menu item = items.get(i);
-            MenuItemDrawable drawable = new MenuItemDrawable(item, ItemCellSize, ItemCellSize);
-            drawable.setPivot(0.5, 0.5);
+            MenuItemDrawable drawable = new MenuItemDrawable(item, itemCellSize, itemCellSize);
+            drawable.setPivot(orientation == Orientation.HORIZONTAL ? 0 : 0.5, orientation == Orientation.VERTICAL ? 0 : 0.5);
             Drawer drawer = new Drawer(drawable);
-            double x = 0.5 + (i - items.size() / 2.0 + 0.5) * (ITEM_PADDING + 0.5) / 100;
-            drawer.setPosition(x, 1 - (ITEM_PADDING + 0.5) / 100);
+            if (orientation == Orientation.HORIZONTAL)
+                drawer.setPosition(start + (itemCellSize + ItemPadding) * i, getBounds().getHeight() / 2);
+            else
+                drawer.setPosition(getBounds().getWidth() / 2, start + (itemCellSize + ItemPadding) * i);
             drawer.setClickListener(this::onMenuItemClick);
             drawer.setLayer(this);
         }

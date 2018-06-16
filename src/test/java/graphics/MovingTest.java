@@ -77,9 +77,8 @@ public class MovingTest extends Application
         drawer.setClickListener((sender, event) -> System.out.println("Salam"));
         drawer.setLayer(layer);
 
-        SoldierGraphicHelper helper = new SoldierGraphicHelper(SoldierFactory.createSoldierByTypeID(Guardian.SOLDIER_TYPE, 1));
+        SoldierGraphicHelper helper = new SoldierGraphicHelper(SoldierFactory.createSoldierByTypeID(Guardian.SOLDIER_TYPE, 1), layer);
         helper.getDrawer().setPosition(0, 5);
-        helper.getDrawer().setLayer(layer);
         helper.getDrawer().setClickListener((sender, event) -> System.out.println("Soldier"));
         helper.moveTo(new PointF(0, 10));
         helper.setMoveListener(position ->
@@ -93,9 +92,8 @@ public class MovingTest extends Application
         });
         handler.addUpdatable(helper);
 
-        SoldierGraphicHelper helper2 = new SoldierGraphicHelper(SoldierFactory.createSoldierByTypeID(Guardian.SOLDIER_TYPE, 2));
+        SoldierGraphicHelper helper2 = new SoldierGraphicHelper(SoldierFactory.createSoldierByTypeID(Guardian.SOLDIER_TYPE, 2), layer);
         helper2.getDrawer().setPosition(8, 6);
-        helper2.getDrawer().setLayer(layer);
 //        helper2.makeIdle();
         helper2.moveTo(new PointF(6, 6));
         helper2.setMoveListener(position ->
