@@ -51,7 +51,7 @@ public class GraphicsValues
         if (!frames.containsKey(animKey + level))
         {
             frames.put(animKey + level, GraphicsUtilities.createFramesFrom(
-                    getSoldierAssetsPath(soldierType) + "/" + level + "/" + animKey.toLowerCase(),
+                    getSoldierAssetsPath(soldierType) + "/" + (level + 1) + "/" + animKey.toLowerCase(),
                     50, 0, 0));
         }
 

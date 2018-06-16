@@ -1,5 +1,6 @@
 package graphics.helpers;
 
+import graphics.Layer;
 import graphics.drawers.SoldierDrawer;
 import graphics.positioning.PositioningSystem;
 import models.attack.attackHelpers.GeneralSoldierAttackHelper;
@@ -27,12 +28,13 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
     private IOnMoveFinishedListener moveListener;
 
 
-    public SoldierGraphicHelper(Soldier soldier)
+    public SoldierGraphicHelper(Soldier soldier, Layer layer)
     {
         this.soldier = soldier;
         try
         {
             drawer = new SoldierDrawer(soldier);
+            drawer.setLayer(layer);
         }
         catch (URISyntaxException e)
         {

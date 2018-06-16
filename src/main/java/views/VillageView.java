@@ -1,6 +1,8 @@
 package views;
 
 import exceptions.InvalidCommandException;
+import graphics.gui.MapStage;
+import javafx.application.Platform;
 import models.*;
 import models.Map;
 import models.buildings.*;
@@ -27,6 +29,7 @@ public class VillageView extends ConsoleMenuContainerView
         mainMenu.insertItem(new ShowBuildingsMenu(mainMenu))
                 .insertItem(Menu.Id.VILLAGE_RESOURCES, "resources");
         setCurrentMenu(mainMenu, false);
+        Platform.runLater(() -> new MapStage(World.sCurrentGame.getVillage().getMap(), 1200, 800).setUpAndShow());
     }
 
     @Override

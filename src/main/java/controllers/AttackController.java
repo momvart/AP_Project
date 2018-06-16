@@ -2,6 +2,8 @@ package controllers;
 
 import com.google.gson.*;
 import exceptions.*;
+import graphics.gui.AttackStage;
+import javafx.application.Platform;
 import menus.*;
 import models.attack.*;
 import models.World;
@@ -86,6 +88,7 @@ public class AttackController implements IMenuClickListener, ICommandManager
                 case Menu.Id.ATTACK_MAP_ATTACK:
                 {
                     theView.setCurrentMenu(null, false);
+                    Platform.runLater(() -> new AttackStage(theAttack, 1200, 800).setUpAndShow());
                 }
                 break;
             }

@@ -78,7 +78,6 @@ public class MainController implements ICommandManager
 
     private void enterGame()
     {
-        Platform.runLater(() -> new MapStage(World.sCurrentGame.getVillage().getMap()).setUpAndShow());
         childCommandManager = new VillageController(new VillageView(theView.getScanner()));
     }
 
