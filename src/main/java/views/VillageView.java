@@ -37,7 +37,7 @@ public class VillageView extends ConsoleMenuContainerView
         mainMenu.insertItem(new ShowBuildingsMenu(mainMenu))
                 .insertItem(Menu.Id.VILLAGE_RESOURCES, "resources");
         setCurrentMenu(mainMenu, false);
-        Platform.runLater(() -> new VillageStage(World.sCurrentGame.getVillage().getMap(), 1200, 725).setUpAndShow());
+        Platform.runLater(() -> new VillageStage(World.sCurrentGame.getVillage().getMap(), 1200, 900).setUpAndShow());
     }
 
     @Override
