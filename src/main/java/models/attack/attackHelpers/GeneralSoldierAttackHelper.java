@@ -2,10 +2,7 @@ package models.attack.attackHelpers;
 
 import models.Resource;
 import models.attack.Attack;
-import models.buildings.Building;
-import models.buildings.GoldStorage;
-import models.buildings.Storage;
-import models.buildings.Trap;
+import models.buildings.*;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import utils.Point;
@@ -31,6 +28,13 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
         return target;
     }
 
+    IOnSoldierFireListener soldierFireListener;
+
+    public void setSoldierFireListener(IOnSoldierFireListener soldierFireListener)
+    {
+        this.soldierFireListener = soldierFireListener;
+    }
+
     @Override
     public void fire()
     {
@@ -46,6 +50,8 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
             int initialStrength = target.getStrength();
             target.getAttackHelper().decreaseStrength(getDamage());
 
+            BuildingDestructionReport bdr = new BuildingDestructionReport(target, initialStrength, target.getStrength());
+            callOnSoldierFire(target.getLocation(), bdr);
             if (target instanceof Storage)
             {
                 Storage storage = (Storage)target;
@@ -70,6 +76,11 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
             attack.addScore(target.getBuildingInfo().getDestroyScore());
             attack.addToClaimedResource(target.getBuildingInfo().getDestroyResource());
         }
+    }
+
+    private void callOnSoldierFire(Point locationOfTarget, BuildingDestructionReport bdr)
+    {
+        soldierFireListener.onSoldierFire(locationOfTarget, bdr);
     }
 
     private boolean isTargetInRange()
@@ -126,7 +137,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 
     private Stream<Building> getAliveBuildings()
     {
-        return attack.getMap().getBuildings().stream().filter(building -> !building.getAttackHelper().isDestroyed());
+        return attack.getMap().getBuildings().stream().filter(building -> !building.getAttackHelper().isDestroyed()).filter(building -> building.getAttackHelper().getStrength() > 0);
     }
 
     private boolean isTargetReachable(Building favouriteTarget)

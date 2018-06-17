@@ -2,6 +2,6 @@ package graphics.helpers;
 
 public enum DefenseKind
 {
-    AREASPLASH,
-    SINGLETARGET,
+    AREA_SPLASH,
+    SINGLE_TARGET,
 }

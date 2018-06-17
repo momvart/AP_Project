@@ -90,11 +90,6 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     public Point getPointToGo(Point destination)
     {
-        return getPointToGo(destination, 1);
-    }
-
-    public Point getPointToGo(Point destination, double deltaT)
-    {
         List<Point> soldierPath = attack.getSoldierPath(getSoldierLocation(), destination, soldier.getMoveType() == MoveType.AIR);
         Point pointToGo = soldierPath.get(soldierPath.size() - 1);
 
@@ -103,10 +98,23 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         {
             if (i != soldierPath.size() - 1)
                 pointToGo = soldierPath.get(i + 1);
-            if (Point.euclideanDistance(soldierPath.get(i), getSoldierLocation()) > soldier.getSpeed() * deltaT)
+            if (Point.euclideanDistance(soldierPath.get(i), getSoldierLocation()) > soldier.getSpeed())
                 break;
         }
         return pointToGo;
+    }
+
+    public Point getNextPathPoint(Point start, Point destination)
+    {
+        List<Point> soldierPath = attack.getSoldierPath(start, destination, soldier.getMoveType() == MoveType.AIR);
+        if (soldierPath.size() >= 2)
+        {
+            return soldierPath.get(soldierPath.size() - 2);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public void increaseHealth(int amount)
@@ -153,7 +161,5 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
     public void setGraphicHelper(SoldierGraphicHelper graphicHelper)
     {
         this.graphicHelper = graphicHelper;
-        graphicHelper.setReloadListener(this);
-        graphicHelper.setMoveListener(this);
     }
 }
