@@ -63,20 +63,19 @@ public class MapStage extends Stage
     {
         Group group = new Group();
 
-        GraphicsValues.setScale(.8);
+        GraphicsValues.setScale(0.5);
         if (System.getProperty("os.name").equals("Linux"))
             GraphicsValues.setScale(2);
 
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);
 
-        gHandler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, width, height));
+        gHandler = new GraphicHandler(canvas.getGraphicsContext2D(),
+                new RectF(
+                        -(canvas.getWidth() - PositioningSystem.sScale * GraphicsValues.getScale() * IsometricPositioningSystem.ANG_COS * 30 * 2) / 2,
+                        -(canvas.getHeight() - PositioningSystem.sScale * GraphicsValues.getScale() * IsometricPositioningSystem.ANG_SIN * 30 * 2) / 2 - (PositioningSystem.sScale * GraphicsValues.getScale() * IsometricPositioningSystem.ANG_SIN * 30 * 2) / 2,
+                        canvas.getWidth(), canvas.getHeight()));
         gScene = new GameScene(new SizeF(width, height));
-
-        gHandler.updateCamera(new RectF(
-                -(width - PositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 30 * 2) / 2,
-                -(PositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 30 * 4 - height) / 2,
-                width, height));
 
         setUpFloor();
 

@@ -46,7 +46,7 @@ public class VillageStage extends MapStage
         guiCanvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(guiCanvas);
 
-        GraphicHandler guiHandler = new GraphicHandler(guiCanvas.getGraphicsContext2D(), new RectF(0, 0, width, height));
+        GraphicHandler guiHandler = new GraphicHandler(guiCanvas.getGraphicsContext2D(), new RectF(0, 0, guiCanvas.getWidth(), guiCanvas.getHeight()));
         guiCanvas.setOnMouseClicked(guiHandler::handleMouseClick);
         guiScene = new GameScene(width, height);
 
