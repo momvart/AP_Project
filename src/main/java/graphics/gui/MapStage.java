@@ -10,16 +10,22 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import models.Map;
 import utils.RectF;
 import utils.SizeF;
+
+import java.util.ArrayList;
 
 public class MapStage extends Stage
 {
     private Map map;
 
     private GameLooper looper;
+
+    protected ArrayList<GraphicHandler> graphicHandlers = new ArrayList<>();
+
     protected GraphicHandler gHandler;
 
     protected GameScene gScene;
@@ -64,26 +70,27 @@ public class MapStage extends Stage
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);
 
-        gHandler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, canvas.getWidth(), canvas.getHeight()));
-        gScene = new GameScene(new SizeF(canvas.getWidth(), canvas.getHeight()));
+        GraphicHandler gHandler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, width, height));
+        gScene = new GameScene(new SizeF(width, height));
 
         gHandler.updateCamera(new RectF(
                 -(width - PositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 30 * 2) / 2,
                 -(PositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 30 * 4 - height) / 2,
-                canvas.getWidth(), canvas.getHeight()));
+                width, height));
 
         setUpFloor();
 
         addBuildings();
 
-        canvas.setOnMouseClicked(gHandler::handleMouseClick);
         gScene.addLayer(lFloor);
         gScene.addLayer(lObjects);
 
         gHandler.setScene(gScene);
+        graphicHandlers.add(gHandler);
 
         new GameLooper(gHandler).start();
         preShow(group);
+        group.setOnMouseClicked(this::handleMouseClick);
         setScene(new Scene(group));
         show();
     }
@@ -120,5 +127,14 @@ public class MapStage extends Stage
     protected void setUpBuildingDrawer(BuildingDrawer drawer)
     { }
 
-    protected void preShow(Group group) {}
+    protected void preShow(Group group)
+    {
+    }
+
+    private void handleMouseClick(MouseEvent event)
+    {
+        for (int i = graphicHandlers.size() - 1; i >= 0; i--)
+            if (graphicHandlers.get(i).handleMouseClickResult(event))
+                return;
+    }
 }

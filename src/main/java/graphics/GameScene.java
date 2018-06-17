@@ -40,10 +40,11 @@ public class GameScene implements IFrameUpdatable
         layers.forEach(l -> l.update(deltaT));
     }
 
-    public void handleMouseClick(double x, double y, MouseEvent event)
+    public boolean handleMouseClick(double x, double y, MouseEvent event)
     {
         for (int i = layers.size() - 1; i >= 0; i--)
             if (layers.getByIndex(i).handleMouseClick(x, y, event))
-                break;
+                return true;
+        return false;
     }
 }

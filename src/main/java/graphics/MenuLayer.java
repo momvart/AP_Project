@@ -54,6 +54,9 @@ public class MenuLayer extends Layer
     {
         removeAllObjects();
 
+        if (currentMenu == null)
+            return;
+
         ArrayList<Menu> items = currentMenu.getMenuItems();
 
         final double start = ((orientation == Orientation.VERTICAL ? getBounds().getHeight() : getBounds().getWidth())

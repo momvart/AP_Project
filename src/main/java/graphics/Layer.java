@@ -16,6 +16,8 @@ public class Layer implements IFrameUpdatable
     private int order;
     private RectF bounds;
 
+    private boolean visible = true;
+
     private ArrayList<Drawer> drawers = new ArrayList<>();
     private ArrayList<IFrameUpdatable> updatables = new ArrayList<>();
 
@@ -41,6 +43,16 @@ public class Layer implements IFrameUpdatable
     public RectF getBounds()
     {
         return bounds;
+    }
+
+    public boolean isVisible()
+    {
+        return visible;
+    }
+
+    public void setVisible(boolean visible)
+    {
+        this.visible = visible;
     }
 
     public void setBounds(RectF bounds)
@@ -101,6 +113,8 @@ public class Layer implements IFrameUpdatable
 
     public void draw(GraphicsContext gc, RectF cameraBounds)
     {
+        if (!isVisible())
+            return;
         gc.save();
         gc.translate(bounds.getX(), bounds.getY());
         RectF relBounds = new RectF(cameraBounds.getX() - bounds.getX(), cameraBounds.getY() - bounds.getY(), cameraBounds.getWidth(), cameraBounds.getHeight());

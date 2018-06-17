@@ -5,6 +5,7 @@ import graphics.drawers.*;
 import graphics.drawers.drawables.*;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import menus.*;
 import models.Map;
@@ -14,10 +15,13 @@ import views.VillageView;
 
 public class VillageStage extends MapStage
 {
-    private Canvas canvas;
-    private GameLooper looper;
+    private Canvas guiCanvas;
+    private GameLooper guiLooper;
+    private GameScene guiScene;
+
     private MenuLayer lmenu;
     private Layer linfo;
+
     private VillageView villageView;
     private final double CELL_SIZE = height / 10;
     private final double LINE_SIZE = height / 20;
@@ -25,7 +29,7 @@ public class VillageStage extends MapStage
     public VillageStage(Map map, double width, double height)
     {
         super(map, width, height);
-        lmenu = new MenuLayer(6, new RectF(0, 0, width, height - CELL_SIZE), MenuLayer.Orientation.HORIZONTAL);
+        lmenu = new MenuLayer(6, new RectF(0, height - CELL_SIZE, width, CELL_SIZE), MenuLayer.Orientation.HORIZONTAL);
         linfo = new Layer(7, new RectF(0, 0, width, height));
     }
 
@@ -38,11 +42,15 @@ public class VillageStage extends MapStage
     protected void preShow(Group group)
     {
         super.preShow(group);
-        canvas = new Canvas(getWidth(), getHeight());
-        canvas.setOnMouseClicked(gHandler::handleMouseClick);
-        group.getChildren().add(canvas);
-        showRightBar();
 
+        guiCanvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
+        group.getChildren().add(guiCanvas);
+
+        GraphicHandler guiHandler = new GraphicHandler(guiCanvas.getGraphicsContext2D(), new RectF(0, 0, width, height));
+        guiCanvas.setOnMouseClicked(guiHandler::handleMouseClick);
+        guiScene = new GameScene(width, height);
+
+        showRightBar();
 
         lmenu.setItemCellSize(CELL_SIZE);
         lmenu.setClickListener(item ->
@@ -51,8 +59,14 @@ public class VillageStage extends MapStage
             villageView.onItemClicked(item);
         });
 
-        gScene.addLayer(lmenu);
-        gScene.addLayer(linfo);
+        guiScene.addLayer(lmenu);
+        guiScene.addLayer(linfo);
+
+        guiHandler.setScene(guiScene);
+
+        new GameLooper(guiHandler).start();
+
+        graphicHandlers.add(guiHandler);
     }
 
     @Override
@@ -81,6 +95,7 @@ public class VillageStage extends MapStage
 
     public void showInfo(String info)
     {
+        linfo.removeAllObjects();
         String[] split = info.split("\n");
         RoundRectDrawable bg = new RoundRectDrawable(width / 4, (split.length + 1) * LINE_SIZE, 10, Color.rgb(0, 0, 0, 0.6));
         Drawer drawer = new Drawer(bg);
