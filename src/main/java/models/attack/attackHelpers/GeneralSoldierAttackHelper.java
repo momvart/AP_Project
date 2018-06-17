@@ -51,7 +51,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
             target.getAttackHelper().decreaseStrength(getDamage());
 
             BuildingDestructionReport bdr = new BuildingDestructionReport(target, initialStrength, target.getStrength());
-            callOnSoldierFire(target.getLocation(), bdr);
+            callOnSoldierFire(bdr);
             if (target instanceof Storage)
             {
                 Storage storage = (Storage)target;
@@ -78,9 +78,9 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
         }
     }
 
-    private void callOnSoldierFire(Point locationOfTarget, BuildingDestructionReport bdr)
+    private void callOnSoldierFire(BuildingDestructionReport bdr)
     {
-        soldierFireListener.onSoldierFire(locationOfTarget, bdr);
+        soldierFireListener.onSoldierFire(bdr);
     }
 
     private boolean isTargetInRange()

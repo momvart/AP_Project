@@ -22,4 +22,19 @@ public class SoldierDrawer extends AnimationDrawer
         addAnimation(DIE, new FrameAnimationDrawable(GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), DIE), 1, 0.5, 1));
         setDrawable(((FrameAnimationDrawable)animations.get(IDLE)).getFrame(0));
     }
+
+    public void beeingHealedGlow()
+    {
+        //TODO
+    }
+
+    public void healthIncreaseBarLoading(int initialHealth, int finalHealth)
+    {
+        //TODO
+    }
+
+    public void healthDecreaseBarLoading(int initialHealth, int finalHealth)
+    {
+        //TODO
+    }
 }

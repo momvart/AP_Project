@@ -1,12 +1,8 @@
 package graphics.drawers;
 
 import graphics.GraphicsValues;
-import graphics.drawers.drawables.Drawable;
 import graphics.drawers.drawables.ImageDrawable;
 import models.buildings.Building;
-import utils.GraphicsUtilities;
-
-import java.net.URISyntaxException;
 
 public class BuildingDrawer extends LayerDrawer
 {
@@ -28,5 +24,16 @@ public class BuildingDrawer extends LayerDrawer
     public Building getBuilding()
     {
         return building;
+    }
+
+
+    public void playDestroyAnimation()
+    {
+        //TODO
+    }
+
+    public void healthDecreseBarLoading(int initialHealth, int finalHealth)
+    {
+        //TODO
     }
 }

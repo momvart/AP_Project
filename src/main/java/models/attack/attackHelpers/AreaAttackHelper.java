@@ -79,11 +79,17 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         {
             try { setTarget(); }
             catch (SoldierNotFoundException ignored) {}
-            attack();
         }
         else
         {
             destroyListener.onDestroy();
         }
+    }
+
+
+    @Override
+    public void onBulletHit()
+    {
+        attack();
     }
 }

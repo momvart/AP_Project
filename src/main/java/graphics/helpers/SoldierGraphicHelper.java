@@ -3,18 +3,18 @@ package graphics.helpers;
 import graphics.Layer;
 import graphics.drawers.SoldierDrawer;
 import graphics.positioning.PositioningSystem;
-import models.attack.attackHelpers.*;
-import models.buildings.BuildingDestructionReport;
-import models.soldiers.*;
+import models.attack.attackHelpers.GeneralSoldierAttackHelper;
+import models.attack.attackHelpers.IOnDecampListener;
+import models.attack.attackHelpers.IOnSoldierDieListener;
+import models.soldiers.Soldier;
 import utils.Point;
 import utils.PointF;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 
 import static java.lang.Math.floor;
 
-public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampListener, IOnSoldierDieListener, IOnSoldierFireListener, IOnHealerHealListener
+public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnDecampListener, IOnSoldierDieListener
 {
     protected Soldier soldier;
 
@@ -22,11 +22,10 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
 
     protected PointF moveDest;
     private boolean isSoldierHealer = false;
-
     private IOnMoveFinishedListener moveListener;
-
-
+    private Status status;
     private int turn = 1;
+
 
     public SoldierGraphicHelper(Soldier soldier, Layer layer)
     {
@@ -40,7 +39,7 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
             e.printStackTrace();
         }
 
-        setReloadDuration(.7);//TODO‌ yet to be decided!! consider that we've got attack animation playing in the reload method. so we should decide this duration equal to attack animation playDuration in order of smoothness of graphic
+        setReloadDuration(.7);
 
         drawer.setPosition(soldier.getLocation().getX(), soldier.getLocation().getY());
         drawer.setLayer(layer);
@@ -55,23 +54,7 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
     {
         setMoveListener(soldier.getAttackHelper());
         setReloadListener(soldier.getAttackHelper());
-        if (isSoldierHealer)
-        {
-            HealerAttackHelper hah = (HealerAttackHelper)soldier.getAttackHelper();
-            hah.setDecampListener(this);
-            hah.setSoldierDieListener(this);
-            hah.setOnHealerHealListener(this);
-        }
-        else
-        {
-            GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
-            gsah.setOnSoldierDieListener(this);
-            gsah.setDecampListener(this);
-            gsah.setSoldierFireListener(this);
-        }
     }
-
-    private Status status;
 
     public Status getStatus()
     {
@@ -86,7 +69,7 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
 
     private void makeAttack()
     {
-        status = Status.ATTACK;//TODO ‌to be manipulated to specify the kind of attack of each soldier.
+        status = Status.ATTACK;
         drawer.playAnimation(SoldierDrawer.ATTACK);
     }
 
@@ -187,86 +170,10 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
         }
     }
 
-    private void triggerSoldier()
+    public void triggerSoldier()
     {
-        if (isSoldierHealer)
-        {
-            HealerAttackHelper hah = (HealerAttackHelper)soldier.getAttackHelper();
-            hah.setTarget();
-            if (hah.getDestination() != null)
-            {
-                startJoggingToward(new PointF(hah.getDestination()));
-            }
-        }
-        else
-        {
-            GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
-            gsah.setTarget();
-            if (gsah.getTarget() != null)
-            {
-                startJoggingToward(new PointF(gsah.getTarget().getLocation()));
-            }
-        }
     }
 
-    @Override
-    public void onDecamp()
-    {
-        if (soldier.getAttackHelper().isDead() || soldier == null || soldier.getAttackHelper().getHealth() <= 0)
-        {
-            makeDie();
-        }
-        else
-        {
-            if (!isSoldierHealer)
-            {
-                GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
-                Point newDest = gsah.getTarget().getLocation();
-                if (newDest != null)
-                {
-                    startJoggingToward(new PointF(newDest));
-                }
-                else
-                {
-                    makeIdle();
-                }
-            }
-            else
-            {
-                HealerAttackHelper hah = (HealerAttackHelper)soldier.getAttackHelper();
-                Point newDest = hah.getDestination();
-                if (newDest != null)
-                {
-                    startJoggingToward(new PointF(newDest));
-                }
-                else
-                {
-                    makeIdle();
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onSoldierFire(Point locationOfTarget, BuildingDestructionReport bdr)
-    {
-        if (soldier.getType() == WallBreaker.SOLDIER_TYPE)
-        {
-            onWallBreakerFire();
-        }
-        else if (soldier.getType() == Archer.SOLDIER_TYPE)
-        {
-            onArcherFire();
-        }
-        else if (soldier.getType() == Dragon.SOLDIER_TYPE)
-        {
-            onDragonFire();
-        }
-        else
-        {
-            onManToManFighterFire();
-        }
-    }
 
     private void onManToManFighterFire()
     {
@@ -288,11 +195,6 @@ public class SoldierGraphicHelper extends GraphicHelper implements IOnDecampList
 
     }
 
-    @Override
-    public void onHeal(ArrayList<SoldiersHealReport> reports)
-    {
-        //...
-    }
 
 
     public enum Status

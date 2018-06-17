@@ -7,6 +7,7 @@ import models.buildings.DefensiveTower;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierInjuryReport;
 import utils.Point;
+import utils.PointF;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,7 @@ public class SingleTargetAttackHelper extends DefensiveTowerAttackHelper
     {
         DefensiveTower tower = getTower();
         Point soldierPoint = attack.getNearestSoldier(tower.getLocation(), tower.getRange(), tower.getDefenseType().convertToMoveType());
+        towerGraphicHelper.setBulletUltimatePosition(new PointF(soldierPoint));
         mainTargets = new ArrayList<>(attack.getSoldiersOnLocations().getSoldiers(soldierPoint));
     }
 
@@ -54,11 +56,17 @@ public class SingleTargetAttackHelper extends DefensiveTowerAttackHelper
         {
             try { setTarget(); }
             catch (SoldierNotFoundException ignored) {}
-            attack();
         }
         else
         {
             destroyListener.onDestroy();
         }
+    }
+
+
+    @Override
+    public void onBulletHit()
+    {
+        attack();
     }
 }

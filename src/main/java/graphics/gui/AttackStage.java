@@ -1,7 +1,10 @@
 package graphics.gui;
 
+import graphics.helpers.GeneralSoldierGraphicHelper;
+import graphics.helpers.HealerGraphicHelper;
 import graphics.helpers.SoldierGraphicHelper;
 import models.attack.Attack;
+import models.soldiers.Healer;
 import models.soldiers.Soldier;
 
 public class AttackStage extends MapStage
@@ -24,7 +27,16 @@ public class AttackStage extends MapStage
 
     private void addSoldier(Soldier soldier)
     {
-        SoldierGraphicHelper helper = new SoldierGraphicHelper(soldier, getObjectsLayer());
+        SoldierGraphicHelper helper;
+        if (soldier.getType() == Healer.SOLDIER_TYPE)
+        {
+            helper = new HealerGraphicHelper(soldier, getObjectsLayer());
+        }
+        else
+        {
+            helper = new GeneralSoldierGraphicHelper(soldier, getObjectsLayer());
+        }
+
         helper.makeIdle();
         soldier.getAttackHelper().setGraphicHelper(helper);
         helper.setUpListeners();

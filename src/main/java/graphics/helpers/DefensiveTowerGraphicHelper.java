@@ -1,60 +1,89 @@
 package graphics.helpers;
 
 import graphics.Layer;
-import graphics.drawers.BuildingDrawer;
+import graphics.drawers.Drawer;
 import models.attack.attackHelpers.DefensiveTowerAttackHelper;
+import models.attack.attackHelpers.IOnBulletHitListener;
 import models.buildings.Building;
 import models.soldiers.SoldierInjuryReport;
 import utils.Point;
+import utils.PointF;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-public class DefensiveTowerGraphicHelper extends GraphicHelper implements IOnDefenseFireListener, IOnDestroyListener
+public class DefensiveTowerGraphicHelper extends BuildingGraphicHelper implements IOnDefenseFireListener
 {
-    Building building;
-
-    BuildingDrawer buildingDrawer;
-
-
-    State currentState = State.IDLE;
     IOnReloadListener reloadListener;
+    IOnBulletHitListener bulletHitListener;
+    DefensiveTowerAttackHelper attackHelper;
+    State currentState = State.IDLE;
+    Drawer bulletDrawer;
+    private boolean hasBulletHitTarget = false;
+    private PointF bulletUltimatePosition;
 
     public DefensiveTowerGraphicHelper(Building building, Layer layer)
     {
-        this.building = building;
-        buildingDrawer = new BuildingDrawer(building);
-        setReloadDuration(1.5);
-        buildingDrawer.setLayer(layer);
-
-
-        buildingDrawer.setPosition(building.getLocation().getX(), building.getLocation().getY());
+        super(building, layer);
+        attackHelper = (DefensiveTowerAttackHelper)building.getAttackHelper();
     }
 
-    private void setUpListeners()
+    public IOnBulletHitListener getBulletHitListener()
     {
-        setReloadListener(building.getAttackHelper());
-        DefensiveTowerAttackHelper dtah = (DefensiveTowerAttackHelper)building.getAttackHelper();
-        dtah.setFireListener(this);
-        dtah.setDestroyListener(this);
+        return bulletHitListener;
     }
 
-    private void makeFire(Point location, DefenseKind defenseKind, ArrayList<SoldierInjuryReport> soldiersInjuredDirectly, ArrayList<SoldierInjuryReport> soldiersInjuredImplicitly)
+    public void setBulletHitListener(IOnBulletHitListener bulletHitListener)
     {
-        currentState = State.FIRING;
-        //play fire animation
+        this.bulletHitListener = bulletHitListener;
+    }
+
+    @Override
+    public void setUpListeners()
+    {
+        super.setUpListeners();
+        setBulletHitListener(attackHelper);
+        setReloadListener(attackHelper);
+        attackHelper.setDefenseFireListener(this);
+    }
+
+    private void splashAreaIfNeeded(Point targetLocation, DefenseKind defenseKind)
+    {
+        if (defenseKind == DefenseKind.AREA_SPLASH)
+            playSplashAnimation(targetLocation);
+    }
+
+    private void playSplashAnimation(Point targetLocation)
+    {
+        //TODO playing an splashing animation
+    }
+
+    @Override
+    public void makeDestroy()
+    {
+        super.makeDestroy();
+        currentState = State.DESTROYED;
     }
 
     private void makeIdle()
     {
         currentState = State.IDLE;
-        //show image
     }
 
-    private void makeDestroy()
+    private void bulletFlyContinue()
     {
-        currentState = State.DESTROYED;
-        //play destroying animation
+        if (currentState == State.FIRING)
+        {
+            if (bulletUltimatePosition != null)
+            {
+                if (PointF.euclideanDistance(bulletDrawer.getPosition(), bulletUltimatePosition) < 0.01)
+                {
+                    hasBulletHitTarget = true;
+                    bulletHitListener.onBulletHit();
+                    return;
+                }
+                //logic of bullet flying
+            }
+        }
     }
 
     @Override
@@ -64,29 +93,47 @@ public class DefensiveTowerGraphicHelper extends GraphicHelper implements IOnDef
         bulletFlyContinue();
     }
 
-    private void bulletFlyContinue()
-    {
-        if (currentState == State.FIRING)
-        {
-
-        }
-        //TODO to be decided how to implement
-        //if bullet reacher the destination the  status = IDLE
-    }
-
     @Override
     protected void callOnReload()
     {
         if (currentState == State.IDLE)
         {
+            hasBulletHitTarget = false;
+            currentState = State.FIRING;
             super.callOnReload();
         }
+    }
+
+    public PointF getBulletUltimatePosition()
+    {
+        return bulletUltimatePosition;
+    }
+
+    public void setBulletUltimatePosition(PointF bulletUltimatePosition)
+    {
+        this.bulletUltimatePosition = bulletUltimatePosition;
     }
 
     @Override
     public void onDefenseFire(Point targetLocation, DefenseKind defenseKind, ArrayList<SoldierInjuryReport> soldiersInjuredDirectly, ArrayList<SoldierInjuryReport> soldiersInjuredImplicitly)
     {
-        makeFire(targetLocation, defenseKind, soldiersInjuredDirectly, soldiersInjuredImplicitly);
+        splashAreaIfNeeded(targetLocation, defenseKind);
+        for (SoldierInjuryReport report : soldiersInjuredDirectly)
+        {
+            getBuildingDrawer().healthDecreseBarLoading(report.getInitialHealth(), report.getFinalHealth());
+        }
+        for (SoldierInjuryReport report : soldiersInjuredImplicitly)
+        {
+            getBuildingDrawer().healthDecreseBarLoading(report.getInitialHealth(), report.getFinalHealth());
+        }
+        currentState = State.IDLE;
+    }
+
+    public enum State
+    {
+        IDLE,
+        FIRING,
+        DESTROYED;
     }
 
     @Override
@@ -95,12 +142,6 @@ public class DefensiveTowerGraphicHelper extends GraphicHelper implements IOnDef
         makeDestroy();
     }
 
-    public enum State
-    {
-        IDLE,
-        FIRING,
-        DESTROYED;
 
-    }
 
 }

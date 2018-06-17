@@ -1,15 +1,16 @@
 package models.attack.attackHelpers;
 
 import exceptions.SoldierNotFoundException;
+import graphics.helpers.DefensiveTowerGraphicHelper;
 import graphics.helpers.IOnDefenseFireListener;
-import graphics.helpers.IOnDestroyListener;
+import graphics.helpers.IOnReloadListener;
 import models.attack.Attack;
 import models.buildings.DefensiveTower;
 import models.soldiers.Soldier;
 
 import java.util.ArrayList;
 
-public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper
+public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper implements IOnReloadListener, IOnBulletHitListener
 {
 
     protected static final int SECOND_RANGE = 2;
@@ -42,25 +43,26 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper
 
     //graphcs
     IOnDefenseFireListener fireListener;
-    IOnDestroyListener destroyListener;
 
     public IOnDefenseFireListener getFireListener()
     {
         return fireListener;
     }
 
-    public void setFireListener(IOnDefenseFireListener fireListener)
+    DefensiveTowerGraphicHelper towerGraphicHelper;
+
+    public void setDefenseFireListener(IOnDefenseFireListener defenseFireListener)
     {
-        this.fireListener = fireListener;
+        this.fireListener = defenseFireListener;
     }
 
-    public IOnDestroyListener getDestroyListener()
+    public DefensiveTowerGraphicHelper getTowerGraphicHelper()
     {
-        return destroyListener;
+        return towerGraphicHelper;
     }
 
-    public void setDestroyListener(IOnDestroyListener destroyListener)
+    public void setTowerGraphicHelper(DefensiveTowerGraphicHelper towerGraphicHelper)
     {
-        this.destroyListener = destroyListener;
+        this.towerGraphicHelper = towerGraphicHelper;
     }
 }
