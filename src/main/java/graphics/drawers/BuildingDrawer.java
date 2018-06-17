@@ -12,11 +12,15 @@ public class BuildingDrawer extends LayerDrawer
 {
     private Building building;
 
-    public BuildingDrawer(Building building) throws URISyntaxException
+    public BuildingDrawer(Building building)
     {
         this.building = building;
         setPosition(building.getLocation().getX(), building.getLocation().getY());
-        ImageDrawable baseImg = GraphicsValues.getBuildingImage(building.getType(), building.getLevel());
+    }
+
+    public void setUpDrawable()
+    {
+        ImageDrawable baseImg = GraphicsValues.getBuildingImage(getBuilding().getType(), getBuilding().getLevel());
         Drawer base = new Drawer(baseImg);
         getDrawers().add(base);
     }

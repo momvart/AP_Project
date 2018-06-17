@@ -157,6 +157,8 @@ public class Map
 
     public Building getBuildingAt(int x, int y)
     {
+        if (!isValid(x, y))
+            return null;
         return map[x][y];
     }
 

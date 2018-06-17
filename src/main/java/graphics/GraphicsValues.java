@@ -14,6 +14,7 @@ import java.util.HashMap;
 public class GraphicsValues
 {
     private static final String BUILDINGS_ASSETS_PATH = "assets/buildings";
+    private static final String WALLS_ASSETS_PATH = "assets/buildings/wall";
     private static final String SOLDIERS_ASSETS_PATH = "assets/soldiers";
 
 
@@ -60,18 +61,53 @@ public class GraphicsValues
 
     private static HashMap<String, ImageDrawable> buildings;
 
-    public static ImageDrawable getBuildingImage(int buildingType, int level) throws URISyntaxException
+    public static ImageDrawable getBuildingImage(int buildingType, int level)
     {
         if (buildings == null)
             buildings = new HashMap<>();
 
         String name = BuildingValues.getBuildingInfo(buildingType).getName().toLowerCase();
         if (!buildings.containsKey(name + level))
-            buildings.put(name + level, GraphicsUtilities.createImageDrawable(String.format("%s/%s/%03d/001.png",
-                    BUILDINGS_ASSETS_PATH, name, level),
-                    IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2,
-                    IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, false));
+            try
+            {
+                buildings.put(name + level, GraphicsUtilities.createImageDrawable(String.format("%s/%s/%03d/001.png",
+                        BUILDINGS_ASSETS_PATH, name, level),
+                        IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2,
+                        IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, false));
+            }
+            catch (URISyntaxException e) { e.printStackTrace(); }
 
         return buildings.get(name + level);
+    }
+
+    public enum WallStyle
+    {
+        UpRight,
+        Right,
+        Up,
+        Static
+    }
+
+    private static HashMap<String, ImageDrawable> walls;
+
+    public static ImageDrawable getWallImage(WallStyle style, int level)
+    {
+        if (walls == null)
+            walls = new HashMap<>();
+
+        if (walls.get(style.name() + level) == null)
+            try
+            {
+                walls.put(style.name() + level, GraphicsUtilities.createImageDrawable(String.format("%s/%s/%03d/001.png",
+                        WALLS_ASSETS_PATH, style.name().toLowerCase(), level),
+                        IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2,
+                        IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true));
+            }
+            catch (URISyntaxException e)
+            {
+                e.printStackTrace();
+            }
+
+        return walls.get(style.name() + level);
     }
 }

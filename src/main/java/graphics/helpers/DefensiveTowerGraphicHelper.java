@@ -23,14 +23,7 @@ public class DefensiveTowerGraphicHelper extends GraphicHelper implements IOnDef
     public DefensiveTowerGraphicHelper(Building building, Layer layer)
     {
         this.building = building;
-        try
-        {
-            buildingDrawer = new BuildingDrawer(building);
-        }
-        catch (URISyntaxException e)
-        {
-            e.printStackTrace();
-        }
+        buildingDrawer = new BuildingDrawer(building);
         setReloadDuration(1.5);
         buildingDrawer.setLayer(layer);
 

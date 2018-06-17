@@ -97,18 +97,24 @@ public class GraphicsUtilities
     {
         JsonObject meta = fetchMetadata(file.getParentFile());
         double pivotX = 0, pivotY = 0;
+        double scaleX = 1, scaleY = 1;
         if (meta != null)
         {
             if (meta.has("pivotX"))
                 pivotX = meta.get("pivotX").getAsDouble();
             if (meta.has("pivotY"))
                 pivotY = meta.get("pivotY").getAsDouble();
+            if (meta.has("scaleX"))
+                scaleX = meta.get("scaleX").getAsDouble();
+            if (meta.has("scaleY"))
+                scaleY = meta.get("scaleY").getAsDouble();
         }
 
         try (FileInputStream reader = new FileInputStream(file))
         {
             ImageDrawable img = new ImageDrawable(new Image(reader), width, height, true, inside);
             img.setPivot(pivotX, pivotY);
+            img.setScale(scaleX, scaleY);
             return img;
         }
         catch (IOException ex)

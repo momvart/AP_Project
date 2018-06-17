@@ -31,6 +31,11 @@ public class ImageDrawable extends Drawable
         this.img = img;
         if (img == null)
             return;
+        if (width == -1 && height == -1)
+        {
+            setSize(img.getWidth(), img.getHeight());
+            return;
+        }
         if (preserveRatio)
         {
             double ratio = img.getWidth() / img.getHeight();

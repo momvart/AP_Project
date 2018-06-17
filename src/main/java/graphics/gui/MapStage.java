@@ -3,6 +3,7 @@ package graphics.gui;
 import graphics.*;
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
+import graphics.drawers.WallDrawer;
 import graphics.drawers.drawables.ImageDrawable;
 import graphics.positioning.IsometricPositioningSystem;
 import graphics.positioning.PositioningSystem;
@@ -13,9 +14,13 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import models.Map;
+import models.buildings.Building;
+import models.buildings.Wall;
+import utils.GraphicsUtilities;
 import utils.RectF;
 import utils.SizeF;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class MapStage extends Stage
@@ -63,7 +68,7 @@ public class MapStage extends Stage
     {
         Group group = new Group();
 
-        GraphicsValues.setScale(0.5);
+        GraphicsValues.setScale(0.8);
         if (System.getProperty("os.name").equals("Linux"))
             GraphicsValues.setScale(2);
 
@@ -96,31 +101,45 @@ public class MapStage extends Stage
 
     private void setUpFloor()
     {
-        Image tile1 = new Image(getClass().getClassLoader().getResourceAsStream("assets/floor/isometric1.png"));
-        Image tile2 = new Image(getClass().getClassLoader().getResourceAsStream("assets/floor/isometric2.png"));
-        for (int i = 0; i < map.getWidth(); i++)
-            for (int j = 0; j < map.getHeight(); j++)
-            {
-                ImageDrawable drawable = new ImageDrawable((i + j) % 2 == 0 ? tile1 : tile2, IsometricPositioningSystem.ANG_SIN * 2 * PositioningSystem.sScale);
-                drawable.setPivot(.5, .5);
-                Drawer drawer = new Drawer(drawable);
-                drawer.setPosition(i, j);
-                drawer.setLayer(lFloor);
-            }
+        try
+        {
+            ImageDrawable tile1 = GraphicsUtilities.createImageDrawable("assets/floor/isometric1.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
+            tile1.setPivot(.5, .5);
+            ImageDrawable tile2 = GraphicsUtilities.createImageDrawable("assets/floor/isometric2.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
+            tile2.setPivot(.5, .5);
+            for (int i = 0; i < map.getWidth(); i++)
+                for (int j = 0; j < map.getHeight(); j++)
+                {
+                    Drawer drawer = new Drawer((i + j) % 2 == 0 ? tile1 : tile2);
+                    drawer.setPosition(i, j);
+                    drawer.setLayer(lFloor);
+                }
+        }
+        catch (URISyntaxException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void addBuildings()
     {
-        map.getAllBuildings().forEach(building ->
+        map.getAllBuildings().forEach(this::addBuilding);
+    }
+
+    private void addBuilding(Building building)
+    {
+        BuildingDrawer drawer;
+        switch (building.getType())
         {
-            try
-            {
-                BuildingDrawer drawer = new BuildingDrawer(building);
-                drawer.setLayer(lObjects);
-                setUpBuildingDrawer(drawer);
-            }
-            catch (Exception ignored) { ignored.printStackTrace(); }
-        });
+            case Wall.BUILDING_TYPE:
+                drawer = new WallDrawer((Wall)building, map);
+                break;
+            default:
+                drawer = new BuildingDrawer(building);
+        }
+        drawer.setLayer(lObjects);
+        drawer.setUpDrawable();
+        setUpBuildingDrawer(drawer);
     }
 
     protected void setUpBuildingDrawer(BuildingDrawer drawer)
