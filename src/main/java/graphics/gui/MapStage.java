@@ -70,7 +70,7 @@ public class MapStage extends Stage
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);
 
-        GraphicHandler gHandler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, width, height));
+        gHandler = new GraphicHandler(canvas.getGraphicsContext2D(), new RectF(0, 0, width, height));
         gScene = new GameScene(new SizeF(width, height));
 
         gHandler.updateCamera(new RectF(
