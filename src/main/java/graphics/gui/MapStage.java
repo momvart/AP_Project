@@ -3,19 +3,19 @@ package graphics.gui;
 import graphics.*;
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
-import graphics.drawers.WallDrawer;
 import graphics.drawers.drawables.ImageDrawable;
+import graphics.helpers.BuildingGraphicHelper;
+import graphics.helpers.DefensiveTowerGraphicHelper;
 import graphics.positioning.IsometricPositioningSystem;
 import graphics.positioning.PositioningSystem;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import models.Map;
 import models.buildings.Building;
-import models.buildings.Wall;
+import models.buildings.DefensiveTower;
 import utils.GraphicsUtilities;
 import utils.RectF;
 import utils.SizeF;
@@ -70,7 +70,7 @@ public class MapStage extends Stage
 
         GraphicsValues.setScale(0.8);
         if (System.getProperty("os.name").equals("Linux"))
-            GraphicsValues.setScale(2);
+            GraphicsValues.setScale(1.5);
 
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);
@@ -128,18 +128,14 @@ public class MapStage extends Stage
 
     private void addBuilding(Building building)
     {
-        BuildingDrawer drawer;
-        switch (building.getType())
-        {
-            case Wall.BUILDING_TYPE:
-                drawer = new WallDrawer((Wall)building, map);
-                break;
-            default:
-                drawer = new BuildingDrawer(building);
-        }
-        drawer.setLayer(lObjects);
-        drawer.setUpDrawable();
-        setUpBuildingDrawer(drawer);
+        BuildingGraphicHelper graphicHelper;
+        if (building instanceof DefensiveTower)
+            graphicHelper = new DefensiveTowerGraphicHelper(building, lObjects, map);
+        else
+            graphicHelper = new BuildingGraphicHelper(building, lObjects, map);
+        building.getAttackHelper().setBgh(graphicHelper);
+        setUpBuildingDrawer(graphicHelper.getBuildingDrawer());
+        graphicHelper.setUpListeners();
     }
 
     protected void setUpBuildingDrawer(BuildingDrawer drawer)

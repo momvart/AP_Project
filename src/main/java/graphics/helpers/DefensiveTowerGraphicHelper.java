@@ -2,6 +2,7 @@ package graphics.helpers;
 
 import graphics.Layer;
 import graphics.drawers.Drawer;
+import models.Map;
 import models.attack.attackHelpers.DefensiveTowerAttackHelper;
 import models.attack.attackHelpers.IOnBulletHitListener;
 import models.buildings.Building;
@@ -21,9 +22,9 @@ public class DefensiveTowerGraphicHelper extends BuildingGraphicHelper implement
     private boolean hasBulletHitTarget = false;
     private PointF bulletUltimatePosition;
 
-    public DefensiveTowerGraphicHelper(Building building, Layer layer)
+    public DefensiveTowerGraphicHelper(Building building, Layer layer, Map map)
     {
-        super(building, layer);
+        super(building, layer, map);
         attackHelper = (DefensiveTowerAttackHelper)building.getAttackHelper();
     }
 
@@ -81,7 +82,7 @@ public class DefensiveTowerGraphicHelper extends BuildingGraphicHelper implement
                     bulletHitListener.onBulletHit();
                     return;
                 }
-                //logic of bullet flying
+                //logic
             }
         }
     }

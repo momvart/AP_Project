@@ -23,10 +23,9 @@ public class GeneralSoldierGraphicHelper extends SoldierGraphicHelper implements
     public void setUpListeners()
     {
         super.setUpListeners();
-        GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
-        gsah.setOnSoldierDieListener(this);
-        gsah.setDecampListener(this);
-        gsah.setSoldierFireListener(this);
+        attackHelper.setOnSoldierDieListener(this);
+        attackHelper.setDecampListener(this);
+        attackHelper.setSoldierFireListener(this);
     }
 
     @Override

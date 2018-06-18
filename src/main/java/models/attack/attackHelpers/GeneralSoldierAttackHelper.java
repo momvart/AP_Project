@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 {
@@ -135,10 +134,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     }
 
 
-    private Stream<Building> getAliveBuildings()
-    {
-        return attack.getMap().getBuildings().stream().filter(building -> !building.getAttackHelper().isDestroyed()).filter(building -> building.getAttackHelper().getStrength() > 0);
-    }
 
     private boolean isTargetReachable(Building favouriteTarget)
     {
