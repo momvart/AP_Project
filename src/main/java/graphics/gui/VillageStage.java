@@ -1,17 +1,23 @@
 package graphics.gui;
 
 import graphics.*;
-import graphics.drawers.*;
-import graphics.drawers.drawables.*;
+import graphics.drawers.BuildingDrawer;
+import graphics.drawers.Drawer;
+import graphics.drawers.drawables.RoundRectDrawable;
+import graphics.drawers.drawables.TextDrawable;
+import graphics.gui.dialogs.MapInputDialog;
+import graphics.gui.dialogs.NumberInputDialog;
+import graphics.gui.dialogs.SingleChoiceDialog;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import menus.*;
+import menus.Menu;
+import menus.ParentMenu;
 import models.Map;
 import models.buildings.Building;
 import utils.RectF;
 import views.VillageView;
+import views.dialogs.DialogResult;
 
 public class VillageStage extends MapStage
 {
@@ -97,16 +103,34 @@ public class VillageStage extends MapStage
     {
         linfo.removeAllObjects();
         String[] split = info.split("\n");
-        RoundRectDrawable bg = new RoundRectDrawable(width / 4, (split.length + 1) * LINE_SIZE, 10, Color.rgb(0, 0, 0, 0.6));
+        RoundRectDrawable bg = new RoundRectDrawable(width / 4, (split.length) * LINE_SIZE, 10, Color.rgb(0, 0, 0, 0.6));
         Drawer drawer = new Drawer(bg);
+        drawer.setPosition(width / 2 - bg.getWidth() / 2, 0);
         drawer.setLayer(linfo);
         for (int i = 0; i < split.length; i++)
         {
             TextDrawable text = new TextDrawable(split[i], Color.WHITE, Fonts.getMedium());
             Drawer tdrawer = new Drawer(text);
-            tdrawer.setPosition(0, i * LINE_SIZE);
+            tdrawer.setPosition(width / 2 - bg.getWidth() / 2, (i) * LINE_SIZE);
             tdrawer.setLayer(linfo);
         }
     }
 
+    public DialogResult showSingleChoiceDialog(String message)
+    {
+        SingleChoiceDialog dialog = new SingleChoiceDialog(linfo, width, height, message);
+        return dialog.showDialog();
+    }
+
+    public DialogResult showNumberInputDialog(String message, int count)
+    {
+        NumberInputDialog dialog = new NumberInputDialog(linfo, width, height, message, count);
+        return dialog.showDialog();
+    }
+
+    public DialogResult showMapInputDialog(String message, Map map)
+    {
+        MapInputDialog dialog = new MapInputDialog(linfo, width, height, message, map);
+        return dialog.showDialog();
+    }
 }

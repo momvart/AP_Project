@@ -12,9 +12,6 @@ import models.buildings.*;
 import models.soldiers.Recruit;
 import models.soldiers.SoldierValues;
 import views.dialogs.DialogResult;
-import views.dialogs.NumberInputDialog;
-import views.dialogs.SingleChoiceDialog;
-import views.dialogs.TextInputDialog;
 
 import java.util.Comparator;
 import java.util.List;
@@ -140,9 +137,10 @@ public class VillageView extends ConsoleMenuContainerView
 
     public DialogResult showConstructDialog(String buildingName, Resource cost)
     {
-        return new SingleChoiceDialog(scanner, String.format("Do you want to build %s for %s?",
-                buildingName,
-                cost.toString(false))).showDialog();
+//        return new SingleChoiceDialog(scanner, String.format("Do you want to build %s for %s?",
+//                buildingName,
+//                cost.toString(false))).showDialog();
+        return villageStage.showSingleChoiceDialog(String.format("Do you want to build %s for %s?", buildingName, cost.toString(false)));
     }
 
     public DialogResult showConstructionMapDialog(String buildingName, Map map)
@@ -154,18 +152,21 @@ public class VillageView extends ConsoleMenuContainerView
                 System.out.print(map.isEmptyForBuilding(j, i) ? 0 : 1);
             System.out.print('\n');
         }
-
-        return new TextInputDialog(scanner,
-                String.format("Where do you want to build %s?", buildingName),
-                "\\((?<x>\\d+),(?<y>\\d+)\\)")
-                .showDialog();
+        return villageStage.showMapInputDialog("Where do you want to build?", map);
+//        return new TextInputDialog(scanner,
+//                String.format("Where do you want to build %s?", buildingName),
+//                "\\((?<x>\\d+),(?<y>\\d+)\\)")
+//                .showDialog();
     }
 
     public DialogResult showUpgradeDialog(String buildingName, Resource cost)
     {
-        return new SingleChoiceDialog(scanner, String.format("Do you want to upgrade %s for %s?",
+//        return new SingleChoiceDialog(scanner, String.format("Do you want to upgrade %s for %s?",
+//                buildingName,
+//                cost.toString(false))).showDialog();
+        return villageStage.showSingleChoiceDialog(String.format("Do you want to upgrade %s for %s?",
                 buildingName,
-                cost.toString(false))).showDialog();
+                cost.toString(false)));
     }
 
     public void showConstructionsStatus(List<Construction> constructions)
@@ -178,9 +179,10 @@ public class VillageView extends ConsoleMenuContainerView
     }
 
 
-    public DialogResult showSoldierTrainCountDialog()
+    public DialogResult showSoldierTrainCountDialog(int availableCount)
     {
-        return new NumberInputDialog(scanner, "How many of this soldier do you want to build?").showDialog();
+//        return new NumberInputDialog(scanner, "How many of this soldier do you want to build?").showDialog();
+        return villageStage.showNumberInputDialog("How many of this soldier do you want to build?", availableCount);
     }
 
     public void showSoldierTrainingsStatus(Iterable<Recruit> recruits)

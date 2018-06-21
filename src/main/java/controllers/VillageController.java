@@ -2,13 +2,20 @@ package controllers;
 
 import exceptions.*;
 import menus.*;
-import models.*;
-import models.soldiers.*;
-import utils.*;
+import models.Resource;
+import models.Village;
+import models.World;
+import models.buildings.*;
+import models.soldiers.SoldierValues;
+import utils.ConsoleUtilities;
+import utils.ICommandManager;
+import utils.Point;
 import views.AttackView;
 import views.VillageView;
-import models.buildings.*;
-import views.dialogs.*;
+import views.dialogs.DialogResult;
+import views.dialogs.DialogResultCode;
+import views.dialogs.NumberInputDialog;
+import views.dialogs.TextInputDialog;
 
 import java.nio.file.Paths;
 import java.util.regex.Matcher;
@@ -113,7 +120,7 @@ public class VillageController implements IMenuClickListener, ICommandManager
         Barracks barracks = (Barracks)((TrainSoldierSubmenu)theView.getCurrentMenu()).getBuilding();
         if (barracks.getBuildStatus() == BuildStatus.IN_CONSTRUCTION)
             throw new BuildingInConstructionException(barracks);
-        DialogResult result = theView.showSoldierTrainCountDialog();
+        DialogResult result = theView.showSoldierTrainCountDialog(item.getAvailableCount());
         if (result.getResultCode() != DialogResultCode.YES)
             return;
 
