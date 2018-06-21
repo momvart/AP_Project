@@ -1,9 +1,10 @@
 package graphics.gui;
 
-import graphics.helpers.GeneralSoldierGraphicHelper;
-import graphics.helpers.HealerGraphicHelper;
-import graphics.helpers.SoldierGraphicHelper;
+import graphics.helpers.*;
 import models.attack.Attack;
+import models.attack.attackHelpers.SingleTargetAttackHelper;
+import models.buildings.Building;
+import models.buildings.DefensiveTower;
 import models.soldiers.Healer;
 import models.soldiers.Soldier;
 
@@ -23,6 +24,26 @@ public class AttackStage extends MapStage
         attack.setSoldierPutListener(this::addSoldier);
 
         super.setUpAndShow();
+    }
+
+    @Override
+    protected void addBuilding(Building building)
+    {
+        AttackBuildingGraphicHelper graphicHelper;
+
+        if (building instanceof DefensiveTower)
+        {
+            if (building.getAttackHelper() instanceof SingleTargetAttackHelper)
+                graphicHelper = new SingleTDefenseGraphicHelper(building, getObjectsLayer(), getMap());
+            else
+                graphicHelper = new AreaSplashDefenseGraphicHelper(building, getObjectsLayer(), getMap());
+        }
+        else
+            graphicHelper = new AttackBuildingGraphicHelper(building, getObjectsLayer(), getMap());
+
+        building.getAttackHelper().setGraphicHelper(graphicHelper);
+        setUpBuildingDrawer(graphicHelper.getBuildingDrawer());
+        graphicHelper.setUpListeners();
     }
 
     private void addSoldier(Soldier soldier)

@@ -1,5 +1,7 @@
 package models.attack.attackHelpers;
 
+import graphics.helpers.HealerGraphicHelper;
+import graphics.helpers.SoldierGraphicHelper;
 import models.attack.Attack;
 import models.soldiers.Healer;
 import models.soldiers.MoveType;
@@ -226,26 +228,21 @@ public class HealerAttackHelper extends SoldierAttackHelper
 
     private IOnSoldierDieListener soldierDieListener;
 
-    private IOnDecampListener decampListener;
-
-    public IOnSoldierDieListener getSoldierDieListener()
-    {
-        return soldierDieListener;
-    }
-
     public void setSoldierDieListener(IOnSoldierDieListener soldierDieListener)
     {
         this.soldierDieListener = soldierDieListener;
     }
 
-    public IOnDecampListener getDecampListener()
-    {
-        return decampListener;
-    }
 
-    public void setDecampListener(IOnDecampListener decampListener)
+    @Override
+    public void setGraphicHelper(SoldierGraphicHelper graphicHelper)
     {
-        this.decampListener = decampListener;
+        if (!(graphicHelper instanceof HealerGraphicHelper))
+            throw new IllegalArgumentException("Graphic helper should be a HealerGraphicHelper.");
+        super.setGraphicHelper(graphicHelper);
+
+        HealerGraphicHelper gh = (HealerGraphicHelper)graphicHelper;
+        this.setOnHealerHealListener(gh);
     }
 
     @Override
@@ -263,13 +260,8 @@ public class HealerAttackHelper extends SoldierAttackHelper
             changeDestinationIfNeeded();
             if (destination != oldDest)
             {
-                onDecamp();
+                callOnDecamp();
             }
         }
-    }
-
-    private void onDecamp()
-    {
-        decampListener.onDecamp();
     }
 }

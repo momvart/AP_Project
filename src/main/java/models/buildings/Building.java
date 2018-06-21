@@ -1,9 +1,11 @@
 package models.buildings;
 
 import exceptions.UnavailableUpgradeException;
+import graphics.drawers.BuildingDrawer;
 import menus.BuildingInfoSubmenu;
 import menus.BuildingSubmenu;
 import menus.ParentMenu;
+import models.Map;
 import models.attack.Attack;
 import models.attack.attackHelpers.BuildingAttackHelper;
 import utils.Point;
@@ -123,5 +125,10 @@ public abstract class Building
     public BuildingSubmenu getMenu(ParentMenu parent)
     {
         return new BuildingSubmenu(parent, this, getInfoSubmenu());
+    }
+
+    public BuildingDrawer createGraphicDrawer(Map container)
+    {
+        return new BuildingDrawer(this);
     }
 }

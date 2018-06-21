@@ -25,9 +25,6 @@ public class HealerGraphicHelper extends SoldierGraphicHelper implements IOnHeal
     public void setUpListeners()
     {
         super.setUpListeners();
-        attackHelper.setDecampListener(this);
-        attackHelper.setSoldierDieListener(this);
-        attackHelper.setOnHealerHealListener(this);
     }
 
     @Override

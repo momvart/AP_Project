@@ -7,7 +7,7 @@ import models.Map;
 import models.buildings.Building;
 import models.buildings.Wall;
 
-public class BuildingGraphicHelper extends GraphicHelper implements IOnDestroyListener
+public class BuildingGraphicHelper extends GraphicHelper
 {
     private Building building;
 
@@ -16,31 +16,18 @@ public class BuildingGraphicHelper extends GraphicHelper implements IOnDestroyLi
     public BuildingGraphicHelper(Building building, Layer layer, Map map)
     {
         this.building = building;
-        if (building.getType() == Wall.BUILDING_TYPE)
-            buildingDrawer = new WallDrawer((Wall)building, map);
-        buildingDrawer = new BuildingDrawer(building);
+        buildingDrawer = building.createGraphicDrawer(map);
         setReloadDuration(1.5);
         buildingDrawer.setLayer(layer);
         buildingDrawer.setPosition(building.getLocation().getX(), building.getLocation().getY());
         buildingDrawer.setUpDrawable();
     }
 
-    @Override
-    public void onDestroy()
-    {
-        makeDestroy();
-    }
-
-
     public void setUpListeners()
     {
-        building.getAttackHelper().setDestroyListener(this);
+
     }
 
-    public void makeDestroy()
-    {
-        buildingDrawer.playDestroyAnimation();
-    }
 
     public BuildingDrawer getBuildingDrawer()
     {

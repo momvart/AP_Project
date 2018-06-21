@@ -48,25 +48,4 @@ public class SingleTargetAttackHelper extends DefensiveTowerAttackHelper
         mainTargets = null;
         // TODO: 6/6/18 don't change mainTargets and wholeTargets to null  each turn for some towers
     }
-
-    @Override
-    public void onReload()
-    {
-        if (!destroyed)
-        {
-            try { setTarget(); }
-            catch (SoldierNotFoundException ignored) {}
-        }
-        else
-        {
-            destroyListener.onDestroy();
-        }
-    }
-
-
-    @Override
-    public void onBulletHit()
-    {
-        attack();
-    }
 }

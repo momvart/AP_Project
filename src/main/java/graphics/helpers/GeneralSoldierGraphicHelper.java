@@ -23,9 +23,6 @@ public class GeneralSoldierGraphicHelper extends SoldierGraphicHelper implements
     public void setUpListeners()
     {
         super.setUpListeners();
-        attackHelper.setOnSoldierDieListener(this);
-        attackHelper.setDecampListener(this);
-        attackHelper.setSoldierFireListener(this);
     }
 
     @Override
@@ -47,15 +44,13 @@ public class GeneralSoldierGraphicHelper extends SoldierGraphicHelper implements
             startJoggingToward(new PointF(newDest));
         }
         else
-        {
             makeIdle();
-        }
     }
 
     @Override
     public void onSoldierFire(BuildingDestructionReport report)
     {
         getDrawer().playAnimation(SoldierDrawer.ATTACK);
-        report.getBuilding().getAttackHelper().getBgh().getBuildingDrawer().healthDecreseBarLoading(report.getInitialStrength(), report.getFinalStrength());
+        report.getBuilding().getAttackHelper().getGraphicHelper().getBuildingDrawer().healthDecreseBarLoading(report.getInitialStrength(), report.getFinalStrength());
     }
 }

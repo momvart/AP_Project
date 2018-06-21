@@ -55,6 +55,10 @@ public class MapStage extends Stage
         lObjects = new Layer(1, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
     }
 
+    public Map getMap()
+    {
+        return map;
+    }
 
     public Layer getFloorLayer()
     {
@@ -128,19 +132,10 @@ public class MapStage extends Stage
         map.getAllBuildings().forEach(this::addBuilding);
     }
 
-    private void addBuilding(Building building)
+    protected void addBuilding(Building building)
     {
-        BuildingGraphicHelper graphicHelper;
-        if (building instanceof DefensiveTower)
-        {
-            if (building.getAttackHelper() instanceof SingleTargetAttackHelper)
-                graphicHelper = new SingleTDefenseGraphicHelper(building, lObjects, map);
-            else
-                graphicHelper = new AreaSplashDefenseGraphicHelper(building, lObjects, map);
-        }
-        else
-            graphicHelper = new BuildingGraphicHelper(building, lObjects, map);
-        building.getAttackHelper().setBgh(graphicHelper);
+        BuildingGraphicHelper graphicHelper = new BuildingGraphicHelper(building, lObjects, map);
+
         setUpBuildingDrawer(graphicHelper.getBuildingDrawer());
         graphicHelper.setUpListeners();
     }

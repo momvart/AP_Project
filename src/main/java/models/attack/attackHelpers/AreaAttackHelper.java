@@ -70,26 +70,4 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         wholeTargets = null;
     }
 
-    //graphcs
-
-    @Override
-    public void onReload()
-    {
-        if (!destroyed)
-        {
-            try { setTarget(); }
-            catch (SoldierNotFoundException ignored) {}
-        }
-        else
-        {
-            destroyListener.onDestroy();
-        }
-    }
-
-
-    @Override
-    public void onBulletHit()
-    {
-        attack();
-    }
 }

@@ -1,6 +1,7 @@
 package models.attack.attackHelpers;
 
 import exceptions.SoldierNotFoundException;
+import graphics.helpers.AttackBuildingGraphicHelper;
 import graphics.helpers.DefensiveTowerGraphicHelper;
 import graphics.helpers.IOnDefenseFireListener;
 import graphics.helpers.IOnReloadListener;
@@ -10,7 +11,7 @@ import models.soldiers.Soldier;
 
 import java.util.ArrayList;
 
-public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper implements IOnReloadListener, IOnBulletHitListener
+public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper implements IOnBulletHitListener
 {
 
     protected static final int SECOND_RANGE = 2;
@@ -37,6 +38,17 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
         }
     }
 
+    @Override
+    public void onReload()
+    {
+        super.onReload();
+        if (!destroyed)
+        {
+            try { setTarget(); }
+            catch (SoldierNotFoundException ignored) {}
+        }
+    }
+
     public abstract void setTarget() throws SoldierNotFoundException;
 
     public abstract void attack();
@@ -56,13 +68,21 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
         this.fireListener = defenseFireListener;
     }
 
-    public DefensiveTowerGraphicHelper getTowerGraphicHelper()
+    @Override
+    public void setGraphicHelper(AttackBuildingGraphicHelper graphicHelper)
     {
-        return towerGraphicHelper;
+        if (!(graphicHelper instanceof DefensiveTowerGraphicHelper))
+            throw new IllegalArgumentException("Graphic helper should be a DefensiveTowerGraphicHelper.");
+        super.setGraphicHelper(graphicHelper);
+
+        DefensiveTowerGraphicHelper gh = (DefensiveTowerGraphicHelper)graphicHelper;
+        gh.setBulletHitListener(this);
+        this.setDefenseFireListener(gh);
     }
 
-    public void setTowerGraphicHelper(DefensiveTowerGraphicHelper towerGraphicHelper)
+    @Override
+    public void onBulletHit()
     {
-        this.towerGraphicHelper = towerGraphicHelper;
+        attack();
     }
 }

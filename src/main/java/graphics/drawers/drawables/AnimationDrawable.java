@@ -43,6 +43,11 @@ public abstract class AnimationDrawable extends Drawable implements IFrameUpdata
         this.duration = duration;
     }
 
+    public void setReversible(boolean reversible)
+    {
+        this.reversible = reversible;
+    }
+
     public void update(double deltaT)
     {
         if (isPaused())

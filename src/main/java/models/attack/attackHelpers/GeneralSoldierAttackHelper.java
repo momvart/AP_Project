@@ -1,5 +1,7 @@
 package models.attack.attackHelpers;
 
+import graphics.helpers.GeneralSoldierGraphicHelper;
+import graphics.helpers.SoldierGraphicHelper;
 import models.Resource;
 import models.attack.Attack;
 import models.buildings.*;
@@ -27,11 +29,17 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
         return target;
     }
 
-    IOnSoldierFireListener soldierFireListener;
+    private IOnSoldierFireListener soldierFireListener;
 
     public void setSoldierFireListener(IOnSoldierFireListener soldierFireListener)
     {
         this.soldierFireListener = soldierFireListener;
+    }
+
+    private void callOnSoldierFire(BuildingDestructionReport bdr)
+    {
+        if (soldierFireListener != null)
+            soldierFireListener.onSoldierFire(bdr);
     }
 
     @Override
@@ -75,11 +83,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
             attack.addScore(target.getBuildingInfo().getDestroyScore());
             attack.addToClaimedResource(target.getBuildingInfo().getDestroyResource());
         }
-    }
-
-    private void callOnSoldierFire(BuildingDestructionReport bdr)
-    {
-        soldierFireListener.onSoldierFire(bdr);
     }
 
     private boolean isTargetInRange()
@@ -134,7 +137,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     }
 
 
-
     private boolean isTargetReachable(Building favouriteTarget)
     {
         return !(attack.getSoldierPath(soldier.getLocation(), favouriteTarget.getLocation(), soldier.getMoveType() == MoveType.AIR) == null);
@@ -151,32 +153,13 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                 soldier.setLocation(pointToGo);
             }
     }
+
     //graphic phase
-    private IOnDecampListener decampListener;
 
-    private IOnSoldierDieListener onSoldierDieListener;
 
-    public IOnDecampListener getDecampListener()
-    {
-        return decampListener;
-    }
+    private boolean readyToFireTarget = false;
 
-    private  boolean readyToFireTarget = false;
 
-    public void setDecampListener(IOnDecampListener decampListener)
-    {
-        this.decampListener = decampListener;
-    }
-
-    public IOnSoldierDieListener getOnSoldierDieListener()
-    {
-        return onSoldierDieListener;
-    }
-
-    public void setOnSoldierDieListener(IOnSoldierDieListener onSoldierDieListener)
-    {
-        this.onSoldierDieListener = onSoldierDieListener;
-    }
 
     @Override
     public void onMoveFinished(PointF currentPos)
@@ -185,36 +168,38 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     }
 
 
+    @Override
+    public void setGraphicHelper(SoldierGraphicHelper graphicHelper)
+    {
+        if (!(graphicHelper instanceof GeneralSoldierGraphicHelper))
+            throw new IllegalArgumentException("Graphic helper should be a GeneralSoldierGraphicHelper.");
+
+        super.setGraphicHelper(graphicHelper);
+
+        GeneralSoldierGraphicHelper gh = (GeneralSoldierGraphicHelper)graphicHelper;
+        this.setSoldierFireListener(gh);
+    }
 
     @Override
     public void onReload()
     {
         if (isSoldierDeployed() && (soldier == null || isDead || getHealth() <= 0))
         {
-            onSoldierDieListener.onSoldierDie();
+            callOnSoldierDie();
             return;
         }
         if (readyToFireTarget)
         {
-            if(soldier != null && isSoldierDeployed() && !isDead && getHealth() > 0 )
+            if (soldier != null && isSoldierDeployed() && !isDead && getHealth() > 0)
             {
                 if (target == null || target.getStrength() <= 0 || target.getAttackHelper().isDestroyed())
                 {
                     setTarget();
-                    onDecamp();
+                    callOnDecamp();
                     return;
                 }
                 fire();
             }
-        }
-    }
-
-    private void onDecamp()
-    {
-        readyToFireTarget = false;
-        if (decampListener != null)
-        {
-            decampListener.onDecamp();
         }
     }
 }

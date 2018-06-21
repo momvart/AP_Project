@@ -1,11 +1,13 @@
 package models.attack.attackHelpers;
 
+import graphics.helpers.AttackBuildingGraphicHelper;
 import graphics.helpers.BuildingGraphicHelper;
 import graphics.helpers.IOnDestroyListener;
+import graphics.helpers.IOnReloadListener;
 import models.attack.Attack;
 import models.buildings.Building;
 
-public class BuildingAttackHelper
+public class BuildingAttackHelper implements IOnReloadListener
 {
     protected Building building;
     protected int strength;
@@ -32,6 +34,11 @@ public class BuildingAttackHelper
     public void decreaseStrength(int amount)
     {
         this.strength -= amount;
+        if (strength <= 0)
+        {
+            destroyed = true;
+            callOnDestroyed();
+        }
     }
 
     public boolean isDestroyed()
@@ -50,12 +57,18 @@ public class BuildingAttackHelper
             destroyed = true;
     }
 
-    IOnDestroyListener destroyListener;
-    BuildingGraphicHelper bgh;
-
-    public IOnDestroyListener getDestroyListener()
+    @Override
+    public void onReload()
     {
-        return destroyListener;
+
+    }
+
+    private IOnDestroyListener destroyListener;
+
+    protected void callOnDestroyed()
+    {
+        if (destroyListener != null)
+            destroyListener.onDestroy();
     }
 
     public void setDestroyListener(IOnDestroyListener destroyListener)
@@ -63,13 +76,17 @@ public class BuildingAttackHelper
         this.destroyListener = destroyListener;
     }
 
-    public BuildingGraphicHelper getBgh()
+    private AttackBuildingGraphicHelper graphicHelper;
+
+    public BuildingGraphicHelper getGraphicHelper()
     {
-        return bgh;
+        return graphicHelper;
     }
 
-    public void setBgh(BuildingGraphicHelper bgh)
+    public void setGraphicHelper(AttackBuildingGraphicHelper graphicHelper)
     {
-        this.bgh = bgh;
+        this.graphicHelper = graphicHelper;
+        setDestroyListener(graphicHelper);
+        graphicHelper.setReloadListener(this);
     }
 }

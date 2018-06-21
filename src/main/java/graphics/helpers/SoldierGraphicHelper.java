@@ -54,8 +54,6 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 
     public void setUpListeners()
     {
-        setMoveListener(soldier.getAttackHelper());
-        setReloadListener(soldier.getAttackHelper());
     }
 
     public Status getStatus()
@@ -87,11 +85,11 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         drawer.playAnimation(SoldierDrawer.RUN);
     }
 
-    PointF finalStandingPoint;
-    Point facingBuildingPoint;
-    PointF nextCheckPointF;
-    double cos;
-    double sin;
+    private PointF finalStandingPoint;
+    private Point facingBuildingPoint;
+    private PointF nextCheckPointF;
+    private double cos;
+    private double sin;
 
     public void startJoggingToward(PointF dest)
     {

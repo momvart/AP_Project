@@ -12,11 +12,9 @@ import utils.PointF;
 
 import java.util.ArrayList;
 
-public abstract class DefensiveTowerGraphicHelper extends BuildingGraphicHelper implements IOnDefenseFireListener
+public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicHelper implements IOnDefenseFireListener
 {
-    IOnReloadListener reloadListener;
     IOnBulletHitListener bulletHitListener;
-    DefensiveTowerAttackHelper attackHelper;
     State currentState = State.IDLE;
     Drawer bulletDrawer;
     protected boolean hasBulletHitTarget = false;
@@ -25,7 +23,6 @@ public abstract class DefensiveTowerGraphicHelper extends BuildingGraphicHelper 
     public DefensiveTowerGraphicHelper(Building building, Layer layer, Map map)
     {
         super(building, layer, map);
-        attackHelper = (DefensiveTowerAttackHelper)building.getAttackHelper();
     }
 
     public IOnBulletHitListener getBulletHitListener()
@@ -42,9 +39,6 @@ public abstract class DefensiveTowerGraphicHelper extends BuildingGraphicHelper 
     public void setUpListeners()
     {
         super.setUpListeners();
-        setBulletHitListener(attackHelper);
-        setReloadListener(attackHelper);
-        attackHelper.setDefenseFireListener(this);
     }
 
     private void splashAreaIfNeeded(Point targetLocation, DefenseKind defenseKind)
@@ -123,13 +117,4 @@ public abstract class DefensiveTowerGraphicHelper extends BuildingGraphicHelper 
         FIRING,
         DESTROYED;
     }
-
-    @Override
-    public void onDestroy()
-    {
-        makeDestroy();
-    }
-
-
-
 }
