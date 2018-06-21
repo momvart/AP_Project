@@ -4,8 +4,9 @@ import graphics.*;
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ImageDrawable;
+import graphics.helpers.AreaSplashDefenseGraphicHelper;
 import graphics.helpers.BuildingGraphicHelper;
-import graphics.helpers.DefensiveTowerGraphicHelper;
+import graphics.helpers.SingleTDefenseGraphicHelper;
 import graphics.positioning.IsometricPositioningSystem;
 import graphics.positioning.PositioningSystem;
 import javafx.scene.Group;
@@ -14,6 +15,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import models.Map;
+import models.attack.attackHelpers.SingleTargetAttackHelper;
 import models.buildings.Building;
 import models.buildings.DefensiveTower;
 import utils.GraphicsUtilities;
@@ -130,7 +132,12 @@ public class MapStage extends Stage
     {
         BuildingGraphicHelper graphicHelper;
         if (building instanceof DefensiveTower)
-            graphicHelper = new DefensiveTowerGraphicHelper(building, lObjects, map);
+        {
+            if (building.getAttackHelper() instanceof SingleTargetAttackHelper)
+                graphicHelper = new SingleTDefenseGraphicHelper(building, lObjects, map);
+            else
+                graphicHelper = new AreaSplashDefenseGraphicHelper(building, lObjects, map);
+        }
         else
             graphicHelper = new BuildingGraphicHelper(building, lObjects, map);
         building.getAttackHelper().setBgh(graphicHelper);

@@ -88,6 +88,10 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     }
 
     PointF finalStandingPoint;
+    Point facingBuildingPoint;
+    PointF nextCheckPointF;
+    double cos;
+    double sin;
 
     public void startJoggingToward(PointF dest)
     {
@@ -97,63 +101,88 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         drawer.getCurrentAnim().setScale(ps.convertX(dest) < ps.convertX(drawer.getPosition()) ? -1 : 1, 1);
         List<Point> soldierPath = soldier.getAttackHelper().getAttack().getSoldierPath(getVeryPoint(drawer.getPosition()), getVeryPoint(moveDest), soldier.getMoveType() == MoveType.AIR);
         Point lastPoint = soldierPath.get(1);
+        facingBuildingPoint = lastPoint;
         if (lastPoint.getX() == moveDest.getX() + 1)
         {
-            if (lastPoint.getY() == moveDest.getY() + 1)
-                finalStandingPoint = new PointF(moveDest.getX() + 1, moveDest.getY());
-            else if (lastPoint.getY() == moveDest.getY())
-                finalStandingPoint = new PointF(moveDest.getX() + 1, moveDest.getY() + .5);
-            else
-                finalStandingPoint = new PointF(moveDest.getX() + 1, moveDest.getY() + 1);
-        }
-        else if (lastPoint.getX() == moveDest.getX())
-        {
-            if (lastPoint.getY() == moveDest.getY() + 1)
-                finalStandingPoint = new PointF(moveDest.getX() + .5, moveDest.getY());
-            else
-                finalStandingPoint = new PointF(moveDest.getX() + .5, moveDest.getY() + 1);
-
-        }
-        else
-        {
-            if (lastPoint.getY() == moveDest.getY() + 1)
+            if (lastPoint.getY() == moveDest.getY() - 1)
                 finalStandingPoint = moveDest;
             else if (lastPoint.getY() == moveDest.getY())
                 finalStandingPoint = new PointF(moveDest.getX(), moveDest.getY() + .5);
             else
                 finalStandingPoint = new PointF(moveDest.getX(), moveDest.getY() + 1);
         }
+        else if (lastPoint.getX() == moveDest.getX())
+        {
+            if (lastPoint.getY() == moveDest.getY() - 1)
+                finalStandingPoint = new PointF(moveDest.getX() - .5, moveDest.getY());
+            else
+                finalStandingPoint = new PointF(moveDest.getX() - .5, moveDest.getY() + 1);
+
+        }
+        else
+        {
+            if (lastPoint.getY() == moveDest.getY() - 1)
+                finalStandingPoint = new PointF(moveDest.getX() - 1, moveDest.getY());
+            else if (lastPoint.getY() == moveDest.getY())
+                finalStandingPoint = new PointF(moveDest.getX() - 1, moveDest.getY() + .5);
+            else
+                finalStandingPoint = new PointF(moveDest.getX() - 1, moveDest.getY() + 1);
+        }
+        nextCheckPointF = null;
+
+
     }
 
     private void doReplacing(double deltaT)
     {
+        Point nextCheckPoint;
         if (status != Status.RUN)
             return;
-        Point nextPoint = soldier.getAttackHelper().getNextPathStarightReachablePoint(getVeryPoint(drawer.getPosition()), getVeryPoint(moveDest));
+        double distanceToNextCheckPoint;
+        double distanceToFinalPosition;
+        if (nextCheckPointF == null || PointF.euclideanDistance(nextCheckPointF, drawer.getPosition()) < .1)
+        {
+            nextCheckPoint = soldier.getAttackHelper().getNextPathStarightReachablePoint(getVeryPoint(drawer.getPosition()), getVeryPoint(moveDest));
+            nextCheckPointF = new PointF(nextCheckPoint);
+            System.out.println("facing building section is :" + facingBuildingPoint);
+            if (nextCheckPoint.equals(facingBuildingPoint) && PointF.euclideanDistance(drawer.getPosition(), new PointF(facingBuildingPoint)) < .1)
+            {
+                nextCheckPointF = finalStandingPoint;
+                System.out.println("here");
+            }
+            System.out.println("position is :" + drawer.getPosition());
+            System.out.println("next checkPoint is : " + nextCheckPoint);
+            distanceToNextCheckPoint = PointF.euclideanDistance(nextCheckPointF, drawer.getPosition());
+            cos = (nextCheckPointF.getX() - drawer.getPosition().getX()) / distanceToNextCheckPoint;
+            sin = (nextCheckPointF.getY() - drawer.getPosition().getY()) / distanceToNextCheckPoint;
+            if (nextCheckPoint == null)
+            {
+                onMoveFinished();
+                return;
+            }
+        }
+        System.out.println("next checkPointF is :‌" + nextCheckPointF);
+        System.out.println("final standing point is : " + finalStandingPoint);
         System.out.println(drawer.getPosition());
-        if (nextPoint == null)
-        {
-            onMoveFinished();
-            return;
-        }
+        System.out.println("cos and sin are :" + cos + "   " + sin);
 
-        double distance = PointF.euclideanDistance(finalStandingPoint, drawer.getPosition());
-        double cos;
-        double sin;
-        cos = (nextPoint.getX() - drawer.getPosition().getX()) / distance;
-        sin = (nextPoint.getY() - drawer.getPosition().getX()) / distance;
-        double stepDistance = deltaT * soldier.getSpeed() * 1.8;//tired of little speed of soldiers so we add a ratio to get scaped
-        if (distance < 0.01 || distance < stepDistance)
+        if (nextCheckPointF != null)
         {
-            onMoveFinished();
-            return;
+            double stepDistance = deltaT * soldier.getSpeed() * 1.5;//tired of little speed of soldiers so we add a ratio to get scaped
+            distanceToFinalPosition = PointF.euclideanDistance(finalStandingPoint, drawer.getPosition());
+            System.out.println("distance till end " + distanceToFinalPosition);
+            if (distanceToFinalPosition < 0.1 || distanceToFinalPosition < stepDistance)
+            {
+                onMoveFinished();
+                return;
+            }
+            PointF newPosition = new PointF(drawer.getPosition().getX() + cos * soldier.getSpeed() * deltaT, drawer.getPosition().getY() + sin * soldier.getSpeed() * deltaT);
+            if (floor(newPosition.getX()) != floor(soldier.getLocation().getX()) || floor(newPosition.getY()) != floor(soldier.getLocation().getY()))
+            {
+                soldier.setLocation(new Point((int)floor(drawer.getPosition().getX()), (int)floor(drawer.getPosition().getY())));
+            }
+            drawer.setPosition(newPosition.getX(), newPosition.getY());
         }
-        PointF newPosition = new PointF(drawer.getPosition().getX() + cos * soldier.getSpeed() * deltaT, drawer.getPosition().getY() + sin * soldier.getSpeed() * deltaT);
-        if (floor(newPosition.getX()) != floor(soldier.getLocation().getX()) || floor(newPosition.getY()) != floor(soldier.getLocation().getY()))
-        {
-            soldier.setLocation(new Point((int)floor(drawer.getPosition().getX()), (int)floor(drawer.getPosition().getY())));
-        }
-        drawer.setPosition(newPosition.getX(), newPosition.getY());
     }
 
     private Point getVeryPoint(PointF position)
@@ -166,7 +195,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     private void onMoveFinished()
     {
         makeIdle();
-        drawer.setPosition(moveDest.getX(), moveDest.getY());
+        drawer.setPosition(finalStandingPoint.getX(), finalStandingPoint.getY());
         soldier.setLocation(getVeryPoint(moveDest));
         if (moveListener != null)
             moveListener.onMoveFinished(drawer.getPosition());
@@ -203,12 +232,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 
     public void triggerSoldier()
     {
-    }
-
-
-    private void onManToManFighterFire()
-    {
-
+        //implemented in the subClasses
     }
 
     private void onDragonFire()
@@ -234,7 +258,6 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         DIE,
         RUN,
         ATTACK;
-
     }
 
     @Override

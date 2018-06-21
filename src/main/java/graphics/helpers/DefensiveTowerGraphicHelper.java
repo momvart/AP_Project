@@ -12,15 +12,15 @@ import utils.PointF;
 
 import java.util.ArrayList;
 
-public class DefensiveTowerGraphicHelper extends BuildingGraphicHelper implements IOnDefenseFireListener
+public abstract class DefensiveTowerGraphicHelper extends BuildingGraphicHelper implements IOnDefenseFireListener
 {
     IOnReloadListener reloadListener;
     IOnBulletHitListener bulletHitListener;
     DefensiveTowerAttackHelper attackHelper;
     State currentState = State.IDLE;
     Drawer bulletDrawer;
-    private boolean hasBulletHitTarget = false;
-    private PointF bulletUltimatePosition;
+    protected boolean hasBulletHitTarget = false;
+    protected PointF bulletUltimatePosition;
 
     public DefensiveTowerGraphicHelper(Building building, Layer layer, Map map)
     {
@@ -70,21 +70,8 @@ public class DefensiveTowerGraphicHelper extends BuildingGraphicHelper implement
         currentState = State.IDLE;
     }
 
-    private void bulletFlyContinue()
-    {
-        if (currentState == State.FIRING)
-        {
-            if (bulletUltimatePosition != null)
-            {
-                if (PointF.euclideanDistance(bulletDrawer.getPosition(), bulletUltimatePosition) < 0.01)
-                {
-                    hasBulletHitTarget = true;
-                    bulletHitListener.onBulletHit();
-                    return;
-                }
-                //logic
-            }
-        }
+    protected void bulletFlyContinue()
+    {//implemented in subClasses
     }
 
     @Override
