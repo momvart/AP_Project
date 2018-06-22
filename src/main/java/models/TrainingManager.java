@@ -37,8 +37,11 @@ public class TrainingManager
 
     public void train(int soldierType, int count)
     {
-        Recruit recruit = new Recruit(soldierType, count, getBarracks().getLevel(), getBarracks().getSoldierBrewTimeDecrease());
-        recruits.add(recruit);
+        for (int i = 0; i <= count; i++)
+        {
+            Recruit recruit = new Recruit(soldierType, getBarracks().getLevel(), getBarracks().getSoldierBrewTimeDecrease());
+            recruits.add(recruit);
+        }
     }
 
     public void passTurn()
@@ -49,19 +52,17 @@ public class TrainingManager
                 recruits.get(0).setTraining(true);
             if (armyQueue.size() != 0)
                 addSoldiersInQueueToArmy();
+            recruits.get(0).passTurn();
             if (recruits.get(0).isCurrentFinished())
             {
                 try
                 {
                     recruits.get(0).finishSoldier();
+                    recruits.remove(0);
                 }
                 catch (SoldierNotAddedToCampException ex)
                 {
                     armyQueue.add(ex.getSoldier());
-                }
-                if (recruits.get(0).checkCompleteFinish())
-                {
-                    recruits.remove(0);
                 }
             }
         }

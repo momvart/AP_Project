@@ -2,6 +2,7 @@ package models.buildings;
 
 import exceptions.UnavailableUpgradeException;
 import graphics.drawers.BuildingDrawer;
+import graphics.helpers.VillageHelper;
 import menus.BuildingInfoSubmenu;
 import menus.BuildingSubmenu;
 import menus.ParentMenu;
@@ -17,6 +18,7 @@ public abstract class Building
     protected int level;
     protected BuildStatus buildStatus = BuildStatus.BUILT;
     protected transient BuildingAttackHelper attackHelper;
+    protected transient VillageHelper villageHelper;
 
     public Building()
     {
@@ -105,6 +107,15 @@ public abstract class Building
         return BuildingValues.getBuildingInfo(getType());
     }
 
+    public VillageHelper getVillageHelper()
+    {
+        return villageHelper;
+    }
+
+    public void createAndSetVillageHelper()
+    {
+        villageHelper = new VillageHelper(this);
+    }
 
     /**
      * Method for setting properties of this building by level

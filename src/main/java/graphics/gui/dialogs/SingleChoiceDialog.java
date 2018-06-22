@@ -23,7 +23,6 @@ public class SingleChoiceDialog extends GraphicDialog
         DialogResult dialogResult;
         dialog.showAndWait();
         ButtonBar.ButtonData buttonData = dialog.getResult().getButtonData();
-        System.err.println(buttonData.toString());
         if (buttonData.equals(ButtonBar.ButtonData.NO))
             dialogResult = new DialogResult(DialogResultCode.NO);
         else if (buttonData.equals(ButtonBar.ButtonData.YES))

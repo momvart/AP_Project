@@ -27,6 +27,8 @@ public abstract class GraphicHelper implements IFrameUpdatable
     @Override
     public void update(double deltaT)
     {
+        if (reloadListener == null)
+            return;
         reloadStack += deltaT;
         if (reloadStack >= reloadDuration)
         {

@@ -6,7 +6,6 @@ import graphics.drawers.drawables.ImageDrawable;
 import models.Map;
 import utils.GraphicsUtilities;
 import views.dialogs.DialogResult;
-import views.dialogs.DialogResultCode;
 
 import java.net.URISyntaxException;
 
@@ -23,13 +22,6 @@ public class MapInputDialog extends GraphicDialog
     @Override
     public DialogResult showDialog()
     {
-        DialogResult dialogResult = null;
-        showMap();
-        return null;
-    }
-
-    private void showMap()
-    {
         try
         {
             ImageDrawable bg1 = GraphicsUtilities.createImageDrawable("assets/floor/gd.png", getWidth() / (2 * map.getSize().getWidth()), getWidth() / (2 * map.getSize().getWidth()), false);
@@ -42,13 +34,20 @@ public class MapInputDialog extends GraphicDialog
             {
                 for (int j = 0; j < map.getSize().getWidth(); j++)
                 {
-                    DialogResult dialogResult = new DialogResult(DialogResultCode.YES).
-                            addData("text", String.format("%d,%d", j, i)).addData("matcher", String.format("%d,%d", j, i));
+                    DialogResult dialogResult;
                     if (map.isEmptyForBuilding(j, i))
                     {
                         Drawer bg = new Drawer((i + j) % 2 == 0 ? bg1 : bg2);
                         bg.setPosition(getWidth() / 2 + (j - map.getSize().getWidth() / 2) * bg1.getHeight(), getHeight() / 2 + (i - map.getSize().getWidth() / 2) * bg1.getWidth());
                         bg.setLayer(getLayer());
+                        bg.setClickListener((sender, event) ->
+                        {
+                            double J = (bg.getPosition().getX() - getWidth() / 2) / bg1.getHeight() + map.getWidth() / 2;
+                            double I = (bg.getPosition().getY() - getHeight() / 2) / bg1.getHeight() + map.getWidth() / 2;
+//                            dialogResult = new DialogResult(DialogResultCode.YES).
+//                                    addData("text", String.format("%d,%d", J, I)).addData("matcher", String.format("%d,%d", J, I));
+                            getLayer().removeAllObjects();
+                        });
                     }
                     else if (!map.isEmptyForBuilding(j, i))
                     {
@@ -60,5 +59,11 @@ public class MapInputDialog extends GraphicDialog
             }
         }
         catch (URISyntaxException ignored) {}
+        return null;
+    }
+
+    private void showMap()
+    {
+
     }
 }

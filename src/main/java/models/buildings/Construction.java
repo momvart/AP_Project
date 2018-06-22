@@ -1,21 +1,21 @@
 package models.buildings;
 
-import models.*;
-import models.Village;
+import models.Builder;
+import models.BuilderStatus;
 import models.World;
-import utils.Point;
 
 public class Construction
 {
-    private int startTurn;
     private int constructTime;
     private ConstructMode constructMode;
     private int builderNum;
+    private int remainingTurn;
     private long buildingId;
+    private transient Building cachedBuilding;
+
 
     public Construction(Building building, int constructTime, ConstructMode constructMode, Builder builder)
     {
-        this.startTurn = World.sCurrentGame.getVillage().getTurn();
         this.constructTime = constructTime;
         this.constructMode = constructMode;
         this.builderNum = builder.getBuilderNum();
@@ -23,9 +23,8 @@ public class Construction
         this.buildingId = building.getId();
         this.cachedBuilding = building;
         building.buildStatus = BuildStatus.IN_CONSTRUCTION;
+        remainingTurn = constructTime;
     }
-
-    private transient Building cachedBuilding;
 
     public Building getBuilding()
     {
@@ -36,7 +35,7 @@ public class Construction
 
     public boolean isFinished()
     {
-        return World.getVillage().getTurn() == startTurn + constructTime;
+        return remainingTurn <= 0;
     }
 
     public void finishConstruction()
@@ -51,7 +50,7 @@ public class Construction
 
     public int getRemainingTurns()
     {
-        return startTurn + constructTime - World.getVillage().getTurn();
+        return remainingTurn;
     }
 
     public int getBuilderNum()
@@ -62,6 +61,12 @@ public class Construction
     public Builder getBuilder()
     {
         return World.getVillage().getMap().getTownHall().getBuilderByNum(builderNum);
+    }
+
+    public void passTurn()
+    {
+        if (remainingTurn > 0)
+            remainingTurn--;
     }
 
     @Override

@@ -2,7 +2,11 @@ package models.buildings;
 
 import exceptions.BuilderNotFoundException;
 import exceptions.NoAvailableBuilderException;
-import menus.*;
+import graphics.helpers.TownHallVillageHelper;
+import menus.AvailableBuildingsSubmenu;
+import menus.BuildingSubmenu;
+import menus.Menu;
+import menus.ParentMenu;
 import models.Builder;
 import models.BuilderStatus;
 import models.World;
@@ -23,7 +27,7 @@ public class TownHall extends VillageBuilding
 
     public void passTurn()
     {
-        addBuilder();
+        World.getVillage().getConstructionManager().checkConstructions();
     }
 
     public static final int BUILDING_TYPE = 5;
@@ -73,5 +77,11 @@ public class TownHall extends VillageBuilding
         menu.insertItem(new AvailableBuildingsSubmenu(menu))
                 .insertItem(new Menu(Menu.Id.TH_STATUS, "Status"));
         return menu;
+    }
+
+    @Override
+    public void createAndSetVillageHelper()
+    {
+        villageHelper = new TownHallVillageHelper(this);
     }
 }

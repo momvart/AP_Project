@@ -1,15 +1,11 @@
 package models.buildings;
 
 import exceptions.UnavailableUpgradeException;
+import graphics.helpers.MineVillageHelper;
 import menus.BuildingSubmenu;
 import menus.Menu;
 import menus.ParentMenu;
-import models.World;
 import utils.Point;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.stream.Stream;
 
 public abstract class Mine extends VillageBuilding
 {
@@ -66,5 +62,11 @@ public abstract class Mine extends VillageBuilding
     {
         return super.getMenu(parent)
                 .insertItem(Menu.Id.MINE_MINE, "Mine");
+    }
+
+    @Override
+    public void createAndSetVillageHelper()
+    {
+        villageHelper = new MineVillageHelper(this);
     }
 }

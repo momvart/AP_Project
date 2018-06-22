@@ -152,7 +152,6 @@ public class Village
             getMap().forEachBuilding(Mine.class, Mine::passTurn);
             getMap().forEachBuilding(Barracks.class, Barracks::passTurn);
             getMap().getTownHall().passTurn();
-            constructionManager.checkConstructions();
         }
     }
     //endregion

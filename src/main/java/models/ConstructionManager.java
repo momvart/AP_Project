@@ -2,12 +2,15 @@ package models;
 
 import exceptions.FilledCellException;
 import exceptions.NoAvailableBuilderException;
-import models.buildings.*;
+import models.buildings.Building;
+import models.buildings.BuildingFactory;
+import models.buildings.Construction;
 import utils.Point;
 
 import java.util.ArrayList;
 
-import static models.buildings.ConstructMode.*;
+import static models.buildings.ConstructMode.CONSTRUCT;
+import static models.buildings.ConstructMode.UPGRADE;
 
 public class ConstructionManager
 {
@@ -48,6 +51,7 @@ public class ConstructionManager
         for (int i = 0; i < constructions.size(); i++)
         {
             construction = constructions.get(i);
+            construction.passTurn();
             if (construction.isFinished())
             {
                 construction.finishConstruction();

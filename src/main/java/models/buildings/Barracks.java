@@ -1,7 +1,11 @@
 package models.buildings;
 
 import exceptions.NotEnoughResourceException;
-import menus.*;
+import graphics.helpers.BarracksVillageHelper;
+import menus.BuildingSubmenu;
+import menus.Menu;
+import menus.ParentMenu;
+import menus.TrainSoldierSubmenu;
 import models.Resource;
 import models.TrainingManager;
 import models.World;
@@ -60,5 +64,11 @@ public class Barracks extends VillageBuilding
         menu.insertItem(new TrainSoldierSubmenu(menu, this))
                 .insertItem(new Menu(Menu.Id.BARRACKS_STATUS, "Status"));
         return menu;
+    }
+
+    @Override
+    public void createAndSetVillageHelper()
+    {
+        villageHelper = new BarracksVillageHelper(this);
     }
 }
