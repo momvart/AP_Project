@@ -3,11 +3,16 @@ package graphics.gui.dialogs;
 import graphics.Layer;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ImageDrawable;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextInputDialog;
 import models.Map;
+import utils.ConsoleUtilities;
 import utils.GraphicsUtilities;
 import views.dialogs.DialogResult;
+import views.dialogs.DialogResultCode;
 
 import java.net.URISyntaxException;
+import java.util.regex.Matcher;
 
 public class MapInputDialog extends GraphicDialog
 {
@@ -21,6 +26,16 @@ public class MapInputDialog extends GraphicDialog
 
     @Override
     public DialogResult showDialog()
+    {
+        Dialog dialog = new TextInputDialog();
+        dialog.setContentText(message);
+        dialog.showAndWait();
+        Object result = dialog.getResult();
+        Matcher command = ConsoleUtilities.getMatchedCommand("\\((?<x>\\d+),(?<y>\\d+)\\)", (String)result);
+        return new DialogResult(DialogResultCode.YES).addData("text", command.group(0)).addData("matcher", command);
+    }
+
+    private void showMap()
     {
         try
         {
@@ -59,11 +74,5 @@ public class MapInputDialog extends GraphicDialog
             }
         }
         catch (URISyntaxException ignored) {}
-        return null;
-    }
-
-    private void showMap()
-    {
-
     }
 }
