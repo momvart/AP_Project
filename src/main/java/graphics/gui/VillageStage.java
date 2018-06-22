@@ -53,7 +53,6 @@ public class VillageStage extends MapStage
         group.getChildren().add(guiCanvas);
 
         GraphicHandler guiHandler = new GraphicHandler(guiCanvas.getGraphicsContext2D(), new RectF(0, 0, guiCanvas.getWidth(), guiCanvas.getHeight()));
-        guiCanvas.setOnMouseClicked(guiHandler::handleMouseClick);
         guiScene = new GameScene(width, height);
 
         showRightBar();

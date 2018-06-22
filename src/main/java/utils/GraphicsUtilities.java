@@ -62,12 +62,9 @@ public class GraphicsUtilities
         files.sort(Comparator.comparing(File::getName));
         ImageDrawable[] frames = new ImageDrawable[files.size()];
         for (int i = 0; i < frames.length; i++)
-            try
-            {
-                frames[i] = new ImageDrawable(new Image(new FileInputStream(files.get(i))), minSideDimen);
-                frames[i].setPivot(pivotX, pivotY);
-            }
-            catch (IOException ignored) {}
+        {
+            frames[i] = createImageDrawable(files.get(i), minSideDimen, minSideDimen, true, pivotX, pivotY);
+        }
         return frames;
     }
 
@@ -95,11 +92,17 @@ public class GraphicsUtilities
 
     public static ImageDrawable createImageDrawable(File file, double width, double height, boolean inside)
     {
+        return createImageDrawable(file, width, height, inside, 0, 0);
+    }
+
+    public static ImageDrawable createImageDrawable(File file, double width, double height, boolean inside, double pivotX, double pivotY)
+    {
         JsonObject meta = fetchMetadata(file.getParentFile());
-        double pivotX = 0, pivotY = 0;
         double scaleX = 1, scaleY = 1;
         if (meta != null)
         {
+            if (meta.has(file.getName()))
+                meta = meta.get(file.getName()).getAsJsonObject();
             if (meta.has("pivotX"))
                 pivotX = meta.get("pivotX").getAsDouble();
             if (meta.has("pivotY"))
@@ -123,5 +126,4 @@ public class GraphicsUtilities
             return null;
         }
     }
-
 }

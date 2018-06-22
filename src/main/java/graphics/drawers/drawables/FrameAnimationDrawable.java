@@ -36,7 +36,7 @@ public class FrameAnimationDrawable extends AnimationDrawable
 
         super.update(deltaT);
 
-        frameNum = (int)(timeStack / getDuration() * frames.length);
+        frameNum = Math.min((int)(timeStack / getDuration() * frames.length), frames.length - 1);
     }
 
     @Override
