@@ -2,10 +2,13 @@ package models.attack;
 
 import models.Map;
 import models.Resource;
-import models.buildings.*;
-import utils.*;
+import models.buildings.Building;
+import models.buildings.DefensiveTower;
+import utils.MySortedList;
+import utils.Point;
+import utils.Size;
 
-import java.util.*;
+import java.util.List;
 
 public class AttackMap extends Map
 {
@@ -20,7 +23,8 @@ public class AttackMap extends Map
     public AttackMap(Size size, Resource resource)
     {
         this(size);
-        this.resources = resource;
+        this.resources.setGold(resource.getGold());
+        this.resources.setElixir(resource.getElixir());
     }
 
     @Override

@@ -3,15 +3,21 @@ package graphics.drawers.drawables;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 
-public class VProgressbarDrawable extends Drawable
+public class HProgressbarDrawable extends Drawable
 {
     private Paint stroke;
 
     private double progress;
 
-    public VProgressbarDrawable(Paint fill)
+    public HProgressbarDrawable(double width, double height, Paint fill)
     {
+        setSize(width, height);
         setFill(fill);
+    }
+
+    public HProgressbarDrawable(Paint fill)
+    {
+        this(100, 100, fill);
     }
 
 

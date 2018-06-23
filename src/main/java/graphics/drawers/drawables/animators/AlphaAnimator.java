@@ -31,6 +31,13 @@ public class AlphaAnimator extends Animator
         this.to = to;
     }
 
+    public AlphaAnimator(double duration, double from, double to, Drawable... targets)
+    {
+        super(duration, targets);
+        this.from = from;
+        this.to = to;
+    }
+
     @Override
     public void update(double deltaT)
     {

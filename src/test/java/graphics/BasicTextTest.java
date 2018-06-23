@@ -1,22 +1,25 @@
 package graphics;
 
-import javafx.application.Application;
-
-import graphics.drawers.*;
-import graphics.drawers.drawables.*;
+import graphics.drawers.Drawer;
+import graphics.drawers.drawables.HProgressbarDrawable;
+import graphics.drawers.drawables.RoundRectDrawable;
+import graphics.drawers.drawables.TextDrawable;
 import graphics.positioning.NormalPositioningSystem;
-import javafx.scene.*;
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.paint.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
 import menus.Menu;
 import menus.ParentMenu;
-import menus.ShowBuildingsMenu;
 import menus.Submenu;
-import models.World;
-import utils.*;
+import utils.RectF;
+import utils.SizeF;
 
 public class BasicTextTest extends Application
 {
@@ -45,7 +48,7 @@ public class BasicTextTest extends Application
         drawer.setPosition(0, 2);
         drawer.setLayer(layer);
 
-        VProgressbarDrawable progressbar = new VProgressbarDrawable(new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.GOLD), new Stop(1, Color.ORANGE)));
+        HProgressbarDrawable progressbar = new HProgressbarDrawable(new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.GOLD), new Stop(1, Color.ORANGE)));
         Drawer drawer2 = new Drawer(progressbar);
         progressbar.setSize(100, 10);
         progressbar.setProgress(.75);
@@ -53,7 +56,7 @@ public class BasicTextTest extends Application
         drawer2.setPosition(1, 10);
         drawer2.setLayer(layer);
 
-        VProgressbarDrawable progressbar2 = new VProgressbarDrawable(new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.VIOLET), new Stop(1, Color.PURPLE)));
+        HProgressbarDrawable progressbar2 = new HProgressbarDrawable(new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.VIOLET), new Stop(1, Color.PURPLE)));
         Drawer drawer3 = new Drawer(progressbar2);
         progressbar2.setSize(100, 10);
         progressbar2.setProgress(.50);

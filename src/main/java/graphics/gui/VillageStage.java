@@ -3,6 +3,7 @@ package graphics.gui;
 import graphics.*;
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
+import graphics.drawers.drawables.ResourceLayer;
 import graphics.drawers.drawables.RoundRectDrawable;
 import graphics.drawers.drawables.TextDrawable;
 import graphics.gui.dialogs.MapInputDialog;
@@ -16,6 +17,7 @@ import javafx.scene.paint.Color;
 import menus.Menu;
 import menus.ParentMenu;
 import models.Map;
+import models.Village;
 import models.buildings.Building;
 import utils.RectF;
 import views.VillageView;
@@ -26,19 +28,22 @@ public class VillageStage extends MapStage
     private Canvas guiCanvas;
     private GameLooper guiLooper;
     private GameScene guiScene;
+    private Village village;
 
     private MenuLayer lmenu;
+    private ResourceLayer lresource;
     private Layer linfo;
 
     private VillageView villageView;
     private final double CELL_SIZE = height / 10;
     private final double LINE_SIZE = height / 20;
 
-    public VillageStage(Map map, double width, double height)
+    public VillageStage(Village village, double width, double height)
     {
-        super(map, width, height);
+        super(village.getMap(), width, height);
         lmenu = new MenuLayer(6, new RectF(0, height - CELL_SIZE, width, CELL_SIZE), MenuLayer.Orientation.HORIZONTAL);
         linfo = new Layer(7, new RectF(0, 0, width, height));
+        lresource = new ResourceLayer(8, new RectF(width - 100, 0, 100, 40), village);
     }
 
     public void setVillageView(VillageView villageView)
@@ -68,6 +73,7 @@ public class VillageStage extends MapStage
 
         guiScene.addLayer(lmenu);
         guiScene.addLayer(linfo);
+        guiScene.addLayer(lresource);
 
         guiHandler.setScene(guiScene);
 
@@ -132,6 +138,7 @@ public class VillageStage extends MapStage
             tdrawer.setLayer(linfo);
         }
     }
+
 
     public DialogResult showSingleChoiceDialog(String message)
     {

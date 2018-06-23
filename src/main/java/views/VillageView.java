@@ -38,7 +38,7 @@ public class VillageView extends ConsoleMenuContainerView
 
         Platform.runLater(() ->
         {
-            villageStage = new VillageStage(World.sCurrentGame.getVillage().getMap(), 1200, 900);
+            villageStage = new VillageStage(village, 1200, 900);
             villageStage.setVillageView(this);
             villageStage.setUpAndShow();
             village.setVillageStage(villageStage);

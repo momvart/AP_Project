@@ -16,7 +16,7 @@ public class GraphicsValues
     private static final String BUILDINGS_ASSETS_PATH = "assets/buildings";
     private static final String WALLS_ASSETS_PATH = "assets/buildings/wall";
     private static final String SOLDIERS_ASSETS_PATH = "assets/soldiers";
-
+    public static final double PADDING = 10;
 
     private static double scale = 1;
 

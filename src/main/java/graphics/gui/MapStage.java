@@ -109,12 +109,36 @@ public class MapStage extends Stage
             tile1.setPivot(.5, .5);
             ImageDrawable tile2 = GraphicsUtilities.createImageDrawable("assets/floor/isometric2.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
             tile2.setPivot(.5, .5);
+            ImageDrawable tree = GraphicsUtilities.createImageDrawable("assets/floor/tree.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, false);
+            tree.setPivot(0.5, 1);
+            ImageDrawable grass = GraphicsUtilities.createImageDrawable("assets/floor/grass.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, false);
+            grass.setPivot(0.5, 0.5);
+            ImageDrawable mushroom = GraphicsUtilities.createImageDrawable("assets/floor/mushroom.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, false);
+            mushroom.setPivot(0.5, 0.5);
+
             for (int i = 0; i < map.getWidth(); i++)
                 for (int j = 0; j < map.getHeight(); j++)
                 {
                     Drawer drawer = new Drawer((i + j) % 2 == 0 ? tile1 : tile2);
                     drawer.setPosition(i, j);
                     drawer.setLayer(lFloor);
+                }
+
+            for (int i = 1; i <= 15; i++)
+                for (int j = i - 1; j <= 30 - i; j++)
+                {
+                    Drawer topDrawer = new Drawer(i < 3 ? mushroom : tree);
+                    Drawer leftDrawer = new Drawer(i < 3 ? mushroom : tree);
+                    Drawer downTree = new Drawer(i < 3 ? mushroom : tree);
+                    Drawer rightTree = new Drawer(i < 3 ? mushroom : tree);
+                    topDrawer.setPosition(j, -i);
+                    leftDrawer.setPosition(-i, j);
+                    rightTree.setPosition(map.getWidth() + i - 1, j);
+                    downTree.setPosition(j, i + map.getWidth() - 1);
+                    topDrawer.setLayer(lFloor);
+                    leftDrawer.setLayer(lFloor);
+                    rightTree.setLayer(lFloor);
+                    downTree.setLayer(lFloor);
                 }
         }
         catch (URISyntaxException e)

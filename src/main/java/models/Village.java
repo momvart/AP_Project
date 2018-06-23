@@ -22,7 +22,7 @@ public class Village
     private VillageStatus villageStatus = VillageStatus.NORMAL;
     private int turn = 0;
     private SoldierCollection soldiers;
-    private VillageStage villageStage;
+    private transient VillageStage villageStage;
 
     public void initialize()
     {
