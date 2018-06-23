@@ -21,13 +21,18 @@ public class ConstructionManager
         return constructions;
     }
 
+    public Construction getLastConstruction()
+    {
+        return constructions.get(constructions.size() - 1);
+    }
+
     private Village getVillage()
     {
         //TODO: change is necessary if it wants to manage multi villages
         return World.getVillage();
     }
 
-    public void construct(int buildingType, Point location) throws NoAvailableBuilderException, FilledCellException
+    public Building construct(int buildingType, Point location) throws NoAvailableBuilderException, FilledCellException
     {
         Building building = BuildingFactory.createBuildingByTypeId(buildingType, location, getVillage().getMap());
         int constructTime = building.getBuildingInfo().getBuildDuration();
@@ -35,6 +40,7 @@ public class ConstructionManager
         World.getVillage().getMap().addBuilding(building);
         Construction construction = new Construction(building, constructTime, CONSTRUCT, builder);
         constructions.add(construction);
+        return building;
     }
 
     public void upgrade(Building building) throws NoAvailableBuilderException

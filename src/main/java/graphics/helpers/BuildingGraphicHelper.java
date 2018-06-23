@@ -2,10 +2,8 @@ package graphics.helpers;
 
 import graphics.Layer;
 import graphics.drawers.BuildingDrawer;
-import graphics.drawers.WallDrawer;
 import models.Map;
 import models.buildings.Building;
-import models.buildings.Wall;
 
 public class BuildingGraphicHelper extends GraphicHelper
 {
@@ -17,7 +15,7 @@ public class BuildingGraphicHelper extends GraphicHelper
     {
         this.building = building;
         buildingDrawer = building.createGraphicDrawer(map);
-        setReloadDuration(1.5);
+        setReloadDuration(0.5);
         buildingDrawer.setLayer(layer);
         buildingDrawer.setPosition(building.getLocation().getX(), building.getLocation().getY());
         buildingDrawer.setUpDrawable();

@@ -36,4 +36,10 @@ public class BuildingDrawer extends LayerDrawer
     {
         //TODO
     }
+
+    public void updateDrawer()
+    {
+        System.err.println("Update requested !");
+        //TODO
+    }
 }

@@ -8,6 +8,8 @@ import graphics.drawers.drawables.TextDrawable;
 import graphics.gui.dialogs.MapInputDialog;
 import graphics.gui.dialogs.NumberInputDialog;
 import graphics.gui.dialogs.SingleChoiceDialog;
+import graphics.helpers.BuildingGraphicHelper;
+import graphics.helpers.VillageBuildingGraphicHelper;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
@@ -82,6 +84,22 @@ public class VillageStage extends MapStage
         {
             showBottomMenu(drawer.getBuilding());
         });
+    }
+
+    @Override
+    public BuildingGraphicHelper addBuilding(Building building)
+    {
+        VillageBuildingGraphicHelper graphicHelper = new VillageBuildingGraphicHelper(building, getObjectsLayer(), getMap());
+
+        building.createAndSetVillageHelper();
+
+        setUpBuildingDrawer(graphicHelper.getBuildingDrawer());
+
+        building.getVillageHelper().setGraphicHelper(graphicHelper);
+
+        gHandler.addUpdatable(graphicHelper);
+
+        return graphicHelper;
     }
 
     public void showBottomMenu(Building building)

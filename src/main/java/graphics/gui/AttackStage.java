@@ -27,7 +27,7 @@ public class AttackStage extends MapStage
     }
 
     @Override
-    protected void addBuilding(Building building)
+    public BuildingGraphicHelper addBuilding(Building building)
     {
         AttackBuildingGraphicHelper graphicHelper;
 
@@ -44,6 +44,7 @@ public class AttackStage extends MapStage
         building.getAttackHelper().setGraphicHelper(graphicHelper);
         setUpBuildingDrawer(graphicHelper.getBuildingDrawer());
         graphicHelper.setUpListeners();
+        return graphicHelper;
     }
 
     private void addSoldier(Soldier soldier)

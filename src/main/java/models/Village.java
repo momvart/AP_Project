@@ -1,6 +1,8 @@
 package models;
 
 import exceptions.*;
+import graphics.gui.VillageStage;
+import graphics.helpers.VillageBuildingGraphicHelper;
 import models.attack.Attack;
 import models.buildings.*;
 import models.soldiers.Soldier;
@@ -20,6 +22,7 @@ public class Village
     private VillageStatus villageStatus = VillageStatus.NORMAL;
     private int turn = 0;
     private SoldierCollection soldiers;
+    private VillageStage villageStage;
 
     public void initialize()
     {
@@ -37,6 +40,11 @@ public class Village
     public void setVillageStatus(VillageStatus villageStatus)
     {
         this.villageStatus = villageStatus;
+    }
+
+    public void setVillageStage(VillageStage villageStage)
+    {
+        this.villageStage = villageStage;
     }
 
     public Map getMap()
@@ -116,7 +124,10 @@ public class Village
         if (available.isLessThan(cost))
             throw new NotEnoughResourceException(available, cost);
 
-        constructionManager.construct(buildingType, location);
+        Building building = constructionManager.construct(buildingType, location);
+        VillageBuildingGraphicHelper graphicHelper = (VillageBuildingGraphicHelper)villageStage.addBuilding(building);
+        constructionManager.getLastConstruction().setFinishListener(graphicHelper);
+
         spendResource(cost);
     }
 

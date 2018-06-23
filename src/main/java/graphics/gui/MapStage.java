@@ -128,7 +128,7 @@ public class MapStage extends Stage
         map.getAllBuildings().forEach(this::addBuilding);
     }
 
-    protected void addBuilding(Building building)
+    public BuildingGraphicHelper addBuilding(Building building)
     {
         BuildingGraphicHelper graphicHelper = new BuildingGraphicHelper(building, lObjects, map);
 
@@ -141,6 +141,8 @@ public class MapStage extends Stage
         graphicHelper.setUpListeners();
 
         gHandler.addUpdatable(graphicHelper);
+
+        return graphicHelper;
     }
 
     protected void setUpBuildingDrawer(BuildingDrawer drawer)

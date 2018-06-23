@@ -1,5 +1,6 @@
 package models.buildings;
 
+import graphics.helpers.IOnConstructFinishListener;
 import models.Builder;
 import models.BuilderStatus;
 import models.World;
@@ -11,6 +12,7 @@ public class Construction
     private int builderNum;
     private int remainingTurn;
     private long buildingId;
+    private IOnConstructFinishListener finishListener;
     private transient Building cachedBuilding;
 
 
@@ -33,6 +35,17 @@ public class Construction
         return cachedBuilding;
     }
 
+    public void setFinishListener(IOnConstructFinishListener finishListener)
+    {
+        this.finishListener = finishListener;
+    }
+
+    public void callOnFinish()
+    {
+        if (finishListener != null)
+            finishListener.onConstructFinish();
+    }
+
     public boolean isFinished()
     {
         return remainingTurn <= 0;
@@ -44,6 +57,7 @@ public class Construction
         if (constructMode.equals(ConstructMode.UPGRADE))
             getBuilding().upgrade();
         getBuilder().setBuilderStatus(BuilderStatus.FREE);
+        callOnFinish();
     }
 
     public BuildingInfo getBuildingInfo() { return getBuilding().getBuildingInfo(); }
