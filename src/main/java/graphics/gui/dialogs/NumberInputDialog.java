@@ -1,14 +1,14 @@
 package graphics.gui.dialogs;
 
 import graphics.Layer;
-import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.Dialog;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Spinner;
 import views.dialogs.DialogResult;
 import views.dialogs.DialogResultCode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 public class NumberInputDialog extends GraphicDialog
@@ -29,12 +29,15 @@ public class NumberInputDialog extends GraphicDialog
         {
             choices.add(i + 1);
         }
-        Dialog dialog = new ChoiceDialog(1, choices);
+        Spinner<Integer> spinner = new Spinner<>(1, choices.size(), 1, 1);
+        spinner.setEditable(true);
+        Alert dialog = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.OK, ButtonType.CANCEL);
         dialog.setContentText(message);
-        Optional optional = dialog.showAndWait();
-        if (optional.isPresent())
-            return new DialogResult(DialogResultCode.YES).addData("number", (int)optional.get());
-        dialog.close();
+        dialog.setGraphic(spinner);
+        SingleChoiceDialog.applyCss(dialog);
+        dialog.showAndWait();
+        if (dialog.getResult().equals(ButtonType.OK))
+            return new DialogResult(DialogResultCode.YES).addData("number", spinner.getValue());
         return new DialogResult(DialogResultCode.NO);
     }
 }

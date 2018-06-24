@@ -3,8 +3,10 @@ package graphics.gui.dialogs;
 import graphics.Layer;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ImageDrawable;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextInputDialog;
+import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 import models.Map;
 import utils.ConsoleUtilities;
 import utils.GraphicsUtilities;
@@ -27,12 +29,21 @@ public class MapInputDialog extends GraphicDialog
     @Override
     public DialogResult showDialog()
     {
-        Dialog dialog = new TextInputDialog();
+        Alert dialog = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.OK, ButtonType.CANCEL);
+        TextField textField = new TextField();
+        textField.setAlignment(Pos.BOTTOM_CENTER);
+        dialog.setGraphic(textField);
+        SingleChoiceDialog.applyCss(dialog);
         dialog.setContentText(message);
         dialog.showAndWait();
-        Object result = dialog.getResult();
-        Matcher command = ConsoleUtilities.getMatchedCommand("\\((?<x>\\d+),(?<y>\\d+)\\)", (String)result);
-        return new DialogResult(DialogResultCode.YES).addData("text", command.group(0)).addData("matcher", command);
+        if (dialog.getResult().equals(ButtonType.OK))
+        {
+            String result = textField.getText();
+            Matcher command = ConsoleUtilities.getMatchedCommand("\\((?<x>\\d+),(?<y>\\d+)\\)", result);
+            return new DialogResult(DialogResultCode.YES).addData("text", command.group(0)).addData("matcher", command);
+        }
+        else
+            return new DialogResult(DialogResultCode.NO);
     }
 
     private void showMap()
