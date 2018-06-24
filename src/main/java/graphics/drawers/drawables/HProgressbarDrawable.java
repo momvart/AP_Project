@@ -43,6 +43,7 @@ public class HProgressbarDrawable extends Drawable
     protected void onDraw(GraphicsContext gc)
     {
         gc.fillRect(0, 0, getWidth() * progress, getHeight());
+        gc.setLineWidth(5);
         gc.setStroke(stroke);
         gc.strokeRoundRect(0, 0, getWidth(), getHeight(), 2, 2);
     }

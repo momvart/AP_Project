@@ -37,13 +37,14 @@ public class VillageStage extends MapStage
     private VillageView villageView;
     private final double CELL_SIZE = height / 10;
     private final double LINE_SIZE = height / 20;
+    private final double CHARACTER_SPACING = width / 100;
 
     public VillageStage(Village village, double width, double height)
     {
         super(village.getMap(), width, height);
         lmenu = new MenuLayer(6, new RectF(0, height - CELL_SIZE, width, CELL_SIZE), MenuLayer.Orientation.HORIZONTAL);
         linfo = new Layer(7, new RectF(0, 0, width, height));
-        lresource = new ResourceLayer(8, new RectF(width - 100, 0, 100, 40), village);
+        lresource = new ResourceLayer(8, new RectF(width - 20, 20, 200, 70), village);
     }
 
     public void setVillageView(VillageView villageView)
@@ -126,7 +127,10 @@ public class VillageStage extends MapStage
     {
         linfo.removeAllObjects();
         String[] split = info.split("\n");
-        RoundRectDrawable bg = new RoundRectDrawable(width / 4, (split.length) * LINE_SIZE, 10, Color.rgb(0, 0, 0, 0.6));
+        int max = 0;
+        for (int i = 0; i < split.length; i++)
+            max = split[i].length() > max ? split[i].length() : max;
+        RoundRectDrawable bg = new RoundRectDrawable(CHARACTER_SPACING * max, (split.length) * LINE_SIZE, 10, Color.rgb(0, 0, 0, 0.6));
         Drawer drawer = new Drawer(bg);
         drawer.setPosition(width / 2 - bg.getWidth() / 2, 0);
         drawer.setLayer(linfo);

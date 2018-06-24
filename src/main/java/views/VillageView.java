@@ -14,6 +14,7 @@ import models.soldiers.SoldierValues;
 import views.dialogs.DialogResult;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -179,7 +180,6 @@ public class VillageView extends ConsoleMenuContainerView
         villageStage.showInfo(s.toString());
     }
 
-
     public DialogResult showSoldierTrainCountDialog(int availableCount)
     {
 //        return new NumberInputDialog(scanner, "How many of this soldier do you want to build?").showDialog();
@@ -189,8 +189,18 @@ public class VillageView extends ConsoleMenuContainerView
     public void showSoldierTrainingsStatus(Iterable<Recruit> recruits)
     {
         StringBuilder s = new StringBuilder();
-        for (Recruit r : recruits)
-            s.append(r.toString()).append("\n");
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        recruits.forEach(recruit ->
+        {
+            if (!hashMap.containsKey(recruit.getSoldierInfo().getName()))
+                hashMap.put(recruit.getSoldierInfo().getName(), 1);
+            else
+                hashMap.put(recruit.getSoldierInfo().getName(), hashMap.get(recruit.getSoldierInfo().getName()) + 1);
+        });
+        hashMap.keySet().forEach(s1 ->
+        {
+            s.append(s1).append(" x").append(hashMap.get(s1).toString()).append("\n");
+        });
         villageStage.showInfo(s.toString());
     }
 
