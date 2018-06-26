@@ -1,5 +1,7 @@
 package views;
 
+import exceptions.ConsoleException;
+import exceptions.ConsoleRuntimeException;
 import exceptions.InvalidCommandException;
 import graphics.gui.VillageStage;
 import javafx.application.Platform;
@@ -240,4 +242,17 @@ public class VillageView extends ConsoleMenuContainerView
         villageStage.showInfo(s.toString());
     }
 
+    @Override
+    public void showError(ConsoleException ex)
+    {
+        super.showError(ex);
+        villageStage.showInfo(ex.getMessage());
+    }
+
+    @Override
+    public void showError(ConsoleRuntimeException ex)
+    {
+        super.showError(ex);
+        villageStage.showInfo(ex.getDatailedMessage());
+    }
 }

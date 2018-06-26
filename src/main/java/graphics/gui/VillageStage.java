@@ -126,19 +126,20 @@ public class VillageStage extends MapStage
     public void showInfo(String info)
     {
         linfo.removeAllObjects();
+        info = "\n" + info;
         String[] split = info.split("\n");
         int max = 0;
         for (int i = 0; i < split.length; i++)
             max = split[i].length() > max ? split[i].length() : max;
         RoundRectDrawable bg = new RoundRectDrawable(CHARACTER_SPACING * max, (split.length) * LINE_SIZE, 10, Color.rgb(0, 0, 0, 0.6));
         Drawer drawer = new Drawer(bg);
-        drawer.setPosition(width / 2 - bg.getWidth() / 2, 0);
+        drawer.setPosition(width / 2 - bg.getWidth() / 2, -LINE_SIZE / 2);
         drawer.setLayer(linfo);
         for (int i = 0; i < split.length; i++)
         {
             TextDrawable text = new TextDrawable(split[i], Color.WHITE, Fonts.getMedium());
             Drawer tdrawer = new Drawer(text);
-            tdrawer.setPosition(width / 2 - bg.getWidth() / 2, (i) * LINE_SIZE);
+            tdrawer.setPosition(width / 2 - bg.getWidth() / 2, (i) * LINE_SIZE - LINE_SIZE / 2);
             tdrawer.setLayer(linfo);
         }
     }
