@@ -12,6 +12,11 @@ public class VillageHelper implements IOnReloadListener
         this.building = building;
     }
 
+    public BuildingGraphicHelper getGraphicHelper()
+    {
+        return graphicHelper;
+    }
+
     public void setGraphicHelper(BuildingGraphicHelper graphicHelper)
     {
         this.graphicHelper = graphicHelper;

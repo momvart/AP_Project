@@ -11,7 +11,6 @@ import graphics.gui.dialogs.NumberInputDialog;
 import graphics.gui.dialogs.SingleChoiceDialog;
 import graphics.helpers.BuildingGraphicHelper;
 import graphics.helpers.VillageBuildingGraphicHelper;
-import graphics.layers.Layer;
 import graphics.layers.MenuLayer;
 import graphics.layers.ToastLayer;
 import javafx.scene.Group;
@@ -134,8 +133,7 @@ public class VillageStage extends MapStage
         info = "\n" + info;
         String[] split = info.split("\n");
         int max = 0;
-        for (int i = 0; i < split.length; i++)
-            max = split[i].length() > max ? split[i].length() : max;
+        for (String aSplit : split) max = aSplit.length() > max ? aSplit.length() : max;
         RoundRectDrawable bg = new RoundRectDrawable(CHARACTER_SPACING * max, (split.length) * LINE_SIZE, 10, Color.rgb(0, 0, 0, 0.6));
         Drawer drawer = new Drawer(bg);
         drawer.setPosition(width / 2 - bg.getWidth() / 2, -LINE_SIZE / 2);

@@ -143,7 +143,10 @@ public class Village
         if (building.getType() == Camp.BUILDING_TYPE)
             throw new UnavailableUpgradeException(building, UnavailableUpgradeException.Reason.IMPOSSIBLE);
 
+        VillageBuildingGraphicHelper graphicHelper = (VillageBuildingGraphicHelper)building.getVillageHelper().getGraphicHelper();
         constructionManager.upgrade(building);
+        constructionManager.getLastConstruction().setFinishListener(graphicHelper);
+
         spendResource(cost);
     }
 
