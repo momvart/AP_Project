@@ -4,6 +4,8 @@ import graphics.drawers.Drawer;
 import graphics.drawers.drawables.HProgressbarDrawable;
 import graphics.drawers.drawables.RoundRectDrawable;
 import graphics.drawers.drawables.TextDrawable;
+import graphics.layers.Layer;
+import graphics.layers.MenuLayer;
 import graphics.positioning.NormalPositioningSystem;
 import javafx.application.Application;
 import javafx.scene.Group;

@@ -1,6 +1,6 @@
 package graphics.gui.dialogs;
 
-import graphics.Layer;
+import graphics.layers.Layer;
 import graphics.gui.GraphicView;
 import views.dialogs.DialogResult;
 

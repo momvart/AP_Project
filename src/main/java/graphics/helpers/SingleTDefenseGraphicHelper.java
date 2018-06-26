@@ -1,6 +1,6 @@
 package graphics.helpers;
 
-import graphics.Layer;
+import graphics.layers.Layer;
 import models.Map;
 import models.buildings.Building;
 import utils.PointF;

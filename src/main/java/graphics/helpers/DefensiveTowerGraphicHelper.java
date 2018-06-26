@@ -1,9 +1,8 @@
 package graphics.helpers;
 
-import graphics.Layer;
+import graphics.layers.Layer;
 import graphics.drawers.Drawer;
 import models.Map;
-import models.attack.attackHelpers.DefensiveTowerAttackHelper;
 import models.attack.attackHelpers.IOnBulletHitListener;
 import models.buildings.Building;
 import models.soldiers.SoldierInjuryReport;

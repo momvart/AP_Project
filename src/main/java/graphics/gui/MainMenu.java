@@ -5,6 +5,7 @@ import graphics.drawers.AnimationDrawer;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.FrameAnimationDrawable;
 import graphics.drawers.drawables.ImageDrawable;
+import graphics.layers.Layer;
 import graphics.positioning.PercentPositioningSystem;
 import javafx.application.Application;
 import javafx.geometry.Pos;

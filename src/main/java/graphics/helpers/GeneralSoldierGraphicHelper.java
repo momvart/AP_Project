@@ -1,6 +1,6 @@
 package graphics.helpers;
 
-import graphics.Layer;
+import graphics.layers.Layer;
 import graphics.drawers.SoldierDrawer;
 import models.attack.attackHelpers.GeneralSoldierAttackHelper;
 import models.attack.attackHelpers.IOnSoldierFireListener;

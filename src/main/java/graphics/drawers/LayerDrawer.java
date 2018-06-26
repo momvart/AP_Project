@@ -1,7 +1,6 @@
 package graphics.drawers;
 
 import graphics.IFrameUpdatable;
-import graphics.Layer;
 import graphics.drawers.drawables.Drawable;
 import javafx.scene.canvas.GraphicsContext;
 

@@ -113,7 +113,7 @@ public abstract class Drawable implements IDrawable
 
         gc.setFill(fill);
         gc.setStroke(Color.BLACK);
-        gc.setGlobalAlpha(alpha);
+        gc.setGlobalAlpha(gc.getGlobalAlpha() * alpha);
     }
 
     protected abstract void onDraw(GraphicsContext gc);

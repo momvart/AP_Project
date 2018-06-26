@@ -1,6 +1,8 @@
-package graphics;
+package graphics.layers;
 
+import graphics.IFrameUpdatable;
 import graphics.drawers.Drawer;
+import graphics.drawers.drawables.IAlphaDrawable;
 import graphics.positioning.NormalPositioningSystem;
 import graphics.positioning.PositioningSystem;
 import javafx.scene.canvas.GraphicsContext;
@@ -11,12 +13,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 
-public class Layer implements IFrameUpdatable
+public class Layer implements IFrameUpdatable, IAlphaDrawable
 {
     private int order;
     private RectF bounds;
 
     private boolean visible = true;
+    private double alpha = 1;
 
     private ArrayList<Drawer> drawers = new ArrayList<>();
     private ArrayList<IFrameUpdatable> updatables = new ArrayList<>();
@@ -53,6 +56,12 @@ public class Layer implements IFrameUpdatable
     public void setVisible(boolean visible)
     {
         this.visible = visible;
+    }
+
+    @Override
+    public void setAlpha(double alpha)
+    {
+        this.alpha = alpha;
     }
 
     public void setBounds(RectF bounds)
@@ -111,11 +120,18 @@ public class Layer implements IFrameUpdatable
         return false;
     }
 
+    @Override
+    public void draw(GraphicsContext gc)
+    {
+        throw new UnsupportedOperationException();
+    }
+
     public void draw(GraphicsContext gc, RectF cameraBounds)
     {
         if (!isVisible())
             return;
         gc.save();
+        gc.setGlobalAlpha(gc.getGlobalAlpha() * alpha);
         gc.translate(bounds.getX(), bounds.getY());
         RectF relBounds = new RectF(cameraBounds.getX() - bounds.getX(), cameraBounds.getY() - bounds.getY(), cameraBounds.getWidth(), cameraBounds.getHeight());
         drawers.stream()

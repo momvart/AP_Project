@@ -1,13 +1,10 @@
 package graphics.drawers;
 
-import graphics.Layer;
+import graphics.layers.Layer;
 import graphics.drawers.drawables.Drawable;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import utils.GraphicsUtilities;
 import utils.PointF;
 import utils.RectF;
 

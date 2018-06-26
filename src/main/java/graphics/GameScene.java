@@ -1,5 +1,6 @@
 package graphics;
 
+import graphics.layers.Layer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import utils.MySortedList;

@@ -2,6 +2,7 @@ package graphics;
 
 import graphics.drawers.*;
 import graphics.drawers.drawables.*;
+import graphics.layers.Layer;
 import graphics.positioning.*;
 import javafx.application.Application;
 import javafx.scene.*;

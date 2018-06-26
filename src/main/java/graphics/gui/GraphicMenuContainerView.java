@@ -1,7 +1,7 @@
 package graphics.gui;
 
 import exceptions.InvalidCommandException;
-import graphics.Layer;
+import graphics.layers.Layer;
 import menus.IMenuClickListener;
 import menus.IMenuContainer;
 import menus.Menu;

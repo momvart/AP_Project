@@ -11,6 +11,9 @@ import graphics.gui.dialogs.NumberInputDialog;
 import graphics.gui.dialogs.SingleChoiceDialog;
 import graphics.helpers.BuildingGraphicHelper;
 import graphics.helpers.VillageBuildingGraphicHelper;
+import graphics.layers.Layer;
+import graphics.layers.MenuLayer;
+import graphics.layers.ToastLayer;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
@@ -28,11 +31,12 @@ public class VillageStage extends MapStage
     private Canvas guiCanvas;
     private GameLooper guiLooper;
     private GameScene guiScene;
+    private GraphicHandler guiHandler;
     private Village village;
 
     private MenuLayer lmenu;
     private ResourceLayer lresource;
-    private Layer linfo;
+    private ToastLayer linfo;
 
     private VillageView villageView;
     private final double CELL_SIZE = height / 10;
@@ -43,7 +47,6 @@ public class VillageStage extends MapStage
     {
         super(village.getMap(), width, height);
         lmenu = new MenuLayer(6, new RectF(0, height - CELL_SIZE, width, CELL_SIZE), MenuLayer.Orientation.HORIZONTAL);
-        linfo = new Layer(7, new RectF(0, 0, width, height));
         lresource = new ResourceLayer(8, new RectF(width - 20, 20, 200, 70), village);
     }
 
@@ -60,7 +63,7 @@ public class VillageStage extends MapStage
         guiCanvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(guiCanvas);
 
-        GraphicHandler guiHandler = new GraphicHandler(guiCanvas.getGraphicsContext2D(), new RectF(0, 0, guiCanvas.getWidth(), guiCanvas.getHeight()));
+        guiHandler = new GraphicHandler(guiCanvas.getGraphicsContext2D(), new RectF(0, 0, guiCanvas.getWidth(), guiCanvas.getHeight()));
         guiScene = new GameScene(width, height);
 
         showRightBar();
@@ -71,6 +74,8 @@ public class VillageStage extends MapStage
             villageView.setCurrentMenu(lmenu.getCurrentMenu(), true);
             villageView.onItemClicked(item);
         });
+
+        linfo = new ToastLayer(7, new RectF(0, 0, width, height), guiHandler);
 
         guiScene.addLayer(lmenu);
         guiScene.addLayer(linfo);
@@ -142,6 +147,8 @@ public class VillageStage extends MapStage
             tdrawer.setPosition(width / 2 - bg.getWidth() / 2, (i) * LINE_SIZE - LINE_SIZE / 2);
             tdrawer.setLayer(linfo);
         }
+
+        linfo.show(guiHandler);
     }
 
 

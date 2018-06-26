@@ -1,47 +1,24 @@
 package graphics.drawers.drawables.animators;
 
 import graphics.drawers.drawables.Drawable;
+import graphics.drawers.drawables.IAlphaDrawable;
 
-import java.util.Collection;
+import java.util.*;
 
-public class AlphaAnimator extends Animator
+public class AlphaAnimator extends ValueAnimator
 {
-    private double from = 0;
-    private double to = 1;
+    private List<IAlphaDrawable> targets;
 
-    public AlphaAnimator(double duration, Drawable... targets)
+    public AlphaAnimator(double duration, double from, double to, IAlphaDrawable... targets)
     {
-        super(duration, targets);
-    }
-
-    public AlphaAnimator(double duration, boolean reversible, Drawable... targets)
-    {
-        super(duration, reversible, targets);
-    }
-
-    public AlphaAnimator(double duration, boolean reversible, Collection<Drawable> targets)
-    {
-        super(duration, reversible, targets);
-    }
-
-    public AlphaAnimator(double duration, boolean reversible, Collection<Drawable> targets, double from, double to)
-    {
-        super(duration, reversible, targets);
-        this.from = from;
-        this.to = to;
-    }
-
-    public AlphaAnimator(double duration, double from, double to, Drawable... targets)
-    {
-        super(duration, targets);
-        this.from = from;
-        this.to = to;
+        super(duration, from, to);
+        this.targets = Arrays.asList(targets);
     }
 
     @Override
     public void update(double deltaT)
     {
         super.update(deltaT);
-        getTargets().forEach(t -> t.setAlpha(timeStack / getDuration() * (to - from) + from));
+        targets.forEach(t -> t.setAlpha(getCurrentValue()));
     }
 }

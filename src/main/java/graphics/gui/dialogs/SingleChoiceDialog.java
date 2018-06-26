@@ -1,7 +1,7 @@
 package graphics.gui.dialogs;
 
 import graphics.Fonts;
-import graphics.Layer;
+import graphics.layers.Layer;
 import javafx.scene.control.*;
 import javafx.stage.StageStyle;
 import views.dialogs.DialogResult;

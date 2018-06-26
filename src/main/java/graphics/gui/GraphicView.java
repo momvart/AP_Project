@@ -1,7 +1,7 @@
 package graphics.gui;
 
-import graphics.Layer;
-import graphics.MenuLayer;
+import graphics.layers.Layer;
+import graphics.layers.MenuLayer;
 import graphics.drawers.Drawer;
 import graphics.drawers.LayerDrawer;
 import graphics.drawers.drawables.Drawable;

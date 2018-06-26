@@ -1,6 +1,6 @@
 package graphics.helpers;
 
-import graphics.Layer;
+import graphics.layers.Layer;
 import graphics.drawers.BuildingDrawer;
 import models.Map;
 import models.buildings.Building;

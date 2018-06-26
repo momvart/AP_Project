@@ -2,27 +2,28 @@ package graphics.drawers.drawables.animators;
 
 import graphics.IFrameUpdatable;
 import graphics.drawers.drawables.Drawable;
-import javafx.animation.FadeTransition;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
-public abstract class Animator implements IFrameUpdatable
+public class Animator implements IFrameUpdatable
 {
-    private ArrayList<Drawable> targets = new ArrayList<>();
     private boolean paused;
+    private boolean repeatable;
 
     private boolean reversible;
     private boolean reversed;
+
     protected double timeStack;
     private double duration;
 
+    private Runnable onFinish;
 
-    public Animator(double duration, Drawable... targets)
+
+    public Animator(double duration)
     {
-        this(duration, false, targets);
+        this(duration, false, Collections.emptyList());
     }
 
     public Animator(double duration, boolean reversible, Drawable... targets)
@@ -34,13 +35,9 @@ public abstract class Animator implements IFrameUpdatable
     {
         this.reversible = reversible;
         this.duration = duration;
-        this.targets = new ArrayList<>(targets);
     }
 
-    public ArrayList<Drawable> getTargets()
-    {
-        return targets;
-    }
+    //region Start, Stop, Pause
 
     public boolean isPaused()
     {
@@ -57,6 +54,24 @@ public abstract class Animator implements IFrameUpdatable
         timeStack = 0;
     }
 
+    public void stop()
+    {
+        this.pause();
+        callOnFinish();
+    }
+
+    private void callOnFinish()
+    {
+        if (onFinish != null)
+            onFinish.run();
+    }
+
+    public void setOnFinish(Runnable onFinish)
+    {
+        this.onFinish = onFinish;
+    }
+
+    //endregion
 
     public double getDuration()
     {
@@ -66,6 +81,22 @@ public abstract class Animator implements IFrameUpdatable
     public void setDuration(double duration)
     {
         this.duration = duration;
+    }
+
+    public void setRepeatable(boolean repeatable)
+    {
+        this.repeatable = repeatable;
+    }
+
+    public void setReversible(boolean reversible)
+    {
+        this.reversible = reversible;
+    }
+
+    public void reverse()
+    {
+        reversible = true;
+        reversed = !reversed;
     }
 
     @Override
@@ -79,7 +110,10 @@ public abstract class Animator implements IFrameUpdatable
         {
             timeStack += deltaT;
             if (timeStack >= duration)
-                timeStack = 0;
+                if (repeatable)
+                    timeStack = 0;
+                else
+                    stop();
         }
         else
         {
@@ -87,12 +121,14 @@ public abstract class Animator implements IFrameUpdatable
             if (timeStack >= duration)
             {
                 timeStack = duration;
-                reversed = true;
+                reverse();
             }
             else if (timeStack <= 0)
             {
                 timeStack = 0;
-                reversed = false;
+                reverse();
+                if (!repeatable)
+                    stop();
             }
         }
     }

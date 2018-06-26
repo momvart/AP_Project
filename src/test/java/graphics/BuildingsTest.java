@@ -2,9 +2,8 @@ package graphics;
 
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
-import graphics.drawers.drawables.Drawable;
 import graphics.drawers.drawables.ImageDrawable;
-import graphics.drawers.drawables.animators.AlphaAnimator;
+import graphics.layers.Layer;
 import graphics.positioning.IsometricPositioningSystem;
 import graphics.positioning.PositioningSystem;
 import javafx.application.Application;
@@ -18,8 +17,6 @@ import models.buildings.*;
 import utils.Point;
 import utils.RectF;
 import utils.SizeF;
-
-import java.util.ArrayList;
 
 public class BuildingsTest extends Application
 {

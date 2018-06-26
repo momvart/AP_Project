@@ -1,4 +1,4 @@
-package graphics;
+package graphics.layers;
 
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.MenuItemDrawable;

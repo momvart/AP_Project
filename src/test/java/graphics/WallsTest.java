@@ -2,6 +2,7 @@ package graphics;
 
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ImageDrawable;
+import graphics.layers.Layer;
 import graphics.positioning.IsometricPositioningSystem;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -55,31 +56,48 @@ public class WallsTest extends Application
             }
         }
 
-        ImageDrawable wall1 = GraphicsUtilities.createImageDrawable("assets/buildings/wall/upright/000/001.png", 32, 24, true);
-        Drawer dwall1 = new Drawer(wall1);
-        dwall1.setPosition(0, 5);
-        dwall1.setLayer(layer);
-        wall1.setScale(1.3, 1.3);
+        {
+            ImageDrawable wall1 = GraphicsUtilities.createImageDrawable("assets/buildings/wall/upright/001/001.png", 32, 24, true);
+            Drawer dwall1 = new Drawer(wall1);
+            dwall1.setPosition(0, 5);
+            dwall1.setLayer(layer);
 
-        ImageDrawable wall2 = GraphicsUtilities.createImageDrawable("assets/buildings/wall/right/000/001.png", 32, 24, true);
-        Drawer dwall2 = new Drawer(wall2);
-        dwall2.setPosition(0, 4);
-        dwall2.setLayer(layer);
-        wall2.setScale(1.3, 1.3);
+            ImageDrawable wall2 = GraphicsUtilities.createImageDrawable("assets/buildings/wall/right/001/001.png", 32, 24, true);
+            Drawer dwall2 = new Drawer(wall2);
+            dwall2.setPosition(0, 4);
+            dwall2.setLayer(layer);
 
-        ImageDrawable wall3 = GraphicsUtilities.createImageDrawable("assets/buildings/wall/up/000/001.png", 32, 24, true);
-        Drawer dwall3 = new Drawer(wall3);
-        dwall3.setPosition(1, 5);
-        dwall3.setLayer(layer);
-        wall3.setScale(1.3, 1.3);
+            ImageDrawable wall3 = GraphicsUtilities.createImageDrawable("assets/buildings/wall/up/001/001.png", 32, 24, true);
+            Drawer dwall3 = new Drawer(wall3);
+            dwall3.setPosition(1, 5);
+            dwall3.setLayer(layer);
 
-        ImageDrawable wall4 = GraphicsUtilities.createImageDrawable("assets/buildings/wall/static/000/001.png", 32, 24, true);
-        Drawer dwall4 = new Drawer(wall4);
-        dwall4.setPosition(1, 4);
-        dwall4.setLayer(layer);
-        wall4.setScale(1.3, 1.3);
+            ImageDrawable wall4 = GraphicsUtilities.createImageDrawable("assets/buildings/wall/static/001/001.png", 32, 24, true);
+            Drawer dwall4 = new Drawer(wall2);
+            dwall4.setPosition(1, 4);
+            dwall4.setLayer(layer);
+        }
+        {
+            ImageDrawable wall1 = GraphicsUtilities.createImageDrawable("assets/buildings/wall/upright/000/001.png", 32, 24, true);
+            Drawer dwall1 = new Drawer(wall1);
+            dwall1.setPosition(0, 8);
+            dwall1.setLayer(layer);
 
+            ImageDrawable wall2 = GraphicsUtilities.createImageDrawable("assets/buildings/wall/right/000/001.png", 32, 24, true);
+            Drawer dwall2 = new Drawer(wall2);
+            dwall2.setPosition(0, 7);
+            dwall2.setLayer(layer);
 
+            ImageDrawable wall3 = GraphicsUtilities.createImageDrawable("assets/buildings/wall/up/000/001.png", 32, 24, true);
+            Drawer dwall3 = new Drawer(wall3);
+            dwall3.setPosition(1, 8);
+            dwall3.setLayer(layer);
+
+            ImageDrawable wall4 = GraphicsUtilities.createImageDrawable("assets/buildings/wall/static/000/001.png", 32, 24, true);
+            Drawer dwall4 = new Drawer(wall4);
+            dwall4.setPosition(1, 7);
+            dwall4.setLayer(layer);
+        }
         gameScene.addLayer(layer);
         gameScene.addLayer(lFloor);
         handler.setScene(gameScene);

@@ -2,7 +2,7 @@ package graphics.drawers.drawables;
 
 import graphics.Fonts;
 import graphics.GraphicsValues;
-import graphics.Layer;
+import graphics.layers.Layer;
 import graphics.drawers.Drawer;
 import graphics.positioning.NormalPositioningSystem;
 import javafx.scene.canvas.GraphicsContext;

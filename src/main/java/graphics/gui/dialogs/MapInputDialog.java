@@ -1,6 +1,6 @@
 package graphics.gui.dialogs;
 
-import graphics.Layer;
+import graphics.layers.Layer;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ImageDrawable;
 import javafx.geometry.Pos;

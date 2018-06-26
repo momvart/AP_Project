@@ -5,6 +5,7 @@ import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ImageDrawable;
 import graphics.helpers.BuildingGraphicHelper;
+import graphics.layers.Layer;
 import graphics.positioning.IsometricPositioningSystem;
 import graphics.positioning.PositioningSystem;
 import javafx.scene.Group;

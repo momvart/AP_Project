@@ -6,6 +6,8 @@ import javafx.scene.input.MouseEvent;
 import utils.RectF;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class GraphicHandler implements IFrameUpdatable
 {
@@ -51,14 +53,25 @@ public class GraphicHandler implements IFrameUpdatable
     }
 
 
+    private Queue<IFrameUpdatable> pendingAdds = new LinkedList<>();
+
     public void addUpdatable(IFrameUpdatable updatable)
     {
-        updatables.add(updatable);
+        pendingAdds.add(updatable);
     }
+
+    private Queue<IFrameUpdatable> pendingRemoves = new LinkedList<>();
+
+    public void removeUpdatable(IFrameUpdatable updatable) { pendingRemoves.add(updatable); }
 
     @Override
     public void update(double deltaT)
     {
+        for (int i = 0; i < pendingAdds.size(); i++)
+            updatables.add(pendingAdds.poll());
+        for (int i = 0; i < pendingRemoves.size(); i++)
+            updatables.remove(pendingRemoves.poll());
+
         updatables.forEach(u -> u.update(deltaT));
         scene.update(deltaT);
         scene.draw(gc, cameraBounds);
