@@ -73,7 +73,7 @@ public class GraphicsValues
             try
             {
                 buildings.put(name + level, GraphicsUtilities.createImageDrawable(String.format("%s/%s/%03d/001.png",
-                        BUILDINGS_ASSETS_PATH, name, level),
+                        BUILDINGS_ASSETS_PATH, name.toLowerCase(), level),
                         IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2,
                         IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, false));
             }
