@@ -1,6 +1,9 @@
 package graphics.gui;
 
-import graphics.*;
+import graphics.GameLooper;
+import graphics.GameScene;
+import graphics.GraphicHandler;
+import graphics.GraphicsValues;
 import graphics.drawers.AnimationDrawer;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.FrameAnimationDrawable;
@@ -107,7 +110,7 @@ public class MainMenu extends Application
         Layer soldierLayer = new Layer(1, new RectF(0, 0, width, height));
         soldierLayer.setPosSys(new PercentPositioningSystem(soldierLayer));
         idleSoldiers(soldierLayer, "guardian/4", 1.1f, 0.3f, 0.8f);
-        idleSoldiers(soldierLayer, "wallBreaker/3", 1, 0.2f, 0.8f);
+        idleSoldiers(soldierLayer, "wallbreaker/3", 1, 0.2f, 0.8f);
         //endregion
 
         //region menu buttons

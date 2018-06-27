@@ -3,6 +3,7 @@ package graphics.gui.dialogs;
 import graphics.Fonts;
 import graphics.layers.Layer;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import views.dialogs.DialogResult;
 import views.dialogs.DialogResultCode;
@@ -23,6 +24,7 @@ public class SingleChoiceDialog extends GraphicDialog
         System.err.println(message);
         dialog.setContentText(message);
         DialogResult dialogResult;
+        dialog.initModality(Modality.WINDOW_MODAL);
         dialog.showAndWait();
         ButtonBar.ButtonData buttonData = dialog.getResult().getButtonData();
         if (buttonData.equals(ButtonBar.ButtonData.NO))

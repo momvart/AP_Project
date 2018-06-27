@@ -1,12 +1,13 @@
 package graphics.gui.dialogs;
 
-import graphics.layers.Layer;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ImageDrawable;
+import graphics.layers.Layer;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import models.Map;
 import utils.ConsoleUtilities;
 import utils.GraphicsUtilities;
@@ -35,6 +36,7 @@ public class MapInputDialog extends GraphicDialog
         dialog.setGraphic(textField);
         SingleChoiceDialog.applyCss(dialog);
         dialog.setContentText(message);
+        dialog.initModality(Modality.WINDOW_MODAL);
         dialog.showAndWait();
         if (dialog.getResult().equals(ButtonType.OK))
         {

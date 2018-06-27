@@ -1,12 +1,16 @@
 package graphics.gui;
 
-import graphics.*;
+import graphics.GameLooper;
+import graphics.GameScene;
+import graphics.GraphicHandler;
+import graphics.GraphicsValues;
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ImageDrawable;
 import graphics.helpers.BuildingGraphicHelper;
 import graphics.layers.Layer;
 import graphics.positioning.IsometricPositioningSystem;
+import graphics.positioning.NormalPositioningSystem;
 import graphics.positioning.PositioningSystem;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -35,6 +39,7 @@ public abstract class MapStage extends Stage
     protected GameScene gScene;
     private final Layer lFloor;
     private final Layer lObjects;
+    private final Layer lbackground;
 
     protected final double width;
     protected final double height;
@@ -48,8 +53,9 @@ public abstract class MapStage extends Stage
 
         PositioningSystem.sScale = 25;
 
-        lFloor = new Layer(0, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
-        lObjects = new Layer(1, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
+        lFloor = new Layer(1, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
+        lObjects = new Layer(2, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
+        lbackground = new Layer(0, new RectF(0, 0, width, height), NormalPositioningSystem.getInstance());
     }
 
     public Map getMap()
@@ -89,6 +95,7 @@ public abstract class MapStage extends Stage
 
         addBuildings();
 
+        gScene.addLayer(lbackground);
         gScene.addLayer(lFloor);
         gScene.addLayer(lObjects);
 
@@ -106,40 +113,24 @@ public abstract class MapStage extends Stage
     {
         try
         {
+            ImageDrawable bg = GraphicsUtilities.createImageDrawable("assets/floor/background2.png", PositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 30 * 2,
+                    PositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 30 * 2, true);
+            Drawer bgDrawer = new Drawer(bg);
+            bgDrawer.setPosition(0, 0);
+            bg.setPivot(0, 0.5);
+            bgDrawer.setLayer(lbackground);
+
+
             ImageDrawable tile1 = GraphicsUtilities.createImageDrawable("assets/floor/isometric1.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
             tile1.setPivot(.5, .5);
             ImageDrawable tile2 = GraphicsUtilities.createImageDrawable("assets/floor/isometric2.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
             tile2.setPivot(.5, .5);
-            ImageDrawable tree = GraphicsUtilities.createImageDrawable("assets/floor/tree.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, false);
-            tree.setPivot(0.5, 1);
-            ImageDrawable grass = GraphicsUtilities.createImageDrawable("assets/floor/grass.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, false);
-            grass.setPivot(0.5, 0.5);
-            ImageDrawable mushroom = GraphicsUtilities.createImageDrawable("assets/floor/mushroom.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, false);
-            mushroom.setPivot(0.5, 0.5);
-
             for (int i = 0; i < map.getWidth(); i++)
                 for (int j = 0; j < map.getHeight(); j++)
                 {
                     Drawer drawer = new Drawer((i + j) % 2 == 0 ? tile1 : tile2);
                     drawer.setPosition(i, j);
                     drawer.setLayer(lFloor);
-                }
-
-            for (int i = 1; i <= 15; i++)
-                for (int j = i - 1; j <= 30 - i; j++)
-                {
-                    Drawer topDrawer = new Drawer(i < 3 ? mushroom : tree);
-                    Drawer leftDrawer = new Drawer(i < 3 ? mushroom : tree);
-                    Drawer downTree = new Drawer(i < 3 ? mushroom : tree);
-                    Drawer rightTree = new Drawer(i < 3 ? mushroom : tree);
-                    topDrawer.setPosition(j, -i);
-                    leftDrawer.setPosition(-i, j);
-                    rightTree.setPosition(map.getWidth() + i - 1, j);
-                    downTree.setPosition(j, i + map.getWidth() - 1);
-                    topDrawer.setLayer(lFloor);
-                    leftDrawer.setLayer(lFloor);
-                    rightTree.setLayer(lFloor);
-                    downTree.setLayer(lFloor);
                 }
         }
         catch (URISyntaxException e)

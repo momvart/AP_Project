@@ -4,6 +4,7 @@ import graphics.layers.Layer;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Spinner;
+import javafx.stage.Modality;
 import views.dialogs.DialogResult;
 import views.dialogs.DialogResultCode;
 
@@ -35,6 +36,7 @@ public class NumberInputDialog extends GraphicDialog
         dialog.setContentText(message);
         dialog.setGraphic(spinner);
         SingleChoiceDialog.applyCss(dialog);
+        dialog.initModality(Modality.WINDOW_MODAL);
         dialog.showAndWait();
         if (dialog.getResult().equals(ButtonType.OK))
             return new DialogResult(DialogResultCode.YES).addData("number", spinner.getValue());

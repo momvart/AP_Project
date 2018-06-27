@@ -31,7 +31,11 @@ public class MenuItemDrawable extends Drawable
                 this.icon = GraphicsUtilities.createImageDrawable(menu.getIconPath(), width, height * IconHeightRatio, true);
                 this.icon.setPivot(.5, .5);
             }
-            catch (Exception ignored) {}
+            catch (Exception ignored)
+            {
+                ignored.printStackTrace(System.out);
+                System.out.println(menu.getIconPath());
+            }
         else
             this.icon = new ImageDrawable(null);
 
