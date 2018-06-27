@@ -60,7 +60,6 @@ public class HealerGraphicHelper extends SoldierGraphicHelper implements IOnHeal
         {
             SoldierDrawer soldierDrawer = report.getSoldier().getAttackHelper().getGraphicHelper().getDrawer();
             soldierDrawer.beeingHealedGlow();
-            soldierDrawer.healthIncreaseBarLoading(report.getInitialHealth(), report.getFinalHealth(), soldier.getAttackHelper().getInitialHealth());
         }
     }
 }

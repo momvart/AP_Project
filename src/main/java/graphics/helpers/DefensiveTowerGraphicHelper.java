@@ -93,14 +93,6 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
     public void onDefenseFire(Point targetLocation, DefenseKind defenseKind, ArrayList<SoldierInjuryReport> soldiersInjuredDirectly, ArrayList<SoldierInjuryReport> soldiersInjuredImplicitly)
     {
         splashAreaIfNeeded(targetLocation, defenseKind);
-        for (SoldierInjuryReport report : soldiersInjuredDirectly)
-        {
-            report.getSoldier().getAttackHelper().getGraphicHelper().getDrawer().healthDecreaseBarLoading(report.getInitialHealth(), report.getFinalHealth(), report.getSoldier().getAttackHelper().getInitialHealth());
-        }
-        for (SoldierInjuryReport report : soldiersInjuredImplicitly)
-        {
-            report.getSoldier().getAttackHelper().getGraphicHelper().getDrawer().healthDecreaseBarLoading(report.getInitialHealth(), report.getFinalHealth(), report.getSoldier().getAttackHelper().getInitialHealth());
-        }
         currentState = State.IDLE;
     }
 
