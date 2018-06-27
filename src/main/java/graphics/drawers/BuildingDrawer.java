@@ -12,14 +12,20 @@ public class BuildingDrawer extends LayerDrawer
     private Map containingMap;
     private Building building;
 
-    private Drawer base;
+    protected Drawer base;
 
     public BuildingDrawer(Building building, Map map)
     {
         this.building = building;
         this.containingMap = map;
+
+        initialize();
+    }
+
+    protected void initialize()
+    {
         setPosition(building.getLocation().getX(), building.getLocation().getY());
-        base = new Drawer(null);
+        base = new Drawer(fetchBaseImage());
         getDrawers().add(base);
     }
 

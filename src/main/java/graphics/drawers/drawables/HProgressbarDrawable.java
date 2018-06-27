@@ -1,6 +1,7 @@
 package graphics.drawers.drawables;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 public class HProgressbarDrawable extends Drawable
@@ -8,7 +9,7 @@ public class HProgressbarDrawable extends Drawable
 
 
     public static final int CornerRadius = 2;
-    private Paint background;
+    private Paint background = Color.TRANSPARENT;
     private Paint stroke;
 
     private double progress;

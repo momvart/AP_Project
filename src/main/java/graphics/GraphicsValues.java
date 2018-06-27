@@ -14,6 +14,7 @@ import java.util.HashMap;
 public class GraphicsValues
 {
     public static final String BUILDINGS_ASSETS_PATH = "assets/buildings";
+    public static final String BUILDINGS_DESTRUCTED_ASSETS_PATH = "assets/buildings/destructed";
     public static final String WALLS_ASSETS_PATH = "assets/buildings/wall";
     public static final String SOLDIERS_ASSETS_PATH = "assets/soldiers";
     public static final String UI_ASSETS_PATH = "assets/ui";
@@ -128,5 +129,21 @@ public class GraphicsValues
         }
 
         return imgConstruction;
+    }
+
+    private static ImageDrawable imgDestructed;
+
+    public static ImageDrawable getDestructedImage()
+    {
+        if (imgDestructed == null)
+            try
+            {
+                imgDestructed = GraphicsUtilities.createImageDrawable(BUILDINGS_DESTRUCTED_ASSETS_PATH + "/general.png",
+                        IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2,
+                        IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, false);
+            }
+            catch (URISyntaxException ignored) { }
+
+        return imgDestructed;
     }
 }

@@ -60,8 +60,10 @@ public class BasicTextTest extends Application
 
         HProgressbarDrawable progressbar2 = new HProgressbarDrawable(new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.VIOLET), new Stop(1, Color.PURPLE)));
         Drawer drawer3 = new Drawer(progressbar2);
+        progressbar2.setRightToLeft(true);
         progressbar2.setSize(100, 10);
-        progressbar2.setProgress(.50);
+        progressbar2.setBackground(Color.WHITE);
+        progressbar2.setProgress(.20);
         progressbar2.setStroke(Color.BROWN);
         drawer3.setPosition(1, 15);
         drawer3.setLayer(layer);

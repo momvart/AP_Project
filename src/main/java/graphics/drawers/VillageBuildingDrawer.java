@@ -13,7 +13,12 @@ public class VillageBuildingDrawer extends BuildingDrawer
     public VillageBuildingDrawer(Building building, Map map)
     {
         super(building, map);
+    }
 
+    @Override
+    protected void initialize()
+    {
+        super.initialize();
         ImageDrawable imgConstruction = GraphicsValues.getConstructionImage();
         imgConstruction.setPivot(0.5, 0.5);
         construction = new Drawer(imgConstruction);

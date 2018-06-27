@@ -29,11 +29,17 @@ public class AttackBuildingGraphicHelper extends BuildingGraphicHelper implement
     protected void makeDestroy()
     {
         buildingDrawer.playDestroyAnimation();
+        buildingDrawer.updateDrawer();
     }
 
     @Override
     public AttackBuildingDrawer getBuildingDrawer()
     {
         return buildingDrawer;
+    }
+
+    public void updateDrawer()
+    {
+        getBuildingDrawer().updateDrawer();
     }
 }
