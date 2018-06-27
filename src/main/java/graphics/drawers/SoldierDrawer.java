@@ -27,14 +27,4 @@ public class SoldierDrawer extends AnimationDrawer
     {
         //TODO
     }
-
-    public void healthIncreaseBarLoading(int initialHealth, int finalHealth)
-    {
-        //TODO
-    }
-
-    public void healthDecreaseBarLoading(int initialHealth, int finalHealth)
-    {
-        //TODO
-    }
 }

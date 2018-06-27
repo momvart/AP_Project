@@ -1,7 +1,7 @@
 package graphics.helpers;
 
-import graphics.layers.Layer;
 import graphics.drawers.SoldierDrawer;
+import graphics.layers.Layer;
 import graphics.positioning.PositioningSystem;
 import models.attack.attackHelpers.GeneralSoldierAttackHelper;
 import models.attack.attackHelpers.IOnDecampListener;
@@ -142,14 +142,10 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         {
             nextCheckPoint = soldier.getAttackHelper().getNextPathStarightReachablePoint(getVeryPoint(drawer.getPosition()), getVeryPoint(moveDest));
             nextCheckPointF = new PointF(nextCheckPoint);
-            System.out.println("facing building section is :" + facingBuildingPoint);
             if (nextCheckPoint.equals(facingBuildingPoint) && PointF.euclideanDistance(drawer.getPosition(), new PointF(facingBuildingPoint)) < .1)
             {
                 nextCheckPointF = finalStandingPoint;
-                System.out.println("here");
             }
-            System.out.println("position is :" + drawer.getPosition());
-            System.out.println("next checkPoint is : " + nextCheckPoint);
             distanceToNextCheckPoint = PointF.euclideanDistance(nextCheckPointF, drawer.getPosition());
             cos = (nextCheckPointF.getX() - drawer.getPosition().getX()) / distanceToNextCheckPoint;
             sin = (nextCheckPointF.getY() - drawer.getPosition().getY()) / distanceToNextCheckPoint;
@@ -159,16 +155,10 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
                 return;
             }
         }
-        System.out.println("next checkPointF is :‌" + nextCheckPointF);
-        System.out.println("final standing point is : " + finalStandingPoint);
-        System.out.println(drawer.getPosition());
-        System.out.println("cos and sin are :" + cos + "   " + sin);
-
         if (nextCheckPointF != null)
         {
             double stepDistance = deltaT * soldier.getSpeed() * 1.5;//tired of little speed of soldiers so we add a ratio to get scaped
             distanceToFinalPosition = PointF.euclideanDistance(finalStandingPoint, drawer.getPosition());
-            System.out.println("distance till end " + distanceToFinalPosition);
             if (distanceToFinalPosition < 0.1 || distanceToFinalPosition < stepDistance)
             {
                 onMoveFinished();

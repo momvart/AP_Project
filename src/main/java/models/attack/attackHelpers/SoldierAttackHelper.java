@@ -177,7 +177,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
             setDead(true);
     }
 
-    private int getInitialHealth()
+    public int getInitialHealth()
     {
         return SoldierValues.getSoldierInfo(soldier.getType()).getInitialHealth() + (soldier.getLevel()) * 5;
     }
