@@ -42,7 +42,10 @@ public class ToastLayer extends Layer
 
     public void show(GraphicHandler gHandler)
     {
+        hider.stop();
+        delayer.stop();
         setVisible(true);
+        setAlpha(0);
         gHandler.addUpdatable(shower);
         shower.restart();
     }

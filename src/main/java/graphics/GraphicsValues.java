@@ -13,9 +13,10 @@ import java.util.HashMap;
 
 public class GraphicsValues
 {
-    private static final String BUILDINGS_ASSETS_PATH = "assets/buildings";
-    private static final String WALLS_ASSETS_PATH = "assets/buildings/wall";
-    private static final String SOLDIERS_ASSETS_PATH = "assets/soldiers";
+    public static final String BUILDINGS_ASSETS_PATH = "assets/buildings";
+    public static final String WALLS_ASSETS_PATH = "assets/buildings/wall";
+    public static final String SOLDIERS_ASSETS_PATH = "assets/soldiers";
+    public static final String UI_ASSETS_PATH = "assets/ui";
     public static final double PADDING = 10;
 
     private static double scale = 1;
@@ -34,9 +35,9 @@ public class GraphicsValues
 
     private static ArrayList<HashMap<String, ImageDrawable[]>> soldierFrames;
 
-    private static String getSoldierAssetsPath(int soldierType)
+    public static String getSoldierAssetsPath(int soldierType)
     {
-        return SOLDIERS_ASSETS_PATH + "/" + SoldierValues.getSoldierInfo(soldierType).getName().toLowerCase();
+        return SOLDIERS_ASSETS_PATH + "/" + SoldierValues.getSoldierInfo(soldierType).getName().toLowerCase().replace(" ", "");
     }
 
     public static ImageDrawable[] getSoldierFrames(int soldierType, int level, String animKey) throws URISyntaxException
@@ -109,5 +110,23 @@ public class GraphicsValues
             }
 
         return walls.get(style.name() + level);
+    }
+
+    private static ImageDrawable imgConstruction;
+
+    public static ImageDrawable getConstructionImage()
+    {
+        if (imgConstruction == null)
+        {
+            try
+            {
+                imgConstruction = GraphicsUtilities.createImageDrawable(BUILDINGS_ASSETS_PATH + "/construction1.png",
+                        IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2,
+                        IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, false);
+            }
+            catch (URISyntaxException ignored) { }
+        }
+
+        return imgConstruction;
     }
 }

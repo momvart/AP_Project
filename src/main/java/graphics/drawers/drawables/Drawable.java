@@ -61,7 +61,7 @@ public abstract class Drawable implements IDrawable
 
     public double getHeight() { return getSize().getHeight(); }
 
-    private void setPivots()
+    protected void setPivots()
     {
         translate.setX(-getPivot().getX() * getWidth());
         translate.setY(-getPivot().getY() * getHeight());
@@ -97,6 +97,11 @@ public abstract class Drawable implements IDrawable
     {
         scale.setX(x);
         scale.setY(y);
+    }
+
+    public Paint getFill()
+    {
+        return fill;
     }
 
     public void setFill(Paint fill)

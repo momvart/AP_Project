@@ -3,7 +3,7 @@ package graphics.gui;
 import graphics.*;
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
-import graphics.drawers.drawables.ResourceLayer;
+import graphics.layers.ResourceLayer;
 import graphics.drawers.drawables.RoundRectDrawable;
 import graphics.drawers.drawables.TextDrawable;
 import graphics.gui.dialogs.MapInputDialog;
@@ -46,7 +46,7 @@ public class VillageStage extends MapStage
     {
         super(village.getMap(), width, height);
         lmenu = new MenuLayer(6, new RectF(0, height - CELL_SIZE, width, CELL_SIZE), MenuLayer.Orientation.HORIZONTAL);
-        lresource = new ResourceLayer(8, new RectF(width - 20, 20, 200, 70), village);
+        lresource = new ResourceLayer(8, new RectF(width - 200 - GraphicsValues.PADDING * 2, 20, 200 + GraphicsValues.PADDING * 2, 70), village);
     }
 
     public void setVillageView(VillageView villageView)
@@ -88,16 +88,6 @@ public class VillageStage extends MapStage
     }
 
     @Override
-    protected void setUpBuildingDrawer(BuildingDrawer drawer)
-    {
-        super.setUpBuildingDrawer(drawer);
-        drawer.setClickListener((sender, event) ->
-        {
-            showBottomMenu(drawer.getBuilding());
-        });
-    }
-
-    @Override
     public BuildingGraphicHelper addBuilding(Building building)
     {
         VillageBuildingGraphicHelper graphicHelper = new VillageBuildingGraphicHelper(building, getObjectsLayer(), getMap());
@@ -111,6 +101,16 @@ public class VillageStage extends MapStage
         gHandler.addUpdatable(graphicHelper);
 
         return graphicHelper;
+    }
+
+    @Override
+    protected void setUpBuildingDrawer(BuildingDrawer drawer)
+    {
+        super.setUpBuildingDrawer(drawer);
+        drawer.setClickListener((sender, event) ->
+        {
+            showBottomMenu(drawer.getBuilding());
+        });
     }
 
     public void showBottomMenu(Building building)

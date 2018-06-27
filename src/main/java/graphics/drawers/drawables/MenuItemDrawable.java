@@ -1,6 +1,7 @@
 package graphics.drawers.drawables;
 
 import graphics.Fonts;
+import graphics.GraphicsValues;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import menus.Menu;
@@ -8,6 +9,8 @@ import utils.GraphicsUtilities;
 
 public class MenuItemDrawable extends Drawable
 {
+    private static final double InsidePadding = GraphicsValues.PADDING / 2;
+
     private static final String IconsPath = "assets/menu/icons/";
     private static final double IconHeightRatio = 2.0 / 3;
 
@@ -25,7 +28,7 @@ public class MenuItemDrawable extends Drawable
         if (!menu.getIconPath().isEmpty())
             try
             {
-                this.icon = GraphicsUtilities.createImageDrawable(IconsPath + menu.getIconPath(), width, height * IconHeightRatio, true);
+                this.icon = GraphicsUtilities.createImageDrawable(menu.getIconPath(), width, height * IconHeightRatio, true);
                 this.icon.setPivot(.5, .5);
             }
             catch (Exception ignored) {}
@@ -49,12 +52,12 @@ public class MenuItemDrawable extends Drawable
         background.draw(gc);
 
         gc.save();
-        gc.translate(getWidth() / 2, getHeight() * IconHeightRatio / 2);
+        gc.translate(getWidth() / 2, getHeight() * IconHeightRatio / 2 + InsidePadding);
         icon.draw(gc);
         gc.restore();
 
         gc.save();
-        gc.translate(getWidth() / 2, getHeight() - getHeight() * (1 - IconHeightRatio) * .5);
+        gc.translate(getWidth() / 2, getHeight() - getHeight() * (1 - IconHeightRatio) * .5 + InsidePadding * 2);
         label.draw(gc);
         gc.restore();
     }

@@ -127,6 +127,7 @@ public class Village
         Building building = constructionManager.construct(buildingType, location);
         VillageBuildingGraphicHelper graphicHelper = (VillageBuildingGraphicHelper)villageStage.addBuilding(building);
         constructionManager.getLastConstruction().setFinishListener(graphicHelper);
+        graphicHelper.getBuildingDrawer().updateDrawer();
 
         spendResource(cost);
     }
@@ -146,6 +147,7 @@ public class Village
         VillageBuildingGraphicHelper graphicHelper = (VillageBuildingGraphicHelper)building.getVillageHelper().getGraphicHelper();
         constructionManager.upgrade(building);
         constructionManager.getLastConstruction().setFinishListener(graphicHelper);
+        graphicHelper.getBuildingDrawer().updateDrawer();
 
         spendResource(cost);
     }

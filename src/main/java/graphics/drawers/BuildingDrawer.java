@@ -2,22 +2,24 @@ package graphics.drawers;
 
 import graphics.GraphicsValues;
 import graphics.drawers.drawables.ImageDrawable;
+import models.Map;
+import models.buildings.BuildStatus;
 import models.buildings.Building;
+import models.buildings.Wall;
 
 public class BuildingDrawer extends LayerDrawer
 {
+    private Map containingMap;
     private Building building;
 
-    public BuildingDrawer(Building building)
+    private Drawer base;
+
+    public BuildingDrawer(Building building, Map map)
     {
         this.building = building;
+        this.containingMap = map;
         setPosition(building.getLocation().getX(), building.getLocation().getY());
-    }
-
-    public void setUpDrawable()
-    {
-        ImageDrawable baseImg = GraphicsValues.getBuildingImage(getBuilding().getType(), getBuilding().getLevel());
-        Drawer base = new Drawer(baseImg);
+        base = new Drawer(null);
         getDrawers().add(base);
     }
 
@@ -27,19 +29,30 @@ public class BuildingDrawer extends LayerDrawer
     }
 
 
-    public void playDestroyAnimation()
+    protected ImageDrawable fetchBaseImage()
     {
-        //TODO
-    }
+        if (building instanceof Wall)
+        {
+            GraphicsValues.WallStyle style;
+            if (containingMap.getBuildingAt(getBuilding().getLocation().getX() + 1, getBuilding().getLocation().getY()) instanceof Wall && containingMap.getBuildingAt(getBuilding().getLocation().getX(), getBuilding().getLocation().getY() - 1) instanceof Wall)
+                style = GraphicsValues.WallStyle.UpRight;
+            else if (containingMap.getBuildingAt(getBuilding().getLocation().getX(), getBuilding().getLocation().getY() - 1) instanceof Wall)
+                style = GraphicsValues.WallStyle.Up;
+            else if (containingMap.getBuildingAt(getBuilding().getLocation().getX() + 1, getBuilding().getLocation().getY()) instanceof Wall)
+                style = GraphicsValues.WallStyle.Right;
+            else
+                style = GraphicsValues.WallStyle.Static;
 
-    public void healthDecreseBarLoading(int initialHealth, int finalHealth)
-    {
-        //TODO
+            return GraphicsValues.getWallImage(style, getBuilding().getLevel());
+        }
+        else
+            return GraphicsValues.getBuildingImage(getBuilding().getType(), getBuilding().getLevel());
     }
 
     public void updateDrawer()
     {
         System.err.println("Update requested !");
         //TODO
+        base.setDrawable(fetchBaseImage());
     }
 }

@@ -1,4 +1,5 @@
 import controllers.MainController;
+import graphics.Fonts;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -24,6 +25,7 @@ public class Main extends Application
             Scanner scanner = new Scanner(System.in);
             new MainController(new ConsoleView(scanner)).start();
         }).start();
+        Fonts.initialize();
         primaryStage.setScene(new Scene(new Group(), 100, 100));
         primaryStage.show();
     }

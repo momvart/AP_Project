@@ -23,21 +23,40 @@ public class TextDrawable extends Drawable
         this.font = font;
         setFill(fill);
 
-        this.privateText = new Text(text);
-        privateText.setFont(font);
-        privateText.applyCss();
-        privateText.setLineSpacing(0);
+        privateText = new Text(text);
+        updatePrivateText();
+    }
+
+    public String getText()
+    {
+        return text;
+    }
+
+    public void setText(String text)
+    {
+        this.text = text;
+        updatePrivateText();
     }
 
     public void setFont(Font font)
     {
         this.font = font;
+        updatePrivateText();
     }
 
     @Override
     public SizeF getSize()
     {
         return new SizeF(privateText.getBoundsInLocal().getWidth(), privateText.getBoundsInLocal().getHeight());
+    }
+
+    private void updatePrivateText()
+    {
+        privateText.setText(text);
+        privateText.setFont(font);
+        privateText.applyCss();
+        privateText.setLineSpacing(0);
+        setPivots();
     }
 
     @Override

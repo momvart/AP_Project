@@ -5,14 +5,19 @@ import javafx.scene.paint.Paint;
 
 public class HProgressbarDrawable extends Drawable
 {
+
+
+    public static final int CornerRadius = 2;
+    private Paint background;
     private Paint stroke;
 
     private double progress;
 
+    private boolean rtl;
+
     public HProgressbarDrawable(double width, double height, Paint fill)
     {
-        setSize(width, height);
-        setFill(fill);
+        this(width, height, fill, false);
     }
 
     public HProgressbarDrawable(Paint fill)
@@ -20,6 +25,17 @@ public class HProgressbarDrawable extends Drawable
         this(100, 100, fill);
     }
 
+    public HProgressbarDrawable(double width, double height, Paint fill, boolean rtl)
+    {
+        setSize(width, height);
+        setFill(fill);
+        this.rtl = rtl;
+    }
+
+    public void setBackground(Paint background)
+    {
+        this.background = background;
+    }
 
     public void setStroke(Paint stroke)
     {
@@ -39,12 +55,20 @@ public class HProgressbarDrawable extends Drawable
         this.progress = progress;
     }
 
+    public void setRightToLeft(boolean rtl)
+    {
+        this.rtl = rtl;
+    }
+
     @Override
     protected void onDraw(GraphicsContext gc)
     {
-        gc.fillRect(0, 0, getWidth() * progress, getHeight());
-        gc.setLineWidth(5);
+        gc.setFill(background);
+        gc.fillRoundRect(0, 0, getWidth(), getHeight(), CornerRadius, CornerRadius);
+        gc.setFill(getFill());
+        gc.fillRoundRect(!rtl ? 0 : getWidth() * (1 - progress), 0, getWidth() * progress, getHeight(), CornerRadius, CornerRadius);
+        gc.setLineWidth(1);
         gc.setStroke(stroke);
-        gc.strokeRoundRect(0, 0, getWidth(), getHeight(), 2, 2);
+        gc.strokeRoundRect(0, 0, getWidth(), getHeight(), CornerRadius, CornerRadius);
     }
 }

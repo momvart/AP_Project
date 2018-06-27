@@ -78,7 +78,7 @@ public class BuildingAttackHelper implements IOnReloadListener
 
     private AttackBuildingGraphicHelper graphicHelper;
 
-    public BuildingGraphicHelper getGraphicHelper()
+    public AttackBuildingGraphicHelper getGraphicHelper()
     {
         return graphicHelper;
     }

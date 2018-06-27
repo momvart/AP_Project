@@ -1,7 +1,9 @@
 package models.buildings;
 
 import exceptions.UnavailableUpgradeException;
+import graphics.drawers.AttackBuildingDrawer;
 import graphics.drawers.BuildingDrawer;
+import graphics.drawers.VillageBuildingDrawer;
 import graphics.helpers.VillageHelper;
 import menus.BuildingInfoSubmenu;
 import menus.BuildingSubmenu;
@@ -87,11 +89,6 @@ public abstract class Building
         return buildStatus;
     }
 
-    public BuildingAttackHelper getAttackHelper()
-    {
-        return attackHelper;
-    }
-
     public void setBuildStatus(BuildStatus buildStatus)
     {
         this.buildStatus = buildStatus;
@@ -117,6 +114,11 @@ public abstract class Building
         villageHelper = new VillageHelper(this);
     }
 
+    public BuildingAttackHelper getAttackHelper()
+    {
+        return attackHelper;
+    }
+
     /**
      * Method for setting properties of this building by level
      */
@@ -136,10 +138,5 @@ public abstract class Building
     public BuildingSubmenu getMenu(ParentMenu parent)
     {
         return new BuildingSubmenu(parent, this, getInfoSubmenu());
-    }
-
-    public BuildingDrawer createGraphicDrawer(Map container)
-    {
-        return new BuildingDrawer(this);
     }
 }

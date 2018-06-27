@@ -48,6 +48,16 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
         return bounds;
     }
 
+    public double getWidth()
+    {
+        return getBounds().getWidth();
+    }
+
+    public double getHeight()
+    {
+        return getBounds().getHeight();
+    }
+
     public boolean isVisible()
     {
         return visible;

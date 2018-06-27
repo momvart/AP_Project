@@ -22,7 +22,7 @@ import utils.SizeF;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-public class MapStage extends Stage
+public abstract class MapStage extends Stage
 {
     private Map map;
 
@@ -153,22 +153,7 @@ public class MapStage extends Stage
         map.getAllBuildings().forEach(this::addBuilding);
     }
 
-    public BuildingGraphicHelper addBuilding(Building building)
-    {
-        BuildingGraphicHelper graphicHelper = new BuildingGraphicHelper(building, lObjects, map);
-
-        building.createAndSetVillageHelper();
-
-        setUpBuildingDrawer(graphicHelper.getBuildingDrawer());
-
-        building.getVillageHelper().setGraphicHelper(graphicHelper);
-
-        graphicHelper.setUpListeners();
-
-        gHandler.addUpdatable(graphicHelper);
-
-        return graphicHelper;
-    }
+    public abstract BuildingGraphicHelper addBuilding(Building building);
 
     protected void setUpBuildingDrawer(BuildingDrawer drawer)
     { }
