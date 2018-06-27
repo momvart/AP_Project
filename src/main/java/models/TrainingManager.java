@@ -37,7 +37,7 @@ public class TrainingManager
 
     public void train(int soldierType, int count)
     {
-        for (int i = 0; i <= count; i++)
+        for (int i = 1; i <= count; i++)
         {
             Recruit recruit = new Recruit(soldierType, getBarracks().getLevel(), getBarracks().getSoldierBrewTimeDecrease());
             recruits.add(recruit);
@@ -63,6 +63,7 @@ public class TrainingManager
                 catch (SoldierNotAddedToCampException ex)
                 {
                     armyQueue.add(ex.getSoldier());
+                    recruits.remove(0);
                 }
             }
         }
