@@ -1,7 +1,6 @@
 package graphics.helpers;
 
 import graphics.layers.Layer;
-import graphics.drawers.Drawer;
 import models.Map;
 import models.attack.attackHelpers.IOnBulletHitListener;
 import models.buildings.Building;
@@ -15,9 +14,8 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
 {
     IOnBulletHitListener bulletHitListener;
     State currentState = State.IDLE;
-    Drawer bulletDrawer;
-    protected boolean hasBulletHitTarget = false;
     protected PointF bulletUltimatePosition;
+    protected final int bulletMaximumSpeed = 1;
 
     public DefensiveTowerGraphicHelper(Building building, Layer layer, Map map)
     {
@@ -63,15 +61,11 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
         currentState = State.IDLE;
     }
 
-    protected void bulletFlyContinue()
-    {//implemented in subClasses
-    }
 
     @Override
     public void update(double deltaT)
     {
         super.update(deltaT);
-        bulletFlyContinue();
     }
 
     @Override
@@ -79,7 +73,6 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
     {
         if (currentState == State.IDLE)
         {
-            hasBulletHitTarget = false;
             currentState = State.FIRING;
             super.callOnReload();
         }
@@ -92,7 +85,8 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
 
     public void setBulletUltimatePosition(PointF bulletUltimatePosition)
     {
-        this.bulletUltimatePosition = bulletUltimatePosition;
+        this.bulletUltimatePosition.setX(bulletUltimatePosition.getX());
+        this.bulletUltimatePosition.setY(bulletUltimatePosition.getY());
     }
 
     @Override
@@ -101,11 +95,11 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
         splashAreaIfNeeded(targetLocation, defenseKind);
         for (SoldierInjuryReport report : soldiersInjuredDirectly)
         {
-            getBuildingDrawer().healthDecreseBarLoading(report.getInitialHealth(), report.getFinalHealth());
+            report.getSoldier().getAttackHelper().getGraphicHelper().getDrawer().healthDecreaseBarLoading(report.getInitialHealth(), report.getFinalHealth(), report.getSoldier().getAttackHelper().getInitialHealth());
         }
         for (SoldierInjuryReport report : soldiersInjuredImplicitly)
         {
-            getBuildingDrawer().healthDecreseBarLoading(report.getInitialHealth(), report.getFinalHealth());
+            report.getSoldier().getAttackHelper().getGraphicHelper().getDrawer().healthDecreaseBarLoading(report.getInitialHealth(), report.getFinalHealth(), report.getSoldier().getAttackHelper().getInitialHealth());
         }
         currentState = State.IDLE;
     }

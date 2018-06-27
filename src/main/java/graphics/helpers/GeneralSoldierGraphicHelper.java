@@ -1,7 +1,7 @@
 package graphics.helpers;
 
-import graphics.layers.Layer;
 import graphics.drawers.SoldierDrawer;
+import graphics.layers.Layer;
 import models.attack.attackHelpers.GeneralSoldierAttackHelper;
 import models.attack.attackHelpers.IOnSoldierFireListener;
 import models.buildings.BuildingDestructionReport;
@@ -51,6 +51,5 @@ public class GeneralSoldierGraphicHelper extends SoldierGraphicHelper implements
     public void onSoldierFire(BuildingDestructionReport report)
     {
         getDrawer().playAnimation(SoldierDrawer.ATTACK);
-        report.getBuilding().getAttackHelper().getGraphicHelper().getBuildingDrawer().healthDecreseBarLoading(report.getInitialStrength(), report.getFinalStrength());
     }
 }

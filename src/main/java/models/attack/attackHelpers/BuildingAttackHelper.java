@@ -1,7 +1,6 @@
 package models.attack.attackHelpers;
 
 import graphics.helpers.AttackBuildingGraphicHelper;
-import graphics.helpers.BuildingGraphicHelper;
 import graphics.helpers.IOnDestroyListener;
 import graphics.helpers.IOnReloadListener;
 import models.attack.Attack;
@@ -96,5 +95,11 @@ public class BuildingAttackHelper implements IOnReloadListener
         this.graphicHelper = graphicHelper;
         setDestroyListener(graphicHelper);
         graphicHelper.setReloadListener(this);
+    }
+
+    public int getMaximumHealthThisLevel()
+    {
+        //TODO
+        return 0;
     }
 }

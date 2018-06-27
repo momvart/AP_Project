@@ -1,7 +1,7 @@
 package graphics.helpers;
 
-import graphics.layers.Layer;
 import graphics.drawers.SoldierDrawer;
+import graphics.layers.Layer;
 import models.attack.attackHelpers.HealerAttackHelper;
 import models.attack.attackHelpers.IOnHealerHealListener;
 import models.soldiers.Soldier;
@@ -60,7 +60,7 @@ public class HealerGraphicHelper extends SoldierGraphicHelper implements IOnHeal
         {
             SoldierDrawer soldierDrawer = report.getSoldier().getAttackHelper().getGraphicHelper().getDrawer();
             soldierDrawer.beeingHealedGlow();
-            soldierDrawer.healthIncreaseBarLoading(report.getInitialHealth(), report.getFinalHealth());
+            soldierDrawer.healthIncreaseBarLoading(report.getInitialHealth(), report.getFinalHealth(), soldier.getAttackHelper().getInitialHealth());
         }
     }
 }
