@@ -2,6 +2,7 @@ package graphics.helpers;
 
 import graphics.drawers.SoldierDrawer;
 import graphics.layers.Layer;
+import models.attack.Attack;
 import models.attack.attackHelpers.GeneralSoldierAttackHelper;
 import models.attack.attackHelpers.IOnDecampListener;
 import models.attack.attackHelpers.IOnSoldierDieListener;
@@ -17,6 +18,7 @@ import static java.lang.Math.floor;
 public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnDecampListener, IOnSoldierDieListener
 {
     protected Soldier soldier;
+    private Attack attack;
 
     private SoldierDrawer drawer;
 
@@ -154,6 +156,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
             PointF newPosition = new PointF(drawer.getPosition().getX() + cos * soldier.getSpeed() * deltaT, drawer.getPosition().getY() + sin * soldier.getSpeed() * deltaT);
             if (floor(newPosition.getX()) != floor(soldier.getLocation().getX()) || floor(newPosition.getY()) != floor(soldier.getLocation().getY()))
             {
+                attack.moveOnLocation(soldier, soldier.getLocation(), new Point((int)floor(drawer.getPosition().getX()), (int)floor(drawer.getPosition().getY())));
                 soldier.setLocation(new Point((int)floor(drawer.getPosition().getX()), (int)floor(drawer.getPosition().getY())));
             }
             drawer.setPosition(newPosition.getX(), newPosition.getY());
