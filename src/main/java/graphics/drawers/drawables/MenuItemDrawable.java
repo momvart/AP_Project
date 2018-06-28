@@ -1,11 +1,8 @@
 package graphics.drawers.drawables;
 
-import graphics.Fonts;
-import graphics.GraphicsValues;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import menus.Menu;
-import utils.GraphicsUtilities;
 
 public class MenuItemDrawable extends ButtonDrawable
 {
@@ -22,4 +19,13 @@ public class MenuItemDrawable extends ButtonDrawable
         return menu;
     }
 
+    @Override
+    protected void onPreDraw(GraphicsContext gc)
+    {
+        if (menu.isFocused())
+            setFill(Color.rgb(128, 128, 128, 0.6));
+        else
+            setFill(Color.rgb(0, 0, 0, 0.6));
+        super.onPreDraw(gc);
+    }
 }

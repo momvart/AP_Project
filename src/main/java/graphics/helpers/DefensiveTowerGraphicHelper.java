@@ -76,11 +76,10 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
     @Override
     public void callOnReload()
     {
-        System.out.println("on reload ...........");
+        super.callOnReload();
         if (currentState == State.IDLE)
         {
             currentState = State.FIRING;
-            super.callOnReload();
         }
     }
 

@@ -158,7 +158,7 @@
     "targetType": "GROUND",
     "udmginc": 1,
     "initialDamage": 2,
-    "attackRange": 4,
+    "attackRange": 5,
     "type": 9,
     "name": "Cannon",
     "buildCost": {

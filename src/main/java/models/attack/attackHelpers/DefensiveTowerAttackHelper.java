@@ -48,15 +48,14 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
     public void onReload()
     {
         super.onReload();
-        System.out.println("on reload ");
         if (!destroyed)
         {
             try
             {
-                System.out.println("set target requested ");
                 setTarget();
             }
             catch (SoldierNotFoundException ignored) {}
+            attack();
         }
     }
 

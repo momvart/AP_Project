@@ -4,7 +4,10 @@ import graphics.drawers.Drawer;
 import graphics.drawers.drawables.MenuItemDrawable;
 import graphics.positioning.NormalPositioningSystem;
 import javafx.scene.input.MouseEvent;
-import menus.*;
+import menus.IMenuClickListener;
+import menus.Menu;
+import menus.ParentMenu;
+import menus.Submenu;
 import utils.RectF;
 
 import java.util.ArrayList;
@@ -87,6 +90,9 @@ public class MenuLayer extends Layer
             setCurrentMenu((ParentMenu)item);
         else if (item.getId() == Menu.Id.BACK)
             setCurrentMenu(((Submenu)currentMenu).getParent());
+
+        currentMenu.getMenuItems().stream().filter(Menu::isFocused).findFirst().ifPresent(i -> i.setFocused(false));
+        item.setFocused(true);
     }
 
 

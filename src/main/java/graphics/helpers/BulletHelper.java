@@ -23,12 +23,15 @@ public class BulletHelper implements IFrameUpdatable
     public BulletHelper(DefensiveTowerGraphicHelper towerGraphicHelper, Layer layer)
     {
         this.towerGraphicHelper = towerGraphicHelper;
+
         try
         {
             drawer = new Drawer(GraphicsUtilities.createImageDrawable("assets/bullets/arrow.png", 10, 10, true, 0.5, 0.5));
         }
         catch (URISyntaxException e) {}
+
         setUpBulletProperties(layer);
+
     }
 
     public void setUpBulletProperties(Layer layer)

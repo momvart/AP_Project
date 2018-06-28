@@ -20,6 +20,7 @@ public class CannonBulletHelper extends BulletHelper
     public CannonBulletHelper(DefensiveTowerGraphicHelper towerGraphicHelper, Layer layer)
     {
         super(towerGraphicHelper, layer);
+
         try
         {
             drawer = new Drawer(GraphicsUtilities.createImageDrawable("assets/bullets/cannonBullet.png", 10, 10, true, .5, .5));
@@ -28,6 +29,7 @@ public class CannonBulletHelper extends BulletHelper
         {
         }
         setUpBulletProperties(layer);
+
     }
 
     @Override

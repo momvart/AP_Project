@@ -39,7 +39,6 @@ public class AttackBuildingGraphicHelper extends BuildingGraphicHelper implement
     @Override
     public void callOnReload()
     {
-        System.out.println("call on reload fuckinnn in......");
         super.callOnReload();
     }
 

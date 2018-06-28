@@ -4,6 +4,7 @@ import graphics.Fonts;
 import graphics.GraphicsValues;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import utils.GraphicsUtilities;
 
 public class ButtonDrawable extends Drawable
@@ -35,6 +36,13 @@ public class ButtonDrawable extends Drawable
         this.label.setPivot(.5, 1);
 
         setSize(width, height);
+    }
+
+    @Override
+    public void setFill(Paint fill)
+    {
+        super.setFill(fill);
+        background.setFill(fill);
     }
 
     @Override

@@ -8,6 +8,8 @@ public class Menu
     private String text;
     private String iconPath;
     protected boolean clickable = true;
+    private boolean focusable = false;
+    private boolean focused = false;
 
     public Menu(int id, String text)
     {
@@ -65,6 +67,27 @@ public class Menu
     public boolean isClickable()
     {
         return clickable;
+    }
+
+    public boolean isFocusable()
+    {
+        return focusable;
+    }
+
+    public void setFocusable(boolean focusable)
+    {
+        this.focusable = focusable;
+    }
+
+    public boolean isFocused()
+    {
+        return focused;
+    }
+
+    public void setFocused(boolean focused)
+    {
+        if (focusable)
+            this.focused = focused;
     }
 
     public static class Id

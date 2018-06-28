@@ -4,7 +4,6 @@ import exceptions.SoldierNotFoundException;
 import models.attack.Attack;
 import models.buildings.DefensiveTower;
 import models.soldiers.Soldier;
-import models.soldiers.SoldierInjuryReport;
 import utils.Point;
 
 import java.util.ArrayList;
@@ -48,8 +47,6 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
     public void attack()
     {
         DefensiveTower tower = (DefensiveTower)building;
-        ArrayList<SoldierInjuryReport> soldiersInjuredDirectly = new ArrayList<>();
-        ArrayList<SoldierInjuryReport> soldiersInjuredImplicitly = new ArrayList<>();
         if (mainTargets != null)
             for (Soldier soldier : mainTargets)
                 soldier.getAttackHelper().decreaseHealth(tower.getDamagePower());

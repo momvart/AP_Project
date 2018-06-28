@@ -116,7 +116,6 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         }
         nextCheckPointF = null;
 
-
     }
 
     private void doReplacing(double deltaT)
