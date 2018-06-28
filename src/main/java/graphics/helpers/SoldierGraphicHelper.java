@@ -156,7 +156,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
             PointF newPosition = new PointF(drawer.getPosition().getX() + cos * soldier.getSpeed() * deltaT, drawer.getPosition().getY() + sin * soldier.getSpeed() * deltaT);
             if (floor(newPosition.getX()) != floor(soldier.getLocation().getX()) || floor(newPosition.getY()) != floor(soldier.getLocation().getY()))
             {
-                attack.moveOnLocation(soldier, soldier.getLocation(), new Point((int)floor(drawer.getPosition().getX()), (int)floor(drawer.getPosition().getY())));
+                soldier.getAttackHelper().getAttack().moveOnLocation(soldier, soldier.getLocation(), new Point((int)floor(drawer.getPosition().getX()), (int)floor(drawer.getPosition().getY())));
                 soldier.setLocation(new Point((int)floor(drawer.getPosition().getX()), (int)floor(drawer.getPosition().getY())));
             }
             drawer.setPosition(newPosition.getX(), newPosition.getY());
