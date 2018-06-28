@@ -40,10 +40,10 @@ public class FirstBasicAnimTest extends Application
 
         AnimationDrawer drawer1 = new AnimationDrawer(new ImageDrawable(null));
         {
-            FrameAnimationDrawable anim = GraphicsUtilities.createFrameAnimDrawableFrom(getClass().getClassLoader().getResource("assets/soldiers/guardian/1/idle").toURI(), 0.75, 100);
+            FrameAnimationDrawable anim = GraphicsUtilities.createFrameAnimDrawableFrom(getClass().getClassLoader().getResource("assets/soldiers/guardian1/1/idle").toURI(), 0.75, 100);
             drawer1.addAnimation("idle", anim);
-            drawer1.addAnimation("run", GraphicsUtilities.createFrameAnimDrawableFrom(getClass().getClassLoader().getResource("assets/soldiers/guardian/1/run").toURI(), 0.75, 100));
-            drawer1.addAnimation("attack", GraphicsUtilities.createFrameAnimDrawableFrom(getClass().getClassLoader().getResource("assets/soldiers/guardian/1/attack").toURI(), 0.75, 100));
+            drawer1.addAnimation("run", GraphicsUtilities.createFrameAnimDrawableFrom(getClass().getClassLoader().getResource("assets/soldiers/guardian1/1/run").toURI(), 0.75, 100));
+            drawer1.addAnimation("attack", GraphicsUtilities.createFrameAnimDrawableFrom(getClass().getClassLoader().getResource("assets/soldiers/guardian1/1/attack").toURI(), 0.75, 100));
             drawer1.playAnimation("idle");
             drawer1.setPosition(0, 0);
             drawer1.setLayer(layer);

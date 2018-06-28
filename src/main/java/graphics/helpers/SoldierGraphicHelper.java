@@ -32,14 +32,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     public SoldierGraphicHelper(Soldier soldier, Layer layer)
     {
         this.soldier = soldier;
-        try
-        {
-            drawer = new SoldierDrawer(soldier);
-        }
-        catch (URISyntaxException e)
-        {
-            e.printStackTrace();
-        }
+        drawer = new SoldierDrawer(soldier);
 
         setReloadDuration(.7);
 
@@ -95,8 +88,9 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     {
         makeRun();
         moveDest = dest;
-        PositioningSystem ps = getDrawer().getLayer().getPosSys();
-        drawer.getCurrentAnim().setScale(ps.convertX(dest) < ps.convertX(drawer.getPosition()) ? -1 : 1, 1);
+
+        drawer.setFace(dest.getX() - drawer.getPosition().getX(), dest.getY() - drawer.getPosition().getY());
+
         List<Point> soldierPath = soldier.getAttackHelper().getAttack().getSoldierPath(getVeryPoint(drawer.getPosition()), getVeryPoint(moveDest), soldier.getMoveType() == MoveType.AIR);
         Point lastPoint = soldierPath.get(1);
         facingBuildingPoint = lastPoint;
@@ -179,7 +173,6 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     }
 
 
-
     private void onMoveFinished()
     {
         makeIdle();
@@ -237,7 +230,6 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     {
 
     }
-
 
 
     public enum Status

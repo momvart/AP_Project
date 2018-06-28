@@ -7,7 +7,7 @@ import models.buildings.Building;
 
 public class AttackBuildingGraphicHelper extends BuildingGraphicHelper implements IOnDestroyListener
 {
-    //private AttackBuildingDrawer buildingDrawer;
+    private AttackBuildingDrawer buildingDrawer;
 
     public AttackBuildingGraphicHelper(Building building, Layer layer, Map map)
     {
@@ -31,13 +31,12 @@ public class AttackBuildingGraphicHelper extends BuildingGraphicHelper implement
         buildingDrawer.updateDrawer();
     }
 
-    /*
-        @Override
-        public AttackBuildingDrawer getBuildingDrawer()
-        {
-            return buildingDrawer;
-        }
-    */
+    @Override
+    public AttackBuildingDrawer getBuildingDrawer()
+    {
+        return buildingDrawer;
+    }
+
     public void updateDrawer()
     {
         getBuildingDrawer().updateDrawer();

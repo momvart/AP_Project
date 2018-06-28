@@ -125,7 +125,7 @@ public class GraphicView
         {
             try
             {
-                ImageDrawable img = GraphicsUtilities.createImageDrawable("assets/soldiers/guardian/1/idle/001.png", cellSize, cellSize, false);
+                ImageDrawable img = GraphicsUtilities.createImageDrawable("assets/soldiers/guardian1/1/idle/001.png", cellSize, cellSize, false);
                 img.setPivot(0.5, 0.5);
                 Drawer d = new Drawer(img);
                 Building building;
@@ -160,7 +160,7 @@ public class GraphicView
         {
             try
             {
-                ImageDrawable img = GraphicsUtilities.createImageDrawable("assets/soldiers/guardian/1/idle/001.png", cellSize, cellSize, false);
+                ImageDrawable img = GraphicsUtilities.createImageDrawable("assets/soldiers/guardian1/1/idle/001.png", cellSize, cellSize, false);
                 img.setPivot(.5, .5);
                 Drawer d = new Drawer(img);
                 d.setPosition(bg.getWidth() / 2, (i) * (cellSize + padding) + (cellSize / 2 + padding));

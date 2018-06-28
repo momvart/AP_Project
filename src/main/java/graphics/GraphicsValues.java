@@ -1,5 +1,6 @@
 package graphics;
 
+import graphics.drawers.SoldierDrawer;
 import graphics.drawers.drawables.ImageDrawable;
 import graphics.positioning.IsometricPositioningSystem;
 import models.buildings.BuildingValues;
@@ -7,6 +8,7 @@ import models.soldiers.SoldierValues;
 import utils.GraphicsUtilities;
 
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,7 +43,7 @@ public class GraphicsValues
         return SOLDIERS_ASSETS_PATH + "/" + SoldierValues.getSoldierInfo(soldierType).getName().toLowerCase().replace(" ", "");
     }
 
-    public static ImageDrawable[] getSoldierFrames(int soldierType, int level, String animKey) throws URISyntaxException
+    public static ImageDrawable[] getSoldierFrames(int soldierType, int level, String animKey, String face)
     {
         if (soldierFrames == null)
             soldierFrames = new ArrayList<>(Collections.nCopies(SoldierValues.SOLDIER_TYPES_COUNT, null));
@@ -51,14 +53,17 @@ public class GraphicsValues
             soldierFrames.set(soldierType - 1, new HashMap<>());
 
         HashMap<String, ImageDrawable[]> frames = soldierFrames.get(soldierType - 1);
-        if (!frames.containsKey(animKey + level))
-        {
-            frames.put(animKey + level, GraphicsUtilities.createFramesFrom(
-                    getSoldierAssetsPath(soldierType) + "/" + (level + 1) + "/" + animKey.toLowerCase(),
-                    50, 0, 0));
-        }
+        final String key = animKey + level + face;
+        if (!frames.containsKey(key))
+            try
+            {
+                frames.put(key, GraphicsUtilities.createFramesFrom(
+                        Paths.get(getSoldierAssetsPath(soldierType), Integer.toString(level + 1), animKey.toLowerCase(), face.toLowerCase()).toString(),
+                        50, 0, 0));
+            }
+            catch (Exception ex) { ex.printStackTrace();}
 
-        return frames.get(animKey + level);
+        return frames.get(key);
     }
 
     private static HashMap<String, ImageDrawable> buildings;
