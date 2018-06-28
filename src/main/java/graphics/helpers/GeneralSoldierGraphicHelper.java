@@ -43,8 +43,6 @@ public class GeneralSoldierGraphicHelper extends SoldierGraphicHelper implements
         {
             startJoggingToward(new PointF(newDest));
         }
-        else
-            makeIdle();
     }
 
     @Override

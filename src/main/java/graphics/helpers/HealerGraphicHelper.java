@@ -46,10 +46,6 @@ public class HealerGraphicHelper extends SoldierGraphicHelper implements IOnHeal
         {
             startJoggingToward(new PointF(newDest));
         }
-        else
-        {
-            makeIdle();
-        }
     }
 
     @Override

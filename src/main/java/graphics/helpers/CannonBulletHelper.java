@@ -1,6 +1,11 @@
 package graphics.helpers;
 
+import graphics.drawers.Drawer;
+import graphics.layers.Layer;
+import utils.GraphicsUtilities;
 import utils.PointF;
+
+import java.net.URISyntaxException;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
@@ -12,9 +17,24 @@ public class CannonBulletHelper extends BulletHelper
     private PointF vertex;
     private double verticalSpeed;
 
-    public CannonBulletHelper()
+    public CannonBulletHelper(DefensiveTowerGraphicHelper towerGraphicHelper, Layer layer)
     {
-        super();
+        super(towerGraphicHelper, layer);
+        try
+        {
+            drawer = new Drawer(GraphicsUtilities.createImageDrawable("assets/bullets/cannonBullet.png", 10, 10, true, .5, .5));
+        }
+        catch (URISyntaxException e)
+        {
+        }
+        setUpBulletProperties(layer);
+    }
+
+    @Override
+    public void setUpBulletProperties(Layer layer)
+    {
+        drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
+        drawer.setLayer(layer);
     }
 
     private PointF getVertexOfParabola(PointF start, PointF end)
@@ -44,7 +64,11 @@ public class CannonBulletHelper extends BulletHelper
         if (hitTarget)
             return;
         if (reachedVertex && PointF.euclideanDistance(drawer.getPosition(), end) < .1)
+        {
             hitTarget = true;
+            drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
+            towerGraphicHelper.onBulletHit(DefenseKind.AREA_SPLASH);
+        }
         if (PointF.euclideanDistance(drawer.getPosition(), vertex) < .1)
         {
             reachedVertex = true;

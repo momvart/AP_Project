@@ -79,7 +79,7 @@ public abstract class MapStage extends Stage
 
         GraphicsValues.setScale(0.8);
         if (System.getProperty("os.name").equals("Linux"))
-            GraphicsValues.setScale(1.5);
+            GraphicsValues.setScale(1);
 
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);

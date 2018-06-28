@@ -1,7 +1,6 @@
 package models.attack.attackHelpers;
 
 import exceptions.SoldierNotFoundException;
-import graphics.helpers.DefenseKind;
 import models.attack.Attack;
 import models.buildings.DefensiveTower;
 import models.soldiers.Soldier;
@@ -31,6 +30,12 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         wholeTargets = new ArrayList<>();
         List<Soldier> soldiersInRange = null;
         soldier = attack.getNearestSoldier(defensiveTower.getLocation(), defensiveTower.getRange(), defensiveTower.getDefenseType().convertToMoveType());
+        if (soldier != null)
+        {
+            triggerListener.onBulletTrigger(soldier);
+            System.out.println("bullet release requested ..............");
+        }
+
         Stream<Soldier> soldiers = attack.getSoldiersOnLocations().getSoldiers(soldier, defensiveTower.getDefenseType().convertToMoveType());
         mainTargets.addAll(soldiers.collect(Collectors.toList()));
         soldiersInRange = attack.getSoldiersInRange(defensiveTower.getLocation(), SECOND_RANGE, defensiveTower.getDefenseType().convertToMoveType());
@@ -47,24 +52,10 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         ArrayList<SoldierInjuryReport> soldiersInjuredImplicitly = new ArrayList<>();
         if (mainTargets != null)
             for (Soldier soldier : mainTargets)
-            {
-                int initialHealth = soldier.getAttackHelper().getHealth();
                 soldier.getAttackHelper().decreaseHealth(tower.getDamagePower());
-                int finalHealth = Math.max(soldier.getAttackHelper().getHealth(), 0);
-                soldiersInjuredDirectly.add(new SoldierInjuryReport(soldier, initialHealth, finalHealth));
-            }
         if (wholeTargets != null)
             for (Soldier soldier : wholeTargets)
-            {
-                int initialHealth = soldier.getAttackHelper().getHealth();
                 soldier.getAttackHelper().decreaseHealth(tower.getDamagePower() - 1);
-                int finalHealth = Math.max(soldier.getAttackHelper().getHealth(), 0);
-                soldiersInjuredDirectly.add(new SoldierInjuryReport(soldier, initialHealth, finalHealth));
-            }
-        if ((mainTargets != null && mainTargets.size() != 0) || (wholeTargets != null && wholeTargets.size() != 0))
-        {
-            fireListener.onDefenseFire(soldier, DefenseKind.AREA_SPLASH, soldiersInjuredDirectly, soldiersInjuredImplicitly);
-        }
 
         mainTargets = null;
         wholeTargets = null;

@@ -3,8 +3,7 @@ package models.attack.attackHelpers;
 import exceptions.SoldierNotFoundException;
 import graphics.helpers.AttackBuildingGraphicHelper;
 import graphics.helpers.DefensiveTowerGraphicHelper;
-import graphics.helpers.IOnDefenseFireListener;
-import graphics.helpers.IOnReloadListener;
+import graphics.helpers.IOnBulletTriggerListener;
 import models.attack.Attack;
 import models.buildings.DefensiveTower;
 import models.soldiers.Soldier;
@@ -38,34 +37,34 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
         }
     }
 
-    @Override
-    public void onReload()
-    {
-        super.onReload();
-        if (!destroyed)
-        {
-            try { setTarget(); }
-            catch (SoldierNotFoundException ignored) {}
-        }
-    }
+    //graphcs
+    protected IOnBulletTriggerListener triggerListener;
 
     public abstract void setTarget() throws SoldierNotFoundException;
 
     public abstract void attack();
 
-    //graphcs
-    IOnDefenseFireListener fireListener;
-
-    public IOnDefenseFireListener getFireListener()
+    @Override
+    public void onReload()
     {
-        return fireListener;
+        super.onReload();
+        System.out.println("on reload ");
+        if (!destroyed)
+        {
+            try
+            {
+                System.out.println("set target requested ");
+                setTarget();
+            }
+            catch (SoldierNotFoundException ignored) {}
+        }
     }
 
     DefensiveTowerGraphicHelper towerGraphicHelper;
 
-    public void setDefenseFireListener(IOnDefenseFireListener defenseFireListener)
+    public void setTriggerListener(IOnBulletTriggerListener triggerListener)
     {
-        this.fireListener = defenseFireListener;
+        this.triggerListener = triggerListener;
     }
 
     @Override
@@ -77,7 +76,6 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
 
         DefensiveTowerGraphicHelper gh = (DefensiveTowerGraphicHelper)graphicHelper;
         gh.setBulletHitListener(this);
-        this.setDefenseFireListener(gh);
     }
 
     @Override

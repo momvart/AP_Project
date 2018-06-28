@@ -2,7 +2,6 @@ package graphics.helpers;
 
 import graphics.drawers.SoldierDrawer;
 import graphics.layers.Layer;
-import graphics.positioning.PositioningSystem;
 import models.attack.attackHelpers.GeneralSoldierAttackHelper;
 import models.attack.attackHelpers.IOnDecampListener;
 import models.attack.attackHelpers.IOnSoldierDieListener;
@@ -11,7 +10,6 @@ import models.soldiers.Soldier;
 import utils.Point;
 import utils.PointF;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 import static java.lang.Math.floor;
@@ -52,12 +50,6 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     public Status getStatus()
     {
         return status;
-    }
-
-    public void makeIdle()
-    {
-        status = Status.IDLE;
-        drawer.playAnimation(SoldierDrawer.IDLE);
     }
 
     private void makeAttack()
@@ -148,6 +140,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
                 onMoveFinished();
                 return;
             }
+            drawer.setFace(cos, sin);
         }
         if (nextCheckPointF != null)
         {
@@ -175,7 +168,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 
     private void onMoveFinished()
     {
-        makeIdle();
+        makeAttack();
         drawer.setPosition(finalStandingPoint.getX(), finalStandingPoint.getY());
         soldier.setLocation(getVeryPoint(moveDest));
         if (moveListener != null)
@@ -195,7 +188,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     }
 
     @Override
-    protected void callOnReload()
+    public void callOnReload()
     {
         GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
         if (turn == 1)
@@ -203,7 +196,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
             triggerSoldier();
             turn++;
         }
-        if (status == Status.IDLE || status == Status.ATTACK)
+        if (status == Status.ATTACK)
         {
             makeAttack();
             System.out.println("strength is :" + gsah.getTarget().getAttackHelper().getStrength());
@@ -216,25 +209,8 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         //implemented in the subClasses
     }
 
-    private void onDragonFire()
-    {
-
-    }
-
-    private void onArcherFire()
-    {
-
-    }
-
-    private void onWallBreakerFire()
-    {
-
-    }
-
-
     public enum Status
     {
-        IDLE,
         DIE,
         RUN,
         ATTACK;

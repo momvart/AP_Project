@@ -1,21 +1,16 @@
 package graphics.helpers;
 
 import graphics.layers.Layer;
-import graphics.drawers.BuildingDrawer;
 import models.Map;
 import models.buildings.Building;
 
-public abstract class BuildingGraphicHelper extends GraphicHelper
+public class BuildingGraphicHelper extends GraphicHelper
 {
+    protected Building building;
     public BuildingGraphicHelper(Building building, Layer layer, Map map)
     {
-        setReloadDuration(0.5);
+        this.building = building;
     }
 
-    public void setUpListeners()
-    {
-
-    }
-
-    public abstract BuildingDrawer getBuildingDrawer();
+    public void setUpListeners() {}
 }

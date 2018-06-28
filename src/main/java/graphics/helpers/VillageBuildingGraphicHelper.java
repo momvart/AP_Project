@@ -25,7 +25,6 @@ public class VillageBuildingGraphicHelper extends BuildingGraphicHelper implemen
         buildingDrawer.updateDrawer();
     }
 
-    @Override
     public VillageBuildingDrawer getBuildingDrawer()
     {
         return buildingDrawer;

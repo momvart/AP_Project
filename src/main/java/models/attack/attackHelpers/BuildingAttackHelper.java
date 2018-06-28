@@ -93,8 +93,6 @@ public class BuildingAttackHelper implements IOnReloadListener
     public void setGraphicHelper(AttackBuildingGraphicHelper graphicHelper)
     {
         this.graphicHelper = graphicHelper;
-        setDestroyListener(graphicHelper);
-        graphicHelper.setReloadListener(this);
     }
 
     public int getMaximumHealthThisLevel()

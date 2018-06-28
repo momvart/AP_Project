@@ -2,24 +2,32 @@ package graphics.helpers;
 
 import graphics.layers.Layer;
 import models.Map;
+import models.attack.attackHelpers.DefensiveTowerAttackHelper;
 import models.attack.attackHelpers.IOnBulletHitListener;
 import models.buildings.Building;
-import models.soldiers.SoldierInjuryReport;
 import utils.Point;
 import utils.PointF;
 
-import java.util.ArrayList;
-
-public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicHelper implements IOnDefenseFireListener
+public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicHelper implements IOnBulletTriggerListener
 {
+    DefensiveTowerAttackHelper attackHelper;
     IOnBulletHitListener bulletHitListener;
     State currentState = State.IDLE;
     protected PointF bulletUltimatePosition;
-    protected final int bulletMaximumSpeed = 1;
+    Layer layer;
+
 
     public DefensiveTowerGraphicHelper(Building building, Layer layer, Map map)
     {
         super(building, layer, map);
+        setReloadDuration(0.5);
+        attackHelper = (DefensiveTowerAttackHelper)building.getAttackHelper();
+        this.layer = layer;
+    }
+
+    public Layer getLayer()
+    {
+        return layer;
     }
 
     public IOnBulletHitListener getBulletHitListener()
@@ -35,25 +43,22 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
     @Override
     public void setUpListeners()
     {
+        System.out.println("defensive tower setup listener method invoked ");
         super.setUpListeners();
+        attackHelper.setTriggerListener(this);
+        this.bulletHitListener = attackHelper;
+        this.setReloadListener(attackHelper);
     }
 
-    private void splashAreaIfNeeded(Point targetLocation, DefenseKind defenseKind)
+    private void splashAreaIfNeeded(PointF targetLocation, DefenseKind defenseKind)
     {
         if (defenseKind == DefenseKind.AREA_SPLASH)
             playSplashAnimation(targetLocation);
     }
 
-    private void playSplashAnimation(Point targetLocation)
+    private void playSplashAnimation(PointF targetLocation)
     {
         //TODO playing an splashing animation
-    }
-
-    @Override
-    public void makeDestroy()
-    {
-        super.makeDestroy();
-        currentState = State.DESTROYED;
     }
 
     private void makeIdle()
@@ -69,8 +74,9 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
     }
 
     @Override
-    protected void callOnReload()
+    public void callOnReload()
     {
+        System.out.println("on reload ...........");
         if (currentState == State.IDLE)
         {
             currentState = State.FIRING;
@@ -90,11 +96,23 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
     }
 
     @Override
-    public void onDefenseFire(Point targetLocation, DefenseKind defenseKind, ArrayList<SoldierInjuryReport> soldiersInjuredDirectly, ArrayList<SoldierInjuryReport> soldiersInjuredImplicitly)
+    public void onBulletTrigger(Point targetedPoint)
     {
-        splashAreaIfNeeded(targetLocation, defenseKind);
+        System.out.println("bullet triggered ");
+        bulletUltimatePosition = new PointF(targetedPoint);
+        triggerBullet();
+    }
+
+    protected abstract void triggerBullet();
+
+    public void onBulletHit(DefenseKind defenseKind)
+    {
+        bulletHitListener.onBulletHit();
+        splashAreaIfNeeded(bulletUltimatePosition, defenseKind);
         currentState = State.IDLE;
     }
+
+    public abstract BulletHelper getBullet();
 
     public enum State
     {

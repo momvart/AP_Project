@@ -59,7 +59,6 @@ public class AttackStage extends MapStage
             helper = new GeneralSoldierGraphicHelper(soldier, getObjectsLayer());
         }
 
-        helper.makeIdle();
         soldier.getAttackHelper().setGraphicHelper(helper);
         helper.setUpListeners();
         gHandler.addUpdatable(helper);
