@@ -113,17 +113,31 @@ public abstract class MapStage extends Stage
     {
         try
         {
-            ImageDrawable bg = GraphicsUtilities.createImageDrawable("assets/floor/background2.png", PositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 30 * 2,
-                    PositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 30 * 2, true);
+            ImageDrawable bg;
+            ImageDrawable tile1;
+            ImageDrawable tile2;
+            if (this instanceof AttackStage)
+                bg = GraphicsUtilities.createImageDrawable("assets/floor/background.png", PositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 30 * 2,
+                        PositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 30 * 2, true);
+            else
+                bg = GraphicsUtilities.createImageDrawable("assets/floor/background2.png", PositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 30 * 2,
+                        PositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 30 * 2, true);
             Drawer bgDrawer = new Drawer(bg);
             bgDrawer.setPosition(0, 0);
             bg.setPivot(0, 0.5);
             bgDrawer.setLayer(lbackground);
 
-
-            ImageDrawable tile1 = GraphicsUtilities.createImageDrawable("assets/floor/isometric1.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
+            if (this instanceof AttackStage)
+            {
+                tile1 = GraphicsUtilities.createImageDrawable("assets/floor/isometric3.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
+                tile2 = GraphicsUtilities.createImageDrawable("assets/floor/isometric4.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
+            }
+            else
+            {
+                tile1 = GraphicsUtilities.createImageDrawable("assets/floor/isometric1.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
+                tile2 = GraphicsUtilities.createImageDrawable("assets/floor/isometric2.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
+            }
             tile1.setPivot(.5, .5);
-            ImageDrawable tile2 = GraphicsUtilities.createImageDrawable("assets/floor/isometric2.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
             tile2.setPivot(.5, .5);
             for (int i = 0; i < map.getWidth(); i++)
                 for (int j = 0; j < map.getHeight(); j++)

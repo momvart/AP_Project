@@ -64,4 +64,5 @@ public class AttackStage extends MapStage
         helper.setUpListeners();
         gHandler.addUpdatable(helper);
     }
+
 }
