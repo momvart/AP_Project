@@ -2,6 +2,7 @@ package graphics.drawers;
 
 import graphics.GraphicsValues;
 import graphics.drawers.drawables.FrameAnimationDrawable;
+import graphics.drawers.drawables.ImageDrawable;
 import javafx.scene.canvas.GraphicsContext;
 import models.soldiers.Soldier;
 
@@ -72,8 +73,10 @@ public class SoldierDrawer extends LayerDrawer
     {
         String strFace = face == Face.UP || face == Face.RIGHT ? "right" : "down";
 //        base.addAnimation(IDLE, new FrameAnimationDrawable(GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), IDLE, face), 1, 0.5, 1));
-        base.addAnimation(RUN, new FrameAnimationDrawable(GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), RUN, strFace), 0.5, 0.5, 1));
-        base.addAnimation(ATTACK, new FrameAnimationDrawable(GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), ATTACK, strFace), 0.5, 0.5, 1));
+        ImageDrawable[] frames = GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), RUN, strFace);
+        base.addAnimation(RUN, new FrameAnimationDrawable(frames, frames.length * 0.1, 0, 0));
+        frames = GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), ATTACK, strFace);
+        base.addAnimation(ATTACK, new FrameAnimationDrawable(frames, frames.length * 0.1, 0, 0));
 //        base.addAnimation(DIE, new FrameAnimationDrawable(GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), DIE, face), 1, 0.5, 1));
 
         playAnimation(lastAnim);

@@ -53,7 +53,7 @@ public class HProgressbarDrawable extends Drawable
      */
     public void setProgress(double progress)
     {
-        this.progress = progress;
+        this.progress = Math.min(Math.max(progress, 0), 1);
     }
 
     public void setRightToLeft(boolean rtl)
