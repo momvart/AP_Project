@@ -45,8 +45,7 @@ public class LayerDrawer extends Drawer implements IFrameUpdatable
     @Override
     public void update(double deltaT)
     {
-        drawers.stream()
-                .filter(d -> d instanceof IFrameUpdatable)
-                .forEach(d -> ((IFrameUpdatable)d).update(deltaT));
+        super.update(deltaT);
+        drawers.forEach(d -> d.update(deltaT));
     }
 }

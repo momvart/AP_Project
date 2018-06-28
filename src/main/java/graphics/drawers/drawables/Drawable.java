@@ -6,7 +6,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.transform.*;
 import utils.*;
 
-public abstract class Drawable implements IDrawable
+public abstract class Drawable implements IDrawable, IAlphaDrawable
 {
     private PointF pivot = new PointF(0f, 0f);
     private SizeF size = new SizeF(0, 0);

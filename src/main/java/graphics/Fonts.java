@@ -6,6 +6,7 @@ public class Fonts
 {
     private static final String FONT_PATH = "assets/fonts/Supercell.ttf";
     private static Font tiny;
+    private static Font smaller;
     private static Font small;
     private static Font medium;
     private static Font large;
@@ -13,6 +14,7 @@ public class Fonts
     public static void initialize()
     {
         tiny = Font.loadFont(Fonts.class.getClassLoader().getResourceAsStream(FONT_PATH), 5);
+        smaller = Font.loadFont(Fonts.class.getClassLoader().getResourceAsStream(FONT_PATH), 7.5);
         small = Font.loadFont(Fonts.class.getClassLoader().getResourceAsStream(FONT_PATH), 10);
         medium = Font.loadFont(Fonts.class.getClassLoader().getResourceAsStream(FONT_PATH), 15);
         large = Font.loadFont(Fonts.class.getClassLoader().getResourceAsStream(FONT_PATH), 20);
@@ -21,6 +23,11 @@ public class Fonts
     public static Font getTiny()
     {
         return tiny;
+    }
+
+    public static Font getSmaller()
+    {
+        return smaller;
     }
 
     public static Font getSmall()

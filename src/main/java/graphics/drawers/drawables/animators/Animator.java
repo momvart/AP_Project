@@ -23,15 +23,10 @@ public class Animator implements IFrameUpdatable
 
     public Animator(double duration)
     {
-        this(duration, false, Collections.emptyList());
+        this(duration, false);
     }
 
-    public Animator(double duration, boolean reversible, Drawable... targets)
-    {
-        this(duration, reversible, Arrays.asList(targets));
-    }
-
-    public Animator(double duration, boolean reversible, Collection<Drawable> targets)
+    public Animator(double duration, boolean reversible)
     {
         this.reversible = reversible;
         this.duration = duration;

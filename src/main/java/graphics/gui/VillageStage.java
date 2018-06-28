@@ -45,7 +45,7 @@ public class VillageStage extends MapStage
     public VillageStage(Village village, double width, double height)
     {
         super(village.getMap(), width, height);
-        lmenu = new MenuLayer(6, new RectF(0, height - CELL_SIZE, width, CELL_SIZE), MenuLayer.Orientation.HORIZONTAL);
+        lmenu = new MenuLayer(6, new RectF(0, height - CELL_SIZE - GraphicsValues.PADDING, width, CELL_SIZE), MenuLayer.Orientation.HORIZONTAL);
         lresource = new ResourceLayer(8, new RectF(width - 200 - GraphicsValues.PADDING * 2, 20, 200 + GraphicsValues.PADDING * 2, 70), village);
     }
 

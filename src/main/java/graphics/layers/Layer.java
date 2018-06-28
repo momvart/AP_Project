@@ -22,7 +22,6 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
     private double alpha = 1;
 
     private ArrayList<Drawer> drawers = new ArrayList<>();
-    private ArrayList<IFrameUpdatable> updatables = new ArrayList<>();
 
     private PositioningSystem posSys;
 
@@ -92,8 +91,6 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
     public void addObject(Drawer drawer)
     {
         drawers.add(drawer);
-        if (drawer instanceof IFrameUpdatable)
-            updatables.add((IFrameUpdatable)drawer);
         if (drawer.isClickable())
             addClickable(drawer);
     }
@@ -101,15 +98,12 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
     public void removeObject(Drawer drawer)
     {
         drawers.remove(drawer);
-        if (drawer instanceof IFrameUpdatable)
-            updatables.remove(drawer);
     }
 
     public void removeAllObjects()
     {
         drawers.clear();
         clickables.clear();
-        updatables.clear();
     }
 
     private HashSet<Drawer> clickables = new HashSet<>();
@@ -154,6 +148,6 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
     @Override
     public void update(double deltaT)
     {
-        updatables.forEach(d -> d.update(deltaT));
+        drawers.forEach(d -> d.update(deltaT));
     }
 }

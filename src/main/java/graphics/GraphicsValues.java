@@ -151,4 +151,18 @@ public class GraphicsValues
 
         return imgDestructed;
     }
+
+    private static ImageDrawable imgDust;
+
+    public static ImageDrawable getDustImage()
+    {
+        if (imgDust == null)
+            try
+            {
+                imgDust = GraphicsUtilities.createImageDrawable(BUILDINGS_DESTRUCTED_ASSETS_PATH + "/dust.png", -1, -1, false, 0.5, 0.5);
+            }
+            catch (URISyntaxException ignored) { }
+
+        return imgDust;
+    }
 }

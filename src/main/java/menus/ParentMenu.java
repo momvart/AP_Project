@@ -41,6 +41,11 @@ public class ParentMenu extends Menu
         return insertItem(new Menu(id, text));
     }
 
+    public ParentMenu insertItem(int id, String text, String iconPath)
+    {
+        return insertItem(new Menu(id, text, iconPath));
+    }
+
     public ParentMenu insertItem(Menu menu)
     {
         items.add(menu);

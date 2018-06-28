@@ -90,6 +90,11 @@ public class GraphicsUtilities
         return createImageDrawable(new File(GraphicsUtilities.class.getClassLoader().getResource(filePath).toURI()), width, height, inside);
     }
 
+    public static ImageDrawable createImageDrawable(String filePath, double width, double height, boolean inside, double pivotX, double pivotY) throws URISyntaxException
+    {
+        return createImageDrawable(new File(GraphicsUtilities.class.getClassLoader().getResource(filePath).toURI()), width, height, inside, pivotX, pivotY);
+    }
+
     public static ImageDrawable createImageDrawable(File file, double width, double height, boolean inside)
     {
         return createImageDrawable(file, width, height, inside, 0, 0);

@@ -16,7 +16,7 @@ public class AvailableBuildingsSubmenu extends Submenu implements IBuildingMenu
 {
     public AvailableBuildingsSubmenu(ParentMenu parent)
     {
-        super(Id.TH_AVAILABLE_BUILDINGS, "Available buildings", parent);
+        super(Id.TH_AVAILABLE_BUILDINGS, "Build", parent);
     }
 
     private void setItems()

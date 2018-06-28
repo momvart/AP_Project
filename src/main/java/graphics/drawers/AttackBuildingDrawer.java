@@ -2,9 +2,13 @@ package graphics.drawers;
 
 import graphics.GraphicsValues;
 import graphics.drawers.drawables.HProgressbarDrawable;
+import graphics.drawers.drawables.IAlphaDrawable;
+import graphics.drawers.drawables.animators.AlphaAnimator;
+import graphics.drawers.drawables.animators.ScaleAnimator;
 import javafx.scene.paint.Color;
 import models.Map;
 import models.buildings.Building;
+import utils.GraphicsUtilities;
 
 public class AttackBuildingDrawer extends BuildingDrawer
 {
@@ -30,14 +34,34 @@ public class AttackBuildingDrawer extends BuildingDrawer
         getDrawers().add(strengthbarDrawer);
     }
 
-    public void playDestroyAnimation()
+    public void healthDecreseBarLoading(int initialHealth, int finalHealth)
     {
         //TODO
     }
 
-    public void healthDecreseBarLoading(int initialHealth, int finalHealth)
+    private void destroyBuilding()
     {
-        //TODO
+        base.setDrawable(GraphicsValues.getDestructedImage());
+        strengthbarDrawer.setVisible(false);
+
+        Drawer dustDrawer = new Drawer(GraphicsValues.getDustImage());
+        getDrawers().add(dustDrawer);
+        ScaleAnimator scaler = new ScaleAnimator(0.5, 0, 1, dustDrawer.getDrawable());
+        AlphaAnimator alpha = new AlphaAnimator(0.5, 1, 0, dustDrawer.getDrawable());
+        AlphaAnimator baseAlpha = new AlphaAnimator(0.5, 0, 1, base.getDrawable());
+        scaler.start();
+        alpha.start();
+        baseAlpha.start();
+        addUpdatable(scaler);
+        addUpdatable(alpha);
+        addUpdatable(baseAlpha);
+        alpha.setOnFinish(() ->
+        {
+            getDrawers().remove(dustDrawer);
+            removeUpdatable(scaler);
+            removeUpdatable(alpha);
+            removeUpdatable(baseAlpha);
+        });
     }
 
     @Override
@@ -46,10 +70,7 @@ public class AttackBuildingDrawer extends BuildingDrawer
         super.updateDrawer();
 
         if (getBuilding().getAttackHelper().isDestroyed())
-        {
-            base.setDrawable(GraphicsValues.getDestructedImage());
-            strengthbarDrawer.setVisible(false);
-        }
+            destroyBuilding();
 
         if (getBuilding().getAttackHelper().getStrength() < getBuilding().getAttackHelper().getStartStrength() && !getBuilding().getAttackHelper().isDestroyed())
         {

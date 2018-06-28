@@ -1,5 +1,6 @@
 package graphics.drawers;
 
+import graphics.IFrameUpdatable;
 import graphics.layers.Layer;
 import graphics.drawers.drawables.Drawable;
 import javafx.geometry.Point2D;
@@ -8,7 +9,11 @@ import javafx.scene.input.MouseEvent;
 import utils.PointF;
 import utils.RectF;
 
-public class Drawer
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Drawer implements IFrameUpdatable
 {
     private Drawable drawable;
 
@@ -16,6 +21,8 @@ public class Drawer
     private PointF position = new PointF(0, 0);
 
     private Layer layer;
+
+    private ArrayList<IFrameUpdatable> updatables = new ArrayList<>();
 
     public Drawer() {}
 
@@ -135,6 +142,28 @@ public class Drawer
         if (!visible || getDrawable() == null)
             return;
         getDrawable().draw(gc);
+    }
+
+    private Queue<IFrameUpdatable> pendingAdds = new LinkedList<>();
+
+    public void addUpdatable(IFrameUpdatable updatable)
+    {
+        pendingAdds.add(updatable);
+    }
+
+    private Queue<IFrameUpdatable> pendingRemoves = new LinkedList<>();
+
+    public void removeUpdatable(IFrameUpdatable updatable) { pendingRemoves.add(updatable); }
+
+    @Override
+    public void update(double deltaT)
+    {
+        for (int i = 0; i < pendingAdds.size(); i++)
+            updatables.add(pendingAdds.poll());
+        for (int i = 0; i < pendingRemoves.size(); i++)
+            updatables.remove(pendingRemoves.poll());
+
+        updatables.forEach(u -> u.update(deltaT));
     }
 
     protected void onPostDraw(GraphicsContext gc)

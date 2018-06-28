@@ -55,5 +55,5 @@ public class Submenu extends ParentMenu
             super.handleCommand(command, container);
     }
 
-    private static Menu sBackItem = new Menu(Id.BACK, "back", "assets/menu/icons/back.png", false);
+    private static Menu sBackItem = new Menu(Id.BACK, "back", "assets/ui/back.png", false);
 }
