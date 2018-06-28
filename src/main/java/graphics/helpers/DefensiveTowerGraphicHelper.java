@@ -23,6 +23,7 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
         setReloadDuration(0.5);
         attackHelper = (DefensiveTowerAttackHelper)building.getAttackHelper();
         this.layer = layer;
+        buildingDrawer.updateDrawer();
     }
 
     public Layer getLayer()
@@ -43,7 +44,6 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
     @Override
     public void setUpListeners()
     {
-        System.out.println("defensive tower setup listener method invoked ");
         super.setUpListeners();
         attackHelper.setTriggerListener(this);
         this.bulletHitListener = attackHelper;
@@ -97,7 +97,6 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
     @Override
     public void onBulletTrigger(Point targetedPoint)
     {
-        System.out.println("bullet triggered ");
         bulletUltimatePosition = new PointF(targetedPoint);
         triggerBullet();
     }

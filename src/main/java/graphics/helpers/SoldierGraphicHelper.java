@@ -91,7 +91,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         if (lastPoint.getX() == moveDest.getX() + 1)
         {
             if (lastPoint.getY() == moveDest.getY() - 1)
-                finalStandingPoint = moveDest;
+                finalStandingPoint = new PointF(moveDest.getX() + .7, moveDest.getY() - .7);
             else if (lastPoint.getY() == moveDest.getY())
                 finalStandingPoint = new PointF(moveDest.getX(), moveDest.getY() + .5);
             else

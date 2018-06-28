@@ -2,6 +2,7 @@ package graphics.helpers;
 
 import graphics.IFrameUpdatable;
 import graphics.drawers.Drawer;
+import graphics.drawers.drawables.ImageDrawable;
 import graphics.layers.Layer;
 import utils.GraphicsUtilities;
 import utils.PointF;
@@ -11,11 +12,11 @@ import java.net.URISyntaxException;
 public class BulletHelper implements IFrameUpdatable
 {
     protected DefensiveTowerGraphicHelper towerGraphicHelper;
-    protected final double maxSpeed = 1;//TODO‌ to be manipulated
+    protected final double maxSpeed = 2;//TODO‌ to be manipulated
     protected Drawer drawer;
     protected PointF start;
     protected PointF end;
-    protected double speed = 1;
+    protected double speed = maxSpeed;
     protected boolean hitTarget = false;
     protected double cos;
     protected double sin;
@@ -26,12 +27,13 @@ public class BulletHelper implements IFrameUpdatable
 
         try
         {
-            drawer = new Drawer(GraphicsUtilities.createImageDrawable("assets/bullets/arrow.png", 10, 10, true, 0.5, 0.5));
+            ImageDrawable imageDrawable = GraphicsUtilities.createImageDrawable("assets/bullets/arrow.png", 10, 10, true, 0.5, 0.5);
+            drawer = new Drawer(imageDrawable);
+            drawer.addUpdatable(this);
         }
         catch (URISyntaxException e) {}
 
         setUpBulletProperties(layer);
-
     }
 
     public void setUpBulletProperties(Layer layer)
@@ -40,7 +42,8 @@ public class BulletHelper implements IFrameUpdatable
         drawer.setLayer(layer);
     }
 
-    public void startNewWave(PointF start, PointF end)
+
+    public void startNewWave(final PointF start, final PointF end)
     {
         System.out.println("on new wave we are ");
         this.start = start;
@@ -59,16 +62,14 @@ public class BulletHelper implements IFrameUpdatable
     @Override
     public void update(double deltaT)
     {
-        System.out.println("update on single target bullet....");
         doReplacing(deltaT);
     }
 
     public void doReplacing(double deltaT)
     {
-        System.out.println("on replacing we are ");
         if (end == null || start == null)
             return;
-        if (PointF.euclideanDistance(drawer.getPosition(), end) < .1)
+        if (PointF.euclideanDistance(drawer.getPosition(), end) < .5)
         {
             System.out.println("move has terminated ");
             hitTarget = true;
@@ -78,8 +79,6 @@ public class BulletHelper implements IFrameUpdatable
         if (hitTarget)
             return;
         double step = deltaT * speed;
-        System.out.println("step is :" + step);
         drawer.setPosition(drawer.getPosition().getX() + step * cos, drawer.getPosition().getY() + step * sin);
-        System.out.println("drawer new position is :" + drawer.getPosition());
     }
 }

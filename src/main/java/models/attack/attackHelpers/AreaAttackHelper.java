@@ -3,6 +3,7 @@ package models.attack.attackHelpers;
 import exceptions.SoldierNotFoundException;
 import models.attack.Attack;
 import models.buildings.DefensiveTower;
+import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import utils.Point;
 
@@ -29,7 +30,7 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         wholeTargets = new ArrayList<>();
         List<Soldier> soldiersInRange = null;
         soldier = attack.getNearestSoldier(defensiveTower.getLocation(), defensiveTower.getRange(), defensiveTower.getDefenseType().convertToMoveType());
-        if (soldier != null)
+        if (soldier != null && attack.getSoldiersOnLocations().getSoldiers(soldier, MoveType.GROUND).anyMatch(x -> !x.getAttackHelper().isDead))
         {
             triggerListener.onBulletTrigger(soldier);
             System.out.println("bullet release requested ..............");
