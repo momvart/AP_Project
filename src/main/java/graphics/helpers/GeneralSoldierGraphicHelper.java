@@ -38,6 +38,8 @@ public class GeneralSoldierGraphicHelper extends SoldierGraphicHelper implements
     @Override
     public void onDecamp()
     {
+        if (attackHelper.getTarget() == null)
+            return;
         Point newDest = attackHelper.getTarget().getLocation();
         if (newDest != null)
         {

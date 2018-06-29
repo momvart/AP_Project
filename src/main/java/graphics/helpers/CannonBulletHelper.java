@@ -15,7 +15,7 @@ public class CannonBulletHelper extends BulletHelper
     private final double height = 7;
     boolean reachedVertex;
     private PointF vertex;
-    private double verticalSpeed;
+    private double verticalSpeed = 2;
 
     public CannonBulletHelper(DefensiveTowerGraphicHelper towerGraphicHelper, Layer layer)
     {
@@ -59,6 +59,7 @@ public class CannonBulletHelper extends BulletHelper
         double distance = PointF.euclideanDistance(start, vertex);
         cos = (vertex.getX() - start.getX()) / distance;
         sin = (vertex.getY() - start.getY()) / distance;
+        System.out.println("cos and sin are " + cos + "   " + sin);
     }
 
     @Override
@@ -74,7 +75,7 @@ public class CannonBulletHelper extends BulletHelper
         }
         if (drawer.getPosition() == null || vertex == null)
             return;
-        if (PointF.euclideanDistance(drawer.getPosition(), vertex) < .1)
+        if (PointF.euclideanDistance(drawer.getPosition(), vertex) < .5)
         {
             reachedVertex = true;
             double distance = PointF.euclideanDistance(drawer.getPosition(), end);
@@ -82,12 +83,17 @@ public class CannonBulletHelper extends BulletHelper
             sin = (end.getY() - drawer.getPosition().getY()) / distance;
         }
         verticalSpeed = reachedVertex ?
-                -sqrt((vertex.getY() - drawer.getPosition().getY()) / abs(vertex.getY() - end.getY())) * maxSpeed
-                : sqrt(vertex.getY() - drawer.getPosition().getY() / abs(vertex.getY() - start.getY())) * maxSpeed;
+                sqrt(abs(vertex.getY() - drawer.getPosition().getY()) / abs(vertex.getY() - end.getY())) * maxSpeed
+                : -sqrt(abs(vertex.getY() - drawer.getPosition().getY()) / abs(vertex.getY() - start.getY())) * maxSpeed;
+
+        System.out.println("vertical speed is " + verticalSpeed);
         speed = abs((1 / sin) * verticalSpeed);
+        System.out.println("speed is :" + speed);
+
         double verticalStep = deltaT * verticalSpeed;
         double horizontalStep = deltaT * speed * cos;
-        drawer.setPosition(drawer.getPosition().getX() + verticalStep, drawer.getPosition().getY() + horizontalStep);
+        drawer.setPosition(drawer.getPosition().getX() + horizontalStep, drawer.getPosition().getY() + verticalStep);
+        System.out.println("drawer position is : " + drawer.getPosition());
     }
 
 }
