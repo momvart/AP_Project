@@ -28,7 +28,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -113,14 +112,13 @@ public class VillageView extends ConsoleMenuContainerView
                     break;
                 case Menu.Id.ATTACK_LOAD_MAP:
                 {
-//                    DialogResult result = theView.showOpenMapDialog(); //Replace it
-                    DialogResult result = null;
+                    DialogResult result = villageStage.showOpenMapDialog("Enter path please");
                     if (result.getResultCode() != DialogResultCode.YES)
                         break;
                     String path = (String)result.getData(TextInputDialog.KEY_TEXT);
                     World.sSettings.getAttackMapPaths().add(path);
                     World.saveSettings();
-                    //Call btnAttackClick again
+                    villageStage.onBtnAttackClick(null, null);
                 }
                 break;
                 case Menu.Id.ATTACK_LOAD_MAP_ITEM:
@@ -130,7 +128,8 @@ public class VillageView extends ConsoleMenuContainerView
                     Platform.runLater(() -> new AttackStage(theAttack, 1200, 900).setUpAndShow());
                     break;
                 case Menu.Id.ATTACK_MAP_INFO:
-//                    showMapInfo(theAttack.getMap()); //Replace it
+                    showMapInfo(theAttack.getMap());
+
                     break;
                 default:
                     super.onItemClicked(menu);
@@ -185,9 +184,6 @@ public class VillageView extends ConsoleMenuContainerView
 
     public DialogResult showConstructDialog(String buildingName, Resource cost)
     {
-//        return new SingleChoiceDialog(scanner, String.format("Do you want to build %s for %s?",
-//                buildingName,
-//                cost.toString(false))).showDialog();
         return villageStage.showSingleChoiceDialog(String.format("Do you want to build %s for %s?", buildingName, cost.toString(false)));
     }
 
@@ -200,18 +196,11 @@ public class VillageView extends ConsoleMenuContainerView
                 System.out.print(map.isEmptyForBuilding(j, i) ? 0 : 1);
             System.out.print('\n');
         }
-        return villageStage.showMapInputDialog("Where do you want to build?", map);
-//        return new TextInputDialog(scanner,
-//                String.format("Where do you want to build %s?", buildingName),
-//                "\\((?<x>\\d+),(?<y>\\d+)\\)")
-//                .showDialog();
+        return villageStage.showMapInputDialog(String.format("Where do you want to build %d", buildingName), map);
     }
 
     public DialogResult showUpgradeDialog(String buildingName, Resource cost)
     {
-//        return new SingleChoiceDialog(scanner, String.format("Do you want to upgrade %s for %s?",
-//                buildingName,
-//                cost.toString(false))).showDialog();
         return villageStage.showSingleChoiceDialog(String.format("Do you want to upgrade %s for %s?",
                 buildingName,
                 cost.toString(false)));
@@ -228,7 +217,6 @@ public class VillageView extends ConsoleMenuContainerView
 
     public DialogResult showSoldierTrainCountDialog(int availableCount)
     {
-//        return new NumberInputDialog(scanner, "How many of this soldier do you want to build?").showDialog();
         return villageStage.showNumberInputDialog("How many of this soldier do you want to build?", availableCount);
     }
 
@@ -300,6 +288,26 @@ public class VillageView extends ConsoleMenuContainerView
         villageStage.showInfo(ex.getDatailedMessage());
     }
 
+
+    private void showMapInfo(AttackMap map)
+    {
+        StringBuilder info = new StringBuilder("Resources: ").append("\n").append(map.getResources()).append("\n");
+        HashMap<String, Integer> defensiveTowers = new HashMap<>();
+        map.getAllDefensiveTowers().forEach(defensiveTower ->
+        {
+            if (!defensiveTowers.containsKey(defensiveTower.getName()))
+                defensiveTowers.put(defensiveTower.getName(), 1);
+            else
+                defensiveTowers.replace(defensiveTower.getName(), defensiveTowers.get(defensiveTower.getName()) + 1);
+        });
+        if (defensiveTowers.size() != 0)
+            info.append("Defensive towers:").append("\n");
+        defensiveTowers.forEach((defensiveTower, integer) ->
+        {
+            info.append(defensiveTower).append(" x").append(integer.toString()).append("\n");
+        });
+        villageStage.showInfo(info.toString());
+    }
 
     private void openMap(Path path) throws MyJsonException, MyIOException
     {

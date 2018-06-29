@@ -1,19 +1,30 @@
 package graphics.gui;
 
 import graphics.*;
-import graphics.drawers.*;
-import graphics.drawers.drawables.*;
-import graphics.gui.dialogs.*;
-import graphics.helpers.*;
-import graphics.layers.*;
-import graphics.positioning.IsometricPositioningSystem;
+import graphics.drawers.BuildingDrawer;
+import graphics.drawers.Drawer;
+import graphics.drawers.drawables.ButtonDrawable;
+import graphics.drawers.drawables.RoundRectDrawable;
+import graphics.drawers.drawables.TextDrawable;
+import graphics.gui.dialogs.MapInputDialog;
+import graphics.gui.dialogs.NumberInputDialog;
+import graphics.gui.dialogs.SingleChoiceDialog;
+import graphics.gui.dialogs.TextInputDialog;
+import graphics.helpers.BuildingGraphicHelper;
+import graphics.helpers.VillageBuildingGraphicHelper;
+import graphics.layers.Layer;
+import graphics.layers.MenuLayer;
+import graphics.layers.ResourceLayer;
+import graphics.layers.ToastLayer;
 import graphics.positioning.NormalPositioningSystem;
-import graphics.positioning.PercentPositioningSystem;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import menus.*;
+import menus.AttackMapItem;
+import menus.Menu;
+import menus.ParentMenu;
 import models.Map;
 import models.Village;
 import models.World;
@@ -162,6 +173,12 @@ public class VillageStage extends MapStage
         return dialog.showDialog();
     }
 
+    public DialogResult showSingleChoiceDialog(String message, ButtonType yes, ButtonType no)
+    {
+        SingleChoiceDialog dialog = new SingleChoiceDialog(lInfo, width, height, message, yes, no);
+        return dialog.showDialog();
+    }
+
     public DialogResult showNumberInputDialog(String message, int count)
     {
         NumberInputDialog dialog = new NumberInputDialog(lInfo, width, height, message, count);
@@ -174,6 +191,12 @@ public class VillageStage extends MapStage
         return dialog.showDialog();
     }
 
+    public DialogResult showOpenMapDialog(String message)
+    {
+        TextInputDialog dialog = new TextInputDialog(lInfo, width, height, message);
+        return dialog.showDialog();
+    }
+
 
     @Override
     protected void onClickAnywhereElse(MouseEvent event)
@@ -183,7 +206,7 @@ public class VillageStage extends MapStage
     }
 
 
-    private void onBtnAttackClick(Drawer sender, MouseEvent event)
+    public void onBtnAttackClick(Drawer sender, MouseEvent event)
     {
         List<Path> paths = World.sSettings.getAttackMapPaths().stream().map(Paths::get).collect(Collectors.toList());
         ParentMenu mainMenu = new ParentMenu(Menu.Id.ATTACK_MAIN_MENU, "");
