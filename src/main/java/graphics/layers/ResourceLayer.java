@@ -55,6 +55,7 @@ public class ResourceLayer extends Layer
 
             lblGold = new TextDrawable("", Color.WHITE, Fonts.getMedium());
             lblGold.setPivot(0.5, 0.5);
+            lblGold.setHasShadow(true);
             Drawer dLabel = new Drawer(lblGold);
             dLabel.setPosition(goldbar.getWidth() / 2, goldbar.getHeight() / 2);
 
@@ -81,6 +82,7 @@ public class ResourceLayer extends Layer
 
             lblElixir = new TextDrawable("", Color.WHITE, Fonts.getMedium());
             lblElixir.setPivot(0.5, 0.5);
+            lblElixir.setHasShadow(true);
             Drawer dLabel = new Drawer(lblElixir);
             dLabel.setPosition(elixirbar.getWidth() / 2, elixirbar.getHeight() / 2);
 

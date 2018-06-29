@@ -42,6 +42,11 @@ public class GraphicsValues
         return SOLDIERS_ASSETS_PATH + "/" + SoldierValues.getSoldierInfo(soldierType).getName().toLowerCase().replace(" ", "");
     }
 
+    public static String getBuildingAssetsPath(int buildingType)
+    {
+        return BUILDINGS_ASSETS_PATH + "/" + BuildingValues.getBuildingInfo(buildingType).getName().toLowerCase();
+    }
+
     public static ImageDrawable[] getSoldierFrames(int soldierType, int level, String animKey, String face)
     {
         if (soldierFrames == null)
@@ -163,5 +168,16 @@ public class GraphicsValues
             catch (URISyntaxException ignored) { }
 
         return imgDust.clone();
+    }
+
+
+    public static class IconPaths
+    {
+        public static String Info = UI_ASSETS_PATH + "/info.png";
+
+        public static String Map = UI_ASSETS_PATH + "/map.png";
+        public static String NewMap = UI_ASSETS_PATH + "/map_plus.png";
+
+        public static String Axes = UI_ASSETS_PATH + "/axes.png";
     }
 }

@@ -1,8 +1,10 @@
 package views;
 
-import exceptions.ConsoleException;
-import exceptions.ConsoleRuntimeException;
-import exceptions.InvalidCommandException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
+import exceptions.*;
+import graphics.gui.AttackStage;
 import graphics.gui.VillageStage;
 import javafx.application.Platform;
 import menus.*;
@@ -10,11 +12,23 @@ import models.Map;
 import models.Resource;
 import models.Village;
 import models.World;
+import models.attack.Attack;
+import models.attack.AttackMap;
 import models.buildings.*;
 import models.soldiers.Recruit;
 import models.soldiers.SoldierValues;
+import serialization.AttackMapGlobalAdapter;
+import serialization.BuildingGlobalAdapter;
+import serialization.StorageGlobalAdapter;
 import views.dialogs.DialogResult;
+import views.dialogs.DialogResultCode;
+import views.dialogs.TextInputDialog;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +38,8 @@ public class VillageView extends ConsoleMenuContainerView
 {
     private Village village;
     private VillageStage villageStage;
+
+    private Attack theAttack;
 
     public VillageView(Scanner scanner)
     {
@@ -64,37 +80,65 @@ public class VillageView extends ConsoleMenuContainerView
 
     public void onItemClicked(Menu menu)
     {
-        switch (menu.getId())
+        try
         {
-            case Menu.Id.VILLAGE_RESOURCES:
-                showResources();
+            switch (menu.getId())
+            {
+                case Menu.Id.VILLAGE_RESOURCES:
+                    showResources();
+                    break;
+                case Menu.Id.OVERALL_INFO:
+                    showBuildingOverallInfo(((IBuildingMenu)currentMenu).getBuilding());
+                    break;
+                case Menu.Id.UPGRADE_INFO:
+                    showUpgradeInfo(((IBuildingMenu)currentMenu).getBuilding());
+                    break;
+                case Menu.Id.TH_STATUS:
+                    showConstructionsStatus(World.sCurrentGame.getVillage().getConstructionManager().getConstructions());
+                    break;
+                case Menu.Id.BARRACKS_STATUS:
+                    showSoldierTrainingsStatus(((Barracks)((IBuildingMenu)currentMenu).getBuilding()).getTrainingManager().getRecruits());
+                    break;
+                case Menu.Id.CAMP_CAPACITY_INFO:
+                    showCampsCapacityInfo();
+                    break;
+                case Menu.Id.CAMP_SOLDIERS:
+                    showAvailableSoldiers();
+                    break;
+                case Menu.Id.STORAGE_SRC_INFO:
+                    showStorageSourceInfo((Storage)((IBuildingMenu)currentMenu).getBuilding());
+                    break;
+                case Menu.Id.DEFENSIVE_TARGET_INFO:
+                    showAttackInfo((DefensiveTower)((IBuildingMenu)currentMenu).getBuilding());
+                    break;
+                case Menu.Id.ATTACK_LOAD_MAP:
+                {
+//                    DialogResult result = theView.showOpenMapDialog(); //Replace it
+                    DialogResult result = null;
+                    if (result.getResultCode() != DialogResultCode.YES)
+                        break;
+                    String path = (String)result.getData(TextInputDialog.KEY_TEXT);
+                    World.sSettings.getAttackMapPaths().add(path);
+                    World.saveSettings();
+                    //Call btnAttackClick again
+                }
                 break;
-            case Menu.Id.OVERALL_INFO:
-                showBuildingOverallInfo(((IBuildingMenu)currentMenu).getBuilding());
-                break;
-            case Menu.Id.UPGRADE_INFO:
-                showUpgradeInfo(((IBuildingMenu)currentMenu).getBuilding());
-                break;
-            case Menu.Id.TH_STATUS:
-                showConstructionsStatus(World.sCurrentGame.getVillage().getConstructionManager().getConstructions());
-                break;
-            case Menu.Id.BARRACKS_STATUS:
-                showSoldierTrainingsStatus(((Barracks)((IBuildingMenu)currentMenu).getBuilding()).getTrainingManager().getRecruits());
-                break;
-            case Menu.Id.CAMP_CAPACITY_INFO:
-                showCampsCapacityInfo();
-                break;
-            case Menu.Id.CAMP_SOLDIERS:
-                showAvailableSoldiers();
-                break;
-            case Menu.Id.STORAGE_SRC_INFO:
-                showStorageSourceInfo((Storage)((IBuildingMenu)currentMenu).getBuilding());
-                break;
-            case Menu.Id.DEFENSIVE_TARGET_INFO:
-                showAttackInfo((DefensiveTower)((IBuildingMenu)currentMenu).getBuilding());
-                break;
-            default:
-                super.onItemClicked(menu);
+                case Menu.Id.ATTACK_LOAD_MAP_ITEM:
+                    openMap(((AttackMapItem)menu).getFilePath());
+                    break;
+                case Menu.Id.ATTACK_MAP_ATTACK:
+                    Platform.runLater(() -> new AttackStage(theAttack, 1200, 900).setUpAndShow());
+                    break;
+                case Menu.Id.ATTACK_MAP_INFO:
+//                    showMapInfo(theAttack.getMap()); //Replace it
+                    break;
+                default:
+                    super.onItemClicked(menu);
+            }
+        }
+        catch (ConsoleException ex)
+        {
+            showError(ex);
         }
     }
 
@@ -254,5 +298,30 @@ public class VillageView extends ConsoleMenuContainerView
     {
         super.showError(ex);
         villageStage.showInfo(ex.getDatailedMessage());
+    }
+
+
+    private void openMap(Path path) throws MyJsonException, MyIOException
+    {
+        try (BufferedReader reader = Files.newBufferedReader(path))
+        {
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(AttackMap.class, new AttackMapGlobalAdapter())
+                    .registerTypeAdapter(Building.class, new BuildingGlobalAdapter())
+                    .registerTypeAdapter(GoldStorage.class, new StorageGlobalAdapter<>(GoldStorage.class))
+                    .registerTypeAdapter(ElixirStorage.class, new StorageGlobalAdapter<>(ElixirStorage.class))
+                    .create();
+
+            AttackMap map = gson.fromJson(reader, AttackMap.class);
+            theAttack = new Attack(map);
+        }
+        catch (JsonParseException ex)
+        {
+            throw new MyJsonException("There is no valid file in this location.", ex);
+        }
+        catch (IOException ex)
+        {
+            throw new MyIOException("There is no valid file in this location.", ex);
+        }
     }
 }

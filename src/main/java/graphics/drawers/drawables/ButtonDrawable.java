@@ -15,9 +15,9 @@ public class ButtonDrawable extends Drawable
     private static final double IconHeightRatio = 2.0 / 3;
 
     protected RoundRectDrawable background;
-    private RoundRectDrawable bgForeground;
-    private ImageDrawable icon = new ImageDrawable(null);
-    private TextDrawable label;
+    protected RoundRectDrawable bgForeground;
+    protected ImageDrawable icon = new ImageDrawable(null);
+    protected TextDrawable label;
 
     public ButtonDrawable(String text, String iconPath, double width, double height)
     {
@@ -34,6 +34,7 @@ public class ButtonDrawable extends Drawable
 
         this.label = new TextDrawable(text, Color.WHITE, Fonts.getSmaller());
         this.label.setPivot(.5, 1);
+        this.label.setHasShadow(true);
 
         setSize(width, height);
     }

@@ -13,6 +13,7 @@ public class MenuItemDrawable extends ButtonDrawable
         super(menu.getText().toUpperCase(), menu.getIconPath(), width, height);
         this.menu = menu;
         background.setEnableDashes(true);
+        label.setHasShadow(!menu.isDisabled());
     }
 
     public Menu getMenu()

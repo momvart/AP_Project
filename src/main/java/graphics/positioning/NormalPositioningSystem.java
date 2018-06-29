@@ -20,6 +20,11 @@ public class NormalPositioningSystem extends PositioningSystem
         return instance;
     }
 
+    public double getScale()
+    {
+        return scale;
+    }
+
     @Override
     public double convertX(PointF position)
     {

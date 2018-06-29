@@ -35,6 +35,6 @@ public class GoldMine extends Mine
     public BuildingSubmenu getMenu(ParentMenu parent)
     {
         return super.getMenu(parent)
-                .insertItem(Menu.Id.MINE_MINE, "Mine", GraphicsValues.UI_ASSETS_PATH + "/GoldCoin.png");
+                .insertItem(Menu.Id.MINE_MINE, "Mine", GraphicsValues.UI_ASSETS_PATH + "/gold.png");
     }
 }

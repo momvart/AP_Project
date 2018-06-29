@@ -15,7 +15,7 @@ public class TrainSoldierItem extends Menu
         super(Id.BARRACKS_TRAIN_ITEM, SoldierValues.getSoldierInfo(soldierType).getName());
         this.soldierType = soldierType;
         this.availableCount = availableCount;
-        if (availableCount == 0)
+        if (availableCount == 0 || availableCount == -1)
             setDisabled(true);
 
         this.setIconPath(GraphicsValues.getSoldierAssetsPath(soldierType) + "/icon/Icon" + (isDisabled() ? "G" : "") + ".png");

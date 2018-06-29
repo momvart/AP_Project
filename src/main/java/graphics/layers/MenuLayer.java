@@ -1,5 +1,6 @@
 package graphics.layers;
 
+import graphics.GraphicsValues;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.MenuItemDrawable;
 import graphics.positioning.NormalPositioningSystem;
@@ -16,7 +17,7 @@ public class MenuLayer extends Layer
 {
     private double itemCellSize;
 
-    private static final double ItemPadding = 10;
+    private static final double ItemPadding = GraphicsValues.PADDING;
 
     private ParentMenu currentMenu;
     private IMenuClickListener clickListener;

@@ -34,6 +34,6 @@ public class ElixirMine extends Mine
     public BuildingSubmenu getMenu(ParentMenu parent)
     {
         return super.getMenu(parent)
-                .insertItem(Menu.Id.MINE_MINE, "Mine", GraphicsValues.UI_ASSETS_PATH + "/ElixirDrop.png");
+                .insertItem(Menu.Id.MINE_MINE, "Mine", GraphicsValues.UI_ASSETS_PATH + "/elixir.png");
     }
 }

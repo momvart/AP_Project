@@ -1,6 +1,7 @@
 package graphics.drawers.drawables;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.*;
 import javafx.scene.text.*;
 import utils.*;
@@ -11,6 +12,8 @@ public class TextDrawable extends Drawable
     private String text;
 
     private Font font;
+
+    private boolean hasShadow = false;
 
     public TextDrawable(String text, Font font)
     {
@@ -46,6 +49,11 @@ public class TextDrawable extends Drawable
         updatePrivateText();
     }
 
+    public void setHasShadow(boolean hasShadow)
+    {
+        this.hasShadow = hasShadow;
+    }
+
     @Override
     public SizeF getSize()
     {
@@ -73,6 +81,9 @@ public class TextDrawable extends Drawable
     @Override
     protected void onDraw(GraphicsContext gc)
     {
+        if (hasShadow)
+            gc.setEffect(new DropShadow(2, 0, 2, Color.BLACK));
+
         gc.fillText(text, 0, 0);
     }
 

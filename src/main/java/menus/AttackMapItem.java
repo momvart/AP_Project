@@ -1,5 +1,7 @@
 package menus;
 
+import graphics.GraphicsValues;
+
 import java.nio.file.*;
 
 public class AttackMapItem extends Submenu
@@ -10,9 +12,10 @@ public class AttackMapItem extends Submenu
     {
         super(Id.ATTACK_LOAD_MAP_ITEM, filePath.getFileName().toString().replaceFirst("\\.[^.]+$", ""), parent);
         this.filePath = filePath;
-        insertItem(Menu.Id.ATTACK_MAP_INFO, "Map Info");
-        insertItem(Menu.Id.ATTACK_MAP_ATTACK, "Attack Map");
+        insertItem(Menu.Id.ATTACK_MAP_INFO, "Map Info", GraphicsValues.IconPaths.Info);
+        insertItem(Menu.Id.ATTACK_MAP_ATTACK, "Attack Map", GraphicsValues.IconPaths.Axes);
         clickable = true;
+        setIconPath(GraphicsValues.IconPaths.Map);
     }
 
     public Path getFilePath()
