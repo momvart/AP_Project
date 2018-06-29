@@ -45,7 +45,6 @@ public class BulletHelper implements IFrameUpdatable
 
     public void startNewWave(final PointF start, final PointF end)
     {
-        System.out.println("on new wave we are ");
         this.start = start;
         this.end = end;
         setUpCosSin(start, end);

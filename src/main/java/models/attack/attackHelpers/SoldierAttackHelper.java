@@ -4,13 +4,12 @@ package models.attack.attackHelpers;
 import graphics.helpers.IOnMoveFinishedListener;
 import graphics.helpers.IOnReloadListener;
 import graphics.helpers.SoldierGraphicHelper;
-import models.World;
 import models.attack.Attack;
 import models.buildings.Building;
+import models.soldiers.Healer;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierValues;
-import models.soldiers.WallBreaker;
 import utils.Point;
 import utils.PointF;
 
@@ -124,30 +123,57 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         return pointToGo;
     }
 
-    public static void main(String[] args)
-    {
-        World.initialize();
-        GeneralSoldierAttackHelper attackHelper = new GeneralSoldierAttackHelper(null, new WallBreaker(4));
-        for (Point point : attackHelper.getPointsOnLine(new Point(1, 1), new Point(2, 4)))
-        {
-            System.out.println(point);
-        }
-    }
-
-    public Point getNextPathStarightReachablePoint(Point start, Point destination)
+    public Point getLastPointOfStanding(Point start, Point destination)
     {
         List<Point> soldierPath = attack.getSoldierPath(start, destination, soldier.getMoveType() == MoveType.AIR);
-        Point pointToGo = soldierPath.get(soldierPath.size() - 1);
+        if (soldierPath == null || soldierPath.size() <= 1)
+            return null;
+        Point lastPoint = soldierPath.get(1);
 
+        int range = getRange();
         int i;
-        for (i = soldierPath.size() - 2; i >= 0; i--)
+        for (i = 1; i < soldierPath.size() - 1; i++)
         {
-            if (isThereABuildingInPath(start, soldierPath.get(i + 1)))
+            lastPoint = soldierPath.get(i);
+            if (Point.euclideanDistance(soldierPath.get(i + 1), destination) > range)
             {
-                System.out.println("on fuckin here agian i is :" + i);
-                return pointToGo;
+                break;
             }
-            pointToGo = soldierPath.get(i + 1);
+        }
+        return lastPoint;
+    }
+
+    public Point getNextPathStraightReachablePoint(Point start, Point destination)
+    {
+        List<Point> soldierPath = attack.getSoldierPath(start, destination, soldier.getMoveType() == MoveType.AIR);
+        int range = soldier.getAttackHelper().getRange();
+        Point pointToGo = soldierPath.get(soldierPath.size() - 1);
+        int i;
+        if (range != 1 && soldier.getType() != Healer.SOLDIER_TYPE)
+        {
+            Point maximumFarPointInRange = getLastPointOfStanding(start, destination);
+            System.out.println("last point of standing is :‌" + maximumFarPointInRange + "toward " + destination);
+            for (i = soldierPath.size() - 2; i >= 0; i--)
+            {
+                if (isThereABuildingInPath(start, soldierPath.get(i + 1)))
+                {
+                    return pointToGo;
+                }
+                pointToGo = soldierPath.get(i + 1);
+            }
+            if (pointToGo.equals(soldierPath.get(1)))
+                return maximumFarPointInRange;
+        }
+        else
+        {
+            for (i = soldierPath.size() - 2; i >= 0; i--)
+            {
+                if (isThereABuildingInPath(start, soldierPath.get(i + 1)))
+                {
+                    return pointToGo;
+                }
+                pointToGo = soldierPath.get(i + 1);
+            }
         }
         return pointToGo;
     }
