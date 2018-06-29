@@ -84,6 +84,8 @@ public class MenuLayer extends Layer
     private void onMenuItemClick(Drawer drawer, MouseEvent event)
     {
         Menu item = ((MenuItemDrawable)drawer.getDrawable()).getMenu();
+        if (item.isDisabled())
+            return;
         if (item.isClickable())
             callOnMenuItemClick(item);
         if (item instanceof ParentMenu)

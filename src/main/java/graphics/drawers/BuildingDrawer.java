@@ -3,7 +3,6 @@ package graphics.drawers;
 import graphics.GraphicsValues;
 import graphics.drawers.drawables.ImageDrawable;
 import models.Map;
-import models.buildings.BuildStatus;
 import models.buildings.Building;
 import models.buildings.Wall;
 
@@ -58,6 +57,5 @@ public class BuildingDrawer extends LayerDrawer
     public void updateDrawer()
     {
         System.err.println("Update requested !");
-        base.setDrawable(fetchBaseImage());
     }
 }

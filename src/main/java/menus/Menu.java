@@ -11,6 +11,8 @@ public class Menu
     private boolean focusable = false;
     private boolean focused = false;
 
+    private boolean disabled = true;
+
     public Menu(int id, String text)
     {
         this(id, text, true);
@@ -88,6 +90,16 @@ public class Menu
     {
         if (focusable)
             this.focused = focused;
+    }
+
+    public boolean isDisabled()
+    {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled)
+    {
+        this.disabled = disabled;
     }
 
     public static class Id

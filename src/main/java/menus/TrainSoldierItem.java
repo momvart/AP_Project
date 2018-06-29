@@ -1,8 +1,7 @@
 package menus;
 
 import graphics.GraphicsValues;
-import graphics.drawers.SoldierDrawer;
-import models.soldiers.*;
+import models.soldiers.SoldierValues;
 
 public class TrainSoldierItem extends Menu
 {
@@ -18,7 +17,7 @@ public class TrainSoldierItem extends Menu
                         (availableCount >= 0 ? "A x" + availableCount : "U"));
         this.soldierType = soldierType;
         this.availableCount = availableCount;
-        this.setIconPath(GraphicsValues.getSoldierAssetsPath(soldierType) + "/Icon.png");
+        this.setIconPath(GraphicsValues.getSoldierAssetsPath(soldierType) + "/icon/Icon.png");
     }
 
     public int getSoldierType()

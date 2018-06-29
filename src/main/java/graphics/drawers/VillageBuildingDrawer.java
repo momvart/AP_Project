@@ -30,6 +30,8 @@ public class VillageBuildingDrawer extends BuildingDrawer
     {
         super.updateDrawer();
 
+        base.setDrawable(fetchBaseImage());
+
         if (getBuilding().getBuildStatus() == BuildStatus.IN_CONSTRUCTION)
             construction.setVisible(true);
         else

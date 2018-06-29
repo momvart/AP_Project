@@ -1,5 +1,7 @@
 package menus;
 
+import graphics.GraphicsValues;
+
 public class SoldierMenuItem extends Menu
 {
     private int count;
@@ -8,16 +10,28 @@ public class SoldierMenuItem extends Menu
     public SoldierMenuItem(int id, String text, int count, int soldierType)
     {
         super(id, text);
-        this.count = count;
+
         this.soldierType = soldierType;
         setFocusable(true);
+        setCount(count);
     }
 
-    public SoldierMenuItem(int id, String text, String iconPath, int count, int soldierType)
+    public void setCount(int count)
     {
-        super(id, text, iconPath);
         this.count = count;
-        this.soldierType = soldierType;
+
+        setDisabled(count == 0);
+    }
+
+    @Override
+    public void setDisabled(boolean disabled)
+    {
+        super.setDisabled(disabled);
+
+        if (disabled)
+            setIconPath(GraphicsValues.getSoldierAssetsPath(soldierType) + "/icon/IconG.png");
+        else
+            setIconPath(GraphicsValues.getSoldierAssetsPath(soldierType) + "/icon/Icon.png");
     }
 
     @Override

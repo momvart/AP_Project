@@ -1,6 +1,5 @@
 package graphics;
 
-import graphics.drawers.SoldierDrawer;
 import graphics.drawers.drawables.ImageDrawable;
 import graphics.positioning.IsometricPositioningSystem;
 import models.buildings.BuildingValues;
@@ -63,7 +62,7 @@ public class GraphicsValues
             }
             catch (Exception ex) { ex.printStackTrace();}
 
-        return frames.get(key);
+        return frames.get(key).clone();
     }
 
     private static HashMap<String, ImageDrawable> buildings;
@@ -84,7 +83,7 @@ public class GraphicsValues
             }
             catch (URISyntaxException e) { e.printStackTrace(); }
 
-        return buildings.get(name + level);
+        return buildings.get(name + level).clone();
     }
 
     public enum WallStyle
@@ -133,7 +132,7 @@ public class GraphicsValues
             catch (URISyntaxException ignored) { }
         }
 
-        return imgConstruction;
+        return imgConstruction.clone();
     }
 
     private static ImageDrawable imgDestructed;
@@ -149,7 +148,7 @@ public class GraphicsValues
             }
             catch (URISyntaxException ignored) { }
 
-        return imgDestructed;
+        return imgDestructed.clone();
     }
 
     private static ImageDrawable imgDust;
@@ -163,6 +162,6 @@ public class GraphicsValues
             }
             catch (URISyntaxException ignored) { }
 
-        return imgDust;
+        return imgDust.clone();
     }
 }
