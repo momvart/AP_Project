@@ -6,7 +6,6 @@ import graphics.helpers.IOnReloadListener;
 import graphics.helpers.SoldierGraphicHelper;
 import models.attack.Attack;
 import models.buildings.Building;
-import models.soldiers.Healer;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierValues;
@@ -123,14 +122,13 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         return pointToGo;
     }
 
-    public Point getLastPointOfStanding(Point start, Point destination)
+    public Point getLastPointOfStanding(int range, Point start, Point destination)
     {
         List<Point> soldierPath = attack.getSoldierPath(start, destination, soldier.getMoveType() == MoveType.AIR);
         if (soldierPath == null || soldierPath.size() <= 1)
             return null;
         Point lastPoint = soldierPath.get(1);
 
-        int range = getRange();
         int i;
         for (i = 1; i < soldierPath.size() - 1; i++)
         {
@@ -146,34 +144,15 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
     public Point getNextPathStraightReachablePoint(Point start, Point destination)
     {
         List<Point> soldierPath = attack.getSoldierPath(start, destination, soldier.getMoveType() == MoveType.AIR);
-        int range = soldier.getAttackHelper().getRange();
         Point pointToGo = soldierPath.get(soldierPath.size() - 1);
         int i;
-        if (range != 1 && soldier.getType() != Healer.SOLDIER_TYPE)
+        for (i = soldierPath.size() - 2; i >= 0; i--)
         {
-            Point maximumFarPointInRange = getLastPointOfStanding(start, destination);
-            System.out.println("last point of standing is :‌" + maximumFarPointInRange + "toward " + destination);
-            for (i = soldierPath.size() - 2; i >= 0; i--)
+            if (isThereABuildingInPath(start, soldierPath.get(i + 1)))
             {
-                if (isThereABuildingInPath(start, soldierPath.get(i + 1)))
-                {
-                    return pointToGo;
-                }
-                pointToGo = soldierPath.get(i + 1);
+                return pointToGo;
             }
-            if (pointToGo.equals(soldierPath.get(1)))
-                return maximumFarPointInRange;
-        }
-        else
-        {
-            for (i = soldierPath.size() - 2; i >= 0; i--)
-            {
-                if (isThereABuildingInPath(start, soldierPath.get(i + 1)))
-                {
-                    return pointToGo;
-                }
-                pointToGo = soldierPath.get(i + 1);
-            }
+            pointToGo = soldierPath.get(i + 1);
         }
         return pointToGo;
     }
@@ -190,7 +169,6 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
             }
         }
         return false;
-
     }
 
     private ArrayList<Point> getAliveBuildingsPositions()

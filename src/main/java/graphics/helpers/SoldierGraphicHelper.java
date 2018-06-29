@@ -87,7 +87,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         if (soldier.getAttackHelper().getRange() != 1 && soldier.getType() != Healer.SOLDIER_TYPE)
         {
             Point lastPoint;
-            lastPoint = soldier.getAttackHelper().getLastPointOfStanding(soldier.getLocation(), getVeryPoint(moveDest));
+            lastPoint = soldier.getAttackHelper().getLastPointOfStanding(soldier.getAttackHelper().getRange(), soldier.getLocation(), getVeryPoint(moveDest));
             facingBuildingPoint = lastPoint;
             if (lastPoint.getX() > moveDest.getX())
             {
@@ -159,19 +159,45 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         if (nextCheckPointF == null || PointF.euclideanDistance(nextCheckPointF, drawer.getPosition()) < .1)
         {
             nextCheckPoint = soldier.getAttackHelper().getNextPathStraightReachablePoint(getVeryPoint(drawer.getPosition()), getVeryPoint(moveDest));
-            nextCheckPointF = new PointF(nextCheckPoint);
-            if (soldier.getAttackHelper().getRange() == 1 || soldier.getType() == Healer.SOLDIER_TYPE)
+            List<Point> soldierPath = soldier.getAttackHelper().getAttack().getSoldierPath(getVeryPoint(drawer.getPosition()), getVeryPoint(moveDest), soldier.getMoveType() == MoveType.AIR);
+            try
             {
-                if (nextCheckPoint.equals(facingBuildingPoint) && PointF.euclideanDistance(drawer.getPosition(), new PointF(facingBuildingPoint)) < .1)
+                if ((soldier.getAttackHelper().getRange() != 1 && soldier.getType() != Healer.SOLDIER_TYPE))
                 {
-                    nextCheckPointF = finalStandingPoint;
+                    System.out.println("archer ");
+                    if (soldierPath.get(1).equals(nextCheckPoint))
+                    {
+                        System.out.println("critical section ");
+                        System.out.println("final soloution ");
+                        if (PointF.euclideanDistance(drawer.getPosition(), moveDest) <= soldier.getAttackHelper().getRange())
+                            onMoveFinished();
+                        else
+                            nextCheckPointF = finalStandingPoint;
+                    }
+                    else
+                    {
+                        System.out.println("normal solution ");
+                        nextCheckPointF = new PointF(nextCheckPoint);
+                    }
+                }
+                else
+                {
+                    if (nextCheckPoint.equals(facingBuildingPoint))
+                    {
+                        nextCheckPointF = finalStandingPoint;
+                    }
+                    else
+                    {
+                        nextCheckPointF = new PointF(nextCheckPoint);
+                    }
                 }
             }
-            else
+            catch (Exception e)
             {
-                if (nextCheckPoint.equals(facingBuildingPoint) && PointF.euclideanDistance(drawer.getPosition(), new PointF(facingBuildingPoint)) < .1)
-                    nextCheckPointF = finalStandingPoint;
+                System.out.println("catch");
+                e.printStackTrace();
             }
+
             distanceToNextCheckPoint = PointF.euclideanDistance(nextCheckPointF, drawer.getPosition());
             cos = (nextCheckPointF.getX() - drawer.getPosition().getX()) / distanceToNextCheckPoint;
             sin = (nextCheckPointF.getY() - drawer.getPosition().getY()) / distanceToNextCheckPoint;
@@ -184,7 +210,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         }
         if (nextCheckPointF != null)
         {
-            System.out.println("drawerPosition is :" + drawer.getPosition());
+            System.out.println("drawerPosition is :" + drawer.getPosition() + "finalstanding point is :" + finalStandingPoint);
             double stepDistance = deltaT * soldier.getSpeed() * 1.5;//tired of little speed of soldiers so we add a ratio to get scaped
             distanceToFinalPosition = PointF.euclideanDistance(finalStandingPoint, drawer.getPosition());
             if (distanceToFinalPosition < 0.1 || distanceToFinalPosition < stepDistance)
@@ -211,10 +237,11 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     private void onMoveFinished()
     {
         makeAttack();
-        drawer.setPosition(finalStandingPoint.getX(), finalStandingPoint.getY());
         soldier.setLocation(getVeryPoint(finalStandingPoint));
         if (moveListener != null)
             moveListener.onMoveFinished(drawer.getPosition());
+        finalStandingPoint = null;
+        nextCheckPointF = null;
     }
 
     public void setMoveListener(IOnMoveFinishedListener moveListener)

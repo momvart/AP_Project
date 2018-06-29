@@ -50,12 +50,14 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
         super.onReload();
         if (!destroyed)
         {
+            DefensiveTowerGraphicHelper towerGraphicHelper = (DefensiveTowerGraphicHelper)getGraphicHelper();
+            if (towerGraphicHelper.getBullet().inProgress)
+                return;
             try
             {
                 setTarget();
             }
             catch (SoldierNotFoundException ignored) {}
-            attack();
         }
     }
 

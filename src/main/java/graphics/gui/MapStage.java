@@ -82,7 +82,7 @@ public abstract class MapStage extends Stage
         double widthS = screenSize.getWidth();
         GraphicsValues.setScale(0.8);
         if (System.getProperty("os.name").equals("Linux") && (widthS - 3840 <= 1 || widthS - 3840 >= -1))
-            GraphicsValues.setScale(1.5);
+            GraphicsValues.setScale(1);
 
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);

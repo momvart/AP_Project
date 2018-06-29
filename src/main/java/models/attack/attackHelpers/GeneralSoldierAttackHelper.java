@@ -45,11 +45,10 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     @Override
     public void fire()
     {
+        System.out.println("in fire method ");
         if (soldier == null || soldier.getAttackHelper().isDead())
             return;
         if (target == null)
-            return;
-        if (!isTargetInRange())
             return;
 
         if (target.getStrength() > 0 && !target.getAttackHelper().isDestroyed())
@@ -79,7 +78,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 
         if (target.getStrength() <= 0)
         {
-            //target.getAttackHelper().setDestroyed(true);
             attack.addScore(target.getBuildingInfo().getDestroyScore());
             attack.addToClaimedResource(target.getBuildingInfo().getDestroyResource());
         }

@@ -16,6 +16,8 @@ public class CannonBulletHelper extends BulletHelper
     boolean reachedVertex;
     private PointF vertex;
     private double verticalSpeed = 2;
+    private double heightDifferanceToEnd;
+    private double heightDifferanceToStart;
 
     public CannonBulletHelper(DefensiveTowerGraphicHelper towerGraphicHelper, Layer layer)
     {
@@ -46,7 +48,6 @@ public class CannonBulletHelper extends BulletHelper
         PointF upper = start.getY() >= end.getY() ? start : end;
         pointF = new PointF((upper.getX() + middle.getX() - upper.getY() + middle.getY()) / 2, (middle.getX() + middle.getY() - upper.getX() + upper.getY()) / 2);
         PointF vertex = new PointF(pointF.getX() + height, pointF.getY() - height);
-        System.out.println("vertex is: " + vertex);
         return vertex;
     }
 
@@ -55,45 +56,59 @@ public class CannonBulletHelper extends BulletHelper
     {
         super.startNewWave(start, end);
         reachedVertex = false;
+        hitTarget = false;
         vertex = getVertexOfParabola(start, end);
+        heightDifferanceToEnd = abs(vertex.getY() - end.getY());
+        heightDifferanceToStart = abs(vertex.getY() - start.getY());
         double distance = PointF.euclideanDistance(start, vertex);
         cos = (vertex.getX() - start.getX()) / distance;
         sin = (vertex.getY() - start.getY()) / distance;
-        System.out.println("cos and sin are " + cos + "   " + sin);
+        inProgress = true;
     }
 
     @Override
     public void doReplacing(double deltaT)
     {
-        if (hitTarget)
-            return;
-        if (reachedVertex && PointF.euclideanDistance(drawer.getPosition(), end) < .5)
-        {
-            hitTarget = true;
-            drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
-            towerGraphicHelper.onBulletHit(DefenseKind.AREA_SPLASH);
-        }
         if (drawer.getPosition() == null || vertex == null)
             return;
-        if (PointF.euclideanDistance(drawer.getPosition(), vertex) < .5)
+        if (hitTarget)
+            return;
+        if (!reachedVertex && PointF.euclideanDistance(drawer.getPosition(), vertex) < 2)
         {
+            System.out.println(toString() + "on fuckin  here ");
             reachedVertex = true;
             double distance = PointF.euclideanDistance(drawer.getPosition(), end);
             cos = (end.getX() - drawer.getPosition().getX()) / distance;
             sin = (end.getY() - drawer.getPosition().getY()) / distance;
         }
         verticalSpeed = reachedVertex ?
-                sqrt(abs(vertex.getY() - drawer.getPosition().getY()) / abs(vertex.getY() - end.getY())) * maxSpeed
-                : -sqrt(abs(vertex.getY() - drawer.getPosition().getY()) / abs(vertex.getY() - start.getY())) * maxSpeed;
+                sqrt(abs(vertex.getY() - drawer.getPosition().getY()) / heightDifferanceToEnd) * maxSpeed
+                : -sqrt(abs(vertex.getY() - drawer.getPosition().getY()) / heightDifferanceToStart) * maxSpeed;
 
-        System.out.println("vertical speed is " + verticalSpeed);
         speed = abs((1 / sin) * verticalSpeed);
-        System.out.println("speed is :" + speed);
 
         double verticalStep = deltaT * verticalSpeed;
         double horizontalStep = deltaT * speed * cos;
         drawer.setPosition(drawer.getPosition().getX() + horizontalStep, drawer.getPosition().getY() + verticalStep);
-        System.out.println("drawer position is : " + drawer.getPosition());
+        System.out.println("drawer position is :" + drawer.getPosition() + " and vertex is : " + vertex);
+        if (reachedVertex && PointF.euclideanDistance(drawer.getPosition(), end) < .5)
+        {
+            vertex = null;
+            hitTarget = true;
+            drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
+            towerGraphicHelper.onBulletHit(DefenseKind.AREA_SPLASH);
+            inProgress = false;
+        }
     }
 
+    @Override
+    public String toString()
+    {
+        return "CannonBulletHelper{" +
+                "height=" + height +
+                ", reachedVertex=" + reachedVertex +
+                ", vertex=" + vertex +
+                ", verticalSpeed=" + verticalSpeed +
+                '}' + super.toString();
+    }
 }

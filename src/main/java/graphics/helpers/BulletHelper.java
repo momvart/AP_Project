@@ -11,13 +11,14 @@ import java.net.URISyntaxException;
 
 public class BulletHelper implements IFrameUpdatable
 {
+    public boolean inProgress = false;
     protected DefensiveTowerGraphicHelper towerGraphicHelper;
     protected final double maxSpeed = 2;//TODO‌ to be manipulated
     protected Drawer drawer;
     protected PointF start;
     protected PointF end;
     protected double speed = maxSpeed;
-    protected boolean hitTarget = false;
+    public boolean hitTarget = false;
     protected double cos;
     protected double sin;
 
@@ -49,6 +50,7 @@ public class BulletHelper implements IFrameUpdatable
         this.end = end;
         setUpCosSin(start, end);
         hitTarget = false;
+        inProgress = true;
     }
 
     private void setUpCosSin(PointF start, PointF end)
@@ -74,6 +76,7 @@ public class BulletHelper implements IFrameUpdatable
             hitTarget = true;
             drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
             towerGraphicHelper.onBulletHit(DefenseKind.SINGLE_TARGET);
+            inProgress = false;
         }
         if (hitTarget)
             return;
