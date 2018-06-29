@@ -34,6 +34,8 @@ public class TextDrawable extends Drawable
 
     public void setText(String text)
     {
+        if (this.text.equals(text))
+            return;
         this.text = text;
         updatePrivateText();
     }

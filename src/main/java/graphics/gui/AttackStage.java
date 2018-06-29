@@ -47,7 +47,6 @@ public class AttackStage extends MapStage
     private final double LINE_SIZE = height / 20;
     private final double CHARACTER_SPACING = width / 100;
     private final String NO_SOLDIER_FOCUSED_ERROR = "No soldier focused yet";
-    private final String SOLDIER_ICON_PATH = "assets/soldiers/";
 
     public AttackStage(Attack attack, double width, double height)
     {
@@ -77,24 +76,9 @@ public class AttackStage extends MapStage
         for (int i = 1; i <= SoldierValues.SOLDIER_TYPES_COUNT; i++)
         {
             SoldierMenuItem submenu = new SoldierMenuItem(100 + i, SoldierValues.getSoldierInfo(i).getName(), attack.getAllUnits(i).size(), i);
-            if (attack.getAllUnits(i).size() == 0)
-            {
-                submenu.setFocusable(false);
-                submenu.setIconPath(SOLDIER_ICON_PATH + SoldierValues.getSoldierInfo(i).getName().toLowerCase().replaceAll(" ", "") + "/IconG.png");
-            }
-            else
-            {
-                submenu.setFocusable(true);
-                submenu.setIconPath(SOLDIER_ICON_PATH + SoldierValues.getSoldierInfo(i).getName().toLowerCase().replaceAll(" ", "") + "/Icon.png");
-            }
             soldierMenuItems.add(submenu);
         }
         soldierMenuItems.forEach(parentMenu::insertItem);
-        lmenu.setClickListener(item ->
-        {
-            soldierMenuItems.forEach(soldierMenuItem -> soldierMenuItem.setFocused(false));
-            item.setFocused(true);
-        });
         lmenu.setCurrentMenu(parentMenu);
 
         linfo = new ToastLayer(7, new RectF(0, 0, width, height), gHandler);
@@ -184,20 +168,16 @@ public class AttackStage extends MapStage
                     int J = j;
                     drawer.setClickListener((sender, event) ->
                     {
-                        Optional<Menu> menu = lmenu.getCurrentMenu().getMenuItems().stream().filter(Menu::isFocused).findFirst();
-                        if (menu.isPresent())
+                        SoldierMenuItem menu = (SoldierMenuItem)lmenu.getCurrentMenu().getMenuItems().stream().filter(Menu::isFocused).findFirst().orElse(null);
+                        if (menu == null)
+                            return;
+                        try
                         {
-                            try
-                            {
-                                attack.putUnits(menu.get().getId() - 100, 1, new Point(I, J));
-                            }
-                            catch (ConsoleException e)
-                            {
-                                e.printStackTrace();
-                            }
+                            attack.putUnits(menu.getId() - 100, 1, new Point(I, J));
+                            menu.setCount((int)attack.getAliveUnits(menu.getId() - 100).filter(soldier -> !soldier.getAttackHelper().isSoldierDeployed()).count());
+                            lmenu.updateMenu();
                         }
-                        else
-                            showInfo(NO_SOLDIER_FOCUSED_ERROR);
+                        catch (ConsoleException e) { e.printStackTrace(); }
                     });
                     drawer.setLayer(lFloor);
                 }

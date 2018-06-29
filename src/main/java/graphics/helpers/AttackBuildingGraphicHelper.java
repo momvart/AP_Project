@@ -33,7 +33,7 @@ public class AttackBuildingGraphicHelper extends BuildingGraphicHelper implement
     protected void makeDestroy()
     {
         //buildingDrawer.playDestroyAnimation();
-        buildingDrawer.updateDrawer();
+        buildingDrawer.destroyBuilding();
     }
 
     @Override

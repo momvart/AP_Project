@@ -1,5 +1,6 @@
 package menus;
 
+import graphics.GraphicsValues;
 import models.World;
 import models.buildings.Barracks;
 import models.buildings.Building;
@@ -16,7 +17,8 @@ public class TrainSoldierSubmenu extends Submenu implements IBuildingMenu
 
     public TrainSoldierSubmenu(ParentMenu parent, Barracks barracks)
     {
-        super(Id.BARRACKS_TRAIN_SOLDIER, "Build Soldiers", parent);
+        super(Id.BARRACKS_TRAIN_SOLDIER, "Train", parent);
+        setIconPath(GraphicsValues.UI_ASSETS_PATH + "/sword.png");
         this.barracks = barracks;
     }
 

@@ -36,8 +36,9 @@ public class AttackBuildingDrawer extends BuildingDrawer
         //TODO
     }
 
-    private void destroyBuilding()
+    public void destroyBuilding()
     {
+        System.out.println("destroyed" + getBuilding().toString());
         base.setDrawable(GraphicsValues.getDestructedImage());
         strengthbarDrawer.setVisible(false);
 
@@ -65,9 +66,6 @@ public class AttackBuildingDrawer extends BuildingDrawer
     public void updateDrawer()
     {
         super.updateDrawer();
-
-        if (getBuilding().getAttackHelper().isDestroyed())
-            destroyBuilding();
 
         if (getBuilding().getAttackHelper().getStrength() < getBuilding().getAttackHelper().getInitialStrength() && !getBuilding().getAttackHelper().isDestroyed())
         {

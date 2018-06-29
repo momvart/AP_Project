@@ -41,7 +41,8 @@ public class SoldierDrawer extends LayerDrawer
         healthbar = new HealthHProgressbarDrawable(20, 5, Color.BLACK);
         healthbar.setPivot(0.5, 1);
         healthbarDrawer = new Drawer(healthbar);
-        healthbarDrawer.setPosition(0, base.getAnimations().values().stream().findFirst().get().getHeight() / 2);
+//        healthbarDrawer.setPosition(0, base.getAnimations().values().stream().findFirst().get().getHeight() / 2);
+        healthbarDrawer.setPosition(0, 0);
         healthbarDrawer.setVisible(false);
         getDrawers().add(healthbarDrawer);
     }

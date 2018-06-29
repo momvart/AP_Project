@@ -12,6 +12,7 @@ public class MenuItemDrawable extends ButtonDrawable
     {
         super(menu.getText().toUpperCase(), menu.getIconPath(), width, height);
         this.menu = menu;
+        background.setEnableDashes(true);
     }
 
     public Menu getMenu()
@@ -22,10 +23,16 @@ public class MenuItemDrawable extends ButtonDrawable
     @Override
     protected void onPreDraw(GraphicsContext gc)
     {
-        if (menu.isFocused())
-            setFill(Color.rgb(128, 128, 128, 0.6));
+        if (menu.isDisabled())
+            setFill(Color.rgb(200, 200, 200, 0.6));
         else
             setFill(Color.rgb(0, 0, 0, 0.6));
+
+        if (menu.isFocused())
+            background.setStroke(Color.WHITE);
+        else
+            background.setStroke(Color.TRANSPARENT);
+
         super.onPreDraw(gc);
     }
 }

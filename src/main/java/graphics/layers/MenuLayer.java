@@ -53,7 +53,7 @@ public class MenuLayer extends Layer
         this.itemCellSize = itemCellSize;
     }
 
-    private void updateMenu()
+    public void updateMenu()
     {
         removeAllObjects();
 
@@ -84,6 +84,8 @@ public class MenuLayer extends Layer
     private void onMenuItemClick(Drawer drawer, MouseEvent event)
     {
         Menu item = ((MenuItemDrawable)drawer.getDrawable()).getMenu();
+        if (item.isDisabled())
+            return;
         if (item.isClickable())
             callOnMenuItemClick(item);
         if (item instanceof ParentMenu)

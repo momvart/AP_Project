@@ -14,7 +14,7 @@ public class ButtonDrawable extends Drawable
 
     private static final double IconHeightRatio = 2.0 / 3;
 
-    private RoundRectDrawable background;
+    protected RoundRectDrawable background;
     private RoundRectDrawable bgForeground;
     private ImageDrawable icon = new ImageDrawable(null);
     private TextDrawable label;
@@ -36,6 +36,11 @@ public class ButtonDrawable extends Drawable
         this.label.setPivot(.5, 1);
 
         setSize(width, height);
+    }
+
+    public void setText(String text)
+    {
+        this.label.setText(text);
     }
 
     @Override

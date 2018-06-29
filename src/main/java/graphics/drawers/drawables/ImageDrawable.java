@@ -1,11 +1,9 @@
 package graphics.drawers.drawables;
 
-import graphics.GraphicsValues;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import utils.SizeF;
 
-public class ImageDrawable extends Drawable
+public class ImageDrawable extends Drawable implements Cloneable
 {
     private final Image img;
 
@@ -67,5 +65,12 @@ public class ImageDrawable extends Drawable
         if (img == null)
             return;
         gc.drawImage(img, 0, 0, getWidth(), getHeight());
+    }
+
+    public ImageDrawable clone()
+    {
+        ImageDrawable cloned = new ImageDrawable(img, getWidth(), getHeight());
+        cloned.setPivot(getPivot().getX(), getPivot().getY());
+        return cloned;
     }
 }
