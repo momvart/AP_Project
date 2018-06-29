@@ -14,7 +14,7 @@ public class ButtonDrawable extends Drawable
 
     private static final double IconHeightRatio = 2.0 / 3;
 
-    private RoundRectDrawable background;
+    protected RoundRectDrawable background;
     private RoundRectDrawable bgForeground;
     private ImageDrawable icon = new ImageDrawable(null);
     private TextDrawable label;

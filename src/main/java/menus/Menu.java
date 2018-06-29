@@ -11,7 +11,7 @@ public class Menu
     private boolean focusable = false;
     private boolean focused = false;
 
-    private boolean disabled = true;
+    private boolean disabled = false;
 
     public Menu(int id, String text)
     {
@@ -100,6 +100,8 @@ public class Menu
     public void setDisabled(boolean disabled)
     {
         this.disabled = disabled;
+        if (disabled)
+            setFocused(false);
     }
 
     public static class Id

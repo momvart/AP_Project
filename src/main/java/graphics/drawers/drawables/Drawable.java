@@ -3,8 +3,12 @@ package graphics.drawers.drawables;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.transform.*;
-import utils.*;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Translate;
+import utils.GraphicsUtilities;
+import utils.PointF;
+import utils.SizeF;
 
 public abstract class Drawable implements IDrawable, IAlphaDrawable
 {
@@ -117,6 +121,8 @@ public abstract class Drawable implements IDrawable, IAlphaDrawable
         GraphicsUtilities.GCTransform(gc, scale);
 
         gc.setFill(fill);
+        gc.setLineDashes(0);
+        gc.setLineWidth(1);
         gc.setStroke(Color.BLACK);
         gc.setGlobalAlpha(gc.getGlobalAlpha() * alpha);
     }
