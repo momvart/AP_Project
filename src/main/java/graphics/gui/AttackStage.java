@@ -67,10 +67,9 @@ public class AttackStage extends MapStage
         soldierMenuItems.forEach(parentMenu::insertItem);
         lmenu.setClickListener(item ->
         {
-            System.out.println(item.getText());
             try
             {
-                attack.putUnits(item.getId() - 100, 1, new Point(29, 0));
+                attack.putUnits(item.getId() - 100, 1, new Point(0, 0));
             }
             catch (ConsoleException e)
             {

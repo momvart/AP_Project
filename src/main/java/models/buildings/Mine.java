@@ -58,13 +58,6 @@ public abstract class Mine extends VillageBuilding
     }
 
     @Override
-    public BuildingSubmenu getMenu(ParentMenu parent)
-    {
-        return super.getMenu(parent)
-                .insertItem(Menu.Id.MINE_MINE, "Mine");
-    }
-
-    @Override
     public void createAndSetVillageHelper()
     {
         villageHelper = new MineVillageHelper(this);

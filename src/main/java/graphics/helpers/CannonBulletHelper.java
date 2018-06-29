@@ -23,7 +23,7 @@ public class CannonBulletHelper extends BulletHelper
 
         try
         {
-            drawer = new Drawer(GraphicsUtilities.createImageDrawable("assets/bullets/cannonBullet.png", 10, 10, true, .5, .5));
+            drawer = new Drawer(GraphicsUtilities.createImageDrawable("assets/bullets/cannonBulletWhite.png", 10, 10, true, .5, .5));
             drawer.addUpdatable(this);
         }
         catch (URISyntaxException e)

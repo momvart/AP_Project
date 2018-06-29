@@ -15,6 +15,7 @@ import graphics.layers.MenuLayer;
 import graphics.layers.ToastLayer;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import menus.Menu;
 import menus.ParentMenu;
@@ -166,5 +167,13 @@ public class VillageStage extends MapStage
     {
         MapInputDialog dialog = new MapInputDialog(linfo, width, height, message, map);
         return dialog.showDialog();
+    }
+
+
+    @Override
+    protected void onClickAnywhereElse(MouseEvent event)
+    {
+        super.onClickAnywhereElse(event);
+        lmenu.setCurrentMenu(null);
     }
 }

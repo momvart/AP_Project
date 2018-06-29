@@ -39,9 +39,23 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         return health;
     }
 
-    public void setHealth(int health)
+    public void increaseHealth(int amount)
     {
-        this.health = health;
+        health = Math.min(this.getHealth() + amount, getInitialHealth());
+    }
+
+    public void decreaseHealth(int amount)
+    {
+        health = Math.max(health - amount, 0);
+        if (health <= 0)
+            setDead(true);
+        if (getGraphicHelper() != null)
+            getGraphicHelper().updateDrawer();
+    }
+
+    public int getInitialHealth()
+    {
+        return SoldierValues.getSoldierInfo(soldier.getType()).getInitialHealth() + (soldier.getLevel()) * 5;
     }
 
     public boolean isSoldierDeployed()
@@ -165,22 +179,6 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         return attack.getMap().getBuildings().stream().filter(building -> !building.getAttackHelper().isDestroyed()).filter(building -> building.getAttackHelper().getStrength() > 0);
     }
 
-    public void increaseHealth(int amount)
-    {
-        health = Math.min(this.getHealth() + amount, getInitialHealth());
-    }
-
-    public void decreaseHealth(int amount)
-    {
-        health = Math.max(health - amount, 0);
-        if (health <= 0)
-            setDead(true);
-    }
-
-    public int getInitialHealth()
-    {
-        return SoldierValues.getSoldierInfo(soldier.getType()).getInitialHealth() + (soldier.getLevel()) * 5;
-    }
 
     public abstract void move();
 

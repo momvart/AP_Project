@@ -2,8 +2,10 @@ package graphics.drawers;
 
 import graphics.GraphicsValues;
 import graphics.drawers.drawables.FrameAnimationDrawable;
+import graphics.drawers.drawables.HealthHProgressbarDrawable;
 import graphics.drawers.drawables.ImageDrawable;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import models.soldiers.Soldier;
 
 public class SoldierDrawer extends LayerDrawer
@@ -19,14 +21,34 @@ public class SoldierDrawer extends LayerDrawer
 
     private AnimationDrawer base;
 
+    private HealthHProgressbarDrawable healthbar;
+    private Drawer healthbarDrawer;
+
     public SoldierDrawer(Soldier soldier)
     {
         super();
-
         this.soldier = soldier;
+
+        initialize();
+    }
+
+    protected void initialize()
+    {
         base = new AnimationDrawer(null);
         getDrawers().add(base);
         setAnimations();
+
+        healthbar = new HealthHProgressbarDrawable(20, 5, Color.BLACK);
+        healthbar.setPivot(0.5, 1);
+        healthbarDrawer = new Drawer(healthbar);
+        healthbarDrawer.setPosition(0, base.getAnimations().values().stream().findFirst().get().getHeight() / 2);
+        healthbarDrawer.setVisible(false);
+        getDrawers().add(healthbarDrawer);
+    }
+
+    public Soldier getSoldier()
+    {
+        return soldier;
     }
 
     public void beeingHealedGlow()
@@ -102,5 +124,14 @@ public class SoldierDrawer extends LayerDrawer
     {
         gc.restore();
         super.onPostDraw(gc);
+    }
+
+    public void updateDrawer()
+    {
+        if (!getSoldier().getAttackHelper().isDead() && getSoldier().getAttackHelper().getHealth() < getSoldier().getAttackHelper().getInitialHealth())
+        {
+            healthbarDrawer.setVisible(true);
+            healthbar.setProgress((double)getSoldier().getAttackHelper().getHealth() / getSoldier().getAttackHelper().getInitialHealth());
+        }
     }
 }

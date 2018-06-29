@@ -9,15 +9,15 @@ import models.buildings.Building;
 public class BuildingAttackHelper implements IOnReloadListener
 {
     protected Building building;
-    private final int startStrength;
+    private final int initStrength;
     protected int strength;
     protected boolean destroyed;
     protected Attack attack;
 
     public BuildingAttackHelper(Building building, Attack attack)
     {
-        startStrength = building.getBuildingInfo().getInitialStrength() + building.getBuildingInfo().getUpgradeStrengthInc() * building.getLevel();
-        strength = startStrength;
+        initStrength = building.getBuildingInfo().getInitialStrength() + building.getBuildingInfo().getUpgradeStrengthInc() * building.getLevel();
+        strength = initStrength;
         this.building = building;
         this.attack = attack;
     }
@@ -27,9 +27,9 @@ public class BuildingAttackHelper implements IOnReloadListener
         return building;
     }
 
-    public int getStartStrength()
+    public int getInitialStrength()
     {
-        return startStrength;
+        return initStrength;
     }
 
     public int getStrength()
@@ -45,7 +45,9 @@ public class BuildingAttackHelper implements IOnReloadListener
             destroyed = true;
             callOnDestroyed();
         }
-        getGraphicHelper().updateDrawer();
+
+        if (getGraphicHelper() != null)
+            getGraphicHelper().updateDrawer();
     }
 
     public boolean isDestroyed()

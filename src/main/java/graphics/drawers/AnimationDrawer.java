@@ -18,6 +18,7 @@ public class AnimationDrawer extends Drawer implements IFrameUpdatable
     {
         super(baseDrawable);
         this.baseDrawable = baseDrawable;
+        setDrawable(baseDrawable);
     }
 
     public void addAnimation(String name, AnimationDrawable anim)

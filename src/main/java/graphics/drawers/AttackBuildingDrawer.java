@@ -1,19 +1,16 @@
 package graphics.drawers;
 
 import graphics.GraphicsValues;
-import graphics.drawers.drawables.HProgressbarDrawable;
-import graphics.drawers.drawables.IAlphaDrawable;
+import graphics.drawers.drawables.HealthHProgressbarDrawable;
 import graphics.drawers.drawables.animators.AlphaAnimator;
 import graphics.drawers.drawables.animators.ScaleAnimator;
 import javafx.scene.paint.Color;
 import models.Map;
 import models.buildings.Building;
-import utils.GraphicsUtilities;
 
 public class AttackBuildingDrawer extends BuildingDrawer
 {
-    private Color[] strengthColors = new Color[] { Color.RED, Color.ORANGE, Color.YELLOW, Color.FORESTGREEN, Color.FORESTGREEN };
-    private HProgressbarDrawable strengthbar;
+    private HealthHProgressbarDrawable strengthbar;
     private Drawer strengthbarDrawer;
 
     public AttackBuildingDrawer(Building building, Map map)
@@ -26,7 +23,7 @@ public class AttackBuildingDrawer extends BuildingDrawer
     {
         super.initialize();
 
-        strengthbar = new HProgressbarDrawable(20, 5, Color.BLACK);
+        strengthbar = new HealthHProgressbarDrawable(20, 5, Color.BLACK);
         strengthbar.setPivot(0.5, 1);
         strengthbarDrawer = new Drawer(strengthbar);
         strengthbarDrawer.setPosition(0, base.getDrawable().getHeight() / 2);
@@ -72,11 +69,10 @@ public class AttackBuildingDrawer extends BuildingDrawer
         if (getBuilding().getAttackHelper().isDestroyed())
             destroyBuilding();
 
-        if (getBuilding().getAttackHelper().getStrength() < getBuilding().getAttackHelper().getStartStrength() && !getBuilding().getAttackHelper().isDestroyed())
+        if (getBuilding().getAttackHelper().getStrength() < getBuilding().getAttackHelper().getInitialStrength() && !getBuilding().getAttackHelper().isDestroyed())
         {
             strengthbarDrawer.setVisible(true);
-            strengthbar.setProgress((double)getBuilding().getAttackHelper().getStrength() / getBuilding().getAttackHelper().getStartStrength());
-            strengthbar.setFill(strengthColors[(int)(strengthbar.getProgress() / 0.25)]);
+            strengthbar.setProgress((double)getBuilding().getAttackHelper().getStrength() / getBuilding().getAttackHelper().getInitialStrength());
         }
     }
 }

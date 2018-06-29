@@ -18,12 +18,10 @@ import static java.lang.Math.floor;
 public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnDecampListener, IOnSoldierDieListener
 {
     protected Soldier soldier;
-    private Attack attack;
 
     private SoldierDrawer drawer;
 
     protected PointF moveDest;
-    private boolean isSoldierHealer = false;
     private IOnMoveFinishedListener moveListener;
     private Status status;
     private int turn = 1;
@@ -222,5 +220,10 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     public void onSoldierDie()
     {
         makeDie();
+    }
+
+    public void updateDrawer()
+    {
+        drawer.updateDrawer();
     }
 }

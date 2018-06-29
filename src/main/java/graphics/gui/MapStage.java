@@ -172,5 +172,11 @@ public abstract class MapStage extends Stage
         for (int i = graphicHandlers.size() - 1; i >= 0; i--)
             if (graphicHandlers.get(i).handleMouseClickResult(event))
                 return;
+        onClickAnywhereElse(event);
+    }
+
+    protected void onClickAnywhereElse(MouseEvent event)
+    {
+
     }
 }
