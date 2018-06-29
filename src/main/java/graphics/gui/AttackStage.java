@@ -79,11 +79,6 @@ public class AttackStage extends MapStage
             soldierMenuItems.add(submenu);
         }
         soldierMenuItems.forEach(parentMenu::insertItem);
-        lmenu.setClickListener(item ->
-        {
-            soldierMenuItems.forEach(soldierMenuItem -> soldierMenuItem.setFocused(false));
-            item.setFocused(true);
-        });
         lmenu.setCurrentMenu(parentMenu);
 
         linfo = new ToastLayer(7, new RectF(0, 0, width, height), gHandler);
@@ -173,20 +168,16 @@ public class AttackStage extends MapStage
                     int J = j;
                     drawer.setClickListener((sender, event) ->
                     {
-                        Optional<Menu> menu = lmenu.getCurrentMenu().getMenuItems().stream().filter(Menu::isFocused).findFirst();
-                        if (menu.isPresent())
+                        SoldierMenuItem menu = (SoldierMenuItem)lmenu.getCurrentMenu().getMenuItems().stream().filter(Menu::isFocused).findFirst().orElse(null);
+                        if (menu == null)
+                            return;
+                        try
                         {
-                            try
-                            {
-                                attack.putUnits(menu.get().getId() - 100, 1, new Point(I, J));
-                            }
-                            catch (ConsoleException e)
-                            {
-                                e.printStackTrace();
-                            }
+                            attack.putUnits(menu.getId() - 100, 1, new Point(I, J));
+                            menu.setCount((int)attack.getAliveUnits(menu.getId() - 100).filter(soldier -> !soldier.getAttackHelper().isSoldierDeployed()).count());
+                            lmenu.updateMenu();
                         }
-                        else
-                            showInfo(NO_SOLDIER_FOCUSED_ERROR);
+                        catch (ConsoleException e) { e.printStackTrace(); }
                     });
                     drawer.setLayer(lFloor);
                 }

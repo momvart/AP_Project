@@ -12,12 +12,13 @@ public class TrainSoldierItem extends Menu
 
     public TrainSoldierItem(int soldierType, int availableCount)
     {
-        super(Id.BARRACKS_TRAIN_ITEM,
-                SoldierValues.getSoldierInfo(soldierType).getName() + " " +
-                        (availableCount >= 0 ? "A x" + availableCount : "U"));
+        super(Id.BARRACKS_TRAIN_ITEM, SoldierValues.getSoldierInfo(soldierType).getName());
         this.soldierType = soldierType;
         this.availableCount = availableCount;
-        this.setIconPath(GraphicsValues.getSoldierAssetsPath(soldierType) + "/icon/Icon.png");
+        if (availableCount == 0)
+            setDisabled(true);
+
+        this.setIconPath(GraphicsValues.getSoldierAssetsPath(soldierType) + "/icon/Icon" + (isDisabled() ? "G" : "") + ".png");
     }
 
     public int getSoldierType()

@@ -38,6 +38,11 @@ public class ButtonDrawable extends Drawable
         setSize(width, height);
     }
 
+    public void setText(String text)
+    {
+        this.label.setText(text);
+    }
+
     @Override
     public void setFill(Paint fill)
     {

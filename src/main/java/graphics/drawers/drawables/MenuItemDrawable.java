@@ -33,7 +33,6 @@ public class MenuItemDrawable extends ButtonDrawable
         else
             background.setStroke(Color.TRANSPARENT);
 
-
         super.onPreDraw(gc);
     }
 }

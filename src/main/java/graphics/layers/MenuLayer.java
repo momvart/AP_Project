@@ -53,7 +53,7 @@ public class MenuLayer extends Layer
         this.itemCellSize = itemCellSize;
     }
 
-    private void updateMenu()
+    public void updateMenu()
     {
         removeAllObjects();
 
