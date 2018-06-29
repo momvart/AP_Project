@@ -23,12 +23,13 @@ import utils.GraphicsUtilities;
 import utils.RectF;
 import utils.SizeF;
 
+import java.awt.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public abstract class MapStage extends Stage
 {
-    private Map map;
+    protected Map map;
 
     private GameLooper looper;
 
@@ -37,9 +38,9 @@ public abstract class MapStage extends Stage
     protected GraphicHandler gHandler;
 
     protected GameScene gScene;
-    private final Layer lFloor;
+    protected final Layer lFloor;
     private final Layer lObjects;
-    private final Layer lbackground;
+    protected final Layer lbackground;
 
     protected final double width;
     protected final double height;
@@ -77,9 +78,11 @@ public abstract class MapStage extends Stage
     {
         Group group = new Group();
 
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double widthS = screenSize.getWidth();
         GraphicsValues.setScale(0.8);
-        if (System.getProperty("os.name").equals("Linux"))
-            GraphicsValues.setScale(.8);
+        if (System.getProperty("os.name").equals("Linux") && (widthS - 3840 <= 1 || widthS - 3840 >= -1))
+            GraphicsValues.setScale(1.5);
 
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);
@@ -109,36 +112,25 @@ public abstract class MapStage extends Stage
         show();
     }
 
-    private void setUpFloor()
+    protected void setUpFloor()
     {
         try
         {
             ImageDrawable bg;
             ImageDrawable tile1;
             ImageDrawable tile2;
-            if (this instanceof AttackStage)
-                bg = GraphicsUtilities.createImageDrawable("assets/floor/background.png", PositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 30 * 2,
-                        PositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 30 * 2, true);
-            else
-                bg = GraphicsUtilities.createImageDrawable("assets/floor/background2.png", PositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 30 * 2,
-                        PositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 30 * 2, true);
+            bg = GraphicsUtilities.createImageDrawable("assets/floor/background2.png", PositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 30 * 2,
+                    PositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 30 * 2, true);
             Drawer bgDrawer = new Drawer(bg);
             bgDrawer.setPosition(0, 0);
             bg.setPivot(0, 0.5);
             bgDrawer.setLayer(lbackground);
 
-            if (this instanceof AttackStage)
-            {
-                tile1 = GraphicsUtilities.createImageDrawable("assets/floor/isometric3.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
-                tile2 = GraphicsUtilities.createImageDrawable("assets/floor/isometric4.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
-            }
-            else
-            {
-                tile1 = GraphicsUtilities.createImageDrawable("assets/floor/isometric1.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
-                tile2 = GraphicsUtilities.createImageDrawable("assets/floor/isometric2.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
-            }
+            tile1 = GraphicsUtilities.createImageDrawable("assets/floor/isometric1.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
+            tile2 = GraphicsUtilities.createImageDrawable("assets/floor/isometric2.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
             tile1.setPivot(.5, .5);
             tile2.setPivot(.5, .5);
+
             for (int i = 0; i < map.getWidth(); i++)
                 for (int j = 0; j < map.getHeight(); j++)
                 {
