@@ -3,7 +3,6 @@ package graphics.gui;
 import graphics.*;
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
-import graphics.layers.ResourceLayer;
 import graphics.drawers.drawables.RoundRectDrawable;
 import graphics.drawers.drawables.TextDrawable;
 import graphics.gui.dialogs.MapInputDialog;
@@ -12,6 +11,7 @@ import graphics.gui.dialogs.SingleChoiceDialog;
 import graphics.helpers.BuildingGraphicHelper;
 import graphics.helpers.VillageBuildingGraphicHelper;
 import graphics.layers.MenuLayer;
+import graphics.layers.ResourceLayer;
 import graphics.layers.ToastLayer;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
@@ -66,7 +66,6 @@ public class VillageStage extends MapStage
         guiHandler = new GraphicHandler(guiCanvas.getGraphicsContext2D(), new RectF(0, 0, guiCanvas.getWidth(), guiCanvas.getHeight()));
         guiScene = new GameScene(width, height);
 
-        showRightBar();
 
         lmenu.setItemCellSize(CELL_SIZE);
         lmenu.setClickListener(item ->
@@ -117,15 +116,6 @@ public class VillageStage extends MapStage
     public void showBottomMenu(Building building)
     {
         lmenu.setCurrentMenu(building.getMenu(new ParentMenu(Menu.Id.VILLAGE_MAIN_MENU, "")));
-    }
-
-    public void showRightBar()
-    {
-        double cellSize = height / 10;
-        MenuLayer rightBar = new MenuLayer(5, new RectF(width - cellSize, 0, cellSize, 0), MenuLayer.Orientation.VERTICAL);
-        rightBar.setItemCellSize(cellSize);
-
-        gScene.addLayer(rightBar);
     }
 
     public void showInfo(String info)
