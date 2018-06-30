@@ -105,11 +105,14 @@ public abstract class MapStage extends Stage
         gHandler.setScene(gScene);
         graphicHandlers.add(gHandler);
 
-        new GameLooper(gHandler).start();
+        looper = new GameLooper(gHandler);
+        looper.start();
         preShow(group);
         group.setOnMouseClicked(this::handleMouseClick);
         setScene(new Scene(group));
         show();
+
+        setOnCloseRequest(event -> onClose());
     }
 
     protected void setUpFloor()
@@ -170,5 +173,10 @@ public abstract class MapStage extends Stage
     protected void onClickAnywhereElse(MouseEvent event)
     {
 
+    }
+
+    protected void onClose()
+    {
+        looper.stop();
     }
 }

@@ -32,7 +32,7 @@ public class HealerAttackHelper extends SoldierAttackHelper
     private final ArrayList<Point> points;
     private Point destination;
 
-    private int timeTillDie = 10;
+    private int timeTillDie = 200;
 
     public void ageOneDeltaT()
     {
@@ -83,7 +83,10 @@ public class HealerAttackHelper extends SoldierAttackHelper
         Healer healer = (Healer)soldier;
         HealerAttackHelper healerAttackHelper = (HealerAttackHelper)healer.getAttackHelper();
         if (healerAttackHelper.getTimeTillDie() <= 0)
+        {
+            System.out.println("fuck");
             setDead(true);
+        }
     }
 
     @Override

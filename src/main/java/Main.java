@@ -118,10 +118,12 @@ public class Main extends Application
             try (BufferedReader reader = Files.newBufferedReader(Paths.get("data", "save.json")))
             {
                 World.openGame(reader);
+                new VillageView(new Scanner(System.in));
+                stage.close();
             }
             catch (Exception ignored)
             {
-
+                ignored.printStackTrace();
             }
         });
         quit.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->

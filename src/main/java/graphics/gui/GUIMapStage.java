@@ -27,6 +27,7 @@ public abstract class GUIMapStage extends MapStage
     private Canvas guiCanvas;
     private GameScene guiScene;
     private GraphicHandler guiHandler;
+    private GameLooper guiLooper;
 
     private MenuLayer lMenu;
     private ToastLayer lInfo;
@@ -63,7 +64,8 @@ public abstract class GUIMapStage extends MapStage
 
         guiHandler.setScene(guiScene);
 
-        new GameLooper(guiHandler).start();
+        guiLooper = new GameLooper(guiHandler);
+        guiLooper.start();
 
         graphicHandlers.add(guiHandler);
     }
@@ -112,4 +114,10 @@ public abstract class GUIMapStage extends MapStage
         return dialog.showDialog();
     }
 
+    @Override
+    protected void onClose()
+    {
+        super.onClose();
+        guiLooper.stop();
+    }
 }

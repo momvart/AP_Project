@@ -13,7 +13,7 @@ public class SoldierDrawer extends LayerDrawer
     public static final String IDLE = "idle";
     public static final String RUN = "run";
     public static final String ATTACK = "attack";
-    public static final String DIE = "die";
+    //public static final String DIE = "die";
 
     private String lastAnim = IDLE;
 

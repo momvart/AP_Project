@@ -61,7 +61,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     private void makeDie()
     {
         status = Status.DIE;
-        drawer.playAnimation(SoldierDrawer.DIE);
+//        drawer.playAnimation(SoldierDrawer.DIE);
     }
 
     private void makeRun()
@@ -259,7 +259,6 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     @Override
     public void callOnReload()
     {
-        GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
         if (turn == 1)
         {
             triggerSoldier();
@@ -268,8 +267,6 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         if (status == Status.ATTACK)
         {
             makeAttack();
-            if (gsah.getTarget() != null)
-                System.out.println("strength is :" + gsah.getTarget().getAttackHelper().getStrength());
             super.callOnReload();
         }
     }
