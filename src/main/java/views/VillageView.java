@@ -20,8 +20,10 @@ import models.soldiers.SoldierValues;
 import serialization.AttackMapGlobalAdapter;
 import serialization.BuildingGlobalAdapter;
 import serialization.StorageGlobalAdapter;
+import utils.Point;
 import views.dialogs.DialogResult;
 import views.dialogs.DialogResultCode;
+import views.dialogs.NumberInputDialog;
 import views.dialogs.TextInputDialog;
 
 import java.io.BufferedReader;
@@ -32,6 +34,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
 
 public class VillageView extends ConsoleMenuContainerView
 {
@@ -110,6 +113,33 @@ public class VillageView extends ConsoleMenuContainerView
                 case Menu.Id.DEFENSIVE_TARGET_INFO:
                     showAttackInfo((DefensiveTower)((IBuildingMenu)currentMenu).getBuilding());
                     break;
+                case Menu.Id.UPGRADE_COMMAND:
+                {
+                    Building building = ((IBuildingMenu)getCurrentMenu()).getBuilding();
+                    upgradeBuilding(building);
+                }
+                break;
+                case Menu.Id.TH_AVAILABLE_BUILDING_ITEM:
+                {
+                    BuildingInfo info = ((AvailableBuildingItem)menu).getBuildingInfo();
+                    constructBuilding(info);
+                }
+                break;
+                case Menu.Id.BARRACKS_TRAIN_ITEM:
+                {
+                    TrainSoldierItem item = (TrainSoldierItem)menu;
+
+                    if (item.getAvailableCount() < 0)
+                        throw new SoldierUnavailableException(SoldierValues.getSoldierInfo(item.getSoldierType()));
+
+                    trainSoldier(item);
+                }
+                break;
+                case Menu.Id.MINE_MINE:
+                {
+                    mineMine((Mine)((IBuildingMenu)getCurrentMenu()).getBuilding());
+                }
+                break;
                 case Menu.Id.ATTACK_LOAD_MAP:
                 {
                     DialogResult result = villageStage.showOpenMapDialog("Enter path please");
@@ -196,7 +226,7 @@ public class VillageView extends ConsoleMenuContainerView
                 System.out.print(map.isEmptyForBuilding(j, i) ? 0 : 1);
             System.out.print('\n');
         }
-        return villageStage.showMapInputDialog(String.format("Where do you want to build %d", buildingName), map);
+        return villageStage.showMapInputDialog(String.format("Where do you want to build %s", buildingName), map);
     }
 
     public DialogResult showUpgradeDialog(String buildingName, Resource cost)
@@ -331,5 +361,56 @@ public class VillageView extends ConsoleMenuContainerView
         {
             throw new MyIOException("There is no valid file in this location.", ex);
         }
+    }
+
+    private void trainSoldier(TrainSoldierItem item) throws NotEnoughResourceException, BuildingInConstructionException
+    {
+        Barracks barracks = (Barracks)((TrainSoldierSubmenu)getCurrentMenu()).getBuilding();
+        if (barracks.getBuildStatus() == BuildStatus.IN_CONSTRUCTION)
+            throw new BuildingInConstructionException(barracks);
+        DialogResult result = showSoldierTrainCountDialog(item.getAvailableCount());
+        if (result.getResultCode() != DialogResultCode.YES)
+            return;
+
+        barracks.trainSoldier(item.getSoldierType(), (int)result.getData(NumberInputDialog.KEY_NUMBER));
+    }
+
+    private void constructBuilding(BuildingInfo info) throws NotEnoughResourceException, NoAvailableBuilderException
+    {
+        if (showConstructDialog(info.getName(), info.getBuildCost()).getResultCode() != DialogResultCode.YES)
+            return;
+        Point location;
+        while (true)
+        {
+            DialogResult mapResult = showConstructionMapDialog(info.getName(), village.getMap());
+            if (mapResult.getResultCode() == DialogResultCode.CANCEL)
+                return;
+
+            Matcher m = (Matcher)mapResult.getData(TextInputDialog.KEY_MATCHER);
+            location = new Point(Integer.parseInt(m.group("x")) - 1, Integer.parseInt(m.group("y")) - 1);
+            if (village.getMap().isEmptyForBuilding(location))
+                break;
+
+            showText("You can't build this building here. Please choose another cell.");
+        }
+        village.construct(info.getType(), location);
+    }
+
+    private void upgradeBuilding(Building building) throws ConsoleException, ConsoleRuntimeException
+    {
+        if (building.getBuildStatus() == BuildStatus.IN_CONSTRUCTION)
+            throw new BuildingInConstructionException(building);
+        Resource cost = building.getBuildingInfo().getUpgradeCost();
+        if (showUpgradeDialog(building.getName(), cost).getResultCode() != DialogResultCode.YES)
+            return;
+
+        World.getVillage().upgradeBuilding(building);
+    }
+
+    private void mineMine(Mine mine) throws BuildingInConstructionException
+    {
+        if (mine.getBuildStatus() == BuildStatus.IN_CONSTRUCTION)
+            throw new BuildingInConstructionException(mine);
+        mine.mine();
     }
 }

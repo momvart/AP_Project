@@ -17,6 +17,8 @@ public class VillageBuildingGraphicHelper extends BuildingGraphicHelper implemen
         buildingDrawer.setLayer(layer);
         buildingDrawer.setPosition(building.getLocation().getX(), building.getLocation().getY());
         buildingDrawer.updateDrawer();
+
+        setReloadDuration(1);
     }
 
     @Override
