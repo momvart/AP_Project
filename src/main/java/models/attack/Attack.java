@@ -12,7 +12,6 @@ import utils.MapCellNode;
 import utils.Point;
 import utils.Size;
 
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -450,7 +449,7 @@ public class Attack
                 for (int i = -1; i <= 1; i++)
                     for (int j = -1; j <= 1; j++)
                         if (!(i == 0 && j == 0) &&
-                                (((isFlying && map.isValid(x + i, y + j)) || map.isEmpty(x + i, y + j)) || (target.getX() == x + i && target.getY() == y + j)))
+                                (((isFlying && map.isValid(x + i, y + j)) || map.isEmptyOrDestroyed(x + i, y + j)) || (target.getX() == x + i && target.getY() == y + j)))
                         {
                             MapCellNode child = nodes[x + i][y + j];
                             if (child == null)

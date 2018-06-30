@@ -174,6 +174,8 @@ public class GraphicsValues
     public static class IconPaths
     {
         public static String Info = UI_ASSETS_PATH + "/info.png";
+        public static String Save = UI_ASSETS_PATH + "/save.png";
+        public static String Settings = UI_ASSETS_PATH + "/settings.png";
 
         public static String Map = UI_ASSETS_PATH + "/map.png";
         public static String NewMap = UI_ASSETS_PATH + "/map_plus.png";

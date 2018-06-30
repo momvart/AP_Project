@@ -12,7 +12,10 @@ public class ButtonDrawable extends Drawable
     private static final double CornerRadius = 10;
     private static final double InsidePadding = GraphicsValues.PADDING / 2;
 
-    private static final double IconHeightRatio = 2.0 / 3;
+    private final double IconHeightRatio;
+
+    public static final Color LIGHT = Color.rgb(255, 255, 255, 0.6);
+    public static final Color DARK = Color.rgb(0, 0, 0, 0.6);
 
     protected RoundRectDrawable background;
     protected RoundRectDrawable bgForeground;
@@ -21,8 +24,20 @@ public class ButtonDrawable extends Drawable
 
     public ButtonDrawable(String text, String iconPath, double width, double height)
     {
-        this.background = new RoundRectDrawable(width, height, CornerRadius, Color.rgb(0, 0, 0, 0.6));
+        this.background = new RoundRectDrawable(width, height, CornerRadius, DARK);
         this.bgForeground = new RoundRectDrawable(width - 2 * InsidePadding, height / 2 - InsidePadding, CornerRadius, Color.rgb(255, 255, 255, 0.2));
+
+        if (!text.isEmpty())
+        {
+            this.label = new TextDrawable(text, Color.WHITE, Fonts.getSmaller());
+            this.label.setPivot(.5, 1);
+            this.label.setHasShadow(true);
+            this.label.setMaxWidth(width - 2 * InsidePadding);
+            IconHeightRatio = 2 / 3.0;
+        }
+        else
+            IconHeightRatio = 1;
+
         if (!iconPath.isEmpty())
             try
             {
@@ -30,12 +45,6 @@ public class ButtonDrawable extends Drawable
                 this.icon.setPivot(.5, .5);
             }
             catch (Exception ignored) { }
-
-
-        this.label = new TextDrawable(text, Color.WHITE, Fonts.getSmaller());
-        this.label.setPivot(.5, 1);
-        this.label.setHasShadow(true);
-        this.label.setMaxWidth(width - 2 * InsidePadding);
 
         setSize(width, height);
     }
@@ -63,13 +72,16 @@ public class ButtonDrawable extends Drawable
         gc.restore();
 
         gc.save();
-        gc.translate(getWidth() / 2, getHeight() * IconHeightRatio / 2 + InsidePadding);
+        gc.translate(getWidth() / 2, getHeight() * IconHeightRatio / 2);
         icon.draw(gc);
         gc.restore();
 
-        gc.save();
-        gc.translate(getWidth() / 2, getHeight() - InsidePadding);
-        label.draw(gc);
-        gc.restore();
+        if (label != null)
+        {
+            gc.save();
+            gc.translate(getWidth() / 2, getHeight() - InsidePadding);
+            label.draw(gc);
+            gc.restore();
+        }
     }
 }
