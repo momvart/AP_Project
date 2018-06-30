@@ -1,5 +1,9 @@
 package graphics.gui;
 
+import com.google.gson.JsonIOException;
+import exceptions.ConsoleException;
+import exceptions.MyIOException;
+import exceptions.MyJsonException;
 import graphics.*;
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
@@ -33,8 +37,9 @@ import utils.RectF;
 import views.VillageView;
 import views.dialogs.DialogResult;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,13 +75,29 @@ public class VillageStage extends GUIMapStage
             villageView.onItemClicked(item);
         });
 
-        ButtonDrawable btnAttack = new ButtonDrawable("Attack", GraphicsValues.UI_ASSETS_PATH + "/axes.png", CELL_SIZE, CELL_SIZE);
+        ButtonDrawable btnAttack = new ButtonDrawable("Attack", GraphicsValues.IconPaths.Axes, CELL_SIZE, CELL_SIZE);
         btnAttack.setPivot(0, 0);
         btnAttack.setFill(Color.rgb(255, 255, 255, 0.6));
         Drawer dBtnAttack = new Drawer(btnAttack);
         dBtnAttack.setPosition(0, getStuffsLayer().getHeight() / ((NormalPositioningSystem)getStuffsLayer().getPosSys()).getScale() - 2);
         dBtnAttack.setLayer(getStuffsLayer());
         dBtnAttack.setClickListener(this::onBtnAttackClick);
+
+        ButtonDrawable btnSave = new ButtonDrawable("", GraphicsValues.IconPaths.Save, CELL_SIZE / 2, CELL_SIZE / 2);
+        btnSave.setPivot(0, 0);
+        btnSave.setFill(Color.rgb(255, 255, 255, 0.6));
+        Drawer dBtnSave = new Drawer(btnSave);
+        dBtnSave.setPosition(0, 0);
+        dBtnSave.setLayer(getStuffsLayer());
+        dBtnSave.setClickListener(this::onBtnSaveClick);
+
+        ButtonDrawable btnSettings = new ButtonDrawable("", GraphicsValues.IconPaths.Settings, CELL_SIZE / 2, CELL_SIZE / 2);
+        btnSettings.setPivot(0, 0);
+        btnSettings.setFill(ButtonDrawable.LIGHT);
+        Drawer dBtnSettings = new Drawer(btnSettings);
+        dBtnSettings.setPosition(0, 0.5);
+        dBtnSettings.setLayer(getStuffsLayer());
+        dBtnSettings.setClickListener(this::onBtnSettingsClick);
 
         getGuiScene().addLayer(lResource);
     }
@@ -145,5 +166,37 @@ public class VillageStage extends GUIMapStage
         mainMenu.insertItem(new Menu(Menu.Id.ATTACK_LOAD_MAP, "Load Map", GraphicsValues.IconPaths.NewMap));
         paths.forEach(p -> mainMenu.insertItem(new AttackMapItem(mainMenu, p)));
         getMenuLayer().setCurrentMenu(mainMenu);
+    }
+
+    private void onBtnSaveClick(Drawer sender, MouseEvent event)
+    {
+        try
+        {
+            try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("data", "save.json"), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING))
+            {
+                World.saveGame(writer);
+            }
+            catch (JsonIOException ex)
+            {
+                throw new MyJsonException(ex);
+            }
+            catch (NoSuchFileException ex)
+            {
+                throw new MyIOException("File not found.", ex);
+            }
+            catch (IOException ex)
+            {
+                throw new MyIOException(ex);
+            }
+        }
+        catch (ConsoleException ex)
+        {
+            villageView.showError(ex);
+        }
+    }
+
+    private void onBtnSettingsClick(Drawer sender, MouseEvent event)
+    {
+
     }
 }

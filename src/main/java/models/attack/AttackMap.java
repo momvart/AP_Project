@@ -56,4 +56,15 @@ public class AttackMap extends Map
     {
         return null;
     }
+
+    public boolean isEmptyOrDestroyed(int x, int y)
+    {
+        if (!isValid(x, y))
+            return false;
+        if (isEmpty(x, y))
+            return true;
+        else if (getBuildingAt(x, y).getAttackHelper().isDestroyed())
+            return true;
+        return true;
+    }
 }
