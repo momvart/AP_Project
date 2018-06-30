@@ -12,26 +12,29 @@ import graphics.drawers.Drawer;
 import graphics.positioning.NormalPositioningSystem;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import models.Resource;
 import models.Village;
 import utils.GraphicsUtilities;
 import utils.RectF;
 
+import java.util.function.Supplier;
+
 public class ResourceLayer extends Layer
 {
-    private Village village;
     private HProgressbarDrawable goldbar;
     private HProgressbarDrawable elixirbar;
 
     private TextDrawable lblGold;
     private TextDrawable lblElixir;
 
-    private Drawer goldTextDrawer;
-    private Drawer elixirTextDrawer;
+    private Supplier<Resource> totalCalculator;
+    private Supplier<Resource> currentCalculator;
 
-    public ResourceLayer(int order, RectF bounds, Village village)
+    public ResourceLayer(int order, RectF bounds, Supplier<Resource> currentCalculator, Supplier<Resource> totalCalculator)
     {
         super(order, bounds, new NormalPositioningSystem(1));
-        this.village = village;
+        this.totalCalculator = totalCalculator;
+        this.currentCalculator = currentCalculator;
         initialize();
     }
 
@@ -96,10 +99,12 @@ public class ResourceLayer extends Layer
     @Override
     public void draw(GraphicsContext gc, RectF cameraBounds)
     {
-        lblGold.setText(String.format("%d", village.getResources().getGold()));
-        lblElixir.setText(String.format("%d", village.getResources().getElixir()));
-        goldbar.setProgress(village.getResources().getGold() * 1.0 / (village.getTotalResourceCapacity().getGold()));
-        elixirbar.setProgress(village.getResources().getElixir() * 1.0 / (village.getTotalResourceCapacity().getElixir()));
+        Resource current = currentCalculator.get();
+        lblGold.setText(String.format("%d", current.getGold()));
+        lblElixir.setText(String.format("%d", current.getElixir()));
+        Resource total = totalCalculator.get();
+        goldbar.setProgress((double)current.getGold() / total.getGold());
+        elixirbar.setProgress((double)current.getElixir() / total.getElixir());
         super.draw(gc, cameraBounds);
     }
 }

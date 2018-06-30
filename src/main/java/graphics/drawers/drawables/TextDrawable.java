@@ -13,6 +13,8 @@ public class TextDrawable extends Drawable
 
     private Font font;
 
+    private double maxWidth = Double.POSITIVE_INFINITY;
+
     private boolean hasShadow = false;
 
     public TextDrawable(String text, Font font)
@@ -54,10 +56,16 @@ public class TextDrawable extends Drawable
         this.hasShadow = hasShadow;
     }
 
+    public void setMaxWidth(double maxWidth)
+    {
+        this.maxWidth = maxWidth;
+        updatePrivateText();
+    }
+
     @Override
     public SizeF getSize()
     {
-        return new SizeF(privateText.getBoundsInLocal().getWidth(), privateText.getBoundsInLocal().getHeight());
+        return new SizeF(Math.min(privateText.getBoundsInLocal().getWidth(), maxWidth), privateText.getBoundsInLocal().getHeight());
     }
 
     private void updatePrivateText()
@@ -65,7 +73,7 @@ public class TextDrawable extends Drawable
         privateText.setText(text);
         privateText.setFont(font);
         privateText.applyCss();
-        privateText.setLineSpacing(0);
+//        privateText.setLineSpacing(0);
         setPivots();
     }
 
@@ -84,7 +92,7 @@ public class TextDrawable extends Drawable
         if (hasShadow)
             gc.setEffect(new DropShadow(2, 0, 2, Color.BLACK));
 
-        gc.fillText(text, 0, 0);
+        gc.fillText(text, 0, 0, maxWidth);
     }
 
     @Override

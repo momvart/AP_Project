@@ -35,6 +35,7 @@ public class ButtonDrawable extends Drawable
         this.label = new TextDrawable(text, Color.WHITE, Fonts.getSmaller());
         this.label.setPivot(.5, 1);
         this.label.setHasShadow(true);
+        this.label.setMaxWidth(width - 2 * InsidePadding);
 
         setSize(width, height);
     }
