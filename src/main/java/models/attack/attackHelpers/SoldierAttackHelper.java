@@ -13,7 +13,6 @@ import utils.Point;
 import utils.PointF;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Stream;
@@ -101,7 +100,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     protected void removeSoldierIfDead()
     {
-        if (health <= 0)
+        if (getHealth() <= 0)
         {
             setDead(true);
             soldier = null;

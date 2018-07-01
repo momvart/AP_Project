@@ -19,7 +19,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 {
     protected Soldier soldier;
 
-    private SoldierDrawer drawer;
+    protected SoldierDrawer drawer;
 
     protected PointF moveDest;
     private IOnMoveFinishedListener moveListener;
@@ -57,28 +57,29 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         return status;
     }
 
-    private void makeAttack()
+    protected PointF finalStandingPoint;
+    protected double sin;
+    protected double cos;
+
+    protected void makeAttack()
     {
         status = Status.ATTACK;
         drawer.playAnimation(SoldierDrawer.ATTACK);
     }
 
-    private void makeDie()
+    private PointF nextCheckPointF;
+
+    protected void makeDie()
     {
         status = Status.DIE;
         //drawer.playAnimation(SoldierDrawer.DIE);
     }
 
-    private void makeRun()
+    protected void makeRun()
     {
         status = Status.RUN;
         drawer.playAnimation(SoldierDrawer.RUN);
     }
-
-    private PointF finalStandingPoint;
-    private PointF nextCheckPointF;
-    private double cos;
-    private double sin;
 
     Point facingBuildingPoint;
     public void startJoggingToward(PointF dest)
@@ -98,13 +99,13 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         facingBuildingPoint = soldierPath.get(1);
     }
 
-    private void setFinalStandingPoint()
+    protected void setFinalStandingPoint()
     {
         Point lastPoint = soldier.getAttackHelper().getLastPointOfStanding(soldier.getAttackHelper().getRange(), soldier.getLocation(), getVeryPoint(moveDest));
         finalStandingPoint = new PointF(lastPoint);
     }
 
-    private void doReplacing(double deltaT)
+    protected void doReplacing(double deltaT)
     {
         if (status != Status.RUN)
             return;
@@ -118,7 +119,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
             continueMoving(deltaT);
     }
 
-    private void continueMoving(double deltaT)
+    protected void continueMoving(double deltaT)
     {
         double stepDistance = deltaT * soldier.getSpeed();
         double distanceToFinalPosition = getDistanceToFinalPosition();
@@ -141,7 +142,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         }
     }
 
-    private double getDistanceToFinalPosition()
+    protected double getDistanceToFinalPosition()
     {
         return PointF.euclideanDistance(finalStandingPoint, drawer.getPosition());
     }
@@ -193,29 +194,27 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         drawer.setFace(cos, sin);
     }
 
-    private boolean isDistanceToFinalPointLessThanRange()
+    protected boolean isDistanceToFinalPointLessThanRange()
     {
         return PointF.euclideanDistance(drawer.getPosition(), finalStandingPoint) <= soldier.getAttackHelper().getRange();
     }
 
-    private boolean isSoldierDistantFighter()
+    protected boolean isSoldierDistantFighter()
     {
         if (soldier.getType() == Healer.SOLDIER_TYPE)
             return false;
         return soldier.getAttackHelper().getRange() != 1;
     }
 
-    private Point getVeryPoint(PointF position)
+    protected Point getVeryPoint(PointF position)
     {
         return new Point((int)round(position.getX()), (int)round(position.getY()));
     }
 
 
-    private void onMoveFinished()
+    protected void onMoveFinished()
     {
         makeAttack();
-        if (finalStandingPoint == null)
-            System.out.println(this);
         soldier.setLocation(getVeryPoint(finalStandingPoint));
         drawer.setPosition(finalStandingPoint.getX(), finalStandingPoint.getY());
         if (moveListener != null)

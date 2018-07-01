@@ -3,7 +3,6 @@ package graphics.helpers;
 import graphics.layers.Layer;
 import models.attack.attackHelpers.HealerAttackHelper;
 import models.soldiers.Soldier;
-import utils.Point;
 import utils.PointF;
 
 public class HealerGraphicHelper extends SoldierGraphicHelper
@@ -17,15 +16,8 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
     }
 
     @Override
-    public void setUpListeners()
-    {
-        super.setUpListeners();
-    }
-
-    @Override
     public void triggerSoldier()
     {
-        attackHelper = (HealerAttackHelper)soldier.getAttackHelper();
         attackHelper.setTarget();
         if (attackHelper.getDestination() != null)
         {
@@ -34,13 +26,42 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
     }
 
     @Override
+    public void startJoggingToward(PointF dest)
+    {
+        makeRun();
+        moveDest = dest;
+        drawer.setFace(dest.getX() - drawer.getPosition().getX(), dest.getY() - drawer.getPosition().getY());
+        finalStandingPoint = dest;
+        if (isDistanceToFinalPointLessThanRange())
+        {
+            onMoveFinished();
+            return;
+        }
+        else
+        {
+            double distanceToFinalPosition = getDistanceToFinalPosition();
+            cos = (finalStandingPoint.getX() - drawer.getPosition().getX()) / distanceToFinalPosition;
+            sin = (finalStandingPoint.getY() - drawer.getPosition().getY()) / distanceToFinalPosition;
+        }
+    }
+
+    @Override
+    protected void doReplacing(double deltaT)
+    {
+        if (getStatus() != Status.RUN)
+            return;
+        if (finalStandingPoint == null)
+            return;
+        if (attackHelper != null && attackHelper.getDestination() != null)
+        {
+            startJoggingToward(new PointF(attackHelper.getDestination()));
+            continueMoving(deltaT);
+        }
+    }
+    @Override
     public void onDecamp()
     {
-        Point newDest = attackHelper.getDestination();
-        if (newDest != null)
-        {
-            startJoggingToward(new PointF(newDest));
-        }
+        // meaning less decamp for healers
     }
 
 }

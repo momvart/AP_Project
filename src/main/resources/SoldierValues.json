@@ -103,7 +103,7 @@
     },
     "brewTime": 30,
     "speed": 3,
-    "range": 10,
+    "range": 5,
     "favouriteTargets": [],
     "initialHealth": -1,
     "initialDamage": 25,
