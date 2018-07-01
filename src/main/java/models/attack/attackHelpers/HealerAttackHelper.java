@@ -32,7 +32,7 @@ public class HealerAttackHelper extends SoldierAttackHelper
     private final ArrayList<Point> points;
     private Point destination;
 
-    private int timeTillDie = 200;
+    private int timeTillDie = 40;
 
     public void ageOneDeltaT()
     {
@@ -222,6 +222,12 @@ public class HealerAttackHelper extends SoldierAttackHelper
 
 
     @Override
+    public int getHealth()
+    {
+        return timeTillDie;
+    }
+
+    @Override
     public void setGraphicHelper(SoldierGraphicHelper graphicHelper)
     {
         if (!(graphicHelper instanceof HealerGraphicHelper))
@@ -232,17 +238,17 @@ public class HealerAttackHelper extends SoldierAttackHelper
     @Override
     public void onReload()
     {
-        if (isSoldierDeployed() && (soldier == null || isDead || getHealth() <= 0))
+        System.out.println("on reload healer ");
+        if (isSoldierDeployed() && (soldier == null || isDead))
         {
+            System.out.println("die healer " + " is dead " + isDead + " get health is :" + getHealth() + "soldier " + soldier);
             soldierDieListener.onSoldierDie();
         }
         else if(soldier != null && isSoldierDeployed() && !isDead && getHealth() > 0 )
         {
             System.out.println("should do sth");
-            setTarget();
-            fire();
             Point oldDest = destination;
-            changeDestinationIfNeeded();
+            passTurn();
             if (destination != oldDest)
             {
                 callOnDecamp();

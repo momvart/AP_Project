@@ -205,6 +205,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
             soldier.getAttackHelper().getAttack().moveOnLocation(soldier, soldier.getLocation(), getVeryPoint(drawer.getPosition()));
             soldier.setLocation(getVeryPoint(drawer.getPosition()));
         }
+        System.out.println("soldier position is :" + drawer.getPosition());
     }
 
     private double getDistanceToFinalPosition()
@@ -266,7 +267,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         sin = (nextCheckPointF.getY() - drawer.getPosition().getY()) / distanceToNextCheckPoint;
         drawer.setFace(cos, sin);
 
-        System.out.println("next checkpoint: " + nextCheckPointF);
+        System.out.println("next checkpoint: " + nextCheckPointF + " final standing point is :" + finalStandingPoint);
     }
 
     private boolean isDistanceToFinalPointLessThanRange()
