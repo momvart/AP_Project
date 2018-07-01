@@ -30,12 +30,13 @@ public class Main extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        new Thread(() ->
-        {
-            World.initialize();
-            Scanner scanner = new Scanner(System.in);
-            new MainController(new ConsoleView(scanner)).start();
-        }).start();
+//        new Thread(() ->
+//        {
+//            World.initialize();
+//            Scanner scanner = new Scanner(System.in);
+//            new MainController(new ConsoleView(scanner)).start();
+//        }).start();
+        World.initialize();
         Fonts.initialize();
         Group group = new Group();
         double width = 1200;
