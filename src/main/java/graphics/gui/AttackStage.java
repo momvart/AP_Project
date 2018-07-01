@@ -1,7 +1,8 @@
 package graphics.gui;
 
 import exceptions.ConsoleException;
-import graphics.*;
+import graphics.Fonts;
+import graphics.GraphicsValues;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ButtonDrawable;
 import graphics.drawers.drawables.ImageDrawable;
@@ -16,7 +17,6 @@ import graphics.positioning.PositioningSystem;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 import menus.Menu;
 import menus.ParentMenu;
 import menus.SoldierMenuItem;
@@ -140,9 +140,8 @@ public class AttackStage extends GUIMapStage
         {
             helper = new GeneralSoldierGraphicHelper(soldier, getObjectsLayer());
         }
-
         soldier.getAttackHelper().setGraphicHelper(helper);
-        soldier.getAttackHelper().addSoldierDieListener(this::checkForAllBuildingsDead);
+        //soldier.getAttackHelper().addSoldierDieListener(this::checkForAllBuildingsDead);
         helper.setUpListeners();
         gHandler.addUpdatable(helper);
     }

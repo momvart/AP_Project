@@ -1,17 +1,12 @@
 package graphics.helpers;
 
-import graphics.drawers.SoldierDrawer;
 import graphics.layers.Layer;
 import models.attack.attackHelpers.HealerAttackHelper;
-import models.attack.attackHelpers.IOnHealerHealListener;
 import models.soldiers.Soldier;
-import models.soldiers.SoldiersHealReport;
 import utils.Point;
 import utils.PointF;
 
-import java.util.ArrayList;
-
-public class HealerGraphicHelper extends SoldierGraphicHelper implements IOnHealerHealListener
+public class HealerGraphicHelper extends SoldierGraphicHelper
 {
     HealerAttackHelper attackHelper;
 
@@ -48,14 +43,4 @@ public class HealerGraphicHelper extends SoldierGraphicHelper implements IOnHeal
         }
     }
 
-    @Override
-    public void onHeal(ArrayList<SoldiersHealReport> reports)
-    {
-        getDrawer().playAnimation(SoldierDrawer.ATTACK);
-        for (SoldiersHealReport report : reports)
-        {
-            SoldierDrawer soldierDrawer = report.getSoldier().getAttackHelper().getGraphicHelper().getDrawer();
-            soldierDrawer.beeingHealedGlow();
-        }
-    }
 }

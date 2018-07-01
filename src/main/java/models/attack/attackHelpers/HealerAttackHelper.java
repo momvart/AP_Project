@@ -84,7 +84,6 @@ public class HealerAttackHelper extends SoldierAttackHelper
         HealerAttackHelper healerAttackHelper = (HealerAttackHelper)healer.getAttackHelper();
         if (healerAttackHelper.getTimeTillDie() <= 0)
         {
-            System.out.println("fuck");
             setDead(true);
         }
     }
@@ -104,13 +103,6 @@ public class HealerAttackHelper extends SoldierAttackHelper
         }
     }
 
-    IOnHealerHealListener onHealerHealListener;
-
-    public void setOnHealerHealListener(IOnHealerHealListener onHealerHealListener)
-    {
-        this.onHealerHealListener = onHealerHealListener;
-    }
-
     @Override
     public void fire()
     {
@@ -121,19 +113,11 @@ public class HealerAttackHelper extends SoldierAttackHelper
             {
                 for (Soldier target : targets)
                 {
-                    int initialHealth = target.getAttackHelper().getHealth();
                     System.out.println("healer healing soldier type:" + target.getType() + "in amount of" + getDamage());
                     target.getAttackHelper().increaseHealth(getDamage());
-                    reports.add(new SoldiersHealReport(soldier, initialHealth, target.getAttackHelper().getHealth()));
                 }
-                callOnHeal(reports);
             }
         }
-    }
-
-    private void callOnHeal(ArrayList<SoldiersHealReport> reports)
-    {
-        onHealerHealListener.onHeal(reports);
     }
 
     @Override
@@ -243,9 +227,6 @@ public class HealerAttackHelper extends SoldierAttackHelper
         if (!(graphicHelper instanceof HealerGraphicHelper))
             throw new IllegalArgumentException("Graphic helper should be a HealerGraphicHelper.");
         super.setGraphicHelper(graphicHelper);
-
-        HealerGraphicHelper gh = (HealerGraphicHelper)graphicHelper;
-        this.setOnHealerHealListener(gh);
     }
 
     @Override
@@ -257,6 +238,7 @@ public class HealerAttackHelper extends SoldierAttackHelper
         }
         else if(soldier != null && isSoldierDeployed() && !isDead && getHealth() > 0 )
         {
+            System.out.println("should do sth");
             setTarget();
             fire();
             Point oldDest = destination;
