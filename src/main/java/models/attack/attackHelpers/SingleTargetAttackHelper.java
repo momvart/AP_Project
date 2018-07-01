@@ -8,6 +8,7 @@ import models.soldiers.Soldier;
 import utils.Point;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class SingleTargetAttackHelper extends DefensiveTowerAttackHelper
 {
@@ -23,11 +24,12 @@ public class SingleTargetAttackHelper extends DefensiveTowerAttackHelper
     {
         DefensiveTower tower = getTower();
         Point soldierPoint = attack.getNearestSoldier(tower.getLocation(), tower.getRange(), tower.getDefenseType().convertToMoveType());
+        mainTargets = new ArrayList<>(attack.getSoldiersOnLocations().getSoldiers(soldierPoint));
         if (soldierPoint != null && attack.getSoldiersOnLocations().getSoldiers(soldierPoint, MoveType.GROUND).anyMatch(x -> !x.getAttackHelper().isDead))
         {
-            triggerListener.onBulletTrigger(soldierPoint);
+            if (mainTargets != null && mainTargets.size() != 0)
+                triggerListener.onBulletTrigger(attack.getSoldiersOnLocations().getSoldiers(soldierPoint, MoveType.GROUND).collect(Collectors.toList()).get(0).getAttackHelper().getGraphicHelper().getDrawer().getPosition(), mainTargets.get(0));
         }
-        mainTargets = new ArrayList<>(attack.getSoldiersOnLocations().getSoldiers(soldierPoint));
     }
 
     @Override

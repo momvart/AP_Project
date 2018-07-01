@@ -4,6 +4,7 @@ import graphics.IFrameUpdatable;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ImageDrawable;
 import graphics.layers.Layer;
+import models.soldiers.Soldier;
 import utils.GraphicsUtilities;
 import utils.PointF;
 
@@ -18,7 +19,7 @@ public class BulletHelper implements IFrameUpdatable
     protected PointF start;
     protected PointF end;
     protected double speed = maxSpeed;
-    public boolean hitTarget = false;
+    protected boolean hitTarget = false;
     protected double cos;
     protected double sin;
 
@@ -43,12 +44,15 @@ public class BulletHelper implements IFrameUpdatable
         drawer.setLayer(layer);
     }
 
+    Soldier targetSoldier;
 
-    public void startNewWave(final PointF start, final PointF end)
+    public void startNewWave(final PointF start, final PointF end, Soldier soldier)
     {
         this.start = start;
         this.end = end;
-        setUpCosSin(start, end);
+        targetSoldier = soldier;
+        if (soldier != null)
+            setUpCosSin(start, end);
         hitTarget = false;
         inProgress = true;
     }
@@ -56,8 +60,9 @@ public class BulletHelper implements IFrameUpdatable
     private void setUpCosSin(PointF start, PointF end)
     {
         double distance = PointF.euclideanDistance(start, end);
-        cos = (end.getX() - start.getX()) / distance;
-        sin = (end.getY() - start.getY()) / distance;
+        PointF location = targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition();
+        cos = (location.getX() - start.getX()) / distance;
+        sin = (location.getY() - start.getY()) / distance;
     }
 
     @Override
@@ -68,19 +73,50 @@ public class BulletHelper implements IFrameUpdatable
 
     public void doReplacing(double deltaT)
     {
+        System.out.println(toString());
         if (end == null || start == null)
             return;
-        if (PointF.euclideanDistance(drawer.getPosition(), end) < .5)
-        {
-            System.out.println("move has terminated ");
-            hitTarget = true;
-            drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
-            towerGraphicHelper.onBulletHit(DefenseKind.SINGLE_TARGET);
-            inProgress = false;
-        }
         if (hitTarget)
             return;
+        if (PointF.euclideanDistance(drawer.getPosition(), end) < .3)
+        {
+            hitTarget = true;
+            drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
+            inProgress = false;
+            towerGraphicHelper.onBulletHit(DefenseKind.SINGLE_TARGET);
+            start = null;
+            end = null;
+            targetSoldier = null;
+            cos = -1;
+            sin = -1;
+        }
         double step = deltaT * speed;
+        drawer.getDrawable().setRotation(getAngle(sin, cos));
+        setUpCosSin(drawer.getPosition(), new PointF(targetSoldier.getLocation()));
         drawer.setPosition(drawer.getPosition().getX() + step * cos, drawer.getPosition().getY() + step * sin);
+
+    }
+
+    private double getAngle(double sin, double cos)
+    {
+        return cos > 0 ? Math.asin(sin) : sin > 0 ? (Math.PI - Math.asin(sin)) : (-Math.PI - Math.asin(sin));
+    }
+
+    @Override
+    public String toString()
+    {
+        return "BulletHelper{" +
+                "inProgress=" + inProgress +
+                ", towerGraphicHelper=" + towerGraphicHelper +
+                ", maxSpeed=" + maxSpeed +
+                ", drawer=" + drawer +
+                ", start=" + start +
+                ", end=" + end +
+                ", speed=" + speed +
+                ", hitTarget=" + hitTarget +
+                ", cos=" + cos +
+                ", sin=" + sin +
+                ", targetSoldier=" + targetSoldier +
+                '}';
     }
 }

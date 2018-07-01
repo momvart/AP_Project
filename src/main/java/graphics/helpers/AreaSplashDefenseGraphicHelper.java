@@ -3,6 +3,7 @@ package graphics.helpers;
 import graphics.layers.Layer;
 import models.Map;
 import models.buildings.Building;
+import models.soldiers.Soldier;
 import utils.PointF;
 
 public class AreaSplashDefenseGraphicHelper extends DefensiveTowerGraphicHelper
@@ -17,9 +18,9 @@ public class AreaSplashDefenseGraphicHelper extends DefensiveTowerGraphicHelper
     }
 
     @Override
-    protected void triggerBullet()
+    protected void triggerBullet(Soldier soldier)
     {
-        bulletHelper.startNewWave(new PointF(building.getLocation()), bulletUltimatePosition);
+        bulletHelper.startNewWave(new PointF(building.getLocation()), bulletUltimatePosition, soldier);
     }
 
     @Override

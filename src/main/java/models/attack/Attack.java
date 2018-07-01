@@ -196,7 +196,8 @@ public class Attack
 
     public int numberOfSoldiersIn(int x, int y, MoveType moveType)
     {
-        return (int)soldiersOnLocations.getSoldiers(x, y, moveType).count();
+        int count = (int)soldiersOnLocations.getSoldiers(x, y, moveType).count();
+        return count;
     }
 
     public int numberOfSoldiersIn(Point location)
@@ -276,6 +277,7 @@ public class Attack
                         soldiers.addAll(soldiersOnLocations.getSoldiers(x + k * i, y + k * j));
                     }
                 }
+
         if (soldiers.isEmpty())
             throw new SoldierNotFoundException("Soldier not found", "SoldierNotFound");
         return soldiers;
@@ -313,7 +315,6 @@ public class Attack
                         else
                             min = new Point(point.getX(), point.getY());
                     }
-
                 }
         if (!min.equals(new Point(-30, -30)) && Point.euclideanDistance(location, min) <= range)
             return min;

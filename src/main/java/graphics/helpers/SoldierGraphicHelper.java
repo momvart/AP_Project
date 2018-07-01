@@ -13,7 +13,7 @@ import utils.PointF;
 
 import java.util.List;
 
-import static java.lang.Math.floor;
+import static java.lang.Math.round;
 
 public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnDecampListener, IOnSoldierDieListener
 {
@@ -61,7 +61,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     private void makeDie()
     {
         status = Status.DIE;
-//        drawer.playAnimation(SoldierDrawer.DIE);
+        //drawer.playAnimation(SoldierDrawer.DIE);
     }
 
     private void makeRun()
@@ -96,23 +96,23 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
                 else if (lastPoint.getY() == moveDest.getY())
                     finalStandingPoint = new PointF(lastPoint.getX() - .8, lastPoint.getY() + .5);
                 else
-                    finalStandingPoint = new PointF(lastPoint.getX() - .8, lastPoint.getY());
+                    finalStandingPoint = new PointF(lastPoint.getX() - .8, lastPoint.getY() + .2);
             }
             else if (lastPoint.getX() == moveDest.getX())
             {
                 if (lastPoint.getY() < moveDest.getY())
                     finalStandingPoint = new PointF(lastPoint.getX() - .5, lastPoint.getY() + .8);
                 else if (lastPoint.getY() > moveDest.getY())
-                    finalStandingPoint = new PointF(lastPoint.getX() - .5, lastPoint.getY());
+                    finalStandingPoint = new PointF(lastPoint.getX() - .5, lastPoint.getY() + .2);
             }
             else
             {
                 if (lastPoint.getY() < moveDest.getY())
-                    finalStandingPoint = new PointF(lastPoint.getX(), lastPoint.getY() + .8);
+                    finalStandingPoint = new PointF(lastPoint.getX() - .2, lastPoint.getY() + .8);
                 else if (lastPoint.getY() == moveDest.getY())
-                    finalStandingPoint = new PointF(lastPoint.getX(), lastPoint.getY() + .5);
+                    finalStandingPoint = new PointF(lastPoint.getX() - .2, lastPoint.getY() + .5);
                 else
-                    finalStandingPoint = new PointF(lastPoint);
+                    finalStandingPoint = new PointF(lastPoint.getX() - .2, lastPoint.getY() + .2);
             }
         }
         else
@@ -124,26 +124,26 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
                 if (lastPoint.getY() == moveDest.getY() - 1)
                     finalStandingPoint = new PointF(moveDest.getX() + .7, moveDest.getY() - .7);
                 else if (lastPoint.getY() == moveDest.getY())
-                    finalStandingPoint = new PointF(moveDest.getX(), moveDest.getY() + .5);
+                    finalStandingPoint = new PointF(moveDest.getX() + .2, moveDest.getY() + .5);
                 else
-                    finalStandingPoint = new PointF(moveDest.getX(), moveDest.getY() + 1);
+                    finalStandingPoint = new PointF(moveDest.getX() + .2, moveDest.getY() + 1.2);
             }
             else if (lastPoint.getX() == moveDest.getX())
             {
                 if (lastPoint.getY() == moveDest.getY() - 1)
-                    finalStandingPoint = new PointF(moveDest.getX() - .5, moveDest.getY());
+                    finalStandingPoint = new PointF(moveDest.getX() - .5, moveDest.getY() - .3);
                 else
-                    finalStandingPoint = new PointF(moveDest.getX() - .5, moveDest.getY() + 1);
+                    finalStandingPoint = new PointF(moveDest.getX() - .5, moveDest.getY() + 1.2);
 
             }
             else
             {
                 if (lastPoint.getY() == moveDest.getY() - 1)
-                    finalStandingPoint = new PointF(moveDest.getX() - 1, moveDest.getY());
+                    finalStandingPoint = new PointF(moveDest.getX() - 1.2, moveDest.getY() - .2);
                 else if (lastPoint.getY() == moveDest.getY())
-                    finalStandingPoint = new PointF(moveDest.getX() - 1, moveDest.getY() + .5);
+                    finalStandingPoint = new PointF(moveDest.getX() - 1.2, moveDest.getY() + .5);
                 else
-                    finalStandingPoint = new PointF(moveDest.getX() - 1, moveDest.getY() + 1);
+                    finalStandingPoint = new PointF(moveDest.getX() - 1.2, moveDest.getY() + 1.2);
             }
             nextCheckPointF = null;
         }
@@ -167,8 +167,6 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
                     System.out.println("archer ");
                     if (soldierPath.get(1).equals(nextCheckPoint))
                     {
-                        System.out.println("critical section ");
-                        System.out.println("final soloution ");
                         if (PointF.euclideanDistance(drawer.getPosition(), moveDest) <= soldier.getAttackHelper().getRange())
                             onMoveFinished();
                         else
@@ -176,7 +174,6 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
                     }
                     else
                     {
-                        System.out.println("normal solution ");
                         nextCheckPointF = new PointF(nextCheckPoint);
                     }
                 }
@@ -194,7 +191,6 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
             }
             catch (Exception e)
             {
-                System.out.println("catch");
                 e.printStackTrace();
             }
 
@@ -210,7 +206,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         }
         if (nextCheckPointF != null)
         {
-            System.out.println("drawerPosition is :" + drawer.getPosition() + "finalstanding point is :" + finalStandingPoint);
+            System.out.println("soldier position is :" + drawer.getPosition() + "finalstanding point is :" + finalStandingPoint);
             double stepDistance = deltaT * soldier.getSpeed() * 1.5;//tired of little speed of soldiers so we add a ratio to get scaped
             distanceToFinalPosition = PointF.euclideanDistance(finalStandingPoint, drawer.getPosition());
             if (distanceToFinalPosition < 0.1 || distanceToFinalPosition < stepDistance)
@@ -219,18 +215,18 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
                 return;
             }
             PointF newPosition = new PointF(drawer.getPosition().getX() + cos * soldier.getSpeed() * deltaT, drawer.getPosition().getY() + sin * soldier.getSpeed() * deltaT);
-            if (floor(newPosition.getX()) != floor(soldier.getLocation().getX()) || floor(newPosition.getY()) != floor(soldier.getLocation().getY()))
-            {
-                soldier.getAttackHelper().getAttack().moveOnLocation(soldier, soldier.getLocation(), new Point((int)floor(drawer.getPosition().getX()), (int)floor(drawer.getPosition().getY())));
-                soldier.setLocation(new Point((int)floor(drawer.getPosition().getX()), (int)floor(drawer.getPosition().getY())));
-            }
             drawer.setPosition(newPosition.getX(), newPosition.getY());
+            if (!getVeryPoint(drawer.getPosition()).equals(soldier.getLocation()))
+            {
+                soldier.getAttackHelper().getAttack().moveOnLocation(soldier, soldier.getLocation(), getVeryPoint(drawer.getPosition()));
+                soldier.setLocation(getVeryPoint(drawer.getPosition()));
+            }
         }
     }
 
     private Point getVeryPoint(PointF position)
     {
-        return new Point((int)floor(position.getX()), (int)floor(position.getY()));
+        return new Point((int)round(position.getX()), (int)round(position.getY()));
     }
 
 
@@ -259,6 +255,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     @Override
     public void callOnReload()
     {
+        GeneralSoldierAttackHelper gsah = (GeneralSoldierAttackHelper)soldier.getAttackHelper();
         if (turn == 1)
         {
             triggerSoldier();
@@ -267,6 +264,8 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         if (status == Status.ATTACK)
         {
             makeAttack();
+            if (gsah.getTarget() != null)
+                System.out.println("strength is :" + gsah.getTarget().getAttackHelper().getStrength());
             super.callOnReload();
         }
     }

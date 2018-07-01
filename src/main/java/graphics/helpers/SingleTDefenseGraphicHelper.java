@@ -3,6 +3,7 @@ package graphics.helpers;
 import graphics.layers.Layer;
 import models.Map;
 import models.buildings.Building;
+import models.soldiers.Soldier;
 import utils.PointF;
 
 public class SingleTDefenseGraphicHelper extends DefensiveTowerGraphicHelper
@@ -16,9 +17,9 @@ public class SingleTDefenseGraphicHelper extends DefensiveTowerGraphicHelper
     }
 
     @Override
-    protected void triggerBullet()
+    protected void triggerBullet(Soldier soldier)
     {
-        bulletHelper.startNewWave(new PointF(building.getLocation()), bulletUltimatePosition);
+        bulletHelper.startNewWave(new PointF(building.getLocation()), bulletUltimatePosition, soldier);
     }
 
     private double cos;

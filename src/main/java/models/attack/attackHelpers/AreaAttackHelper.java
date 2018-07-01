@@ -31,7 +31,7 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         soldier = attack.getNearestSoldier(defensiveTower.getLocation(), defensiveTower.getRange(), defensiveTower.getDefenseType().convertToMoveType());
         if (soldier != null && attack.getSoldiersOnLocations().getSoldiers(soldier, MoveType.GROUND).anyMatch(x -> !x.getAttackHelper().isDead))
         {
-            triggerListener.onBulletTrigger(soldier);
+            triggerListener.onBulletTrigger(attack.getSoldiersOnLocations().getSoldiers(soldier, MoveType.GROUND).collect(Collectors.toList()).get(0).getAttackHelper().getGraphicHelper().getDrawer().getPosition(), null);
         }
     }
 
@@ -48,7 +48,6 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         }
         catch (SoldierNotFoundException e)
         {
-            e.printStackTrace();
         }
         // TODO: 6/6/18 Change Second range.
         if (soldiersInRange != null)

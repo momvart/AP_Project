@@ -45,7 +45,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     @Override
     public void fire()
     {
-        System.out.println("in fire method ");
+        System.out.println("soldier firing.. ");
         if (soldier == null || soldier.getAttackHelper().isDead())
             return;
         if (target == null)

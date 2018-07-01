@@ -5,7 +5,7 @@ import models.Map;
 import models.attack.attackHelpers.DefensiveTowerAttackHelper;
 import models.attack.attackHelpers.IOnBulletHitListener;
 import models.buildings.Building;
-import utils.Point;
+import models.soldiers.Soldier;
 import utils.PointF;
 
 public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicHelper implements IOnBulletTriggerListener
@@ -95,13 +95,13 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
     }
 
     @Override
-    public void onBulletTrigger(Point targetedPoint)
+    public void onBulletTrigger(PointF targetedPoint, Soldier soldier)
     {
-        bulletUltimatePosition = new PointF(targetedPoint);
-        triggerBullet();
+        bulletUltimatePosition = targetedPoint;
+        triggerBullet(soldier);
     }
 
-    protected abstract void triggerBullet();
+    protected abstract void triggerBullet(Soldier soldier);
 
     public void onBulletHit(DefenseKind defenseKind)
     {

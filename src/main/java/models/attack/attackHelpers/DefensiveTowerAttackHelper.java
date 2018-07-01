@@ -47,9 +47,9 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
     @Override
     public void onReload()
     {
-        super.onReload();
         if (!destroyed)
         {
+
             DefensiveTowerGraphicHelper towerGraphicHelper = (DefensiveTowerGraphicHelper)getGraphicHelper();
             if (towerGraphicHelper.getBullet().inProgress)
                 return;

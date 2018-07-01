@@ -2,6 +2,7 @@ package graphics.helpers;
 
 import graphics.drawers.Drawer;
 import graphics.layers.Layer;
+import models.soldiers.Soldier;
 import utils.GraphicsUtilities;
 import utils.PointF;
 
@@ -12,8 +13,8 @@ import static java.lang.Math.sqrt;
 
 public class CannonBulletHelper extends BulletHelper
 {
-    private final double height = 7;
-    boolean reachedVertex;
+    private final double height = 5;
+    private boolean reachedVertex;
     private PointF vertex;
     private double verticalSpeed = 2;
     private double heightDifferanceToEnd;
@@ -22,7 +23,6 @@ public class CannonBulletHelper extends BulletHelper
     public CannonBulletHelper(DefensiveTowerGraphicHelper towerGraphicHelper, Layer layer)
     {
         super(towerGraphicHelper, layer);
-
         try
         {
             drawer = new Drawer(GraphicsUtilities.createImageDrawable("assets/bullets/cannonBulletWhite.png", 10, 10, true, .5, .5));
@@ -47,14 +47,14 @@ public class CannonBulletHelper extends BulletHelper
         PointF pointF;
         PointF upper = start.getY() >= end.getY() ? start : end;
         pointF = new PointF((upper.getX() + middle.getX() - upper.getY() + middle.getY()) / 2, (middle.getX() + middle.getY() - upper.getX() + upper.getY()) / 2);
-        PointF vertex = new PointF(pointF.getX() + height, pointF.getY() - height);
-        return vertex;
+        return new PointF(pointF.getX() + height, pointF.getY() - height);
     }
 
     @Override
-    public void startNewWave(PointF start, PointF end)
+    public void startNewWave(final PointF start, final PointF end, final Soldier soldier)
     {
-        super.startNewWave(start, end);
+        System.out.println("new wave requested ...................");
+        super.startNewWave(start, end, soldier);
         reachedVertex = false;
         hitTarget = false;
         vertex = getVertexOfParabola(start, end);
@@ -73,7 +73,7 @@ public class CannonBulletHelper extends BulletHelper
             return;
         if (hitTarget)
             return;
-        if (!reachedVertex && PointF.euclideanDistance(drawer.getPosition(), vertex) < 2)
+        if (!reachedVertex && PointF.euclideanDistance(drawer.getPosition(), vertex) < 1)
         {
             System.out.println(toString() + "on fuckin  here ");
             reachedVertex = true;
@@ -90,14 +90,21 @@ public class CannonBulletHelper extends BulletHelper
         double verticalStep = deltaT * verticalSpeed;
         double horizontalStep = deltaT * speed * cos;
         drawer.setPosition(drawer.getPosition().getX() + horizontalStep, drawer.getPosition().getY() + verticalStep);
-        System.out.println("drawer position is :" + drawer.getPosition() + " and vertex is : " + vertex);
+        System.out.println("drawer position is :" + drawer.getPosition() + " and vertex is : " + vertex + " and end is :" + end);
+        System.out.println("cos and sin are " + sin + "        " + cos);
         if (reachedVertex && PointF.euclideanDistance(drawer.getPosition(), end) < .5)
         {
             vertex = null;
             hitTarget = true;
             drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
-            towerGraphicHelper.onBulletHit(DefenseKind.AREA_SPLASH);
             inProgress = false;
+            System.out.println("in progress offed ");
+            towerGraphicHelper.onBulletHit(DefenseKind.AREA_SPLASH);
+            start = null;
+            end = null;
+            targetSoldier = null;
+            cos = -1;
+            sin = -1;
         }
     }
 
