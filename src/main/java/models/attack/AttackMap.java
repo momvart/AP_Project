@@ -65,6 +65,6 @@ public class AttackMap extends Map
             return true;
         else if (getBuildingAt(x, y).getAttackHelper().isDestroyed())
             return true;
-        return true;
+        return false;
     }
 }

@@ -108,6 +108,8 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
                     finalStandingPoint = new PointF(lastPoint.getX() - .5, lastPoint.getY() + .8);
                 else if (lastPoint.getY() > moveDest.getY())
                     finalStandingPoint = new PointF(lastPoint.getX() - .5, lastPoint.getY() + .2);
+                else
+                    System.out.println("The else");
             }
             else
             {
@@ -124,6 +126,8 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
             if (byTheBuildingPoint == null)
             {
                 finalStandingPoint = moveDest;
+                if (moveDest == null)
+                    System.out.println("MoveDest");
             }
             else
             {
@@ -156,6 +160,8 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
             }
             nextCheckPointF = null;
         }
+
+        System.out.println(finalStandingPoint);
     }
 
     private void doReplacing(double deltaT)
@@ -168,7 +174,8 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         {
             setNewCheckPoint();
         }
-        continueMoving(deltaT);
+        if (status == Status.RUN)
+            continueMoving(deltaT);
     }
 
     private void continueMoving(double deltaT)
@@ -176,15 +183,13 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         double stepDistance = deltaT * soldier.getSpeed();
         double distanceToFinalPosition = getDistanceToFinalPosition();
 
-        if (distanceToFinalPosition < 0.1 || distanceToFinalPosition < stepDistance)
+        if (distanceToFinalPosition < stepDistance)
         {
+            System.out.println("Move finished 1");
             onMoveFinished();
             return;
         }
-        /*else
-            System.out.println("df " + distanceToFinalPosition + " " + stepDistance);
-        System.out.println("final standing point is :" + finalStandingPoint+  "current position is :‌ "+ drawer.getPosition());
-        */
+
         PointF newPosition;
         newPosition = new PointF(drawer.getPosition().getX() + cos * stepDistance, drawer.getPosition().getY() + sin * stepDistance);
 
@@ -214,6 +219,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
                     if (isDistanceToFinalPointLessThanRange())
                     {
                         finalStandingPoint = drawer.getPosition();
+                        System.out.println("Move finished 2");
                         onMoveFinished();
                     }
                     else
@@ -245,6 +251,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 
         if (nextCheckPointF == null)
         {
+            System.out.println("Move finished 3");
             onMoveFinished();
             return;
         }
@@ -252,6 +259,8 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         cos = (nextCheckPointF.getX() - drawer.getPosition().getX()) / distanceToNextCheckPoint;
         sin = (nextCheckPointF.getY() - drawer.getPosition().getY()) / distanceToNextCheckPoint;
         drawer.setFace(cos, sin);
+
+        System.out.println("next checkpoint: " + nextCheckPointF);
     }
 
     private boolean isDistanceToFinalPointLessThanRange()
@@ -274,7 +283,10 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 
     private void onMoveFinished()
     {
+        System.out.println("Move finished " + this);
         makeAttack();
+        if (finalStandingPoint == null)
+            System.out.println(this);
         soldier.setLocation(getVeryPoint(finalStandingPoint));
         drawer.setPosition(finalStandingPoint.getX(), finalStandingPoint.getY());
         if (moveListener != null)

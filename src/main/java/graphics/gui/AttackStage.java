@@ -81,7 +81,7 @@ public class AttackStage extends GUIMapStage
             Drawer dTime = new Drawer(txtTime);
             dTime.setPosition(0.5, 0.5);
             dTime.setLayer(getStuffsLayer());
-            timer = new TimerGraphicHelper(txtTime, new TimeSpan(1, 0), true);
+            timer = new TimerGraphicHelper(txtTime, new TimeSpan(3, 0), true);
             timer.setOnTimeFinished(() -> this.quitAttack(Attack.QuitReason.TURN));
             getGuiHandler().addUpdatable(timer);
         }

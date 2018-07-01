@@ -80,6 +80,7 @@ public class BulletHelper implements IFrameUpdatable
                 || targetSoldier.getAttackHelper().getGraphicHelper().getDrawer() == null || targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition() == null || targetSoldier.getAttackHelper().isDead() || PointF.euclideanDistance(drawer.getPosition(), end) < .3)
         {
             onMoveFinish();
+            return;
         }
         double step = deltaT * speed;
         drawer.getDrawable().setRotation(getAngle(sin, cos));
