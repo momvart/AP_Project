@@ -21,7 +21,6 @@ public class AttackBuildingGraphicHelper extends BuildingGraphicHelper implement
     @Override
     public void setUpListeners()
     {
-        building.getAttackHelper().setDestroyListener(this);
     }
 
     @Override

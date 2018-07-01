@@ -181,5 +181,11 @@ public class GraphicsValues
         public static String NewMap = UI_ASSETS_PATH + "/map_plus.png";
 
         public static String Axes = UI_ASSETS_PATH + "/axes.png";
+
+        public static String ElixirDrop = UI_ASSETS_PATH + "/ElixirDrop.png";
+        public static String GoldCoin = UI_ASSETS_PATH + "/GoldCoin.png";
+        public static String Trophie = UI_ASSETS_PATH + "/Trophie.png";
+
+        public static String Stop = UI_ASSETS_PATH + "/stop.png";
     }
 }

@@ -99,10 +99,22 @@ public class Attack
 
     public enum QuitReason
     {
-        TURN,
-        USER,
-        MAP_DESTROYED,
-        SOLDIERS_DIE
+        TURN("Time Is Up!"),
+        USER("User Quited The Battle!"),
+        MAP_DESTROYED("All Buildings Destroyed!"),
+        SOLDIERS_DIE("All Soldiers Died!");
+
+        private String title;
+
+        QuitReason(String title)
+        {
+            this.title = title;
+        }
+
+        public String getTitle()
+        {
+            return title;
+        }
     }
 
     public void quitAttack(QuitReason reason)

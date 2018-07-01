@@ -14,6 +14,7 @@ import graphics.positioning.NormalPositioningSystem;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
+import javafx.stage.WindowEvent;
 import models.Map;
 import utils.RectF;
 import views.dialogs.DialogResult;
@@ -115,9 +116,9 @@ public abstract class GUIMapStage extends MapStage
     }
 
     @Override
-    protected void onClose()
+    protected void onClose(WindowEvent event)
     {
-        super.onClose();
+        super.onClose(event);
         guiLooper.stop();
     }
 }

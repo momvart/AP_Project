@@ -12,11 +12,13 @@ import graphics.layers.Layer;
 import graphics.positioning.IsometricPositioningSystem;
 import graphics.positioning.NormalPositioningSystem;
 import graphics.positioning.PositioningSystem;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import models.Map;
 import models.buildings.Building;
 import utils.GraphicsUtilities;
@@ -24,6 +26,7 @@ import utils.RectF;
 import utils.SizeF;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
@@ -62,6 +65,11 @@ public abstract class MapStage extends Stage
     public Map getMap()
     {
         return map;
+    }
+
+    protected GameLooper getLooper()
+    {
+        return looper;
     }
 
     public Layer getFloorLayer()
@@ -112,7 +120,7 @@ public abstract class MapStage extends Stage
         setScene(new Scene(group));
         show();
 
-        setOnCloseRequest(event -> onClose());
+        setOnCloseRequest(this::onClose);
     }
 
     protected void setUpFloor()
@@ -175,7 +183,7 @@ public abstract class MapStage extends Stage
 
     }
 
-    protected void onClose()
+    protected void onClose(WindowEvent event)
     {
         looper.stop();
     }

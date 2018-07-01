@@ -77,7 +77,7 @@ public class VillageStage extends GUIMapStage
 
         ButtonDrawable btnAttack = new ButtonDrawable("Attack", GraphicsValues.IconPaths.Axes, CELL_SIZE, CELL_SIZE);
         btnAttack.setPivot(0, 0);
-        btnAttack.setFill(Color.rgb(255, 255, 255, 0.6));
+        btnAttack.setFill(ButtonDrawable.LIGHT);
         Drawer dBtnAttack = new Drawer(btnAttack);
         dBtnAttack.setPosition(0, getStuffsLayer().getHeight() / ((NormalPositioningSystem)getStuffsLayer().getPosSys()).getScale() - 2);
         dBtnAttack.setLayer(getStuffsLayer());

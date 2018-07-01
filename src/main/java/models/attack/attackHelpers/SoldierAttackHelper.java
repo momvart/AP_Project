@@ -213,17 +213,16 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
             decampListener.onDecamp();
     }
 
-    private IOnSoldierDieListener soldierDieListener;
+    private ArrayList<IOnSoldierDieListener> soldierDieListeners = new ArrayList<>();
 
-    public void setSoldierDieListener(IOnSoldierDieListener soldierDieListener)
+    public void addSoldierDieListener(IOnSoldierDieListener soldierDieListener)
     {
-        this.soldierDieListener = soldierDieListener;
+        this.soldierDieListeners.add(soldierDieListener);
     }
 
     protected void callOnSoldierDie()
     {
-        if (soldierDieListener != null)
-            soldierDieListener.onSoldierDie();
+        soldierDieListeners.forEach(IOnSoldierDieListener::onSoldierDie);
     }
 
     //graphic
@@ -241,7 +240,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         graphicHelper.setMoveListener(this);
         graphicHelper.setReloadListener(this);
         this.setDecampListener(graphicHelper);
-        this.setSoldierDieListener(graphicHelper);
+        this.addSoldierDieListener(graphicHelper);
     }
 
     public ArrayList<Point> getPointsOnLine(Point start, Point destination)

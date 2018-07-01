@@ -6,6 +6,8 @@ import graphics.helpers.IOnReloadListener;
 import models.attack.Attack;
 import models.buildings.Building;
 
+import java.util.ArrayList;
+
 public class BuildingAttackHelper implements IOnReloadListener
 {
     protected Building building;
@@ -72,17 +74,16 @@ public class BuildingAttackHelper implements IOnReloadListener
 
     }
 
-    private IOnDestroyListener destroyListener;
+    private ArrayList<IOnDestroyListener> destroyListeners = new ArrayList<>();
 
     protected void callOnDestroyed()
     {
-        if (destroyListener != null)
-            destroyListener.onDestroy();
+        destroyListeners.forEach(IOnDestroyListener::onDestroy);
     }
 
-    public void setDestroyListener(IOnDestroyListener destroyListener)
+    public void addDestroyListener(IOnDestroyListener destroyListener)
     {
-        this.destroyListener = destroyListener;
+        this.destroyListeners.add(destroyListener);
     }
 
     private AttackBuildingGraphicHelper graphicHelper;
@@ -95,6 +96,7 @@ public class BuildingAttackHelper implements IOnReloadListener
     public void setGraphicHelper(AttackBuildingGraphicHelper graphicHelper)
     {
         this.graphicHelper = graphicHelper;
+        addDestroyListener(graphicHelper);
     }
 
     public int getMaximumHealthThisLevel()

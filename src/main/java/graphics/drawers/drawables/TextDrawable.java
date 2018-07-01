@@ -56,6 +56,11 @@ public class TextDrawable extends Drawable
         this.hasShadow = hasShadow;
     }
 
+    public double getMaxWidth()
+    {
+        return maxWidth;
+    }
+
     public void setMaxWidth(double maxWidth)
     {
         this.maxWidth = maxWidth;

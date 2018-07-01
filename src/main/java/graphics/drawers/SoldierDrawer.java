@@ -95,7 +95,11 @@ public class SoldierDrawer extends LayerDrawer
     private void setAnimations()
     {
         String strFace = face == Face.UP || face == Face.RIGHT ? "right" : "down";
-//        base.addAnimation(IDLE, new FrameAnimationDrawable(GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), IDLE, face), 1, 0.5, 1));
+        try
+        {
+            base.addAnimation(IDLE, new FrameAnimationDrawable(GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), IDLE, strFace), 1, 0, 0));
+        }
+        catch (Exception ignored) {}
         ImageDrawable[] frames = GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), RUN, strFace);
         base.addAnimation(RUN, new FrameAnimationDrawable(frames, frames.length * 0.1, 0, 0));
         frames = GraphicsValues.getSoldierFrames(soldier.getType(), soldier.getLevel(), ATTACK, strFace);
