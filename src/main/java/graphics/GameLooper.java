@@ -1,8 +1,7 @@
 package graphics;
 
 import javafx.animation.AnimationTimer;
-
-import java.util.function.Consumer;
+import models.World;
 
 public class GameLooper extends AnimationTimer
 {
@@ -18,7 +17,7 @@ public class GameLooper extends AnimationTimer
     @Override
     public void handle(long now)
     {
-        float deltaT = (now - previousNow) / (float)1e9;
+        double deltaT = (now - previousNow) * World.sSettings.getGameSpeed() / (double)1e9;
         previousNow = now;
         if (deltaT > 1)
             return;
