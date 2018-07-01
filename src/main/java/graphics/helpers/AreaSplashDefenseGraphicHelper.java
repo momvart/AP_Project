@@ -9,7 +9,7 @@ import utils.PointF;
 public class AreaSplashDefenseGraphicHelper extends DefensiveTowerGraphicHelper
 {
 
-    private CannonBulletHelper bulletHelper;
+    private BulletHelper bulletHelper;
 
     public AreaSplashDefenseGraphicHelper(Building building, Layer layer, Map map)
     {

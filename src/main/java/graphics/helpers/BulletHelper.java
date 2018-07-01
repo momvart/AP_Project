@@ -77,7 +77,8 @@ public class BulletHelper implements IFrameUpdatable
         if (hitTarget)
             return;
         if (drawer == null || targetSoldier == null || targetSoldier.getAttackHelper() == null || targetSoldier.getAttackHelper().getGraphicHelper() == null
-                || targetSoldier.getAttackHelper().getGraphicHelper().getDrawer() == null || targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition() == null || targetSoldier.getAttackHelper().isDead() || PointF.euclideanDistance(drawer.getPosition(), end) < .3)
+                || targetSoldier.getAttackHelper().getGraphicHelper().getDrawer() == null || targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition() == null
+                || targetSoldier.getAttackHelper().isDead() || PointF.euclideanDistance(drawer.getPosition(), end) < .3)
         {
             onMoveFinish();
             return;

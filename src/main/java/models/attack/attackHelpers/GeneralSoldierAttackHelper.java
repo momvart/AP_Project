@@ -13,7 +13,6 @@ import utils.PointF;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class GeneralSoldierAttackHelper extends SoldierAttackHelper
@@ -116,7 +115,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     }
 
     private Building getNearestBuilding() throws Exception
-    {
+    {/*
         ArrayList<Building> aliveBuildings = getAliveBuildings()
                 .sorted(Comparator.comparingDouble(building -> Point.euclideanDistance2nd(building.getLocation(), getSoldierLocation())))
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -171,6 +170,30 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                 return aliveBuildings.get(0);
             }
         }
+    */
+        ArrayList<Building> aliveBuildings = getAliveBuildings()
+                .sorted(Comparator.comparingDouble(building -> Point.euclideanDistance2nd(building.getLocation(), getSoldierLocation())))
+                .collect(Collectors.toCollection(ArrayList::new));
+        try
+        {
+            if (soldier.getSoldierInfo().getFavouriteTargets().length == 0)
+                throw new Exception();
+
+            return aliveBuildings.stream()
+                    .filter(building -> Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(t -> t.isInstance(building)))
+                    .filter(this::isTargetReachable)
+                    .findFirst().orElseThrow(Exception::new);
+
+        }
+        catch (Exception ex)
+        {
+            return aliveBuildings.stream()
+                    .filter(this::isTargetReachable)
+                    .filter(building -> building.getType() != Trap.BUILDING_TYPE) //canceling out the traps from the target choices
+                    .findFirst()
+                    .orElse(null);
+        }
+
     }
 
     private boolean isThereAFavouriteBuildingIn(ArrayList<Building> aliveBuildings)

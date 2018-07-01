@@ -4,6 +4,7 @@ import graphics.drawers.SoldierDrawer;
 import graphics.layers.Layer;
 import models.attack.attackHelpers.IOnDecampListener;
 import models.attack.attackHelpers.IOnSoldierDieListener;
+import models.attack.attackHelpers.SoldierAttackHelper;
 import models.soldiers.Healer;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
@@ -44,6 +45,11 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 
     public void setUpListeners()
     {
+        SoldierAttackHelper attackHelper = soldier.getAttackHelper();
+        setMoveListener(attackHelper);
+        setReloadListener(attackHelper);
+        attackHelper.setDecampListener(this);
+        attackHelper.setSoldierDieListener(this);
     }
 
     public Status getStatus()
