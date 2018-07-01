@@ -31,7 +31,10 @@ public class Construction
     public Building getBuilding()
     {
         if (cachedBuilding == null)
+        {
             cachedBuilding = World.getVillage().getMap().getBuildingById(buildingId);
+            setFinishListener(cachedBuilding.getVillageHelper().getGraphicHelper());
+        }
         return cachedBuilding;
     }
 

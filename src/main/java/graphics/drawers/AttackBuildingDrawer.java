@@ -26,7 +26,7 @@ public class AttackBuildingDrawer extends BuildingDrawer
         strengthbar = new HealthHProgressbarDrawable(20, 5, Color.BLACK);
         strengthbar.setPivot(0.5, 1);
         strengthbarDrawer = new Drawer(strengthbar);
-        strengthbarDrawer.setPosition(0, base.getDrawable().getHeight() / 2);
+        strengthbarDrawer.setPosition(0, 0);
         strengthbarDrawer.setVisible(false);
         getDrawers().add(strengthbarDrawer);
     }

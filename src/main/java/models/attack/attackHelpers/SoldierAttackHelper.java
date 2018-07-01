@@ -13,6 +13,8 @@ import utils.Point;
 import utils.PointF;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -147,10 +149,12 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         if (soldierPath == null)
             return null;
         Point pointToGo = soldierPath.get(soldierPath.size() - 1);
+        HashSet<Point> aliveBuildingPositions = getAliveBuildingsPositions();
+
         int i;
         for (i = soldierPath.size() - 2; i >= 0; i--)
         {
-            if (isThereABuildingInPath(start, soldierPath.get(i + 1)))
+            if (isThereABuildingInPath(start, soldierPath.get(i + 1), aliveBuildingPositions))
             {
                 return pointToGo;
             }
@@ -159,23 +163,15 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         return pointToGo;
     }
 
-    private boolean isThereABuildingInPath(Point start, Point destination)
+    private boolean isThereABuildingInPath(Point start, Point destination, HashSet<Point> buildingsPositions)
     {
         ArrayList<Point> pointsOnTheLine = getPointsOnLine(start, destination);
-        ArrayList<Point> aliveBuildingPositions = getAliveBuildingsPositions();
-        for (Point point : pointsOnTheLine)
-        {
-            if (aliveBuildingPositions.contains(point))
-            {
-                return true;
-            }
-        }
-        return false;
+        return pointsOnTheLine.stream().anyMatch(p -> buildingsPositions.contains(p));
     }
 
-    private ArrayList<Point> getAliveBuildingsPositions()
+    private HashSet<Point> getAliveBuildingsPositions()
     {
-        ArrayList<Point> positions = new ArrayList<>();
+        HashSet<Point> positions = new HashSet<>();
         getAliveBuildings().forEach(building -> positions.add(building.getLocation()));
         return positions;
     }

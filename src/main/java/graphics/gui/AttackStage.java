@@ -254,7 +254,7 @@ public class AttackStage extends GUIMapStage
 
     private void addTextAndIcon(Layer layer, String text, String iconPath, double y)
     {
-        TextDrawable txt = new TextDrawable(Integer.toString(theAttack.getClaimedResource().getGold()), Color.WHITE, Fonts.getLarge());
+        TextDrawable txt = new TextDrawable(text, Color.WHITE, Fonts.getLarge());
         txt.setHasShadow(true);
         txt.setMaxWidth(200);
         txt.setPivot(0.5, 0.5);

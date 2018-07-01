@@ -5,19 +5,19 @@ import models.buildings.Building;
 public class VillageHelper implements IOnReloadListener
 {
     protected Building building;
-    private BuildingGraphicHelper graphicHelper;
+    private VillageBuildingGraphicHelper graphicHelper;
 
     public VillageHelper(Building building)
     {
         this.building = building;
     }
 
-    public BuildingGraphicHelper getGraphicHelper()
+    public VillageBuildingGraphicHelper getGraphicHelper()
     {
         return graphicHelper;
     }
 
-    public void setGraphicHelper(BuildingGraphicHelper graphicHelper)
+    public void setGraphicHelper(VillageBuildingGraphicHelper graphicHelper)
     {
         this.graphicHelper = graphicHelper;
         this.graphicHelper.setReloadListener(this);

@@ -58,6 +58,12 @@ public class Point
     }
 
     @Override
+    public int hashCode()
+    {
+        return x << Integer.SIZE / 2 + y;
+    }
+
+    @Override
     public String toString()
     {
         return String.format("(%d,%d)", x, y);

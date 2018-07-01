@@ -65,7 +65,11 @@ public class GraphicsValues
                         Paths.get(getSoldierAssetsPath(soldierType), Integer.toString(level + 1), animKey.toLowerCase(), face.toLowerCase()).toString(),
                         50, 0, 0));
             }
-            catch (Exception ex) { ex.printStackTrace();}
+            catch (Exception ex)
+            {
+                if (level > 0)
+                    return getSoldierFrames(soldierType, 0, animKey, face);
+            }
 
         return frames.get(key).clone();
     }
@@ -86,7 +90,11 @@ public class GraphicsValues
                         IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2,
                         IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, false));
             }
-            catch (URISyntaxException e) { e.printStackTrace(); }
+            catch (Exception ex)
+            {
+                if (level > 0)
+                    return getBuildingImage(buildingType, 0);
+            }
 
         return buildings.get(name + level).clone();
     }
@@ -114,9 +122,10 @@ public class GraphicsValues
                         IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2,
                         IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true));
             }
-            catch (URISyntaxException e)
+            catch (Exception ex)
             {
-                e.printStackTrace();
+                if (level > 0)
+                    return getWallImage(style, 0);
             }
 
         return walls.get(style.name() + level);
