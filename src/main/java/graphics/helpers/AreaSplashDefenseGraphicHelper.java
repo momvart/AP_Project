@@ -20,7 +20,7 @@ public class AreaSplashDefenseGraphicHelper extends DefensiveTowerGraphicHelper
     @Override
     protected void triggerBullet(Soldier soldier)
     {
-        bulletHelper.startNewWave(new PointF(building.getLocation()), bulletUltimatePosition, soldier);
+        bulletHelper.startNewWave(new PointF(building.getLocation()), new PointF(bulletUltimatePosition), soldier);
     }
 
     @Override

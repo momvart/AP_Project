@@ -13,6 +13,7 @@ import utils.PointF;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class GeneralSoldierAttackHelper extends SoldierAttackHelper
@@ -100,7 +101,13 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
         if (soldier != null && !soldier.getAttackHelper().isDead())
             if (target == null || target.getAttackHelper().getStrength() <= 0 || target.getAttackHelper().isDestroyed())
             {
-                target = getNearestBuilding();
+                try
+                {
+                    target = getNearestBuilding();
+                }
+                catch (Exception e)
+                {
+                }
                 if (target != null)
                     System.err.println("new target: " + target.getName() + " at: " + target.getLocation().toString());
                 else
@@ -108,31 +115,71 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
             }
     }
 
-    private Building getNearestBuilding()
+    private Building getNearestBuilding() throws Exception
     {
         ArrayList<Building> aliveBuildings = getAliveBuildings()
                 .sorted(Comparator.comparingDouble(building -> Point.euclideanDistance2nd(building.getLocation(), getSoldierLocation())))
                 .collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Building> buildingsWithoutWalls = getAliveBuildings()
+                .sorted(Comparator.comparingDouble(building -> Point.euclideanDistance2nd(building.getLocation(), getSoldierLocation())))
+                .filter(building -> building.getType() != Wall.BUILDING_TYPE)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        if (aliveBuildings == null || buildingsWithoutWalls == null || aliveBuildings.size() == 0 || buildingsWithoutWalls.size() == 0)
+        {
+            throw new Exception("no buildings there is on the map");
+        }
         try
         {
-            if (soldier.getSoldierInfo().getFavouriteTargets().length == 0)
-                throw new Exception();
-
-            return aliveBuildings.stream()
+            List<Building> favouriteBuildings = aliveBuildings.stream()
                     .filter(building -> Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(t -> t.isInstance(building)))
-                    .filter(this::isTargetReachable)
-                    .findFirst().orElseThrow(Exception::new);
+                    .collect(Collectors.toList());
 
+            if (soldier.getSoldierInfo().getFavouriteTargets().length == 0)
+            {
+                throw new Exception();
+            }
+            else
+            {
+                if (isThereAFavouriteBuildingIn(aliveBuildings))
+                {
+                    Building building = favouriteBuildings.get(0);
+                    if (isTargetReachable(building))
+                    {
+                        return building;
+                    }
+                    else
+                    {
+                        throw new Exception();// to be manipulated later on we should return the cutting edge wall on the path to the soldier point
+                    }
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
         }
         catch (Exception ex)
         {
-            return aliveBuildings.stream()
-                    .filter(this::isTargetReachable)
-                    .filter(building -> building.getType() != Trap.BUILDING_TYPE) //canceling out the traps from the target choices
-                    .findFirst()
-                    .orElse(null);
+            Building building = buildingsWithoutWalls.get(0);
+            if (isTargetReachable(building))
+            {
+                return building;
+            }
+            else
+            {
+                return aliveBuildings.get(0);
+            }
         }
     }
+
+    private boolean isThereAFavouriteBuildingIn(ArrayList<Building> aliveBuildings)
+    {
+        return aliveBuildings.stream()
+                .filter(building -> Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(t -> t.isInstance(building)))
+                .collect(Collectors.toList()).size() > 0;
+    }
+
 
 
     private boolean isTargetReachable(Building favouriteTarget)

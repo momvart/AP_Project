@@ -26,13 +26,23 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
     public void setTarget() throws SoldierNotFoundException
     {
         DefensiveTower defensiveTower = (DefensiveTower)building;
-        mainTargets = new ArrayList<>();
-        wholeTargets = new ArrayList<>();
-        soldier = attack.getNearestSoldier(defensiveTower.getLocation(), defensiveTower.getRange(), defensiveTower.getDefenseType().convertToMoveType());
-        if (soldier != null && attack.getSoldiersOnLocations().getSoldiers(soldier, MoveType.GROUND).anyMatch(x -> !x.getAttackHelper().isDead))
+        try
         {
-            triggerListener.onBulletTrigger(attack.getSoldiersOnLocations().getSoldiers(soldier, MoveType.GROUND).collect(Collectors.toList()).get(0).getAttackHelper().getGraphicHelper().getDrawer().getPosition(), null);
+            soldier = attack.getNearestSoldier(defensiveTower.getLocation(), defensiveTower.getRange(), defensiveTower.getDefenseType().convertToMoveType());
         }
+        catch (Exception e)
+        {
+            return;
+        }
+        if (isThereAnAliveUnit(soldier))
+        {
+            triggerListener.onBulletTrigger(soldier.toPointF(), null);
+        }
+    }
+
+    private boolean isThereAnAliveUnit(Point soldier)
+    {
+        return attack.getSoldiersOnLocations().getSoldiers(soldier, MoveType.GROUND).anyMatch(x -> !x.getAttackHelper().isDead);
     }
 
     @Override
@@ -41,6 +51,8 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         DefensiveTower defensiveTower = (DefensiveTower)building;
         List<Soldier> soldiersInRange = null;
         Stream<Soldier> soldiers = attack.getSoldiersOnLocations().getSoldiers(soldier, defensiveTower.getDefenseType().convertToMoveType());
+        mainTargets = new ArrayList<>();
+        wholeTargets = new ArrayList<>();
         mainTargets.addAll(soldiers.collect(Collectors.toList()));
         try
         {
@@ -59,7 +71,6 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         if (wholeTargets != null)
             for (Soldier soldier : wholeTargets)
                 soldier.getAttackHelper().decreaseHealth(tower.getDamagePower() - 1);
-
         mainTargets = null;
         wholeTargets = null;
 

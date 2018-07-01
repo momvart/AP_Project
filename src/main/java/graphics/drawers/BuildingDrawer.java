@@ -56,6 +56,5 @@ public class BuildingDrawer extends LayerDrawer
 
     public void updateDrawer()
     {
-        System.err.println("Update requested !");
     }
 }
