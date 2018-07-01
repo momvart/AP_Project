@@ -4,25 +4,19 @@ import com.google.gson.JsonIOException;
 import exceptions.ConsoleException;
 import exceptions.MyIOException;
 import exceptions.MyJsonException;
-import graphics.*;
+import graphics.GraphicsValues;
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ButtonDrawable;
-import graphics.drawers.drawables.RoundRectDrawable;
-import graphics.drawers.drawables.TextDrawable;
 import graphics.gui.dialogs.MapInputDialog;
-import graphics.gui.dialogs.NumberInputDialog;
 import graphics.gui.dialogs.SingleChoiceDialog;
+import graphics.gui.dialogs.SpinnerDialog;
 import graphics.gui.dialogs.TextInputDialog;
 import graphics.helpers.BuildingGraphicHelper;
 import graphics.helpers.VillageBuildingGraphicHelper;
-import graphics.layers.Layer;
-import graphics.layers.MenuLayer;
 import graphics.layers.ResourceLayer;
-import graphics.layers.ToastLayer;
 import graphics.positioning.NormalPositioningSystem;
 import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -36,6 +30,7 @@ import models.buildings.Building;
 import utils.RectF;
 import views.VillageView;
 import views.dialogs.DialogResult;
+import views.dialogs.DialogResultCode;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -175,6 +170,7 @@ public class VillageStage extends GUIMapStage
             try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("data", "save.json"), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING))
             {
                 World.saveGame(writer);
+                World.saveSettings();
             }
             catch (JsonIOException ex)
             {
@@ -197,6 +193,11 @@ public class VillageStage extends GUIMapStage
 
     private void onBtnSettingsClick(Drawer sender, MouseEvent event)
     {
+        SpinnerDialog spinnerDialog = new SpinnerDialog(getStuffsLayer(), width, height, "Set speed", World.sSettings.getGameSpeed(), 3, 0.5);
+        DialogResult dialogResult = spinnerDialog.showDialog();
+
+        if (dialogResult.getResultCode().equals(DialogResultCode.YES))
+            World.sSettings.setGameSpeed((double)(dialogResult.getData("speed")));
 
     }
 }

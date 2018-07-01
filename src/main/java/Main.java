@@ -1,9 +1,12 @@
-import controllers.MainController;
 import graphics.Fonts;
+import graphics.gui.dialogs.SingleChoiceDialog;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Spinner;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,12 +15,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import models.World;
-import views.ConsoleView;
 import views.VillageView;
 
 import java.io.BufferedReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Main extends Application
@@ -126,6 +129,23 @@ public class Main extends Application
             {
                 ignored.printStackTrace();
             }
+        });
+        settings.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
+        {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Set game speed", ButtonType.OK, ButtonType.CANCEL);
+            Spinner<Double> spinner = new Spinner(1, 3, 1, 0.5);
+            alert.setGraphic(spinner);
+            SingleChoiceDialog.applyCss(alert);
+            Optional<ButtonType> buttonType = alert.showAndWait();
+            buttonType.ifPresent(buttonType1 -> {
+                if (buttonType.get().equals(ButtonType.OK))
+                {
+                    World.sSettings.setGameSpeed(spinner.getValue());
+                    alert.close();
+                }
+                else
+                    alert.close();
+            });
         });
         quit.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
         {

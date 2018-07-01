@@ -12,7 +12,6 @@ import graphics.layers.Layer;
 import graphics.positioning.IsometricPositioningSystem;
 import graphics.positioning.NormalPositioningSystem;
 import graphics.positioning.PositioningSystem;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -26,7 +25,6 @@ import utils.RectF;
 import utils.SizeF;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
@@ -90,7 +88,7 @@ public abstract class MapStage extends Stage
         double widthS = screenSize.getWidth();
         GraphicsValues.setScale(0.8);
         if (System.getProperty("os.name").equals("Linux") && (widthS - 3840 <= 1 || widthS - 3840 >= -1))
-            GraphicsValues.setScale(1);
+            GraphicsValues.setScale(1.5);
 
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);
