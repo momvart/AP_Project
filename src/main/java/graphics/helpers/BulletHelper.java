@@ -60,9 +60,8 @@ public class BulletHelper implements IFrameUpdatable
     private void setUpCosSin(PointF start, PointF end)
     {
         double distance = PointF.euclideanDistance(start, end);
-        PointF location = targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition();
-        cos = (location.getX() - start.getX()) / distance;
-        sin = (location.getY() - start.getY()) / distance;
+        cos = (end.getX() - start.getX()) / distance;
+        sin = (end.getY() - start.getY()) / distance;
     }
 
     @Override
@@ -73,28 +72,33 @@ public class BulletHelper implements IFrameUpdatable
 
     public void doReplacing(double deltaT)
     {
-        System.out.println(toString());
         if (end == null || start == null)
             return;
         if (hitTarget)
             return;
-        if (PointF.euclideanDistance(drawer.getPosition(), end) < .3)
+        if (drawer == null || targetSoldier == null || targetSoldier.getAttackHelper() == null || targetSoldier.getAttackHelper().getGraphicHelper() == null
+                || targetSoldier.getAttackHelper().getGraphicHelper().getDrawer() == null || targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition() == null || targetSoldier.getAttackHelper().isDead() || PointF.euclideanDistance(drawer.getPosition(), end) < .3)
         {
-            hitTarget = true;
-            drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
-            inProgress = false;
-            towerGraphicHelper.onBulletHit(DefenseKind.SINGLE_TARGET);
-            start = null;
-            end = null;
-            targetSoldier = null;
-            cos = -1;
-            sin = -1;
+            onMoveFinish();
         }
         double step = deltaT * speed;
         drawer.getDrawable().setRotation(getAngle(sin, cos));
-        setUpCosSin(drawer.getPosition(), new PointF(targetSoldier.getLocation()));
+        setUpCosSin(drawer.getPosition(), targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition());
         drawer.setPosition(drawer.getPosition().getX() + step * cos, drawer.getPosition().getY() + step * sin);
+    }
 
+    private void onMoveFinish()
+    {
+        hitTarget = true;
+        drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
+        inProgress = false;
+        if (!targetSoldier.getAttackHelper().isDead())
+            towerGraphicHelper.onBulletHit(DefenseKind.SINGLE_TARGET);
+        start = null;
+        end = null;
+        targetSoldier = null;
+        cos = -1;
+        sin = -1;
     }
 
     private double getAngle(double sin, double cos)

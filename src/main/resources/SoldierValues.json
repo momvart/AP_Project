@@ -69,7 +69,7 @@
         "name": "models.buildings.DefensiveTower"
       }
     ],
-    "initialHealth": 100,
+    "initialHealth": 1000,
     "initialDamage": 10,
     "minBarracksLevel": 0,
     "moveType": "GROUND"

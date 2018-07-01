@@ -75,7 +75,6 @@ public class CannonBulletHelper extends BulletHelper
             return;
         if (!reachedVertex && PointF.euclideanDistance(drawer.getPosition(), vertex) < 1)
         {
-            System.out.println(toString() + "on fuckin  here ");
             reachedVertex = true;
             double distance = PointF.euclideanDistance(drawer.getPosition(), end);
             cos = (end.getX() - drawer.getPosition().getX()) / distance;
@@ -90,15 +89,12 @@ public class CannonBulletHelper extends BulletHelper
         double verticalStep = deltaT * verticalSpeed;
         double horizontalStep = deltaT * speed * cos;
         drawer.setPosition(drawer.getPosition().getX() + horizontalStep, drawer.getPosition().getY() + verticalStep);
-        System.out.println("drawer position is :" + drawer.getPosition() + " and vertex is : " + vertex + " and end is :" + end);
-        System.out.println("cos and sin are " + sin + "        " + cos);
         if (reachedVertex && PointF.euclideanDistance(drawer.getPosition(), end) < .5)
         {
             vertex = null;
             hitTarget = true;
             drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
             inProgress = false;
-            System.out.println("in progress offed ");
             towerGraphicHelper.onBulletHit(DefenseKind.AREA_SPLASH);
             start = null;
             end = null;

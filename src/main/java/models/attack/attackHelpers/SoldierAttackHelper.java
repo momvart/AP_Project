@@ -144,6 +144,8 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
     public Point getNextPathStraightReachablePoint(Point start, Point destination)
     {
         List<Point> soldierPath = attack.getSoldierPath(start, destination, soldier.getMoveType() == MoveType.AIR);
+        if (soldierPath == null)
+            return null;
         Point pointToGo = soldierPath.get(soldierPath.size() - 1);
         int i;
         for (i = soldierPath.size() - 2; i >= 0; i--)
