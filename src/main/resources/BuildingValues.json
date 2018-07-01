@@ -1,7 +1,7 @@
 [
   {
     "type": 1,
-    "name": "Gold mine",
+    "name": "Gold Mine",
     "buildCost": {
       "gold": 150,
       "elixir": 5
@@ -21,7 +21,7 @@
   },
   {
     "type": 2,
-    "name": "Elixir mine",
+    "name": "Elixir Mine",
     "buildCost": {
       "gold": 100,
       "elixir": 3
@@ -41,7 +41,7 @@
   },
   {
     "type": 3,
-    "name": "Gold storage",
+    "name": "Gold Storage",
     "buildCost": {
       "gold": 200,
       "elixir": 0
@@ -61,7 +61,7 @@
   },
   {
     "type": 4,
-    "name": "Elixir storage",
+    "name": "Elixir Storage",
     "buildCost": {
       "gold": 200,
       "elixir": 0
@@ -81,7 +81,7 @@
   },
   {
     "type": 5,
-    "name": "Main building",
+    "name": "Main Building",
     "buildCost": {
       "gold": 200,
       "elixir": 0
@@ -139,7 +139,7 @@
     "initialDamage": 2,
     "attackRange": 4,
     "type": 8,
-    "name": "Archer tower",
+    "name": "Archer Tower",
     "buildCost": {
       "gold": 300,
       "elixir": 0
@@ -181,7 +181,7 @@
     "initialDamage": 2,
     "attackRange": 4,
     "type": 10,
-    "name": "Air defense",
+    "name": "Air Defense",
     "buildCost": {
       "gold": 300,
       "elixir": 0
@@ -202,7 +202,7 @@
     "initialDamage": 2,
     "attackRange": 5,
     "type": 11,
-    "name": "Wizard tower",
+    "name": "Wizard Tower",
     "buildCost": {
       "gold": 500,
       "elixir": 0

@@ -76,7 +76,7 @@
   },
   {
     "type": 5,
-    "name": "Wall breaker",
+    "name": "Wall Breaker",
     "brewCost": {
       "gold": 0,
       "elixir": 40

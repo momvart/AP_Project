@@ -12,7 +12,7 @@ public class Construction
     private int builderNum;
     private int remainingTurn;
     private long buildingId;
-    private IOnConstructFinishListener finishListener;
+    private transient IOnConstructFinishListener finishListener;
     private transient Building cachedBuilding;
 
 
