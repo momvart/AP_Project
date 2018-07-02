@@ -99,8 +99,8 @@ public class Drawer implements IFrameUpdatable
 
     public void setLayer(Layer layer)
     {
-        if (layer != null)
-            layer.removeObject(this);
+        if (this.layer != null)
+            this.layer.removeObject(this);
         this.layer = layer;
         layer.addObject(this);
     }

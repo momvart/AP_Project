@@ -10,9 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import utils.RectF;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
+import java.util.*;
 
 public class Layer implements IFrameUpdatable, IAlphaDrawable
 {
@@ -101,6 +99,9 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
         this.posSys = posSys;
     }
 
+
+    private Queue<Drawer> pendingAdds = new ArrayDeque<>();
+
     public void addObject(Drawer drawer)
     {
         drawers.add(drawer);
@@ -108,9 +109,25 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
             addClickable(drawer);
     }
 
+    public void addObject(Drawer drawer, boolean putInQue)
+    {
+        if (!putInQue)
+        {
+            addObject(drawer);
+            return;
+        }
+        pendingAdds.add(drawer);
+        if (drawer.isClickable())
+            addClickable(drawer);
+    }
+
+    private Queue<Drawer> pendingRemoves = new ArrayDeque<>();
+
     public void removeObject(Drawer drawer)
     {
-        drawers.remove(drawer);
+        pendingRemoves.add(drawer);
+        if (drawer.isClickable())
+            clickables.remove(drawer);
     }
 
     public void removeAllObjects()
@@ -161,6 +178,10 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
     @Override
     public void update(double deltaT)
     {
+        for (int i = 0; i < pendingAdds.size(); i++)
+            drawers.add(pendingAdds.poll());
+        for (int i = 0; i < pendingRemoves.size(); i++)
+            drawers.remove(pendingRemoves.poll());
         drawers.forEach(d -> d.update(deltaT));
     }
 }

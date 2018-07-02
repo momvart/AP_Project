@@ -94,6 +94,13 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
         //TODO‌ bad smell of redundant code of escaping compile error.in fact the code shouldn't reach here because we set the target first then we come up to move or fight
     }
 
+    public Point getTargetLocation()
+    {
+        if (target == null)
+            return new Point(-1, -1);
+        return target.getLocation();
+    }
+
     @Override
     public void setTarget()
     {
@@ -204,7 +211,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     }
 
 
-
     private boolean isTargetReachable(Building favouriteTarget)
     {
         return !(attack.getSoldierPath(soldier.getLocation(), favouriteTarget.getLocation(), soldier.getMoveType() == MoveType.AIR) == null);
@@ -223,7 +229,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     }
 
     //graphic phase
-
 
 
     @Override
