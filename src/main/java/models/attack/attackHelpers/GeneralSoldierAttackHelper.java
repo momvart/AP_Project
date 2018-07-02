@@ -225,9 +225,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     //graphic phase
 
 
-    private boolean readyToFireTarget = false;
-
-
 
     @Override
     public void onMoveFinished(PointF currentPos)
@@ -268,6 +265,10 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                 }
                 fire();
             }
+            else
+                System.out.println("soldier is dead ");
         }
+        else
+            System.out.println("not ready decamping !!!");
     }
 }

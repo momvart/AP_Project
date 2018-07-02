@@ -133,7 +133,7 @@ public class HealerAttackHelper extends SoldierAttackHelper
     @Override
     public void onMoveFinished(PointF currentPos)
     {
-        //do nothing
+        readyToFireTarget = true;
     }
 
     private IOnSoldierDieListener soldierDieListener;
@@ -164,8 +164,9 @@ public class HealerAttackHelper extends SoldierAttackHelper
         if (isSoldierDeployed() && (soldier == null || isDead))
         {
             soldierDieListener.onSoldierDie();
+            return;
         }
-        else if(soldier != null && isSoldierDeployed() && !isDead && getHealth() > 0 )
+        if (soldier != null && isSoldierDeployed() && !isDead && getHealth() > 0)
         {
             Point oldDest = destination;
             setTarget();

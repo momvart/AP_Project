@@ -140,6 +140,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
             soldier.getAttackHelper().getAttack().moveOnLocation(soldier, soldier.getLocation(), getVeryPoint(drawer.getPosition()));
             soldier.setLocation(getVeryPoint(drawer.getPosition()));
         }
+
     }
 
     protected double getDistanceToFinalPosition()
@@ -214,6 +215,8 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 
     protected void onMoveFinished()
     {
+        if (finalStandingPoint == null)
+            return;
         makeAttack();
         soldier.setLocation(getVeryPoint(finalStandingPoint));
         drawer.setPosition(finalStandingPoint.getX(), finalStandingPoint.getY());

@@ -289,7 +289,6 @@ public class Attack
                         soldiers.addAll(soldiersOnLocations.getSoldiers(x + k * i, y + k * j));
                     }
                 }
-
         if (soldiers.isEmpty())
             throw new SoldierNotFoundException("Soldier not found", "SoldierNotFound");
         return soldiers;

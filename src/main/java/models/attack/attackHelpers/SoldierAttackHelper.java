@@ -23,6 +23,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
     protected Attack attack;
     protected Soldier soldier;
     private boolean isSoldierDeployed = false;
+    public boolean readyToFireTarget = false;
 
     protected boolean isDead = false;
 
@@ -206,6 +207,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     protected void callOnDecamp()
     {
+        readyToFireTarget = false;
         if (decampListener != null)
             decampListener.onDecamp();
     }

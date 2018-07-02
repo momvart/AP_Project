@@ -12,6 +12,13 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
     public HealerGraphicHelper(Soldier soldier, Layer layer)
     {
         super(soldier, layer);
+        setReloadDuration(.7);
+    }
+
+    @Override
+    public void setUpListeners()
+    {
+        super.setUpListeners();
         attackHelper = (HealerAttackHelper)soldier.getAttackHelper();
     }
 
@@ -31,7 +38,7 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
         makeRun();
         moveDest = dest;
         drawer.setFace(dest.getX() - drawer.getPosition().getX(), dest.getY() - drawer.getPosition().getY());
-        finalStandingPoint = dest;
+        finalStandingPoint = getFinalStandingPoint(dest);
         if (isDistanceToFinalPointLessThanRange())
         {
             onMoveFinished();
@@ -45,19 +52,34 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
         }
     }
 
+    private PointF getFinalStandingPoint(PointF dest)
+    {
+        return soldier.getAttackHelper().getLastPointOfStanding(soldier.getAttackHelper().getRange(), soldier.getLocation(), getVeryPoint(dest)).toPointF();
+    }
+
     @Override
     protected void doReplacing(double deltaT)
     {
+        /*
         if (getStatus() != Status.RUN)
             return;
         if (finalStandingPoint == null)
             return;
         if (attackHelper != null && attackHelper.getDestination() != null)
-        {
-            startJoggingToward(new PointF(attackHelper.getDestination()));
             continueMoving(deltaT);
-        }
+    */
     }
+
+    @Override
+    public void callOnReload()
+    {
+        if (attackHelper != null && getStatus() == null)
+            triggerSoldier();
+        super.callOnReload();
+        if (attackHelper != null && attackHelper.getDestination() != null)
+            startJoggingToward(new PointF(attackHelper.getDestination()));
+    }
+
     @Override
     public void onDecamp()
     {
