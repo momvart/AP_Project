@@ -58,6 +58,12 @@ public class GraphicsUtilities
 
     public static ImageDrawable[] createFramesFrom(File directory, double minSideDimen, double pivotX, double pivotY)
     {
+        if (Files.exists(Paths.get(directory.getAbsolutePath(), "REF.json")))
+            try (FileReader reader = new FileReader(Paths.get(directory.getAbsolutePath(), "REF.json").toFile()))
+            {
+                directory = Paths.get(directory.getAbsolutePath(), new JsonParser().parse(reader).getAsJsonObject().get("ref").getAsString()).toFile();
+            }
+            catch (Exception ex) { }
         List<File> files = Arrays.asList(directory.listFiles(File::isFile));
         files.sort(Comparator.comparing(File::getName));
         ImageDrawable[] frames = new ImageDrawable[files.size()];

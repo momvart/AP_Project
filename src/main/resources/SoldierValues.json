@@ -46,10 +46,10 @@
       "elixir": 200
     },
     "brewTime": 45,
-    "speed": 6,
-    "range": 3,
+    "speed": 3,
+    "range": 2,
     "favouriteTargets": [],
-    "initialHealth": 700,
+    "initialHealth": 300,
     "initialDamage": 30,
     "minBarracksLevel": 2,
     "moveType": "AIR"
