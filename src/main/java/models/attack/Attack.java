@@ -4,18 +4,14 @@ import exceptions.*;
 import models.Resource;
 import models.World;
 import models.buildings.*;
-import models.soldiers.MoveType;
-import models.soldiers.Soldier;
-import models.soldiers.SoldierCollection;
-import models.soldiers.SoldierValues;
+import models.soldiers.*;
 import utils.MapCellNode;
 import utils.Point;
-import utils.Size;
+import utils.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
+import java.util.function.BiConsumer;
+import java.util.stream.*;
 
 public class Attack
 {
@@ -297,39 +293,43 @@ public class Attack
     public Point getNearestSoldier(Point location, int range, MoveType moveType) throws SoldierNotFoundException
     {
         Point min = new Point(-30, -30);
-        Point point;
-        int x = location.getX();
-        int y = location.getY();
-        outer:
-        for (int k = 1; k <= range; k++)
-            for (int i = -1; x + k * i >= 0 && x + k * i < map.getSize().getWidth() && i <= 1; i++)
-                for (int j = -1; y + k * j >= 0 && y + k * j < map.getSize().getHeight() && j <= 1; j++)
+
+        BiConsumer<Integer, Integer> checker = (Integer dx, Integer dy) ->
+        {
+            Point toCheck = new Point(location.getX() + dx, location.getY() + dy);
+            if (toCheck.getX() < 0 || toCheck.getX() >= map.getWidth() || toCheck.getY() < 0 || toCheck.getY() >= map.getHeight())
+                return;
+
+            if (numberOfSoldiersIn(toCheck.getX(), toCheck.getY(), moveType) > 0)
+                if (Point.euclideanDistance2nd(toCheck, location) < Point.euclideanDistance2nd(min, location))
                 {
-                    if (i == 0 && j == 0)
-                        continue;
-                    if (moveType != null)
-                    {
-                        if (numberOfSoldiersIn(x + k * i, y + k * j, moveType) > 0)
-                        {
-                            point = new Point(x + k * i, y + k * j);
-                            if (Point.euclideanDistance2nd(point, location) > Point.euclideanDistance2nd(min, location))
-                                break outer;
-                            else
-                                min = new Point(point.getX(), point.getY());
-                        }
-                    }
-                    else if (numberOfSoldiersIn(x + k * i, y + k * j) > 0)
-                    {
-                        point = new Point(x + k * i, y + k * j);
-                        if (Point.euclideanDistance2nd(point, location) > Point.euclideanDistance2nd(min, location))
-                            break outer;
-                        else
-                            min = new Point(point.getX(), point.getY());
-                    }
+                    min.setX(toCheck.getX());
+                    min.setY(toCheck.getY());
                 }
-        if (!min.equals(new Point(-30, -30)) && Point.euclideanDistance(location, min) <= range)
+        };
+
+        for (int radius = 0; radius <= range; radius++)
+        {
+            if (radius * radius > Point.euclideanDistance2nd(min, location))
+                break;
+
+            for (int j = -radius; j <= radius; j++)
+            {
+                checker.accept(-radius, j);
+                checker.accept(+radius, j);
+            }
+
+            for (int i = -radius + 1; i <= radius - 1; i++)
+            {
+                checker.accept(i, -radius);
+                checker.accept(i, +radius);
+            }
+        }
+
+        if (!min.equals(new Point(-30, -30)))
             return min;
-        else throw new SoldierNotFoundException("Soldier not found", "SoldierNotFound");
+        else
+            throw new SoldierNotFoundException("Soldier not found", "SoldierNotFound");
     }
 
     public void moveOnLocation(Soldier soldier, Point soldierLocation, Point pointToGo)

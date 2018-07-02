@@ -4,6 +4,7 @@ import graphics.GraphicsValues;
 import graphics.drawers.drawables.HealthHProgressbarDrawable;
 import graphics.drawers.drawables.animators.AlphaAnimator;
 import graphics.drawers.drawables.animators.ScaleAnimator;
+import graphics.gui.MapStage;
 import javafx.scene.paint.Color;
 import models.Map;
 import models.buildings.Building;
@@ -59,6 +60,8 @@ public class AttackBuildingDrawer extends BuildingDrawer
             removeUpdatable(scaler);
             removeUpdatable(alpha);
             removeUpdatable(baseAlpha);
+            getLayer().removeObject(this);
+            setLayer(getLayer().getScene().getLayers().get(MapStage.FLOOR_LAYER_ORDER));
         });
     }
 

@@ -23,7 +23,7 @@
       "elixir": 150
     },
     "brewTime": 30,
-    "speed": 3,
+    "speed": 1,
     "range": 1,
     "favouriteTargets": [
       {

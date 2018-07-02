@@ -138,5 +138,8 @@ public class SoldierDrawer extends LayerDrawer
             healthbarDrawer.setVisible(true);
             healthbar.setProgress((double)getSoldier().getAttackHelper().getHealth() / getSoldier().getAttackHelper().getInitialHealth());
         }
+
+        if (getSoldier().getAttackHelper().isDead())
+            setVisible(false);
     }
 }

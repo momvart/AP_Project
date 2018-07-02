@@ -30,6 +30,7 @@ import java.util.ArrayList;
 
 public abstract class MapStage extends Stage
 {
+    public static final int FLOOR_LAYER_ORDER = 1;
     protected Map map;
 
     private GameLooper looper;
@@ -55,7 +56,7 @@ public abstract class MapStage extends Stage
 
         PositioningSystem.sScale = 25;
 
-        lFloor = new Layer(1, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
+        lFloor = new Layer(FLOOR_LAYER_ORDER, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
         lObjects = new Layer(2, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
         lbackground = new Layer(0, new RectF(0, 0, width, height), NormalPositioningSystem.getInstance());
     }

@@ -27,6 +27,12 @@ public class GameScene implements IFrameUpdatable
     public void addLayer(Layer layer)
     {
         layers.addValue(layer);
+        layer.setScene(this);
+    }
+
+    public MySortedList<Integer, Layer> getLayers()
+    {
+        return layers;
     }
 
     public void draw(GraphicsContext gc, RectF cameraBounds)

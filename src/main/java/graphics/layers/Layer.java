@@ -1,5 +1,6 @@
 package graphics.layers;
 
+import graphics.GameScene;
 import graphics.IFrameUpdatable;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.IAlphaDrawable;
@@ -15,6 +16,8 @@ import java.util.HashSet;
 
 public class Layer implements IFrameUpdatable, IAlphaDrawable
 {
+    private GameScene scene;
+
     private int order;
     private RectF bounds;
 
@@ -35,6 +38,16 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
         this.order = order;
         this.bounds = bounds;
         this.posSys = posSys;
+    }
+
+    public GameScene getScene()
+    {
+        return scene;
+    }
+
+    public void setScene(GameScene scene)
+    {
+        this.scene = scene;
     }
 
     public int getOrder()
