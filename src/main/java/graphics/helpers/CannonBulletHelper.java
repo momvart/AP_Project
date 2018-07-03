@@ -45,7 +45,7 @@ public class CannonBulletHelper extends BulletHelper
     {
         PointF middle = new PointF((start.getX() + end.getX()) / 2, (start.getY() + end.getY()) / 2);
         PointF pointF;
-        PointF upper = start.getY() >= end.getY() ? start : end;
+        PointF upper = start.getY() <= end.getY() ? start : end;
         pointF = new PointF((upper.getX() + middle.getX() - upper.getY() + middle.getY()) / 2, (middle.getX() + middle.getY() - upper.getX() + upper.getY()) / 2);
         return new PointF(pointF.getX() + height, pointF.getY() - height);
     }

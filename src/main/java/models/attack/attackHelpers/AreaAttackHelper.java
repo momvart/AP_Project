@@ -3,6 +3,7 @@ package models.attack.attackHelpers;
 import exceptions.SoldierNotFoundException;
 import models.attack.Attack;
 import models.buildings.DefensiveTower;
+import models.buildings.WizardTower;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import utils.Point;
@@ -22,6 +23,7 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
     }
 
     Point soldier;
+    Soldier targetSoldier;
     @Override
     public void setTarget() throws SoldierNotFoundException
     {
@@ -34,10 +36,13 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         {
             return;
         }
-        if (isThereAnAliveUnit(soldier))
-        {
+        targetSoldier = getAnAliveSoldier(attack.getSoldiersOnLocations().getSoldiers(soldier));
+        if (targetSoldier == null)
+            return;
+        if (building.getType() == WizardTower.DEFENSIVE_TOWER_TYPE)
+            triggerListener.onBulletTrigger(targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition(), targetSoldier);
+        else
             triggerListener.onBulletTrigger(soldier.toPointF(), null);
-        }
     }
 
     private boolean isThereAnAliveUnit(Point soldier)
@@ -48,6 +53,7 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
     @Override
     public void attack()
     {
+        soldier = targetSoldier.getLocation();
         DefensiveTower defensiveTower = (DefensiveTower)building;
         List<Soldier> soldiersInRange = null;
         Stream<Soldier> soldiers = attack.getSoldiersOnLocations().getSoldiers(soldier, defensiveTower.getDefenseType().convertToMoveType());

@@ -14,7 +14,7 @@ public class BulletHelper implements IFrameUpdatable
 {
     public boolean inProgress = false;
     protected DefensiveTowerGraphicHelper towerGraphicHelper;
-    protected final double maxSpeed = 2.5;//TODO‌ to be manipulated
+    protected final double maxSpeed = 4;//TODO‌ to be manipulated
     protected Drawer drawer;
     protected PointF start;
     protected PointF end;
@@ -74,9 +74,13 @@ public class BulletHelper implements IFrameUpdatable
             return;
         if (hitTarget)
             return;
-        if (drawer == null || targetSoldier == null || targetSoldier.getAttackHelper() == null || targetSoldier.getAttackHelper().getGraphicHelper() == null
-                || targetSoldier.getAttackHelper().getGraphicHelper().getDrawer() == null || targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition() == null
-                || targetSoldier.getAttackHelper().isDead() || PointF.euclideanDistance(drawer.getPosition(), end) < .3)
+        if (drawer == null || targetSoldier == null || targetSoldier.getAttackHelper() == null
+                || targetSoldier.getAttackHelper().getGraphicHelper() == null
+                || targetSoldier.getAttackHelper().getGraphicHelper().getDrawer() == null
+                || targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition() == null
+                || targetSoldier.getAttackHelper().isDead()
+                || PointF.euclideanDistance(drawer.getPosition(), targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition()
+        ) < .3)
         {
             onMoveFinish();
             return;
@@ -87,7 +91,7 @@ public class BulletHelper implements IFrameUpdatable
         drawer.setPosition(drawer.getPosition().getX() + step * cos, drawer.getPosition().getY() + step * sin);
     }
 
-    private void onMoveFinish()
+    public void onMoveFinish()
     {
         hitTarget = true;
         drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());

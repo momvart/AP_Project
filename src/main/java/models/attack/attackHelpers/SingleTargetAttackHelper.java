@@ -30,22 +30,6 @@ public class SingleTargetAttackHelper extends DefensiveTowerAttackHelper
         triggerListener.onBulletTrigger(targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition(), targetSoldier);
     }
 
-    private Soldier getAnAliveSoldier(ArrayList<Soldier> mainTargets)
-    {
-        if (mainTargets == null || mainTargets.size() == 0)
-        {
-            return null;
-        }
-        for (Soldier soldier : mainTargets)
-        {
-            if (!soldier.getAttackHelper().isDead)
-            {
-                return soldier;
-            }
-        }
-        return null;
-    }
-
     @Override
     public void attack()
     {

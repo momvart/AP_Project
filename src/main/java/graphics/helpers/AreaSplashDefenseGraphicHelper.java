@@ -3,6 +3,7 @@ package graphics.helpers;
 import graphics.layers.Layer;
 import models.Map;
 import models.buildings.Building;
+import models.buildings.WizardTower;
 import models.soldiers.Soldier;
 import utils.PointF;
 
@@ -14,7 +15,10 @@ public class AreaSplashDefenseGraphicHelper extends DefensiveTowerGraphicHelper
     public AreaSplashDefenseGraphicHelper(Building building, Layer layer, Map map)
     {
         super(building, layer, map);
-        bulletHelper = new CannonBulletHelper(this, layer);
+        if (building.getType() == WizardTower.DEFENSIVE_TOWER_TYPE)
+            bulletHelper = new WizardBulletHelper(this, layer);
+        else
+            bulletHelper = new CannonBulletHelper(this, layer);
     }
 
     @Override

@@ -9,6 +9,7 @@ import models.buildings.DefensiveTower;
 import models.soldiers.Soldier;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper implements IOnBulletHitListener
 {
@@ -35,6 +36,22 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
             catch (SoldierNotFoundException ignored) {}
             attack();
         }
+    }
+
+    public Soldier getAnAliveSoldier(List<Soldier> mainTargets)
+    {
+        if (mainTargets == null || mainTargets.size() == 0)
+        {
+            return null;
+        }
+        for (Soldier soldier : mainTargets)
+        {
+            if (!soldier.getAttackHelper().isDead)
+            {
+                return soldier;
+            }
+        }
+        return null;
     }
 
     //graphcs
