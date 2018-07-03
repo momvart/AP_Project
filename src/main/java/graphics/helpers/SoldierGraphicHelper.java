@@ -5,7 +5,6 @@ import graphics.layers.Layer;
 import models.attack.attackHelpers.IOnDecampListener;
 import models.attack.attackHelpers.IOnSoldierDieListener;
 import models.attack.attackHelpers.SoldierAttackHelper;
-import models.soldiers.Healer;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import utils.Point;
@@ -140,7 +139,6 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
             soldier.getAttackHelper().getAttack().moveOnLocation(soldier, soldier.getLocation(), getVeryPoint(drawer.getPosition()));
             soldier.setLocation(getVeryPoint(drawer.getPosition()));
         }
-
     }
 
     protected double getDistanceToFinalPosition()
@@ -202,8 +200,8 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 
     protected boolean isSoldierDistantFighter()
     {
-        if (soldier.getType() == Healer.SOLDIER_TYPE)
-            return false;
+        /*if (soldier.getType() == Healer.SOLDIER_TYPE)
+            return false;*/
         return soldier.getAttackHelper().getRange() != 1;
     }
 

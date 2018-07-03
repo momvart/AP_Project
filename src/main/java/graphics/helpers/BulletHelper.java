@@ -14,7 +14,7 @@ public class BulletHelper implements IFrameUpdatable
 {
     public boolean inProgress = false;
     protected DefensiveTowerGraphicHelper towerGraphicHelper;
-    protected final double maxSpeed = 2;//TODO‌ to be manipulated
+    protected final double maxSpeed = 2.5;//TODO‌ to be manipulated
     protected Drawer drawer;
     protected PointF start;
     protected PointF end;
@@ -26,7 +26,6 @@ public class BulletHelper implements IFrameUpdatable
     public BulletHelper(DefensiveTowerGraphicHelper towerGraphicHelper, Layer layer)
     {
         this.towerGraphicHelper = towerGraphicHelper;
-
         try
         {
             ImageDrawable imageDrawable = GraphicsUtilities.createImageDrawable("assets/bullets/arrow.png", 10, 10, true, 0.5, 0.5);
@@ -34,7 +33,6 @@ public class BulletHelper implements IFrameUpdatable
             drawer.addUpdatable(this);
         }
         catch (URISyntaxException e) {}
-
         setUpBulletProperties(layer);
     }
 

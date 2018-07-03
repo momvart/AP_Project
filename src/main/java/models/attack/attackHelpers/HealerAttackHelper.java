@@ -9,7 +9,6 @@ import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import models.soldiers.SoldiersHealReport;
 import utils.Point;
-import utils.PointF;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class HealerAttackHelper extends SoldierAttackHelper
     private final int height;
     private Point destination;
 
-    private int timeTillDie = 40;
+    private int timeTillDie = 400;
 
     public void ageOneDeltaT()
     {
@@ -130,12 +129,6 @@ public class HealerAttackHelper extends SoldierAttackHelper
         return soldiersInRange;
     }
 
-    @Override
-    public void onMoveFinished(PointF currentPos)
-    {
-        readyToFireTarget = true;
-    }
-
     private IOnSoldierDieListener soldierDieListener;
 
     public void setSoldierDieListener(IOnSoldierDieListener soldierDieListener)
@@ -166,11 +159,20 @@ public class HealerAttackHelper extends SoldierAttackHelper
             soldierDieListener.onSoldierDie();
             return;
         }
+        setTarget();
+        ageOneDeltaT();
+        if (!readyToFireTarget)
+            return;
         if (soldier != null && isSoldierDeployed() && !isDead && getHealth() > 0)
         {
-            Point oldDest = destination;
-            setTarget();
             fire();
+            if (destination == null)
+            {
+                callOnDecamp();
+                return;
+            }
+            if (Point.euclideanDistance(getSoldierLocation(), destination) > getRange())
+                callOnDecamp();
         }
     }
 }

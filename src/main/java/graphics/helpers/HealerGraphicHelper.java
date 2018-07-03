@@ -12,7 +12,7 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
     public HealerGraphicHelper(Soldier soldier, Layer layer)
     {
         super(soldier, layer);
-        setReloadDuration(.7);
+        setReloadDuration(.3);
     }
 
     @Override
@@ -21,6 +21,7 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
         super.setUpListeners();
         attackHelper = (HealerAttackHelper)soldier.getAttackHelper();
     }
+
 
     @Override
     public void triggerSoldier()
@@ -35,12 +36,15 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
     @Override
     public void startJoggingToward(PointF dest)
     {
+        if (finalStandingPoint != null)
+            return;
         makeRun();
         moveDest = dest;
         drawer.setFace(dest.getX() - drawer.getPosition().getX(), dest.getY() - drawer.getPosition().getY());
-        finalStandingPoint = getFinalStandingPoint(dest);
+        finalStandingPoint = dest;
         if (isDistanceToFinalPointLessThanRange())
         {
+            finalStandingPoint = drawer.getPosition();
             onMoveFinished();
             return;
         }
@@ -52,38 +56,36 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
         }
     }
 
-    private PointF getFinalStandingPoint(PointF dest)
-    {
-        return soldier.getAttackHelper().getLastPointOfStanding(soldier.getAttackHelper().getRange(), soldier.getLocation(), getVeryPoint(dest)).toPointF();
-    }
-
     @Override
     protected void doReplacing(double deltaT)
     {
-        /*
         if (getStatus() != Status.RUN)
             return;
-        if (finalStandingPoint == null)
-            return;
-        if (attackHelper != null && attackHelper.getDestination() != null)
-            continueMoving(deltaT);
-    */
+        startJoggingToward(attackHelper.getDestination().toPointF());
+        continueMoving(deltaT);
     }
 
     @Override
     public void callOnReload()
     {
+        System.out.println(getStatus());
         if (attackHelper != null && getStatus() == null)
             triggerSoldier();
-        super.callOnReload();
-        if (attackHelper != null && attackHelper.getDestination() != null)
-            startJoggingToward(new PointF(attackHelper.getDestination()));
+        if (getStatus() == Status.ATTACK)
+        {
+            makeAttack();
+            super.callOnReload();
+        }
     }
+
 
     @Override
     public void onDecamp()
     {
-        // meaning less decamp for healers
+        if (getStatus() == Status.RUN)
+            return;
+        if (attackHelper.getDestination() != null)
+            startJoggingToward(attackHelper.getDestination().toPointF());
     }
 
 }

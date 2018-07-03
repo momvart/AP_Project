@@ -219,6 +219,11 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         this.soldierDieListener = soldierDieListener;
     }
 
+    public void onMoveFinished(PointF currentPos)
+    {
+        readyToFireTarget = true;
+    }
+
     protected void callOnSoldierDie()
     {
         if (soldierDieListener != null)

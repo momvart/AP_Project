@@ -53,7 +53,6 @@ public class CannonBulletHelper extends BulletHelper
     @Override
     public void startNewWave(final PointF start, final PointF end, final Soldier soldier)
     {
-        System.out.println("new wave requested ...................");
         super.startNewWave(start, end, soldier);
         reachedVertex = false;
         hitTarget = false;
