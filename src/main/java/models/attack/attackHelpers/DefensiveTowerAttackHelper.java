@@ -46,7 +46,7 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
         }
         for (Soldier soldier : mainTargets)
         {
-            if (!soldier.getAttackHelper().isDead)
+            if (!soldier.getAttackHelper().isDead())
             {
                 return soldier;
             }

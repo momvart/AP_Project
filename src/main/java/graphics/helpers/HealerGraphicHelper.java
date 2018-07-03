@@ -7,7 +7,7 @@ import utils.PointF;
 
 public class HealerGraphicHelper extends SoldierGraphicHelper
 {
-    HealerAttackHelper attackHelper;
+    private HealerAttackHelper attackHelper;
 
     public HealerGraphicHelper(Soldier soldier, Layer layer)
     {

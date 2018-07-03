@@ -204,8 +204,7 @@ public class Attack
 
     public int numberOfSoldiersIn(int x, int y, MoveType moveType)
     {
-        int count = (int)soldiersOnLocations.getSoldiers(x, y, moveType).count();
-        return count;
+        return (int)soldiersOnLocations.getSoldiers(x, y, moveType).count();
     }
 
     public int numberOfSoldiersIn(Point location)

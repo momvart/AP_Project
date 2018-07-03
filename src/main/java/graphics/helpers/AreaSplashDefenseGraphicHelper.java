@@ -33,4 +33,11 @@ public class AreaSplashDefenseGraphicHelper extends DefensiveTowerGraphicHelper
         return bulletHelper;
     }
 
+    @Override
+    public void updateDrawer()
+    {
+        super.updateDrawer();
+        if (building.getAttackHelper().isDestroyed())
+            bulletHelper.drawer.setVisible(false);
+    }
 }

@@ -89,7 +89,7 @@
         "name": "models.buildings.Wall"
       }
     ],
-    "initialHealth": 100,
+    "initialHealth": 40,
     "initialDamage": 50,
     "minBarracksLevel": 0,
     "moveType": "GROUND"
@@ -103,10 +103,10 @@
     },
     "brewTime": 30,
     "speed": 3,
-    "range": 5,
+    "range": 3,
     "favouriteTargets": [],
-    "initialHealth": -1,
-    "initialDamage": 25,
+    "initialHealth": 50,
+    "initialDamage": 10,
     "minBarracksLevel": 0,
     "moveType": "AIR"
   }

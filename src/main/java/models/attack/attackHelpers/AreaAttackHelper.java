@@ -47,7 +47,7 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
 
     private boolean isThereAnAliveUnit(Point soldier)
     {
-        return attack.getSoldiersOnLocations().getSoldiers(soldier, MoveType.GROUND).anyMatch(x -> !x.getAttackHelper().isDead);
+        return attack.getSoldiersOnLocations().getSoldiers(soldier, MoveType.GROUND).anyMatch(x -> !x.getAttackHelper().isDead());
     }
 
     @Override

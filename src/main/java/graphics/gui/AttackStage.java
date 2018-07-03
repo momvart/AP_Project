@@ -17,6 +17,7 @@ import graphics.positioning.PositioningSystem;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import menus.Menu;
 import menus.ParentMenu;
 import menus.SoldierMenuItem;
@@ -141,7 +142,7 @@ public class AttackStage extends GUIMapStage
             helper = new GeneralSoldierGraphicHelper(soldier, getObjectsLayer());
         }
         soldier.getAttackHelper().setGraphicHelper(helper);
-        //soldier.getAttackHelper().addSoldierDieListener(this::checkForAllBuildingsDead);
+        soldier.getAttackHelper().addSoldierDieListener(this::checkForAllSoldiersDead);
         helper.setUpListeners();
         gHandler.addUpdatable(helper);
     }
@@ -194,7 +195,16 @@ public class AttackStage extends GUIMapStage
         }
     }
 
-    private void checkForAllBuildingsDead()
+    @Override
+    protected void onClose(WindowEvent event)
+    {
+        super.onClose(event);
+        theAttack = null;
+        lResource = null;
+        timer = null;
+    }
+
+    private void checkForAllSoldiersDead()
     {
         if (theAttack.areSoldiersDead())
             quitAttack(Attack.QuitReason.SOLDIERS_DIE);

@@ -120,5 +120,11 @@ public abstract class GUIMapStage extends MapStage
     {
         super.onClose(event);
         guiLooper.stop();
+
+        guiScene = null;
+        guiHandler = null;
+        lMenu = null;
+        lInfo = null;
+        lStuffs = null;
     }
 }

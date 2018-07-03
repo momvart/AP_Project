@@ -45,10 +45,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     public void setUpListeners()
     {
         SoldierAttackHelper attackHelper = soldier.getAttackHelper();
-        setMoveListener(attackHelper);
-        setReloadListener(attackHelper);
-        attackHelper.setDecampListener(this);
-        attackHelper.setSoldierDieListener(this);
+
     }
 
     public Status getStatus()

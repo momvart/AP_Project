@@ -25,7 +25,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
     private boolean isSoldierDeployed = false;
     public boolean readyToFireTarget = false;
 
-    protected boolean isDead = false;
+    //protected boolean isDead = false;
 
     public SoldierAttackHelper(Attack attack, Soldier soldier)
     {
@@ -91,7 +91,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
     public void passTurn()
     {
         removeSoldierIfDead();
-        if (soldier != null && !isDead && isSoldierDeployed)
+        if (soldier != null && !isDead() && isSoldierDeployed)
         {
             setTarget();
             move();
@@ -101,10 +101,9 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     protected void removeSoldierIfDead()
     {
-        if (getHealth() <= 0)
+        if (isDead())
         {
-            setDead(true);
-            soldier = null;
+            attack.getSoldiersOnLocations().pull(soldier, soldier.getLocation());
         }
     }
 
@@ -193,12 +192,12 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     public boolean isDead()
     {
-        return isDead;
+        return getHealth() <= 0;
     }
 
     public void setDead(boolean dead)
     {
-        isDead = dead;
+//        isDead = dead;
     }
 
     private IOnDecampListener decampListener;
@@ -215,22 +214,21 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
             decampListener.onDecamp();
     }
 
-    private IOnSoldierDieListener soldierDieListener;
+    private ArrayList<IOnSoldierDieListener> soldierDieListeners = new ArrayList<>();
 
-    public void setSoldierDieListener(IOnSoldierDieListener soldierDieListener)
+    public void addSoldierDieListener(IOnSoldierDieListener soldierDieListener)
     {
-        this.soldierDieListener = soldierDieListener;
+        soldierDieListeners.add(soldierDieListener);
+    }
+
+    protected void callOnSoldierDie()
+    {
+        soldierDieListeners.forEach(IOnSoldierDieListener::onSoldierDie);
     }
 
     public void onMoveFinished(PointF currentPos)
     {
         readyToFireTarget = true;
-    }
-
-    protected void callOnSoldierDie()
-    {
-        if (soldierDieListener != null)
-            soldierDieListener.onSoldierDie();
     }
 
     //graphic
@@ -244,6 +242,12 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
     public void setGraphicHelper(SoldierGraphicHelper graphicHelper)
     {
         this.graphicHelper = graphicHelper;
+
+        graphicHelper.setReloadListener(this);
+        graphicHelper.setMoveListener(this);
+        graphicHelper.setMoveListener(this);
+        this.setDecampListener(graphicHelper);
+        this.addSoldierDieListener(graphicHelper);
     }
 
     public ArrayList<Point> getPointsOnLine(Point start, Point destination)
@@ -270,5 +274,11 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
                 pointsOnLine.add(veryCurrentPoint);
         }
         return pointsOnLine;
+    }
+
+    @Override
+    public void onReload()
+    {
+        removeSoldierIfDead();
     }
 }

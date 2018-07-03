@@ -17,31 +17,16 @@ import java.util.stream.Collectors;
 public class HealerAttackHelper extends SoldierAttackHelper
 {
     private ArrayList<Soldier> targets;
-    private final int width;
-    private final int height;
     private Point destination;
-
-    private int timeTillDie = 400;
 
     public void ageOneDeltaT()
     {
-        if (timeTillDie > 0)
-        {
-            timeTillDie--;
-        }
+        decreaseHealth(1);
     }
-
-    public int getTimeTillDie()
-    {
-        return timeTillDie;
-    }
-
 
     public HealerAttackHelper(Attack attack, Healer healer)
     {
         super(attack, healer);
-        width = attack.getMap().getWidth();
-        height = attack.getMap().getHeight();
     }
 
     public Point getDestination()
@@ -59,12 +44,7 @@ public class HealerAttackHelper extends SoldierAttackHelper
     @Override
     protected void removeSoldierIfDead()
     {
-        Healer healer = (Healer)soldier;
-        HealerAttackHelper healerAttackHelper = (HealerAttackHelper)healer.getAttackHelper();
-        if (healerAttackHelper.getTimeTillDie() <= 0)
-        {
-            setDead(true);
-        }
+        super.removeSoldierIfDead();
     }
 
     @Override
@@ -137,20 +117,6 @@ public class HealerAttackHelper extends SoldierAttackHelper
         return soldiersInRange;
     }
 
-    private IOnSoldierDieListener soldierDieListener;
-
-    public void setSoldierDieListener(IOnSoldierDieListener soldierDieListener)
-    {
-        this.soldierDieListener = soldierDieListener;
-    }
-
-
-    @Override
-    public int getHealth()
-    {
-        return timeTillDie;
-    }
-
     @Override
     public void setGraphicHelper(SoldierGraphicHelper graphicHelper)
     {
@@ -162,16 +128,17 @@ public class HealerAttackHelper extends SoldierAttackHelper
     @Override
     public void onReload()
     {
-        if (isSoldierDeployed() && (soldier == null || isDead))
+        super.onReload();
+        if (isSoldierDeployed() && (soldier == null || isDead() || getHealth() <= 0))
         {
-            soldierDieListener.onSoldierDie();
+            callOnSoldierDie();
             return;
         }
         setTarget();
         ageOneDeltaT();
         if (!readyToFireTarget)
             return;
-        if (soldier != null && isSoldierDeployed() && !isDead && getHealth() > 0)
+        if (soldier != null && isSoldierDeployed() && !isDead() && getHealth() > 0)
         {
             fire();
             if (destination == null)

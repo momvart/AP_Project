@@ -115,66 +115,13 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     @Override
     public Point getTargetLocation()
     {
+        if (target == null)
+            return new Point(-1, -1);
         return target.getLocation();
     }
 
     private Building getNearestBuilding() throws Exception
-    {/*
-        ArrayList<Building> aliveBuildings = getAliveBuildings()
-                .sorted(Comparator.comparingDouble(building -> Point.euclideanDistance2nd(building.getLocation(), getSoldierLocation())))
-                .collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Building> buildingsWithoutWalls = getAliveBuildings()
-                .sorted(Comparator.comparingDouble(building -> Point.euclideanDistance2nd(building.getLocation(), getSoldierLocation())))
-                .filter(building -> building.getType() != Wall.BUILDING_TYPE)
-                .collect(Collectors.toCollection(ArrayList::new));
-
-        if (aliveBuildings == null || buildingsWithoutWalls == null || aliveBuildings.size() == 0 || buildingsWithoutWalls.size() == 0)
-        {
-            throw new Exception("no buildings there is on the map");
-        }
-        try
-        {
-            List<Building> favouriteBuildings = aliveBuildings.stream()
-                    .filter(building -> Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(t -> t.isInstance(building)))
-                    .collect(Collectors.toList());
-
-            if (soldier.getSoldierInfo().getFavouriteTargets().length == 0)
-            {
-                throw new Exception();
-            }
-            else
-            {
-                if (isThereAFavouriteBuildingIn(aliveBuildings))
-                {
-                    Building building = favouriteBuildings.get(0);
-                    if (isTargetReachable(building))
-                    {
-                        return building;
-                    }
-                    else
-                    {
-                        throw new Exception();// to be manipulated later on we should return the cutting edge wall on the path to the soldier point
-                    }
-                }
-                else
-                {
-                    throw new Exception();
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Building building = buildingsWithoutWalls.get(0);
-            if (isTargetReachable(building))
-            {
-                return building;
-            }
-            else
-            {
-                return aliveBuildings.get(0);
-            }
-        }
-    */
+    {
         ArrayList<Building> aliveBuildings = getAliveBuildings()
                 .sorted(Comparator.comparingDouble(building -> Point.euclideanDistance2nd(building.getLocation(), getSoldierLocation())))
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -243,14 +190,14 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     @Override
     public void onReload()
     {
-        if (isSoldierDeployed() && (soldier == null || isDead || getHealth() <= 0))
+        super.onReload();
+        if (isSoldierDeployed() && (soldier == null || isDead() || getHealth() <= 0))
         {
             callOnSoldierDie();
             return;
         }
         if (readyToFireTarget)
-        {
-            if (soldier != null && isSoldierDeployed() && !isDead && getHealth() > 0)
+            if (soldier != null && isSoldierDeployed() && !isDead() && getHealth() > 0)
             {
                 if (target == null || target.getStrength() <= 0 || target.getAttackHelper().isDestroyed())
                 {
@@ -262,7 +209,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
             }
             else
                 System.out.println("soldier is dead ");
-        }
         else
             System.out.println("not ready decamping !!!");
     }
