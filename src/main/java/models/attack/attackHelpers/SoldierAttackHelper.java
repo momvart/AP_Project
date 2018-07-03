@@ -188,6 +188,9 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     public abstract void setTarget();
 
+    public abstract Point getTargetLocation();
+
+
     public boolean isDead()
     {
         return isDead;

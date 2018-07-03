@@ -64,6 +64,8 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     {
         status = Status.ATTACK;
         drawer.playAnimation(SoldierDrawer.ATTACK);
+        PointF looking = soldier.getAttackHelper().getTargetLocation().toPointF();
+        drawer.setFace(looking.getX() - drawer.getPosition().getX(), looking.getY() - drawer.getPosition().getY());
     }
 
     private PointF nextCheckPointF;

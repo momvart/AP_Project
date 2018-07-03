@@ -74,22 +74,20 @@ public class SoldierDrawer extends LayerDrawer
 
     public void setFace(Face face)
     {
+        if (this.face == face)
+            return;
         this.face = face;
         setAnimations();
-
-        System.out.println(face);
     }
 
     public void setFace(double deltaX, double deltaY)
     {
-        if (deltaX < 0)
-            setFace(Face.LEFT);
-        else if (deltaX > 0)
-            setFace(Face.RIGHT);
-        else if (deltaY < 0)
-            setFace(Face.UP);
-        else if (deltaY > 0)
-            setFace(Face.DOWN);
+        boolean updown = Math.abs(deltaY) > Math.abs(deltaX);
+
+        if (updown)
+            setFace(deltaY > 0 ? Face.DOWN : Face.UP);
+        else
+            setFace(deltaX > 0 ? Face.RIGHT : Face.LEFT);
     }
 
     private void setAnimations()

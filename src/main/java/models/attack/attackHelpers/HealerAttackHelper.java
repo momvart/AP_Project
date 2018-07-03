@@ -109,6 +109,14 @@ public class HealerAttackHelper extends SoldierAttackHelper
         catch (SoldierNotFoundException e) {}
     }
 
+    @Override
+    public Point getTargetLocation()
+    {
+        if (targets.size() == 0)
+            return new Point(-1, -1);
+        return targets.get(0).getLocation();
+    }
+
     private ArrayList<Soldier> getSoldiersInRange()
     {
         ArrayList<Soldier> soldiersInRange = new ArrayList<>();

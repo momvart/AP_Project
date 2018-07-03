@@ -82,7 +82,7 @@
       "elixir": 40
     },
     "brewTime": 10,
-    "speed": 6,
+    "speed": 2,
     "range": 1,
     "favouriteTargets": [
       {

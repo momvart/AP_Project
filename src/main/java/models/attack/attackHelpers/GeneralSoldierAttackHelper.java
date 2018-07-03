@@ -8,6 +8,7 @@ import models.buildings.*;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import utils.Point;
+import utils.PointF;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +45,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     @Override
     public void fire()
     {
+        System.out.println("soldier firing.. ");
         if (soldier == null || soldier.getAttackHelper().isDead())
             return;
         if (target == null)
