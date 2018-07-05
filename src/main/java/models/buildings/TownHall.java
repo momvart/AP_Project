@@ -2,6 +2,7 @@ package models.buildings;
 
 import exceptions.BuilderNotFoundException;
 import exceptions.NoAvailableBuilderException;
+import graphics.GraphicsValues;
 import graphics.helpers.TownHallVillageHelper;
 import menus.AvailableBuildingsSubmenu;
 import menus.BuildingSubmenu;
@@ -75,7 +76,7 @@ public class TownHall extends VillageBuilding
     {
         BuildingSubmenu menu = super.getMenu(parent);
         menu.insertItem(new AvailableBuildingsSubmenu(menu))
-                .insertItem(new Menu(Menu.Id.TH_STATUS, "Status"));
+                .insertItem(new Menu(Menu.Id.TH_STATUS, "Status", GraphicsValues.IconPaths.Status));
         return menu;
     }
 

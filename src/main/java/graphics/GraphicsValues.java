@@ -183,6 +183,8 @@ public class GraphicsValues
     public static class IconPaths
     {
         public static String Info = UI_ASSETS_PATH + "/info.png";
+        public static String Status = UI_ASSETS_PATH + "/status.png";
+        public static String AttackInfo = UI_ASSETS_PATH + "/attackInfo.png";
         public static String Save = UI_ASSETS_PATH + "/save.png";
         public static String Settings = UI_ASSETS_PATH + "/settings.png";
 
@@ -193,8 +195,10 @@ public class GraphicsValues
 
         public static String ElixirDrop = UI_ASSETS_PATH + "/ElixirDrop.png";
         public static String GoldCoin = UI_ASSETS_PATH + "/GoldCoin.png";
-        public static String Trophie = UI_ASSETS_PATH + "/Trophie.png";
+        public static String Trophie = UI_ASSETS_PATH + "/trophie.png";
 
         public static String Stop = UI_ASSETS_PATH + "/stop.png";
+
+        public static String Build = UI_ASSETS_PATH + "/build.png";
     }
 }

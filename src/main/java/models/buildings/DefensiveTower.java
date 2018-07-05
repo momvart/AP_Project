@@ -1,9 +1,9 @@
 package models.buildings;
 
+import graphics.GraphicsValues;
 import menus.BuildingInfoSubmenu;
 import menus.Menu;
 import models.attack.Attack;
-import models.attack.attackHelpers.DefensiveTowerAttackHelper;
 import models.attack.attackHelpers.SingleTargetAttackHelper;
 import models.soldiers.Soldier;
 import utils.Point;
@@ -46,7 +46,7 @@ public abstract class DefensiveTower extends Building
     public BuildingInfoSubmenu getInfoSubmenu()
     {
         return new BuildingInfoSubmenu(null)
-                .insertItem(Menu.Id.DEFENSIVE_TARGET_INFO, "Attack Info");
+                .insertItem(Menu.Id.DEFENSIVE_TARGET_INFO, "Attack Info", GraphicsValues.IconPaths.AttackInfo);
     }
 
     @Override

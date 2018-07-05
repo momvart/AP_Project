@@ -1,7 +1,7 @@
 package menus;
 
+import graphics.GraphicsValues;
 import models.Resource;
-import models.Village;
 import models.World;
 import models.buildings.Building;
 import models.buildings.BuildingInfo;
@@ -17,6 +17,7 @@ public class AvailableBuildingsSubmenu extends Submenu implements IBuildingMenu
     public AvailableBuildingsSubmenu(ParentMenu parent)
     {
         super(Id.TH_AVAILABLE_BUILDINGS, "Build", parent);
+        setIconPath(GraphicsValues.IconPaths.Build);
     }
 
     private void setItems()

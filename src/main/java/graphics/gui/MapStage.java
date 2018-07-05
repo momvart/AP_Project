@@ -88,8 +88,8 @@ public abstract class MapStage extends Stage
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double widthS = screenSize.getWidth();
         GraphicsValues.setScale(0.8);
-        if (System.getProperty("os.name").equals("Linux") && (widthS - 3840 <= 1 || widthS - 3840 >= -1))
-            GraphicsValues.setScale(1);
+        if (System.getProperty("os.name").equals("Linux") && widthS == 3840)
+            GraphicsValues.setScale(1.5);
 
         Canvas canvas = new Canvas(width * GraphicsValues.getScale(), height * GraphicsValues.getScale());
         group.getChildren().add(canvas);

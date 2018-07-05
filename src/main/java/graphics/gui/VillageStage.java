@@ -193,7 +193,7 @@ public class VillageStage extends GUIMapStage
 
     private void onBtnSettingsClick(Drawer sender, MouseEvent event)
     {
-        SpinnerDialog spinnerDialog = new SpinnerDialog(getStuffsLayer(), width, height, "Set speed", World.sSettings.getGameSpeed(), 3, 0.5);
+        SpinnerDialog spinnerDialog = new SpinnerDialog(getStuffsLayer(), width, height, "Set game speed", 1, 3, 0.5);
         DialogResult dialogResult = spinnerDialog.showDialog();
 
         if (dialogResult.getResultCode().equals(DialogResultCode.YES))
