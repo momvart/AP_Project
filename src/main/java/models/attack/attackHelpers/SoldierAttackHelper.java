@@ -6,6 +6,7 @@ import graphics.helpers.IOnReloadListener;
 import graphics.helpers.SoldierGraphicHelper;
 import models.attack.Attack;
 import models.buildings.Building;
+import models.buildings.Trap;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierValues;
@@ -170,7 +171,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
     private ArrayList<Point> getAliveBuildingsPositions()
     {
         ArrayList<Point> positions = new ArrayList<>();
-        getAliveBuildings().forEach(building -> positions.add(building.getLocation()));
+        getAliveBuildings().filter(building -> building.getType() != Trap.BUILDING_TYPE).forEach(building -> positions.add(building.getLocation()));
         return positions;
     }
 

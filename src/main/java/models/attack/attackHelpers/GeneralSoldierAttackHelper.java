@@ -132,6 +132,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 
             return aliveBuildings.stream()
                     .filter(building -> Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(t -> t.isInstance(building)))
+                    .filter(building -> building.getType() != Trap.BUILDING_TYPE)
                     .filter(this::isTargetReachable)
                     .findFirst().orElseThrow(Exception::new);
 
@@ -140,7 +141,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
         {
             return aliveBuildings.stream()
                     .filter(this::isTargetReachable)
-                    .filter(building -> building.getType() != Trap.BUILDING_TYPE) //canceling out the traps from the target choices
+                    .filter(building -> building.getType() != Trap.BUILDING_TYPE)
                     .findFirst()
                     .orElse(null);
         }
@@ -153,7 +154,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                 .filter(building -> Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(t -> t.isInstance(building)))
                 .collect(Collectors.toList()).size() > 0;
     }
-
 
 
     private boolean isTargetReachable(Building favouriteTarget)

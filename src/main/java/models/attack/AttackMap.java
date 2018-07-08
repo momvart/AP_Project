@@ -4,6 +4,7 @@ import models.Map;
 import models.Resource;
 import models.buildings.Building;
 import models.buildings.DefensiveTower;
+import models.buildings.Trap;
 import utils.MySortedList;
 import utils.Point;
 import utils.Size;
@@ -52,10 +53,6 @@ public class AttackMap extends Map
         }).getValues();
     }
 
-    public Building getNearestBuilding(Point location, int BuildingType)
-    {
-        return null;
-    }
 
     public boolean isEmptyOrDestroyed(int x, int y)
     {
@@ -63,7 +60,7 @@ public class AttackMap extends Map
             return false;
         if (isEmpty(x, y))
             return true;
-        else if (getBuildingAt(x, y).getAttackHelper().isDestroyed())
+        else if (getBuildingAt(x, y).getAttackHelper().isDestroyed() || getBuildingAt(x, y).getType() == Trap.BUILDING_TYPE)
             return true;
         return false;
     }

@@ -4,35 +4,22 @@ import exceptions.ConsoleException;
 import graphics.Fonts;
 import graphics.GraphicsValues;
 import graphics.drawers.Drawer;
-import graphics.drawers.drawables.ButtonDrawable;
-import graphics.drawers.drawables.ImageDrawable;
-import graphics.drawers.drawables.RoundRectDrawable;
-import graphics.drawers.drawables.TextDrawable;
+import graphics.drawers.drawables.*;
 import graphics.helpers.*;
-import graphics.layers.Layer;
-import graphics.layers.ResourceLayer;
-import graphics.positioning.IsometricPositioningSystem;
-import graphics.positioning.NormalPositioningSystem;
-import graphics.positioning.PositioningSystem;
+import graphics.layers.*;
+import graphics.positioning.*;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
-import menus.Menu;
-import menus.ParentMenu;
-import menus.SoldierMenuItem;
+import menus.*;
 import models.World;
 import models.attack.Attack;
 import models.attack.attackHelpers.SingleTargetAttackHelper;
 import models.buildings.Building;
 import models.buildings.DefensiveTower;
-import models.soldiers.Healer;
-import models.soldiers.Soldier;
-import models.soldiers.SoldierValues;
-import utils.GraphicsUtilities;
-import utils.Point;
-import utils.RectF;
-import utils.TimeSpan;
+import models.soldiers.*;
+import utils.*;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -42,6 +29,8 @@ public class AttackStage extends GUIMapStage
     private Attack theAttack;
 
     private ResourceLayer lResource;
+
+    private Layer lFliers;
 
     private TimerGraphicHelper timer;
 
@@ -53,6 +42,8 @@ public class AttackStage extends GUIMapStage
         lResource = new ResourceLayer(8,
                 new RectF(width - 200 - GraphicsValues.PADDING * 2, 20, 200 + GraphicsValues.PADDING * 2, 70),
                 attack::getClaimedResource, attack::getTotalResource);
+
+        lFliers = new Layer(3, getObjectsLayer().getBounds(), getObjectsLayer().getPosSys());
     }
 
     @Override
@@ -97,6 +88,7 @@ public class AttackStage extends GUIMapStage
 
 
         getGuiScene().addLayer(lResource);
+        getGameScene().addLayer(lFliers);
     }
 
     public void setUpAndShow()
@@ -133,14 +125,12 @@ public class AttackStage extends GUIMapStage
     private void addSoldier(Soldier soldier)
     {
         SoldierGraphicHelper helper;
+        Layer layer = soldier.getMoveType() == MoveType.AIR ? lFliers : getObjectsLayer();
         if (soldier.getType() == Healer.SOLDIER_TYPE)
-        {
-            helper = new HealerGraphicHelper(soldier, getObjectsLayer());
-        }
+            helper = new HealerGraphicHelper(soldier, layer);
         else
-        {
-            helper = new GeneralSoldierGraphicHelper(soldier, getObjectsLayer());
-        }
+            helper = new GeneralSoldierGraphicHelper(soldier, layer);
+
         soldier.getAttackHelper().setGraphicHelper(helper);
         soldier.getAttackHelper().addSoldierDieListener(this::checkForAllSoldiersDead);
         helper.setUpListeners();

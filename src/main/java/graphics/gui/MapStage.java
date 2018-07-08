@@ -71,6 +71,11 @@ public abstract class MapStage extends Stage
         return looper;
     }
 
+    protected GameScene getGameScene()
+    {
+        return gScene;
+    }
+
     public Layer getFloorLayer()
     {
         return lFloor;

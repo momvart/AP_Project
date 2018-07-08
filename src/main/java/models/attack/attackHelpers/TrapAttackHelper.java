@@ -9,7 +9,7 @@ import models.soldiers.Soldier;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrapAttackHelper extends AreaAttackHelper
+public class TrapAttackHelper extends SingleTargetAttackHelper
 {
     public TrapAttackHelper(Trap building, Attack attack)
     {
@@ -22,6 +22,8 @@ public class TrapAttackHelper extends AreaAttackHelper
         mainTargets = new ArrayList<>();
         List<Soldier> soldiers = attack.getSoldiersOnLocations().getSoldiers(building.getLocation());
         mainTargets.addAll(soldiers);
+        if (mainTargets.size() > 0)
+            targetSoldier = mainTargets.get(0);
     }
 
     @Override
@@ -30,7 +32,14 @@ public class TrapAttackHelper extends AreaAttackHelper
         if (mainTargets != null && mainTargets.size() != 0)
         {
             super.attack();
-            destroyed = true;
+            decreaseStrength(getStrength());
         }
+    }
+
+    @Override
+    public void onReload()
+    {
+        super.onReload();
+        attack();
     }
 }

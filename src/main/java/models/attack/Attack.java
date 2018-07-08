@@ -435,6 +435,11 @@ public class Attack
         return pathFinder.getSoldierPath(start, target, isFlying);
     }
 
+    public List<Point> getSoldierPath2(Point start, Point target, boolean isFlying, int damage, int speed)
+    {
+        return pathFinder.getSoldierPath2(start, target, isFlying, damage, speed);
+    }
+
     class PathFinder
     {
         private static final int VERTICAL_COST = 10;
@@ -443,7 +448,6 @@ public class Attack
 
         private List<MapCellNode> findPath(MapCellNode start, MapCellNode target, boolean isFlying)
         {
-
             MapCellNode[][] nodes = new MapCellNode[map.getSize().getWidth()][map.getSize().getHeight()];
             initialize(nodes, start, target);
             TreeSet<MapCellNode> priority = new TreeSet<>(Comparator.comparingInt(MapCellNode::getF).thenComparing(MapCellNode::getX).thenComparing(MapCellNode::getY));
@@ -473,6 +477,55 @@ public class Attack
                             if (child.isVisited())
                                 continue;
                             int dist = (i == j || i == -j) ? DIAGONAL_COST : VERTICAL_COST;
+                            if (node.getDistStart() + dist < child.getDistStart())
+                            {
+                                priority.remove(child);
+                                child.setDistStart(node.getDistStart() + dist);
+                                child.setParent(node);
+                                priority.add(child);
+                            }
+                        }
+                node.setVisited(true);
+            } while (!priority.isEmpty());
+            return extractPath(start, target);
+        }
+
+        private List<MapCellNode> findPath2(MapCellNode start, MapCellNode target, boolean isFlying, int damage, int speed)
+        {
+            MapCellNode[][] nodes = new MapCellNode[map.getSize().getWidth()][map.getSize().getHeight()];
+            initialize(nodes, start, target);
+
+            TreeSet<MapCellNode> priority = new TreeSet<>(Comparator.comparingInt(MapCellNode::getF).thenComparing(MapCellNode::getX).thenComparing(MapCellNode::getY));
+            priority.add(start);
+            do
+            {
+                MapCellNode node = priority.first();
+                if (node.equals(target))
+                    break;
+                priority.remove(node);
+                int x = node.getX();
+                int y = node.getY();
+
+                for (int i = -1; i <= 1; i++)
+                    for (int j = -1; j <= 1; j++)
+                        if (!(i == 0 && j == 0) && map.isValid(x + i, y + j))
+                        {
+                            MapCellNode child = nodes[x + i][y + j];
+                            if (child == null)
+                            {
+                                child = new MapCellNode(new Point(x + i, y + j), node, 0);
+                                child.setDistEnd(getDistance(child, target));
+                                nodes[x + i][y + j] = child;
+                            }
+
+                            if (child.isVisited())
+                                continue;
+
+                            int dist = 0; //Way cost
+                            dist += Math.max(((i == j || i == -j) ? DIAGONAL_COST : VERTICAL_COST) / speed * 10, 1);
+                            if (!isFlying && !map.isEmpty(x + i, y + j))
+                                dist += Math.max(map.getBuildingAt(x + i, y + j).getAttackHelper().getStrength() / damage, 1);
+
                             if (node.getDistStart() + dist < child.getDistStart())
                             {
                                 priority.remove(child);
@@ -520,6 +573,16 @@ public class Attack
             MapCellNode soldier = new MapCellNode(soldierLocation, null, 0);
             MapCellNode building = new MapCellNode(buildingLocation, null, 0);
             List<MapCellNode> path = findPath(soldier, building, isFlying);
+            List<Point> soldierPath = new ArrayList<>(path.size());
+            for (MapCellNode aPath : path) soldierPath.add(aPath.getPoint());
+            return soldierPath;
+        }
+
+        public List<Point> getSoldierPath2(Point soldierLocation, Point buildingLocation, boolean isFlying, int damage, int speed)
+        {
+            MapCellNode soldier = new MapCellNode(soldierLocation, null, 0);
+            MapCellNode building = new MapCellNode(buildingLocation, null, 0);
+            List<MapCellNode> path = findPath2(soldier, building, isFlying, damage, speed);
             List<Point> soldierPath = new ArrayList<>(path.size());
             for (MapCellNode aPath : path) soldierPath.add(aPath.getPoint());
             return soldierPath;

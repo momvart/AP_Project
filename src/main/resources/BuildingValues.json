@@ -238,7 +238,7 @@
     "targetType": "GROUND",
     "udmginc": 1,
     "initialDamage": 100,
-    "attackRange": 1,
+    "attackRange": 0,
     "type": 13,
     "name": "Trap",
     "buildCost": {
