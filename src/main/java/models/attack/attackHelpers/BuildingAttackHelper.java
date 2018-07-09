@@ -22,11 +22,7 @@ public class BuildingAttackHelper implements IOnReloadListener
         strength = initStrength;
         this.building = building;
         this.attack = attack;
-    }
-
-    public void setIsReal()
-    {
-        isReal = attack.isReal;
+        this.isReal = attack.isReal;
     }
 
     public boolean isReal()

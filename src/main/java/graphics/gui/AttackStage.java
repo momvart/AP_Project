@@ -15,6 +15,7 @@ import graphics.positioning.IsometricPositioningSystem;
 import graphics.positioning.NormalPositioningSystem;
 import graphics.positioning.PositioningSystem;
 import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
@@ -38,24 +39,16 @@ import utils.TimeSpan;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-public class AttackStage extends GUIMapStage
+public class AttackStage extends AttackMapStage
 {
-    private Attack theAttack;
-
-    private ResourceLayer lResource;
-
     private Layer lFliers;
 
     private TimerGraphicHelper timer;
 
     public AttackStage(Attack attack, double width, double height)
     {
-        super(attack.getMap(), width, height);
+        super(attack, width, height, false);
         this.theAttack = attack;
-
-        lResource = new ResourceLayer(8,
-                new RectF(width - 200 - GraphicsValues.PADDING * 2, 20, 200 + GraphicsValues.PADDING * 2, 70),
-                attack::getClaimedResource, attack::getTotalResource);
 
         lFliers = new Layer(3, getObjectsLayer().getBounds(), getObjectsLayer().getPosSys());
     }
@@ -101,39 +94,13 @@ public class AttackStage extends GUIMapStage
         dBtnEndAttack.setClickListener((sender, event) -> quitAttack(Attack.QuitReason.USER));
 
 
-        getGuiScene().addLayer(lResource);
         getGameScene().addLayer(lFliers);
     }
 
     public void setUpAndShow()
     {
-        theAttack.setSoldierPutListener(soldier -> addSoldier(soldier, false));
+        theAttack.setSoldierPutListener(soldier -> addSoldier(soldier, true));
         super.setUpAndShow();
-    }
-
-    @Override
-    public BuildingGraphicHelper addBuilding(Building building)
-    {
-        AttackBuildingGraphicHelper graphicHelper;
-        building.getAttackHelper().setIsReal();
-
-        if (building instanceof DefensiveTower)
-        {
-            if (building.getAttackHelper() instanceof SingleTargetAttackHelper)
-                graphicHelper = new SingleTDefenseGraphicHelper(building, getObjectsLayer(), getMap());
-            else
-                graphicHelper = new AreaSplashDefenseGraphicHelper(building, getObjectsLayer(), getMap());
-        }
-        else
-            graphicHelper = new AttackBuildingGraphicHelper(building, getObjectsLayer(), getMap());
-
-        building.getAttackHelper().setGraphicHelper(graphicHelper);
-        building.getAttackHelper().addDestroyListener(this::checkForAllBuildingsDestroyed);
-        setUpBuildingDrawer(graphicHelper.getBuildingDrawer());
-        graphicHelper.setUpListeners();
-        gHandler.addUpdatable(graphicHelper);
-
-        return graphicHelper;
     }
 
     private void addSoldier(Soldier soldier, boolean networkPermission)
@@ -156,53 +123,20 @@ public class AttackStage extends GUIMapStage
     }
 
     @Override
-    protected void setUpFloor()
+    protected void onMarginalCellClick(Drawer sender, MouseEvent e)
     {
+        if (!theAttack.isReal)
+            return;
+        SoldierMenuItem menu = (SoldierMenuItem)getMenuLayer().getCurrentMenu().getMenuItems().stream().filter(Menu::isFocused).findFirst().orElse(null);
+        if (menu == null)
+            return;
         try
         {
-            ImageDrawable bg;
-            ImageDrawable tile1;
-            ImageDrawable tile2;
-            bg = GraphicsUtilities.createImageDrawable("assets/floor/background.png", PositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 30 * 2,
-                    PositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 30 * 2, true);
-            Drawer bgDrawer = new Drawer(bg);
-            bgDrawer.setPosition(0, 0);
-            bg.setPivot(0, 0.5);
-            bgDrawer.setLayer(lbackground);
-
-            tile1 = GraphicsUtilities.createImageDrawable("assets/floor/isometric3.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
-            tile2 = GraphicsUtilities.createImageDrawable("assets/floor/isometric4.png", IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_COS * 2, IsometricPositioningSystem.sScale * IsometricPositioningSystem.ANG_SIN * 2, true);
-            tile1.setPivot(.5, .5);
-            tile2.setPivot(.5, .5);
-            for (int i = 0; i < map.getWidth(); i++)
-                for (int j = 0; j < map.getHeight(); j++)
-                {
-                    Drawer drawer = new Drawer((i + j) % 2 == 0 ? tile1 : tile2);
-                    drawer.setPosition(i, j);
-                    int I = i;
-                    int J = j;
-                    drawer.setClickListener((sender, event) ->
-                    {
-                        if (!theAttack.isReal)
-                            return;
-                        SoldierMenuItem menu = (SoldierMenuItem)getMenuLayer().getCurrentMenu().getMenuItems().stream().filter(Menu::isFocused).findFirst().orElse(null);
-                        if (menu == null)
-                            return;
-                        try
-                        {
-                            theAttack.putUnits(menu.getId() - 100, 1, new Point(I, J), false);
-                            menu.setCount((int)theAttack.getAliveUnits(menu.getId() - 100).filter(soldier -> !soldier.getAttackHelper().isSoldierDeployed()).count());
-                            getMenuLayer().updateMenu();
-                        }
-                        catch (ConsoleException e) { e.printStackTrace(); }
-                    });
-                    drawer.setLayer(lFloor);
-                }
+            theAttack.putUnits(menu.getId() - 100, 1, new Point((int)sender.getPosition().getX(), (int)sender.getPosition().getY()), false);
+            menu.setCount((int)theAttack.getAliveUnits(menu.getId() - 100).filter(soldier -> !soldier.getAttackHelper().isSoldierDeployed()).count());
+            getMenuLayer().updateMenu();
         }
-        catch (URISyntaxException e)
-        {
-            showInfo(e.getMessage());
-        }
+        catch (ConsoleException ex) { ex.printStackTrace(); }
     }
 
     @Override
@@ -210,7 +144,6 @@ public class AttackStage extends GUIMapStage
     {
         super.onClose(event);
         theAttack = null;
-        lResource = null;
         timer = null;
     }
 
