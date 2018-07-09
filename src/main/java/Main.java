@@ -15,7 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import models.World;
 import network.Client;
-import network.Server;
+import network.GameHost;
 import views.VillageView;
 
 import java.io.BufferedReader;
@@ -125,8 +125,8 @@ public class Main extends Application
                     alert.getButtonTypes().removeAll(serverButton, clientButton);
                     alert.getButtonTypes().add(new ButtonType("OK", ButtonBar.ButtonData.YES));
                     alert.showAndWait();
-                    Server server = new Server(Integer.parseInt(textField.getText()));
-                    new Thread(server).start();
+                    GameHost gameHost = new GameHost(Integer.parseInt(textField.getText()));
+                    gameHost.start();
                 }
                 else
                 {
@@ -149,7 +149,7 @@ public class Main extends Application
                     alert.getButtonTypes().add(new ButtonType("OK", ButtonBar.ButtonData.YES));
                     alert.showAndWait();
                     Client client = new Client("Mahdi", Integer.parseInt(port.getText()), ip.getText());
-                    new Thread(client).start();
+                    client.start();
                 }
             });
             World.newGame();

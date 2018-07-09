@@ -16,6 +16,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import models.Map;
@@ -121,6 +122,7 @@ public abstract class MapStage extends Stage
         looper.start();
         preShow(group);
         group.setOnMouseClicked(this::handleMouseClick);
+        group.setOnScroll(this::handleMouseScroll);
         setScene(new Scene(group));
         show();
 
@@ -180,6 +182,13 @@ public abstract class MapStage extends Stage
             if (graphicHandlers.get(i).handleMouseClickResult(event))
                 return;
         onClickAnywhereElse(event);
+    }
+
+    private void handleMouseScroll(ScrollEvent event)
+    {
+        for (int i = graphicHandlers.size() - 1; i >= 0; i--)
+            if (graphicHandlers.get(i).handleScrollResult(event))
+                return;
     }
 
     protected void onClickAnywhereElse(MouseEvent event)

@@ -8,6 +8,7 @@ import graphics.positioning.NormalPositioningSystem;
 import graphics.positioning.PositioningSystem;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import utils.RectF;
 
 import java.util.*;
@@ -58,6 +59,11 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
         return bounds;
     }
 
+    public void setBounds(RectF bounds)
+    {
+        this.bounds = bounds;
+    }
+
     public double getWidth()
     {
         return getBounds().getWidth();
@@ -84,10 +90,65 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
         this.alpha = alpha;
     }
 
-    public void setBounds(RectF bounds)
+    //region Scroll
+
+    private boolean hScrollable = false, vScrollable = false;
+    private boolean dynamicScroll = false;
+    private double scrollX, scrollY;
+    private double maxXScroll, minXScroll, maxYScroll, minYScroll;
+
+    public boolean isScrollable()
     {
-        this.bounds = bounds;
+        return hScrollable || vScrollable;
     }
+
+    public void setHorizontallyScrollable(boolean scrollable)
+    {
+        this.hScrollable = scrollable;
+    }
+
+    public void setVerticallyScrollable(boolean scrollable) { this.vScrollable = scrollable; }
+
+    public void setScroll(double x, double y)
+    {
+        if (dynamicScroll)
+            updateScrollBounds();
+        this.scrollX = Math.max(-maxXScroll, Math.min(-minXScroll, x));
+        this.scrollY = Math.max(-maxYScroll, Math.min(-minYScroll, y)); ;
+    }
+
+    private void updateScrollBounds()
+    {
+        for (Drawer drawer : drawers)
+        {
+            double x = getPosSys().convertX(drawer.getPosition());
+            double y = getPosSys().convertY(drawer.getPosition());
+
+            minXScroll = Math.min(minXScroll, x);
+            minYScroll = Math.min(minYScroll, y);
+            maxXScroll = Math.max(maxXScroll, x + drawer.getDrawable().getWidth() - bounds.getWidth());
+            maxYScroll = Math.max(maxYScroll, y + drawer.getDrawable().getHeight() - bounds.getHeight());
+        }
+    }
+
+    public void setDynamicScroll(boolean dynamicScroll)
+    {
+        this.dynamicScroll = dynamicScroll;
+    }
+
+    public boolean handleScroll(double x, double y, ScrollEvent event)
+    {
+        if (!isScrollable() || !bounds.contains(x, y))
+            return false;
+
+        if (hScrollable)
+            setScroll(scrollX + event.getDeltaX(), scrollY);
+        if (vScrollable)
+            setScroll(scrollX, scrollY + event.getDeltaY());
+        return true;
+    }
+
+    //endregion
 
     public PositioningSystem getPosSys()
     {
@@ -107,6 +168,8 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
         drawers.add(drawer);
         if (drawer.isClickable())
             addClickable(drawer);
+        if (!dynamicScroll)
+            updateScrollBounds();
     }
 
     public void addObject(Drawer drawer, boolean putInQue)
@@ -119,6 +182,8 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
         pendingAdds.add(drawer);
         if (drawer.isClickable())
             addClickable(drawer);
+        if (!dynamicScroll)
+            updateScrollBounds();
     }
 
     private Queue<Drawer> pendingRemoves = new ArrayDeque<>();
@@ -146,7 +211,7 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
     public boolean handleMouseClick(double x, double y, MouseEvent event)
     {
         for (Drawer clickable : clickables)
-            if (clickable.containsPoint(x - bounds.getX(), y - bounds.getY()))
+            if (clickable.containsPoint(x - bounds.getX() - scrollX, y - bounds.getY() - scrollY))
             {
                 clickable.callOnClick(event);
                 return true;
@@ -167,9 +232,10 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
         gc.save();
         gc.setGlobalAlpha(gc.getGlobalAlpha() * alpha);
         gc.translate(bounds.getX(), bounds.getY());
-        RectF relBounds = new RectF(cameraBounds.getX() - bounds.getX(), cameraBounds.getY() - bounds.getY(), cameraBounds.getWidth(), cameraBounds.getHeight());
+        gc.translate(scrollX, scrollY);
+        RectF relBounds = new RectF(cameraBounds.getX() - bounds.getX() - scrollX, cameraBounds.getY() - bounds.getY() - scrollY, cameraBounds.getWidth(), cameraBounds.getHeight());
         drawers.stream()
-                .filter(d -> d.isVisible()/* && d.canBeVisibleIn(bounds)*/ && d.canBeVisibleIn(relBounds))
+                .filter(d -> d.isVisible() && d.canBeVisibleIn(relBounds))
                 .sorted(Comparator.comparing(d -> posSys.convertY(d.getPosition()))) //TODO: not optimized
                 .forEach(d -> d.draw(gc));
         gc.restore();

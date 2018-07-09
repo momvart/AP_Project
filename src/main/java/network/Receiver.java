@@ -2,21 +2,20 @@ package network;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.function.Consumer;
 
-public class Receiver implements Runnable
+public class Receiver extends Thread
 {
     private Client client;
-    private Consumer<String> consumer;
+    private IOnMessageReceivedListener listener;
 
     public Receiver(Client client)
     {
         this.client = client;
     }
 
-    public void setConsumer(Consumer<String> consumer)
+    public void setListener(IOnMessageReceivedListener listener)
     {
-        this.consumer = consumer;
+        this.listener = listener;
     }
 
     @Override
@@ -33,7 +32,7 @@ public class Receiver implements Runnable
                     int read = inputStream.read(buffer);
                     String s = new String(buffer, 0, read);
                     System.err.println(s + " received");
-                    consumer.accept(s);
+                    callOnMessageReceive(s);
                 }
                 catch (IOException e)
                 {
@@ -43,4 +42,9 @@ public class Receiver implements Runnable
         }
     }
 
+    private void callOnMessageReceive(String message)
+    {
+        if (listener != null)
+            listener.messageReceived(message);
+    }
 }

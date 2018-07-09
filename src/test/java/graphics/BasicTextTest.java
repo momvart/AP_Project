@@ -1,9 +1,11 @@
 package graphics;
 
 import graphics.drawers.Drawer;
+import graphics.drawers.drawables.ChatMessageDrawable;
 import graphics.drawers.drawables.HProgressbarDrawable;
 import graphics.drawers.drawables.RoundRectDrawable;
 import graphics.drawers.drawables.TextDrawable;
+import graphics.layers.ChatLayer;
 import graphics.layers.Layer;
 import graphics.layers.MenuLayer;
 import graphics.positioning.NormalPositioningSystem;
@@ -20,6 +22,8 @@ import javafx.stage.Stage;
 import menus.Menu;
 import menus.ParentMenu;
 import menus.Submenu;
+import models.World;
+import network.Message;
 import utils.RectF;
 import utils.SizeF;
 
@@ -33,6 +37,7 @@ public class BasicTextTest extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
+        World.initialize();
         Group group = new Group();
         Canvas canvas = new Canvas(400, 400);
         group.getChildren().add(canvas);
@@ -83,6 +88,16 @@ public class BasicTextTest extends Application
                 .insertItem(4, "item 2");
         lMenu.setCurrentMenu(mainMenu);
         lMenu.setClickListener(menu1 -> System.out.println(menu1.getText()));
+
+        ChatMessageDrawable chat = new ChatMessageDrawable(new Message("salam", "mohammad"), 100);
+        Drawer drawer5 = new Drawer(chat);
+        drawer5.setPosition(1, 20);
+        drawer5.setLayer(layer);
+
+        ChatLayer chatLayer = new ChatLayer(5, new RectF(10, 200, 200, 300));
+        chatLayer.newMessage(new Message("Salam", "Mohammad"));
+        chatLayer.newMessage(new Message("Hello! It's me. I was wondering if after all these years you like to meet.", "Ali"));
+        gameScene.addLayer(chatLayer);
 
         gameScene.addLayer(lMenu);
         gameScene.addLayer(layer);
