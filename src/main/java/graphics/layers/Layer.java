@@ -23,9 +23,6 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
     private boolean visible = true;
     private double alpha = 1;
 
-    private boolean hScrollable = false, vScrollable = false;
-    private double scrollX, scrollY;
-
     private ArrayList<Drawer> drawers = new ArrayList<>();
 
     private PositioningSystem posSys;
@@ -93,6 +90,13 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
         this.alpha = alpha;
     }
 
+    //region Scroll
+
+    private boolean hScrollable = false, vScrollable = false;
+    private boolean dynamicScroll = false;
+    private double scrollX, scrollY;
+    private double maxXScroll, minXScroll, maxYScroll, minYScroll;
+
     public boolean isScrollable()
     {
         return hScrollable || vScrollable;
@@ -107,18 +111,44 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
 
     public void setScroll(double x, double y)
     {
-        double minX = 0, minY = 0;
-        double maxX = 0, maxY = 0;
+        if (dynamicScroll)
+            updateScrollBounds();
+        this.scrollX = Math.max(-maxXScroll, Math.min(-minXScroll, x));
+        this.scrollY = Math.max(-maxYScroll, Math.min(-minYScroll, y)); ;
+    }
+
+    private void updateScrollBounds()
+    {
         for (Drawer drawer : drawers)
         {
-            minX = Math.min(minX, drawer.getPosition().getX());
-            minY = Math.min(minY, drawer.getPosition().getY());
-            maxX = Math.max(maxX, drawer.getPosition().getX() + drawer.getDrawable().getWidth() - bounds.getWidth());
-            maxY = Math.max(maxY, drawer.getPosition().getY() + drawer.getDrawable().getWidth() - bounds.getHeight());
+            double x = getPosSys().convertX(drawer.getPosition());
+            double y = getPosSys().convertY(drawer.getPosition());
+
+            minXScroll = Math.min(minXScroll, x);
+            minYScroll = Math.min(minYScroll, y);
+            maxXScroll = Math.max(maxXScroll, x + drawer.getDrawable().getWidth() - bounds.getWidth());
+            maxYScroll = Math.max(maxYScroll, y + drawer.getDrawable().getHeight() - bounds.getHeight());
         }
-        this.scrollX = Math.max(-maxX, Math.min(-minX, x));
-        this.scrollY = Math.max(-maxY, Math.min(-minY, y)); ;
     }
+
+    public void setDynamicScroll(boolean dynamicScroll)
+    {
+        this.dynamicScroll = dynamicScroll;
+    }
+
+    public boolean handleScroll(double x, double y, ScrollEvent event)
+    {
+        if (!isScrollable() || !bounds.contains(x, y))
+            return false;
+
+        if (hScrollable)
+            setScroll(scrollX + event.getDeltaX(), scrollY);
+        if (vScrollable)
+            setScroll(scrollX, scrollY + event.getDeltaY());
+        return true;
+    }
+
+    //endregion
 
     public PositioningSystem getPosSys()
     {
@@ -138,6 +168,8 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
         drawers.add(drawer);
         if (drawer.isClickable())
             addClickable(drawer);
+        if (!dynamicScroll)
+            updateScrollBounds();
     }
 
     public void addObject(Drawer drawer, boolean putInQue)
@@ -150,6 +182,8 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
         pendingAdds.add(drawer);
         if (drawer.isClickable())
             addClickable(drawer);
+        if (!dynamicScroll)
+            updateScrollBounds();
     }
 
     private Queue<Drawer> pendingRemoves = new ArrayDeque<>();
@@ -183,18 +217,6 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
                 return true;
             }
         return false;
-    }
-
-    public boolean handleScroll(double x, double y, ScrollEvent event)
-    {
-        if (!isScrollable() || !bounds.contains(x, y))
-            return false;
-
-        if (hScrollable)
-            setScroll(scrollX + event.getDeltaX(), scrollY);
-        if (vScrollable)
-            setScroll(scrollX, scrollY + event.getDeltaY());
-        return true;
     }
 
     @Override
