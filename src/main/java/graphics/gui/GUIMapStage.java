@@ -1,19 +1,18 @@
 package graphics.gui;
 
-import graphics.*;
-import graphics.drawers.Drawer;
-import graphics.drawers.drawables.ButtonDrawable;
-import graphics.drawers.drawables.RoundRectDrawable;
-import graphics.drawers.drawables.TextDrawable;
+import graphics.GameLooper;
+import graphics.GameScene;
+import graphics.GraphicHandler;
+import graphics.GraphicsValues;
 import graphics.gui.dialogs.NumberInputDialog;
 import graphics.gui.dialogs.SingleChoiceDialog;
+import graphics.layers.ChatLayer;
 import graphics.layers.Layer;
 import graphics.layers.MenuLayer;
 import graphics.layers.ToastLayer;
 import graphics.positioning.NormalPositioningSystem;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.paint.Color;
 import javafx.stage.WindowEvent;
 import models.Map;
 import utils.RectF;
@@ -33,7 +32,7 @@ public abstract class GUIMapStage extends MapStage
     private MenuLayer lMenu;
     private ToastLayer lInfo;
     private Layer lStuffs;
-
+    private ChatLayer lChat;
 
     public GUIMapStage(Map map, double width, double height)
     {
@@ -44,6 +43,8 @@ public abstract class GUIMapStage extends MapStage
 
         lStuffs = new Layer(10, new RectF(GraphicsValues.PADDING, GraphicsValues.PADDING, width - 2 * GraphicsValues.PADDING, height - 2 * GraphicsValues.PADDING));
         lStuffs.setPosSys(new NormalPositioningSystem(CELL_SIZE + 2 * GraphicsValues.PADDING));
+
+        lChat = new ChatLayer(8, new RectF(GraphicsValues.PADDING, height / 2 - 2 * GraphicsValues.PADDING, width / 4 - 2 * GraphicsValues.PADDING, height / 2));
     }
 
     @Override
@@ -62,6 +63,7 @@ public abstract class GUIMapStage extends MapStage
         guiScene.addLayer(lMenu);
         guiScene.addLayer(lInfo);
         guiScene.addLayer(lStuffs);
+        guiScene.addLayer(lChat);
 
         guiHandler.setScene(guiScene);
 
@@ -97,6 +99,10 @@ public abstract class GUIMapStage extends MapStage
         return lStuffs;
     }
 
+    public ChatLayer getChatLayer()
+    {
+        return lChat;
+    }
 
     public void showInfo(String info)
     {

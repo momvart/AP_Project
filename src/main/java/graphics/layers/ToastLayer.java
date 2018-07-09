@@ -8,8 +8,6 @@ import graphics.drawers.drawables.RoundRectDrawable;
 import graphics.drawers.drawables.TextDrawable;
 import graphics.drawers.drawables.animators.AlphaAnimator;
 import graphics.drawers.drawables.animators.Animator;
-import graphics.helpers.GraphicHelper;
-import graphics.positioning.NormalPositioningSystem;
 import graphics.positioning.PercentPositioningSystem;
 import javafx.scene.paint.Color;
 import utils.RectF;
@@ -92,24 +90,6 @@ public class ToastLayer extends Layer
     {
         this.text.setText(txt);
         this.background.setSize(this.text.getWidth() + GraphicsValues.PADDING * 2, this.text.getHeight() + GraphicsValues.PADDING * 2);
-
-//        info = "\n" + info;
-//        String[] split = info.split("\n");
-//        int max = 0;
-//        for (String aSplit : split) max = aSplit.length() > max ? aSplit.length() : max;
-//        RoundRectDrawable bg = new RoundRectDrawable(CHARACTER_SPACING * max, (split.length) * LINE_SIZE, 10, Color.rgb(0, 0, 0, 0.6));
-//        Drawer drawer = new Drawer(bg);
-//        drawer.setPosition(width / 2 - bg.getWidth() / 2, -LINE_SIZE / 2);
-//        drawer.setLayer(lInfo);
-//        for (int i = 0; i < split.length; i++)
-//        {
-//            TextDrawable text = new TextDrawable(split[i], Color.WHITE, Fonts.getMedium());
-//            Drawer tdrawer = new Drawer(text);
-//            tdrawer.setPosition(width / 2 - bg.getWidth() / 2, (i) * LINE_SIZE - LINE_SIZE / 2);
-//            tdrawer.setLayer(lInfo);
-//        }
-
-
         show(gHandler);
     }
 }

@@ -11,4 +11,13 @@ public class Message
         this.clientName = clientName;
     }
 
+    public String getClientName()
+    {
+        return clientName;
+    }
+
+    public String getMessage()
+    {
+        return message;
+    }
 }

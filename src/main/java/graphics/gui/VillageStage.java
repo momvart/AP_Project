@@ -94,8 +94,17 @@ public class VillageStage extends GUIMapStage
         dBtnSettings.setLayer(getStuffsLayer());
         dBtnSettings.setClickListener(this::onBtnSettingsClick);
 
+        ButtonDrawable btnChat = new ButtonDrawable("Chat", GraphicsValues.IconPaths.Settings, CELL_SIZE / 2, CELL_SIZE / 2);
+        btnChat.setPivot(0, 0);
+        btnChat.setFill(ButtonDrawable.LIGHT);
+        Drawer dBtnChat = new Drawer(btnChat);
+        dBtnChat.setPosition(0, 1);
+        dBtnChat.setLayer(getStuffsLayer());
+        dBtnChat.setClickListener(this::onBtnChatClick);
+
         getGuiScene().addLayer(lResource);
     }
+
 
     @Override
     public BuildingGraphicHelper addBuilding(Building building)
@@ -199,5 +208,11 @@ public class VillageStage extends GUIMapStage
         if (dialogResult.getResultCode().equals(DialogResultCode.YES))
             World.sSettings.setGameSpeed((double)(dialogResult.getData("speed")));
 
+    }
+
+    private void onBtnChatClick(Drawer sender, MouseEvent event)
+    {
+        //show chats
+        getChatLayer().update();
     }
 }

@@ -71,7 +71,7 @@ public class Client implements Runnable
     {
         try
         {
-            socket = new Socket("localhost", 8888);
+            socket = new Socket(ip, port);
             InputStream inputStream = socket.getInputStream();
             this.inputStream = new DataInputStream(inputStream);
             OutputStream outputStream = socket.getOutputStream();
