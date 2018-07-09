@@ -6,8 +6,9 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Optional;
 
-public class Server implements Runnable
+public class GameHost extends Thread implements IOnMessageReceivedListener
 {
     private ServerSocket serverSocket;
     private ArrayList<DataInputStream> inputStreams = new ArrayList<>();
@@ -17,7 +18,7 @@ public class Server implements Runnable
     private int port;
 
 
-    public Server(int port)
+    public GameHost(int port)
     {
         this.port = port;
     }
@@ -47,8 +48,9 @@ public class Server implements Runnable
             DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
             inputStreams.add(dataInputStream);
             outputStreams.add(dataOutputStream);
-            clients.add(new Client(dataInputStream, dataOutputStream));
-            receiveMessage(dataInputStream, dataOutputStream);
+            Client client = new Client(dataInputStream, dataOutputStream, clients.size() + 1);
+            clients.add(client);
+            receiveMessage(client);
         }
     }
 
@@ -67,7 +69,7 @@ public class Server implements Runnable
         });
     }
 
-    //server message
+    //server message to all clients
     public void sendMessage(Message message)
     {
         Gson gson = new Gson();
@@ -82,10 +84,29 @@ public class Server implements Runnable
         });
     }
 
-    private void receiveMessage(DataInputStream inputStream, DataOutputStream outputStream)
+    public void sendMessage(Message message, int clientId)
     {
-        Receiver receiver = new Receiver(new Client(inputStream, outputStream));
-        receiver.setConsumer(this::sendMessage);
-        new Thread(receiver).start();
+        Gson gson = new Gson();
+        String toJson = gson.toJson(message);
+        Optional<Client> cl = clients.stream().filter(client -> client.getClientId() == clientId).findFirst();
+        Client client = cl.get();
+        try
+        {
+            client.getOutputStream().write(toJson.getBytes(), 0, toJson.length());
+        }
+        catch (IOException ignored) {}
+    }
+
+    private void receiveMessage(Client client)
+    {
+        Receiver receiver = new Receiver(client);
+        receiver.setListener(this);
+        receiver.start();
+    }
+
+    @Override
+    public void messageReceived(String message)
+    {
+        sendMessage(message);
     }
 }

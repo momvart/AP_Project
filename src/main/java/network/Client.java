@@ -5,24 +5,26 @@ import com.google.gson.Gson;
 import java.io.*;
 import java.net.Socket;
 
-public class Client implements Runnable
+public class Client extends Thread implements IOnMessageReceivedListener
 {
-    private String name;
+    private int clientId;
+    private String clientName;
     private int port;
     private String ip;
     private Socket socket;
     private DataInputStream inputStream;
     private DataOutputStream outputStream;
 
-    public Client(DataInputStream inputStream, DataOutputStream outputStream)
+    public Client(DataInputStream inputStream, DataOutputStream outputStream, int id)
     {
+        this.clientId = id;
         this.inputStream = inputStream;
         this.outputStream = outputStream;
     }
 
-    public Client(String name, int port, String ip)
+    public Client(String clientName, int port, String ip)
     {
-        this.name = name;
+        this.clientName = clientName;
         this.port = port;
         this.ip = ip;
     }
@@ -30,7 +32,7 @@ public class Client implements Runnable
     public void sendMessage(String message)
     {
         Gson gson = new Gson();
-        String toJson = gson.toJson(new Message(message, name));
+        String toJson = gson.toJson(new Message(message, clientName));
         try
         {
             outputStream.write(toJson.getBytes(), 0, toJson.length());
@@ -38,9 +40,9 @@ public class Client implements Runnable
         catch (IOException ignored) {}
     }
 
-    public String getName()
+    public String getClientName()
     {
-        return name;
+        return clientName;
     }
 
     public DataInputStream getInputStream()
@@ -53,6 +55,11 @@ public class Client implements Runnable
         return outputStream;
     }
 
+    public int getClientId()
+    {
+        return clientId;
+    }
+
     @Override
     public void run()
     {
@@ -63,8 +70,8 @@ public class Client implements Runnable
     private void receiveMessage()
     {
         Receiver receiver = new Receiver(this);
-        receiver.setConsumer(this::showMessage);
-        new Thread(receiver).start();
+        receiver.setListener(this);
+        receiver.start();
     }
 
     private void setUp()
@@ -89,5 +96,11 @@ public class Client implements Runnable
         Gson gson = new Gson();
         Message fromJson = gson.fromJson(message, Message.class);
         System.out.println(fromJson.clientName + ":" + fromJson.message);
+    }
+
+    @Override
+    public void messageReceived(String message)
+    {
+        showMessage(message);
     }
 }
