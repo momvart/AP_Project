@@ -19,11 +19,15 @@ public class GuardianGiantAttackHelper extends SingleTargetAttackHelper
     }
 
     @Override
-    public void setTarget()
+    public void setTarget(boolean networkPermission)
     {
+        if (!isReal && !networkPermission)
+            return;
         mainTargets = new ArrayList<>();
         Optional<Soldier> min = attack.getDeployedAliveUnits().min(Comparator.comparingDouble(soldier -> Point.euclideanDistance2nd(soldier.getLocation(), getBuilding().getLocation())));
         min.ifPresent(soldier -> mainTargets.add(soldier));
+        if (isReal)
+            NetworkHelper.buildingSetTarget(this);
     }
 
     @Override
@@ -32,9 +36,9 @@ public class GuardianGiantAttackHelper extends SingleTargetAttackHelper
         if (!destroyed)
         {
             DefensiveTower defensiveTower = (DefensiveTower)building;
-            setTarget();
+            setTarget(false);
             if (mainTargets.size() != 0 && Point.euclideanDistance(mainTargets.get(0).getLocation(), defensiveTower.getLocation()) <= defensiveTower.getRange() * 1.5)
-                attack();
+                attack(false);
             else
                 move();
         }

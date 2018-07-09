@@ -1,18 +1,15 @@
 package models.soldiers;
 
 import models.attack.Attack;
-import models.attack.attackHelpers.SoldierAttackHelper;
 import models.attack.attackHelpers.GeneralSoldierAttackHelper;
+import models.attack.attackHelpers.SoldierAttackHelper;
 import utils.Point;
-
-import java.net.URISyntaxException;
 
 public abstract class Soldier
 {
     private int level;
     private Point location;
     protected transient SoldierAttackHelper attackHelper;
-
     public Soldier()
     {
 
@@ -67,6 +64,36 @@ public abstract class Soldier
     public Point getLocation()
     {
         return location;
+    }
+
+    public static Soldier getSimilarSoldier(Soldier soldier)
+    {
+        Soldier newSoldier;
+        int level = soldier.getLevel();
+        switch (soldier.getType())
+        {
+            case Archer.SOLDIER_TYPE:
+                newSoldier = new Archer(level);
+                break;
+            case Dragon.SOLDIER_TYPE:
+                newSoldier = new Dragon(level);
+                break;
+            case Giant.SOLDIER_TYPE:
+                newSoldier = new Giant(level);
+                break;
+            case Guardian.SOLDIER_TYPE:
+                newSoldier = new Guardian(level);
+                break;
+            case Healer.SOLDIER_TYPE:
+                newSoldier = new Healer(level);
+                break;
+            default:
+                newSoldier = new WallBreaker(level);
+                break;
+        }//TODO‌ we should manipulate here anytime we suppose to add to or change the soldier varieties
+        newSoldier.setLocation(soldier.getLocation());
+        newSoldier.attackHelper = soldier.attackHelper;
+        return newSoldier;
     }
 
     public void setLocation(Point location)

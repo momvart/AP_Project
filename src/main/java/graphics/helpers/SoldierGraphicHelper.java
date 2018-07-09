@@ -24,17 +24,16 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     private IOnMoveFinishedListener moveListener;
     private Status status;
     private int turn = 1;
-
+    private SoldierAttackHelper attackHelper;
 
     public SoldierGraphicHelper(Soldier soldier, Layer layer)
     {
         this.soldier = soldier;
         drawer = new SoldierDrawer(soldier);
-
         setReloadDuration(.7);
-
         drawer.setPosition(soldier.getLocation().getX(), soldier.getLocation().getY());
         drawer.setLayer(layer);
+        attackHelper = soldier.getAttackHelper();
     }
 
     public SoldierDrawer getDrawer()
@@ -44,8 +43,10 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 
     public void setUpListeners()
     {
-        SoldierAttackHelper attackHelper = soldier.getAttackHelper();
-
+        this.setReloadListener(attackHelper);
+        this.setMoveListener(attackHelper);
+        attackHelper.setDecampListener(this);
+        attackHelper.addSoldierDieListener(this);
     }
 
     public Status getStatus()
@@ -199,8 +200,6 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 
     protected boolean isSoldierDistantFighter()
     {
-        /*if (soldier.getType() == Healer.SOLDIER_TYPE)
-            return false;*/
         return soldier.getAttackHelper().getRange() != 1;
     }
 
@@ -231,6 +230,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     @Override
     public void update(double deltaT)
     {
+        System.out.println("soldier position is : ‌" + drawer.getPosition());
         super.update(deltaT);
         doReplacing(deltaT);
     }

@@ -4,22 +4,36 @@ import exceptions.ConsoleException;
 import graphics.Fonts;
 import graphics.GraphicsValues;
 import graphics.drawers.Drawer;
-import graphics.drawers.drawables.*;
+import graphics.drawers.drawables.ButtonDrawable;
+import graphics.drawers.drawables.ImageDrawable;
+import graphics.drawers.drawables.RoundRectDrawable;
+import graphics.drawers.drawables.TextDrawable;
 import graphics.helpers.*;
-import graphics.layers.*;
-import graphics.positioning.*;
+import graphics.layers.Layer;
+import graphics.layers.ResourceLayer;
+import graphics.positioning.IsometricPositioningSystem;
+import graphics.positioning.NormalPositioningSystem;
+import graphics.positioning.PositioningSystem;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
-import menus.*;
+import menus.Menu;
+import menus.ParentMenu;
+import menus.SoldierMenuItem;
 import models.World;
 import models.attack.Attack;
 import models.attack.attackHelpers.SingleTargetAttackHelper;
 import models.buildings.Building;
 import models.buildings.DefensiveTower;
-import models.soldiers.*;
-import utils.*;
+import models.soldiers.Healer;
+import models.soldiers.MoveType;
+import models.soldiers.Soldier;
+import models.soldiers.SoldierValues;
+import utils.GraphicsUtilities;
+import utils.Point;
+import utils.RectF;
+import utils.TimeSpan;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -93,8 +107,7 @@ public class AttackStage extends GUIMapStage
 
     public void setUpAndShow()
     {
-        theAttack.setSoldierPutListener(this::addSoldier);
-
+        theAttack.setSoldierPutListener(soldier -> addSoldier(soldier, false));
         super.setUpAndShow();
     }
 
@@ -102,6 +115,7 @@ public class AttackStage extends GUIMapStage
     public BuildingGraphicHelper addBuilding(Building building)
     {
         AttackBuildingGraphicHelper graphicHelper;
+        building.getAttackHelper().setIsReal();
 
         if (building instanceof DefensiveTower)
         {
@@ -122,8 +136,12 @@ public class AttackStage extends GUIMapStage
         return graphicHelper;
     }
 
-    private void addSoldier(Soldier soldier)
+    private void addSoldier(Soldier soldier, boolean networkPermission)
     {
+        soldier.getAttackHelper().setIsReal();
+        boolean isReal = soldier.getAttackHelper().isReal();
+        if (!isReal && !networkPermission)
+            return;
         SoldierGraphicHelper helper;
         Layer layer = soldier.getMoveType() == MoveType.AIR ? lFliers : getObjectsLayer();
         if (soldier.getType() == Healer.SOLDIER_TYPE)
@@ -165,12 +183,14 @@ public class AttackStage extends GUIMapStage
                     int J = j;
                     drawer.setClickListener((sender, event) ->
                     {
+                        if (!theAttack.isReal)
+                            return;
                         SoldierMenuItem menu = (SoldierMenuItem)getMenuLayer().getCurrentMenu().getMenuItems().stream().filter(Menu::isFocused).findFirst().orElse(null);
                         if (menu == null)
                             return;
                         try
                         {
-                            theAttack.putUnits(menu.getId() - 100, 1, new Point(I, J));
+                            theAttack.putUnits(menu.getId() - 100, 1, new Point(I, J), false);
                             menu.setCount((int)theAttack.getAliveUnits(menu.getId() - 100).filter(soldier -> !soldier.getAttackHelper().isSoldierDeployed()).count());
                             getMenuLayer().updateMenu();
                         }

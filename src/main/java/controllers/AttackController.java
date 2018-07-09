@@ -1,22 +1,39 @@
 package controllers;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import exceptions.*;
 import graphics.gui.AttackStage;
 import javafx.application.Platform;
-import menus.*;
-import models.attack.*;
+import menus.AttackMapItem;
+import menus.IMenuClickListener;
+import menus.Menu;
+import menus.ParentMenu;
 import models.World;
-import models.buildings.*;
+import models.attack.Attack;
+import models.attack.AttackMap;
+import models.buildings.Building;
+import models.buildings.ElixirStorage;
+import models.buildings.GoldStorage;
 import models.soldiers.SoldierValues;
-import serialization.*;
-import utils.*;
+import serialization.AttackMapGlobalAdapter;
+import serialization.BuildingGlobalAdapter;
+import serialization.StorageGlobalAdapter;
+import utils.ConsoleUtilities;
+import utils.ICommandManager;
+import utils.Point;
 import views.AttackView;
-import views.dialogs.*;
+import views.dialogs.DialogResult;
+import views.dialogs.DialogResultCode;
+import views.dialogs.TextInputDialog;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.regex.Matcher;
 
 public class AttackController implements IMenuClickListener, ICommandManager
@@ -71,7 +88,7 @@ public class AttackController implements IMenuClickListener, ICommandManager
                     if (result.getResultCode() != DialogResultCode.YES)
                         break;
                     String path = (String)result.getData(TextInputDialog.KEY_TEXT);
-                    openMap(Paths.get(path));
+                    openMap(Paths.get(path), true);//TODO this code is expired. anytime in use consider the map reality
                     World.sSettings.getAttackMapPaths().add(path);
                     World.saveSettings();
                     theView.setCurrentMenu(new AttackMapItem(theView.getCurrentMenu(), Paths.get(path)), true);
@@ -79,7 +96,7 @@ public class AttackController implements IMenuClickListener, ICommandManager
                 break;
                 case Menu.Id.ATTACK_LOAD_MAP_ITEM:
                 {
-                    openMap(((AttackMapItem)menu).getFilePath());
+                    openMap(((AttackMapItem)menu).getFilePath(), true);//TODO this code is expired. anytime in use consider the map reality
                 }
                 break;
                 case Menu.Id.ATTACK_MAIN_BACK:
@@ -187,7 +204,7 @@ public class AttackController implements IMenuClickListener, ICommandManager
 
     private void putUnits(int soldierType, int count, Point location) throws ConsoleException
     {
-        theAttack.putUnits(soldierType, count, location);
+        theAttack.putUnits(soldierType, count, location, false);
     }
 
     private void passTurn()
@@ -211,7 +228,7 @@ public class AttackController implements IMenuClickListener, ICommandManager
         finished = true;
     }
 
-    private void openMap(Path path) throws MyJsonException, MyIOException
+    private void openMap(Path path, boolean isReal) throws MyJsonException, MyIOException
     {
         try (BufferedReader reader = Files.newBufferedReader(path))
         {
@@ -223,7 +240,7 @@ public class AttackController implements IMenuClickListener, ICommandManager
                     .create();
 
             AttackMap map = gson.fromJson(reader, AttackMap.class);
-            setTheAttack(new Attack(map));
+            setTheAttack(new Attack(map, isReal));
         }
         catch (JsonParseException ex)
         {

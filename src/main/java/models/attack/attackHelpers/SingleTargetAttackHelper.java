@@ -19,23 +19,38 @@ public class SingleTargetAttackHelper extends DefensiveTowerAttackHelper
 
     Soldier targetSoldier;
     @Override
-    public void setTarget() throws SoldierNotFoundException
+    public void setTarget(boolean networkPermission)
     {
+        if (!isReal && !networkPermission)
+            return;
         DefensiveTower tower = getTower();
-        Point soldierPoint = attack.getNearestSoldier(tower.getLocation(), tower.getRange(), tower.getDefenseType().convertToMoveType());
+        Point soldierPoint = null;
+        try
+        {
+            soldierPoint = attack.getNearestSoldier(tower.getLocation(), tower.getRange(), tower.getDefenseType().convertToMoveType());
+        }
+        catch (SoldierNotFoundException e) {}
+        if (soldierPoint == null)
+            return;
         mainTargets = new ArrayList<>(attack.getSoldiersOnLocations().getSoldiers(soldierPoint));
         targetSoldier = getAnAliveSoldier(mainTargets);
         if (targetSoldier == null)
             return;
         triggerListener.onBulletTrigger(targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition(), targetSoldier);
+        if (isReal)
+            NetworkHelper.buildingSetTarget(this);
     }
 
     @Override
-    public void attack()
+    public void attack(boolean networkPermission)
     {
+        if (!isReal && !networkPermission)
+            return;
         targetSoldier.getAttackHelper().decreaseHealth(getTower().getDamagePower());
         mainTargets = null;
         targetSoldier = null;
+        if (isReal)
+            NetworkHelper.buildingAttack(this);
         // TODO: 6/6/18 don't change mainTargets and wholeTargets to null  each turn for some towers
     }
 }
