@@ -109,54 +109,56 @@ public class Main extends Application
         //todo : change alerts to dialog
         newGame.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
         {
+            Client client = null;
+            GameHost gameHost = null;
             ButtonType serverButton = new ButtonType("SERVER", ButtonBar.ButtonData.YES);
             ButtonType clientButton = new ButtonType("CLIENT", ButtonBar.ButtonData.YES);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Which one?", serverButton, clientButton);
             SingleChoiceDialog.applyCss(alert);
             Optional<ButtonType> buttonType = alert.showAndWait();
-            buttonType.ifPresent(buttonType1 ->
+            if (buttonType.get().getText().equals("SERVER"))
             {
-                if (buttonType.get().getText().equals("SERVER"))
-                {
-                    alert.setTitle("PORT");
-                    alert.setContentText("Insert port number");
-                    TextField textField = new TextField();
-                    alert.setGraphic(textField);
-                    alert.getButtonTypes().removeAll(serverButton, clientButton);
-                    alert.getButtonTypes().add(new ButtonType("OK", ButtonBar.ButtonData.YES));
-                    alert.showAndWait();
-                    GameHost gameHost = new GameHost(Integer.parseInt(textField.getText()));
-                    gameHost.start();
-                }
-                else
-                {
-                    alert.setTitle("CLIENT");
-                    alert.setContentText("Insert ip and port");
-                    TextField ip = new TextField();
-                    TextField port = new TextField();
-                    Label ipL = new Label("IP:");
-                    ipL.setPrefWidth(ip.getPrefWidth());
-                    ipL.setTextFill(Color.GREENYELLOW);
-                    Label portL = new Label("PORT:");
-                    portL.setPrefWidth(port.getPrefWidth());
-                    portL.setTextFill(Color.GREENYELLOW);
-                    HBox hBox = new HBox(ipL, ip);
-                    HBox hBox1 = new HBox(portL, port);
-                    VBox vBox = new VBox(hBox, hBox1);
-                    vBox.setAlignment(Pos.CENTER_RIGHT);
-                    alert.setGraphic(vBox);
-                    alert.getButtonTypes().removeAll(serverButton, clientButton);
-                    alert.getButtonTypes().add(new ButtonType("OK", ButtonBar.ButtonData.YES));
-                    alert.showAndWait();
-                    Client client = new Client("Mahdi", Integer.parseInt(port.getText()), ip.getText());
-                    client.start();
-                }
-            });
-            World.newGame();
-            new VillageView(new Scanner(System.in));
+                alert.setTitle("PORT");
+                alert.setContentText("Insert port number");
+                TextField textField = new TextField();
+                alert.setGraphic(textField);
+                alert.getButtonTypes().removeAll(serverButton, clientButton);
+                alert.getButtonTypes().add(new ButtonType("OK", ButtonBar.ButtonData.YES));
+                alert.showAndWait();
+                gameHost = new GameHost(Integer.parseInt(textField.getText()));
+                World.newGame();
+                new VillageView(new Scanner(System.in));
+                gameHost.start();
+            }
+            else
+            {
+                alert.setTitle("CLIENT");
+                alert.setContentText("Insert ip and port");
+                TextField ip = new TextField();
+                TextField port = new TextField();
+                Label ipL = new Label("IP:");
+                ipL.setPrefWidth(ip.getPrefWidth());
+                ipL.setTextFill(Color.YELLOWGREEN);
+                Label portL = new Label("PORT:");
+                portL.setPrefWidth(port.getPrefWidth());
+                portL.setTextFill(Color.YELLOWGREEN);
+                HBox hBox = new HBox(ipL, ip);
+                HBox hBox1 = new HBox(portL, port);
+                VBox vBox = new VBox(hBox, hBox1);
+                vBox.setAlignment(Pos.CENTER_RIGHT);
+                alert.setGraphic(vBox);
+                alert.getButtonTypes().removeAll(serverButton, clientButton);
+                alert.getButtonTypes().add(new ButtonType("OK", ButtonBar.ButtonData.YES));
+                alert.showAndWait();
+                client = new Client("Mahdi", Integer.parseInt(port.getText()), ip.getText());
+                World.newGame();
+
+                client.start();
+            }
             stage.close();
         });
         loadGame.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
+
         {
             try (BufferedReader reader = Files.newBufferedReader(Paths.get("data", "save.json")))
             {
@@ -170,6 +172,7 @@ public class Main extends Application
             }
         });
         settings.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
+
         {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Set game speed", ButtonType.OK, ButtonType.CANCEL);
             Spinner<Double> spinner = new Spinner(1, 3, 1, 0.5);
@@ -187,6 +190,7 @@ public class Main extends Application
             });
         });
         quit.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
+
         {
             stage.close();
         });

@@ -75,6 +75,6 @@ hs_err_pid*
 # Custom files
 AP_Project.iml
 .idea/misc.xml
-.idea/name
+.idea/clientName
 .idea/codeStyles/codeStyleConfig.xml
 AP.iml

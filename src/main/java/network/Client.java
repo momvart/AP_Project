@@ -1,6 +1,7 @@
 package network;
 
 import com.google.gson.Gson;
+import graphics.gui.VillageStage;
 
 import java.io.*;
 import java.net.Socket;
@@ -14,6 +15,7 @@ public class Client extends Thread implements IOnMessageReceivedListener
     private Socket socket;
     private DataInputStream inputStream;
     private DataOutputStream outputStream;
+    private VillageStage villageStage;
 
     public Client(DataInputStream inputStream, DataOutputStream outputStream, int id)
     {
@@ -27,17 +29,6 @@ public class Client extends Thread implements IOnMessageReceivedListener
         this.clientName = clientName;
         this.port = port;
         this.ip = ip;
-    }
-
-    public void sendMessage(String message)
-    {
-        Gson gson = new Gson();
-        String toJson = gson.toJson(new Message(message, clientName));
-        try
-        {
-            outputStream.write(toJson.getBytes(), 0, toJson.length());
-        }
-        catch (IOException ignored) {}
     }
 
     public String getClientName()
@@ -60,11 +51,15 @@ public class Client extends Thread implements IOnMessageReceivedListener
         return clientId;
     }
 
-    @Override
-    public void run()
+    public void sendMessage(String message)
     {
-        setUp();
-        receiveMessage();
+        Gson gson = new Gson();
+        String toJson = gson.toJson(new Message(message, clientName, MessageType.CHAT_MESSAGE));
+        try
+        {
+            outputStream.write(toJson.getBytes(), 0, toJson.length());
+        }
+        catch (IOException ignored) {}
     }
 
     private void receiveMessage()
@@ -91,16 +86,23 @@ public class Client extends Thread implements IOnMessageReceivedListener
 
     }
 
-    private void showMessage(String message)
+
+    @Override
+    public void run()
     {
-        Gson gson = new Gson();
-        Message fromJson = gson.fromJson(message, Message.class);
-        System.out.println(fromJson.clientName + ":" + fromJson.message);
+        setUp();
+        receiveMessage();
     }
 
     @Override
     public void messageReceived(String message)
     {
-        showMessage(message);
+        Gson gson = new Gson();
+        Message fromJson = gson.fromJson(message, Message.class);
+        if (fromJson.messageType.equals(MessageType.CHAT_MESSAGE))
+            villageStage.getChatLayer().newMessage(fromJson);
+        else if (fromJson.messageType.equals(MessageType.ATTACK_REQUEST)) ;
+        //attack request
+
     }
 }

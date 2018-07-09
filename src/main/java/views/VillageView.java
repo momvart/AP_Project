@@ -40,7 +40,6 @@ public class VillageView extends ConsoleMenuContainerView
 {
     private Village village;
     private VillageStage villageStage;
-
     private Attack theAttack;
 
     public VillageView(Scanner scanner)
@@ -64,6 +63,11 @@ public class VillageView extends ConsoleMenuContainerView
             villageStage.setUpAndShow();
             village.setVillageStage(villageStage);
         });
+    }
+
+    public VillageStage getVillageStage()
+    {
+        return villageStage;
     }
 
     @Override

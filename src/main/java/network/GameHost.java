@@ -17,7 +17,6 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
     private ArrayList<Receiver> receivers = new ArrayList<>();
     private int port;
 
-
     public GameHost(int port)
     {
         this.port = port;
@@ -51,10 +50,11 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
             Client client = new Client(dataInputStream, dataOutputStream, clients.size() + 1);
             clients.add(client);
             receiveMessage(client);
+            sendMessage(new Message("new player joined", "Server", MessageType.SERVER_MESSAGE));
         }
     }
 
-    //clients message
+    //send client message to other clients
     private void sendMessage(String message)
     {
         Gson gson = new Gson();
@@ -69,7 +69,7 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
         });
     }
 
-    //server message to all clients
+    //send message to all clients
     public void sendMessage(Message message)
     {
         Gson gson = new Gson();
@@ -84,6 +84,7 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
         });
     }
 
+    //send message to specific client
     public void sendMessage(Message message, int clientId)
     {
         Gson gson = new Gson();

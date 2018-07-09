@@ -1,5 +1,6 @@
 package graphics.gui;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import exceptions.ConsoleException;
 import exceptions.MyIOException;
@@ -27,6 +28,8 @@ import models.Map;
 import models.Village;
 import models.World;
 import models.buildings.Building;
+import network.IOnMessageReceivedListener;
+import network.Message;
 import utils.RectF;
 import views.VillageView;
 import views.dialogs.DialogResult;
@@ -38,7 +41,7 @@ import java.nio.file.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class VillageStage extends GUIMapStage
+public class VillageStage extends GUIMapStage implements IOnMessageReceivedListener
 {
     private Village village;
 
@@ -214,5 +217,13 @@ public class VillageStage extends GUIMapStage
     {
         //show chats
         getChatLayer().update();
+    }
+
+    @Override
+    public void messageReceived(String message)
+    {
+        Gson gson = new Gson();
+        Message fromJson = gson.fromJson(message, Message.class);
+        getChatLayer().newMessage(fromJson);
     }
 }

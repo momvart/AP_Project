@@ -45,6 +45,8 @@ public abstract class GUIMapStage extends MapStage
         lStuffs.setPosSys(new NormalPositioningSystem(CELL_SIZE + 2 * GraphicsValues.PADDING));
 
         lChat = new ChatLayer(8, new RectF(GraphicsValues.PADDING, height / 2 - 2 * GraphicsValues.PADDING, width / 4 - 2 * GraphicsValues.PADDING, height / 2));
+        lChat.setVerticallyScrollable(true);
+        lChat.setDynamicScroll(true);
     }
 
     @Override

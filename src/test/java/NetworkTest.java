@@ -1,5 +1,5 @@
 import network.Client;
-import network.Server;
+import network.GameHost;
 
 import java.util.Scanner;
 
@@ -11,8 +11,8 @@ public class NetworkTest
         String s = scanner.nextLine();
         if (s.equals("server"))
         {
-            Server server = new Server(8888);
-            Thread thread = new Thread(server);
+            GameHost gameHost = new GameHost(8888);
+            Thread thread = new Thread(gameHost);
             thread.start();
             String s1 = scanner.nextLine();
 
