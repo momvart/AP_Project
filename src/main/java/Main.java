@@ -14,11 +14,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import models.World;
-import network.Client;
+import network.GameClient;
+import network.GameClientC;
 import network.GameHost;
 import views.VillageView;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -109,7 +111,7 @@ public class Main extends Application
         //todo : change alerts to dialog
         newGame.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
         {
-            Client client = null;
+            GameClient client = null;
             GameHost gameHost = null;
             ButtonType serverButton = new ButtonType("SERVER", ButtonBar.ButtonData.YES);
             ButtonType clientButton = new ButtonType("CLIENT", ButtonBar.ButtonData.YES);
@@ -125,10 +127,17 @@ public class Main extends Application
                 alert.getButtonTypes().removeAll(serverButton, clientButton);
                 alert.getButtonTypes().add(new ButtonType("OK", ButtonBar.ButtonData.YES));
                 alert.showAndWait();
-                gameHost = new GameHost(Integer.parseInt(textField.getText()));
-                World.newGame();
-                new VillageView(new Scanner(System.in));
-                gameHost.start();
+                try
+                {
+                    gameHost = new GameHost(Integer.parseInt(textField.getText()));
+                    World.newGame();
+                    new VillageView(new Scanner(System.in));
+                    gameHost.start();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
             }
             else
             {
@@ -150,15 +159,20 @@ public class Main extends Application
                 alert.getButtonTypes().removeAll(serverButton, clientButton);
                 alert.getButtonTypes().add(new ButtonType("OK", ButtonBar.ButtonData.YES));
                 alert.showAndWait();
-                client = new Client("Mahdi", Integer.parseInt(port.getText()), ip.getText());
-                World.newGame();
-
-                client.start();
+                try
+                {
+                    client = new GameClientC(Integer.parseInt(port.getText()), ip.getText());
+                    World.newGame();
+                    client.setUp();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
             }
             stage.close();
         });
         loadGame.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
-
         {
             try (BufferedReader reader = Files.newBufferedReader(Paths.get("data", "save.json")))
             {
@@ -172,14 +186,14 @@ public class Main extends Application
             }
         });
         settings.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
-
         {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Set game speed", ButtonType.OK, ButtonType.CANCEL);
             Spinner<Double> spinner = new Spinner(1, 3, 1, 0.5);
             alert.setGraphic(spinner);
             SingleChoiceDialog.applyCss(alert);
             Optional<ButtonType> buttonType = alert.showAndWait();
-            buttonType.ifPresent(buttonType1 -> {
+            buttonType.ifPresent(buttonType1 ->
+            {
                 if (buttonType.get().equals(ButtonType.OK))
                 {
                     World.sSettings.setGameSpeed(spinner.getValue());
@@ -190,7 +204,6 @@ public class Main extends Application
             });
         });
         quit.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
-
         {
             stage.close();
         });

@@ -4,22 +4,22 @@ import com.google.gson.Gson;
 
 import java.io.*;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class GameHost extends Thread implements IOnMessageReceivedListener
 {
     private ServerSocket serverSocket;
-    private ArrayList<DataInputStream> inputStreams = new ArrayList<>();
-    private ArrayList<DataOutputStream> outputStreams = new ArrayList<>();
-    private ArrayList<Client> clients = new ArrayList<>();
-    private ArrayList<Receiver> receivers = new ArrayList<>();
-    private int port;
 
-    public GameHost(int port)
+    private HashMap<UUID, GameClient> clients = new HashMap<>();
+
+    private Gson gson = new Gson();
+
+    public GameHost(int port) throws IOException
     {
-        this.port = port;
+        this.serverSocket = new ServerSocket(port);
     }
 
     @Override
@@ -27,7 +27,15 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
     {
         try
         {
-            setUp();
+            while (true)
+            {
+                GameClient client = new GameClient(serverSocket.accept());
+                clients.put(client.getClientId(), client);
+                client.setUp();
+                client.sendMessage(new Message(client.getClientId().toString(), null, MessageType.SET_ID));
+                client.setMessageReceiver(this);
+                broadcastClientsList();
+            }
         }
         catch (IOException e)
         {
@@ -35,79 +43,37 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
         }
     }
 
-    private void setUp() throws IOException
-    {
-        serverSocket = new ServerSocket(port);
-        while (true)
-        {
-            Socket accept = serverSocket.accept();
-            InputStream inputStream = accept.getInputStream();
-            DataInputStream dataInputStream = new DataInputStream(inputStream);
-            OutputStream outputStream = accept.getOutputStream();
-            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-            inputStreams.add(dataInputStream);
-            outputStreams.add(dataOutputStream);
-            Client client = new Client(dataInputStream, dataOutputStream, clients.size() + 1);
-            clients.add(client);
-            receiveMessage(client);
-            sendMessage(new Message("new player joined", "Server", MessageType.SERVER_MESSAGE));
-        }
-    }
-
     //send client message to other clients
-    private void sendMessage(String message)
+    public void broadcastMessage(Message message)
     {
-        Gson gson = new Gson();
-        Message fromJson = gson.fromJson(message, Message.class);
-        outputStreams.forEach(outputStream -> {
-            try
-            {
-                outputStream.write(message.getBytes(), 0, message.length());
-                outputStream.flush();
-            }
-            catch (IOException ignored) {}
-        });
+        clients.values().forEach(client -> client.sendMessage(message));
     }
 
-    //send message to all clients
-    public void sendMessage(Message message)
+    public void broadcastExcept(UUID exception, Message message)
     {
-        Gson gson = new Gson();
-        String toJson = gson.toJson(message);
-        outputStreams.forEach(outputStream -> {
-            try
-            {
-                outputStream.write(toJson.getBytes(), 0, toJson.length());
-                outputStream.flush();
-            }
-            catch (IOException ignored) {}
-        });
+        clients.values().stream().filter(client -> !client.getClientId().equals(exception)).forEach(client -> client.sendMessage(message));
+    }
+
+    private void broadcastClientsList()
+    {
+        broadcastMessage(new Message(gson.toJson(clients.values().stream().map(GameClient::getInfo).collect(Collectors.toList())), null, MessageType.PLAYERS_LIST));
     }
 
     //send message to specific client
-    public void sendMessage(Message message, int clientId)
+    public void sendMessage(UUID clientId, Message message)
     {
-        Gson gson = new Gson();
-        String toJson = gson.toJson(message);
-        Optional<Client> cl = clients.stream().filter(client -> client.getClientId() == clientId).findFirst();
-        Client client = cl.get();
-        try
-        {
-            client.getOutputStream().write(toJson.getBytes(), 0, toJson.length());
-        }
-        catch (IOException ignored) {}
-    }
-
-    private void receiveMessage(Client client)
-    {
-        Receiver receiver = new Receiver(client);
-        receiver.setListener(this);
-        receiver.start();
+        clients.get(clientId).sendMessage(message);
     }
 
     @Override
-    public void messageReceived(String message)
+    public void messageReceived(Message message)
     {
-        sendMessage(message);
+        switch (message.getMessageType())
+        {
+            case CHAT_MESSAGE:
+                broadcastExcept(message.getSenderId(), message);
+                break;
+
+        }
     }
 }

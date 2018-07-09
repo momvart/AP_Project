@@ -1,21 +1,23 @@
 package network;
 
+import java.util.UUID;
+
 public class Message
 {
-    String message;
-    String clientName;
-    MessageType messageType;
+    private String message;
+    private UUID from;
+    private MessageType messageType;
 
-    public Message(String message, String clientName, MessageType messageType)
+    public Message(String message, UUID from, MessageType messageType)
     {
         this.message = message;
-        this.clientName = clientName;
+        this.from = from;
         this.messageType = messageType;
     }
 
-    public String getClientName()
+    public UUID getSenderId()
     {
-        return clientName;
+        return from;
     }
 
     public String getMessage()

@@ -187,6 +187,8 @@ public class GraphicsValues
         public static String AttackInfo = UI_ASSETS_PATH + "/attackInfo.png";
         public static String Save = UI_ASSETS_PATH + "/save.png";
         public static String Settings = UI_ASSETS_PATH + "/settings.png";
+        public static String Chat = UI_ASSETS_PATH + "/chat.png";
+        public static String Network = UI_ASSETS_PATH + "/network.png";
 
         public static String Map = UI_ASSETS_PATH + "/map.png";
         public static String NewMap = UI_ASSETS_PATH + "/map_plus.png";

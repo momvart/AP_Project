@@ -1,50 +1,66 @@
 package network;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 
 public class Receiver extends Thread
 {
-    private Client client;
-    private IOnMessageReceivedListener listener;
+    private GameClient client;
+    private IOnMessageReceivedListener receiver;
 
-    public Receiver(Client client)
+    private Gson deserializer = new Gson();
+
+
+    public Receiver(GameClient client)
     {
         this.client = client;
-    }
-
-    public void setListener(IOnMessageReceivedListener listener)
-    {
-        this.listener = listener;
+        this.receiver = client;
     }
 
     @Override
     public void run()
     {
-        if (client != null)
+        try (DataInputStream inputStream = new DataInputStream(client.getSocket().getInputStream()))
         {
-            DataInputStream inputStream = client.getInputStream();
             while (true)
             {
-                byte[] buffer = new byte[2000];
+                byte[] buffer = new byte[client.getSocket().getReceiveBufferSize()];
+
+                int read = inputStream.read(buffer);
+                String s = new String(buffer, 0, read);
+                System.err.println(s + " received");
                 try
                 {
-                    int read = inputStream.read(buffer);
-                    String s = new String(buffer, 0, read);
-                    System.err.println(s + " received");
-                    callOnMessageReceive(s);
+                    String[] datas = new String(buffer, 0, read).split(";;");
+                    for (String strMessage : datas)
+                    {
+                        Message message = deserializer.fromJson(strMessage, Message.class);
+                        callOnMessageReceived(message);
+                    }
                 }
-                catch (IOException e)
+                catch (JsonSyntaxException ex)
                 {
-                    e.printStackTrace();
+                    System.err.println("Message is not valid: " + new String(buffer, 0, read));
                 }
             }
         }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
-    private void callOnMessageReceive(String message)
+    private void callOnMessageReceived(Message message)
     {
-        if (listener != null)
-            listener.messageReceived(message);
+        if (receiver != null)
+            receiver.messageReceived(message);
+    }
+
+    public void setReceiver(IOnMessageReceivedListener listener)
+    {
+        this.receiver = listener;
     }
 }

@@ -32,7 +32,6 @@ public abstract class GUIMapStage extends MapStage
     private MenuLayer lMenu;
     private ToastLayer lInfo;
     private Layer lStuffs;
-    private ChatLayer lChat;
 
     public GUIMapStage(Map map, double width, double height)
     {
@@ -43,10 +42,6 @@ public abstract class GUIMapStage extends MapStage
 
         lStuffs = new Layer(10, new RectF(GraphicsValues.PADDING, GraphicsValues.PADDING, width - 2 * GraphicsValues.PADDING, height - 2 * GraphicsValues.PADDING));
         lStuffs.setPosSys(new NormalPositioningSystem(CELL_SIZE + 2 * GraphicsValues.PADDING));
-
-        lChat = new ChatLayer(8, new RectF(GraphicsValues.PADDING, height / 2 - 2 * GraphicsValues.PADDING, width / 4 - 2 * GraphicsValues.PADDING, height / 2));
-        lChat.setVerticallyScrollable(true);
-        lChat.setDynamicScroll(true);
     }
 
     @Override
@@ -65,7 +60,6 @@ public abstract class GUIMapStage extends MapStage
         guiScene.addLayer(lMenu);
         guiScene.addLayer(lInfo);
         guiScene.addLayer(lStuffs);
-        guiScene.addLayer(lChat);
 
         guiHandler.setScene(guiScene);
 
@@ -99,11 +93,6 @@ public abstract class GUIMapStage extends MapStage
     public Layer getStuffsLayer()
     {
         return lStuffs;
-    }
-
-    public ChatLayer getChatLayer()
-    {
-        return lChat;
     }
 
     public void showInfo(String info)

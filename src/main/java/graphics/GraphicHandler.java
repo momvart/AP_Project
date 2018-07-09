@@ -35,8 +35,8 @@ public class GraphicHandler implements IFrameUpdatable
     public void setScale(double scale)
     {
         gc.restore();
-        gc.transform(scale, 0, 0, scale, 0, 0);
         gc.save();
+        gc.transform(scale, 0, 0, scale, 0, 0);
         this.scale = scale;
     }
 

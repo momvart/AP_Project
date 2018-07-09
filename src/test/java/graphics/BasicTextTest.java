@@ -1,5 +1,6 @@
 package graphics;
 
+import com.sun.prism.Graphics;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ChatMessageDrawable;
 import graphics.drawers.drawables.HProgressbarDrawable;
@@ -13,6 +14,7 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -89,15 +91,6 @@ public class BasicTextTest extends Application
         lMenu.setCurrentMenu(mainMenu);
         lMenu.setClickListener(menu1 -> System.out.println(menu1.getText()));
 
-        ChatMessageDrawable chat = new ChatMessageDrawable(new Message("salam", "mohammad"), 100);
-        Drawer drawer5 = new Drawer(chat);
-        drawer5.setPosition(1, 20);
-        drawer5.setLayer(layer);
-
-        ChatLayer chatLayer = new ChatLayer(5, new RectF(10, 200, 200, 300));
-        chatLayer.newMessage(new Message("Salam", "Mohammad"));
-        chatLayer.newMessage(new Message("Hello! It's me. I was wondering if after all these years you like to meet.", "Ali"));
-        gameScene.addLayer(chatLayer);
 
         gameScene.addLayer(lMenu);
         gameScene.addLayer(layer);

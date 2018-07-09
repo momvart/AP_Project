@@ -4,6 +4,7 @@ import graphics.Fonts;
 import graphics.GraphicsValues;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.util.Pair;
 import network.Message;
 import utils.GraphicsUtilities;
 import utils.SizeF;
@@ -19,13 +20,13 @@ public class ChatMessageDrawable extends Drawable
 
     private Message message;
 
-    public ChatMessageDrawable(Message message, double width)
+    public ChatMessageDrawable(Pair<String, String> message, double width)
     {
-        this.txtTitle = new TextDrawable(message.getClientName() + ":", Color.GOLD, Fonts.getTiny());
+        this.txtTitle = new TextDrawable(message.getKey() + ":", Color.GOLD, Fonts.getTiny());
         this.txtTitle.setPivot(0, 0);
         this.txtTitle.setMaxWidth(width - 2 * InsidePadding);
 
-        this.txtMessage = new TextDrawable(message.getMessage(), Color.WHITE, Fonts.getSmaller());
+        this.txtMessage = new TextDrawable(message.getValue(), Color.WHITE, Fonts.getSmaller());
         this.txtMessage.setPivot(0, 0);
         this.txtMessage.setMaxWidth(width - 2 * InsidePadding);
         //TODO: text must be multiline.
