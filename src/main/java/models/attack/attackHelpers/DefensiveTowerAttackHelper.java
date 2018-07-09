@@ -1,6 +1,5 @@
 package models.attack.attackHelpers;
 
-import exceptions.SoldierNotFoundException;
 import graphics.helpers.AttackBuildingGraphicHelper;
 import graphics.helpers.DefensiveTowerGraphicHelper;
 import graphics.helpers.IOnBulletTriggerListener;
@@ -29,6 +28,8 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
 
     public void passTurn()
     {
+        //this method is expired
+        /*
         super.passTurn();
         if (!destroyed)
         {
@@ -36,6 +37,7 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
             catch (SoldierNotFoundException ignored) {}
             attack();
         }
+        */
     }
 
     public Soldier getAnAliveSoldier(List<Soldier> mainTargets)
@@ -57,28 +59,22 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
     //graphcs
     protected IOnBulletTriggerListener triggerListener;
 
-    public abstract void setTarget() throws SoldierNotFoundException;
+    public abstract void setTarget(boolean networkPermission);
 
-    public abstract void attack();
+    public abstract void attack(boolean networkPermission);
 
     @Override
     public void onReload()
     {
         if (!destroyed)
         {
-
             DefensiveTowerGraphicHelper towerGraphicHelper = (DefensiveTowerGraphicHelper)getGraphicHelper();
             if (towerGraphicHelper.getBullet().inProgress)
                 return;
-            try
-            {
-                setTarget();
-            }
-            catch (SoldierNotFoundException ignored) {}
+            setTarget(false);
         }
     }
 
-    DefensiveTowerGraphicHelper towerGraphicHelper;
 
     public void setTriggerListener(IOnBulletTriggerListener triggerListener)
     {
@@ -99,6 +95,6 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
     @Override
     public void onBulletHit()
     {
-        attack();
+        attack(false);
     }
 }

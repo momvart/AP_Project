@@ -15,13 +15,23 @@ public class BuildingAttackHelper implements IOnReloadListener
     protected int strength;
     protected boolean destroyed;
     protected Attack attack;
-
+    protected boolean isReal;
     public BuildingAttackHelper(Building building, Attack attack)
     {
         initStrength = building.getBuildingInfo().getInitialStrength() + building.getBuildingInfo().getUpgradeStrengthInc() * building.getLevel();
         strength = initStrength;
         this.building = building;
         this.attack = attack;
+    }
+
+    public void setIsReal()
+    {
+        isReal = attack.isReal;
+    }
+
+    public boolean isReal()
+    {
+        return isReal;
     }
 
     public Building getBuilding()
@@ -69,10 +79,7 @@ public class BuildingAttackHelper implements IOnReloadListener
     }
 
     @Override
-    public void onReload()
-    {
-
-    }
+    public void onReload() {}
 
     private ArrayList<IOnDestroyListener> destroyListeners = new ArrayList<>();
 

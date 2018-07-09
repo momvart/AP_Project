@@ -42,8 +42,10 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     }
 
     @Override
-    public void fire()
+    public void fire(boolean networkPermission)
     {
+        if (!isReal() && !networkPermission)
+            return;
         if (soldier == null || soldier.getAttackHelper().isDead())
             return;
         if (target == null)
@@ -69,8 +71,9 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                     attack.addToClaimedResource(new Resource(claimedAmount, 0));
                 else
                     attack.addToClaimedResource(new Resource(0, claimedAmount));
-
                 storage.decreaseCurrentAmount(claimedAmount);
+                if (isReal)
+                    NetworkHelper.soldierFiring(this);
             }
         }
 
@@ -93,8 +96,10 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     }
 
     @Override
-    public void setTarget()
+    public void setTarget(boolean networkPermission)
     {
+        if (!isReal && !networkPermission)
+            return;
         if (soldier != null && !soldier.getAttackHelper().isDead())
             if (target == null || target.getAttackHelper().getStrength() <= 0 || target.getAttackHelper().isDestroyed())
             {
@@ -109,6 +114,8 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                     System.err.println("new target: " + target.getName() + " at: " + target.getLocation().toString());
                 else
                     System.err.println("no target found.");
+                if (isReal)
+                    NetworkHelper.soldierSetTarget(this);
             }
     }
 
@@ -148,14 +155,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 
     }
 
-    private boolean isThereAFavouriteBuildingIn(ArrayList<Building> aliveBuildings)
-    {
-        return aliveBuildings.stream()
-                .filter(building -> Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(t -> t.isInstance(building)))
-                .collect(Collectors.toList()).size() > 0;
-    }
-
-
     private boolean isTargetReachable(Building favouriteTarget)
     {
         return !(attack.getSoldierPath(soldier.getLocation(), favouriteTarget.getLocation(), soldier.getMoveType() == MoveType.AIR) == null);
@@ -182,9 +181,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
             throw new IllegalArgumentException("Graphic helper should be a GeneralSoldierGraphicHelper.");
 
         super.setGraphicHelper(graphicHelper);
-
-        GeneralSoldierGraphicHelper gh = (GeneralSoldierGraphicHelper)graphicHelper;
-        this.setSoldierFireListener(gh);
     }
 
     @Override
@@ -201,11 +197,11 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
             {
                 if (target == null || target.getStrength() <= 0 || target.getAttackHelper().isDestroyed())
                 {
-                    setTarget();
+                    setTarget(false);
                     callOnDecamp();
                     return;
                 }
-                fire();
+                fire(false);
             }
             else
                 System.out.println("soldier is dead ");

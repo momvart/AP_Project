@@ -3,15 +3,21 @@ package models.attack;
 import exceptions.*;
 import models.Resource;
 import models.World;
+import models.attack.attackHelpers.NetworkHelper;
 import models.buildings.*;
-import models.soldiers.*;
+import models.soldiers.MoveType;
+import models.soldiers.Soldier;
+import models.soldiers.SoldierCollection;
+import models.soldiers.SoldierValues;
 import utils.MapCellNode;
 import utils.Point;
-import utils.*;
+import utils.Size;
 
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.stream.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Attack
 {
@@ -23,10 +29,11 @@ public class Attack
     private AttackMap map;
     private int turn;
     private HashMap<Storage, Resource> claimedResourceStorages = new HashMap<>();
+    public boolean isReal;
 
     private SoldierCoordinatedCollection soldiersOnLocations;
 
-    public Attack(AttackMap map)
+    public Attack(AttackMap map, Boolean isReal)
     {
         this.map = map;
         claimedResource = new Resource(0, 0);
@@ -41,6 +48,7 @@ public class Attack
         map.getAllBuildings().forEach(building -> totalResource.increase(building.getBuildingInfo().getDestroyResource()));
         map.getAllBuildings().forEach(building -> building.participateIn(this));
         soldiersOnLocations = new SoldierCoordinatedCollection(map.getSize());
+        this.isReal = isReal;
     }
 
     //region Turn, Score, Resource
@@ -54,7 +62,10 @@ public class Attack
         return soldiersOnLocations;
     }
 
-    public void addScore(int score) { this.claimedScore += score; }
+    public void addScore(int score)
+    {
+        this.claimedScore += score;
+    }
 
     public int getClaimedScore()
     {
@@ -165,6 +176,8 @@ public class Attack
 
     public void addUnits(List<Soldier> soldierList)
     {
+        if (!isReal)
+            return;
         soldierList.forEach(this::addUnit);
     }
 
@@ -179,8 +192,10 @@ public class Attack
         }
     }
 
-    public void putUnits(int unitType, int count, Point location) throws ConsoleException
+    public void putUnits(int unitType, int count, Point location, boolean networkPermission) throws ConsoleException
     {
+        if (!isReal && !networkPermission)
+            return;
         if (!map.isMarginal(location))
             throw new ConsoleRuntimeException("Invalid location.", location + " is not a marginal location.", new IllegalArgumentException("Invalid location"));
 
@@ -194,7 +209,8 @@ public class Attack
         else
             for (int i = 0; i < count; i++)
                 putUnit(available.get(i), location);
-
+        if (isReal)
+            NetworkHelper.putUnits(unitType, count, location);
     }
 
     public int numberOfSoldiersIn(int x, int y)

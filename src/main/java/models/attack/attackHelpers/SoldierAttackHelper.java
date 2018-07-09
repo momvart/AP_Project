@@ -24,7 +24,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
     protected Soldier soldier;
     private boolean isSoldierDeployed = false;
     public boolean readyToFireTarget = false;
-
+    protected boolean isReal;
     //protected boolean isDead = false;
 
     public SoldierAttackHelper(Attack attack, Soldier soldier)
@@ -32,6 +32,16 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         this.attack = attack;
         this.soldier = soldier;
         this.health = getInitialHealth();
+    }
+
+    public void setIsReal()
+    {
+        isReal = attack.isReal;
+    }
+
+    public boolean isReal()
+    {
+        return isReal;
     }
 
     public int getHealth()
@@ -90,6 +100,8 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     public void passTurn()
     {
+        //pass turn method is expired
+        /*
         removeSoldierIfDead();
         if (soldier != null && !isDead() && isSoldierDeployed)
         {
@@ -97,6 +109,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
             move();
             fire();
         }
+        */
     }
 
     protected void removeSoldierIfDead()
@@ -183,9 +196,9 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     public abstract void move();
 
-    public abstract void fire();
+    public abstract void fire(boolean networkPermission);
 
-    public abstract void setTarget();
+    public abstract void setTarget(boolean networkPermission);
 
     public abstract Point getTargetLocation();
 
@@ -242,12 +255,6 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
     public void setGraphicHelper(SoldierGraphicHelper graphicHelper)
     {
         this.graphicHelper = graphicHelper;
-
-        graphicHelper.setReloadListener(this);
-        graphicHelper.setMoveListener(this);
-        graphicHelper.setMoveListener(this);
-        this.setDecampListener(graphicHelper);
-        this.addSoldierDieListener(graphicHelper);
     }
 
     public ArrayList<Point> getPointsOnLine(Point start, Point destination)

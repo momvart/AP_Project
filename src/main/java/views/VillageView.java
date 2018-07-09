@@ -156,7 +156,7 @@ public class VillageView extends ConsoleMenuContainerView
                 }
                 break;
                 case Menu.Id.ATTACK_LOAD_MAP_ITEM:
-                    openMap(((AttackMapItem)menu).getFilePath());
+                    openMap(((AttackMapItem)menu).getFilePath(), true);
                     break;
                 case Menu.Id.ATTACK_MAP_ATTACK:
                     Platform.runLater(() -> new AttackStage(theAttack, 1200, 900).setUpAndShow());
@@ -343,7 +343,7 @@ public class VillageView extends ConsoleMenuContainerView
         villageStage.showInfo(info.toString());
     }
 
-    private void openMap(Path path) throws MyJsonException, MyIOException
+    private void openMap(Path path, boolean isReal) throws MyJsonException, MyIOException
     {
         try (BufferedReader reader = Files.newBufferedReader(path))
         {
@@ -355,7 +355,7 @@ public class VillageView extends ConsoleMenuContainerView
                     .create();
 
             AttackMap map = gson.fromJson(reader, AttackMap.class);
-            theAttack = new Attack(map);
+            theAttack = new Attack(map, isReal);
         }
         catch (JsonParseException ex)
         {

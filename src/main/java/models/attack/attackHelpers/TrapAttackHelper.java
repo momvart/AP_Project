@@ -1,8 +1,6 @@
 package models.attack.attackHelpers;
 
 import models.attack.Attack;
-import models.buildings.Building;
-import models.buildings.DefensiveTower;
 import models.buildings.Trap;
 import models.soldiers.Soldier;
 
@@ -17,22 +15,28 @@ public class TrapAttackHelper extends SingleTargetAttackHelper
     }
 
     @Override
-    public void setTarget()
+    public void setTarget(boolean networkPermission)
     {
+        if (!isReal && !networkPermission)
+            return;
         mainTargets = new ArrayList<>();
         List<Soldier> soldiers = attack.getSoldiersOnLocations().getSoldiers(building.getLocation());
         mainTargets.addAll(soldiers);
         if (mainTargets.size() > 0)
             targetSoldier = mainTargets.get(0);
+        if (isReal)
+            NetworkHelper.buildingSetTarget(this);
     }
 
     @Override
-    public void attack()
+    public void attack(boolean networkPermission)
     {
         if (mainTargets != null && mainTargets.size() != 0)
         {
-            super.attack();
+            super.attack(networkPermission);
             decreaseStrength(getStrength());
+            if (isReal)
+                NetworkHelper.buildingAttack(this);
         }
     }
 
@@ -40,6 +44,6 @@ public class TrapAttackHelper extends SingleTargetAttackHelper
     public void onReload()
     {
         super.onReload();
-        attack();
+        attack(false);
     }
 }

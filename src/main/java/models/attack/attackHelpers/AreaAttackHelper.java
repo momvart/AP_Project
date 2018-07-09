@@ -4,7 +4,6 @@ import exceptions.SoldierNotFoundException;
 import models.attack.Attack;
 import models.buildings.DefensiveTower;
 import models.buildings.WizardTower;
-import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import utils.Point;
 
@@ -25,8 +24,13 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
     Point soldier;
     Soldier targetSoldier;
     @Override
-    public void setTarget() throws SoldierNotFoundException
+    public void setTarget(boolean networkPermission)
     {
+        if (!isReal && !networkPermission)
+        {
+            return;
+        }
+
         DefensiveTower defensiveTower = (DefensiveTower)building;
         try
         {
@@ -39,20 +43,22 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         targetSoldier = getAnAliveSoldier(attack.getSoldiersOnLocations().getSoldiers(soldier));
         if (targetSoldier == null)
             return;
+
         if (building.getType() == WizardTower.DEFENSIVE_TOWER_TYPE)
             triggerListener.onBulletTrigger(targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition(), targetSoldier);
         else
+        {
             triggerListener.onBulletTrigger(soldier.toPointF(), null);
-    }
-
-    private boolean isThereAnAliveUnit(Point soldier)
-    {
-        return attack.getSoldiersOnLocations().getSoldiers(soldier, MoveType.GROUND).anyMatch(x -> !x.getAttackHelper().isDead());
+        }
+        if (isReal)
+            NetworkHelper.buildingSetTarget(this);
     }
 
     @Override
-    public void attack()
+    public void attack(boolean networkPermission)
     {
+        if (!isReal && !networkPermission)
+            return;
         soldier = targetSoldier.getLocation();
         DefensiveTower defensiveTower = (DefensiveTower)building;
         List<Soldier> soldiersInRange = null;
@@ -64,9 +70,7 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         {
             soldiersInRange = attack.getSoldiersInRange(defensiveTower.getLocation(), SECOND_RANGE, defensiveTower.getDefenseType().convertToMoveType());
         }
-        catch (SoldierNotFoundException e)
-        {
-        }
+        catch (SoldierNotFoundException e) {}
         // TODO: 6/6/18 Change Second range.
         if (soldiersInRange != null)
             wholeTargets.addAll(soldiersInRange);
@@ -79,7 +83,8 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
                 soldier.getAttackHelper().decreaseHealth(tower.getDamagePower() - 1);
         mainTargets = null;
         wholeTargets = null;
-
+        if (isReal)
+            NetworkHelper.buildingAttack(this);
     }
 
 }
