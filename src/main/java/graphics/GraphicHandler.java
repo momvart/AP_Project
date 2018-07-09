@@ -3,6 +3,7 @@ package graphics;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import utils.RectF;
 
 import java.util.ArrayList;
@@ -93,6 +94,16 @@ public class GraphicHandler implements IFrameUpdatable
         {
             Point2D point = gc.getTransform().inverseTransform(event.getX(), event.getY());
             return scene.handleMouseClick(point.getX(), point.getY(), event);
+        }
+        catch (Exception ex) { ex.printStackTrace(); return false;}
+    }
+
+    public boolean handleScrollResult(ScrollEvent event)
+    {
+        try
+        {
+            Point2D point = gc.getTransform().inverseTransform(event.getX(), event.getY());
+            return scene.handleScroll(point.getX(), point.getY(), event);
         }
         catch (Exception ex) { ex.printStackTrace(); return false;}
     }

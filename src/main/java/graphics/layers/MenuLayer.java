@@ -80,6 +80,9 @@ public class MenuLayer extends Layer
             drawer.setClickListener(this::onMenuItemClick);
             drawer.setLayer(this);
         }
+
+        setScroll(0, 0);
+        setHorizontallyScrollable(items.size() * (itemCellSize + ItemPadding) > getWidth());
     }
 
     private void onMenuItemClick(Drawer drawer, MouseEvent event)
@@ -97,7 +100,6 @@ public class MenuLayer extends Layer
         currentMenu.getMenuItems().stream().filter(Menu::isFocused).findFirst().ifPresent(i -> i.setFocused(false));
         item.setFocused(true);
     }
-
 
     private void callOnMenuItemClick(Menu item)
     {

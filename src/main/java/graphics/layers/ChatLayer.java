@@ -51,7 +51,7 @@ public class ChatLayer extends Layer
 
         messages.forEach(message ->
         {
-            ChatMessageDrawable chatMessageDrawable = new ChatMessageDrawable(message);
+            ChatMessageDrawable chatMessageDrawable = new ChatMessageDrawable(message, getWidth() - 2 * GraphicsValues.PADDING);
             chatMessageDrawable.setPivot(0, 0);
             messageDrawables.add(chatMessageDrawable);
         });
