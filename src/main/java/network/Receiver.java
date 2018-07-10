@@ -5,11 +5,14 @@ import com.google.gson.JsonSyntaxException;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.net.SocketException;
 
 public class Receiver extends Thread
 {
     private GameClient client;
+
     private IOnMessageReceivedListener receiver;
+    private Runnable onConnectionClosedListener;
 
     private Gson deserializer = new Gson();
 
@@ -30,8 +33,10 @@ public class Receiver extends Thread
                 byte[] buffer = new byte[client.getSocket().getReceiveBufferSize()];
 
                 int read = inputStream.read(buffer);
-                String s = new String(buffer, 0, read);
-                System.err.println(s + " received");
+                if (read == -1)
+                    throw new SocketException("Connection closed.");
+                String str = new String(buffer, 0, read);
+                System.err.println("Received: " + str);
                 try
                 {
                     String[] datas = new String(buffer, 0, read).split(";;");
@@ -43,13 +48,14 @@ public class Receiver extends Thread
                 }
                 catch (JsonSyntaxException ex)
                 {
-                    System.err.println("Message is not valid: " + new String(buffer, 0, read));
+                    System.err.println("Message is not valid: " + str);
                 }
             }
         }
         catch (IOException e)
         {
             e.printStackTrace();
+            callOnConnectionClosed();
         }
     }
 
@@ -62,5 +68,16 @@ public class Receiver extends Thread
     public void setReceiver(IOnMessageReceivedListener listener)
     {
         this.receiver = listener;
+    }
+
+    private void callOnConnectionClosed()
+    {
+        if (onConnectionClosedListener != null)
+            onConnectionClosedListener.run();
+    }
+
+    public void setOnConnectionClosedListener(Runnable onConnectionClosedListener)
+    {
+        this.onConnectionClosedListener = onConnectionClosedListener;
     }
 }

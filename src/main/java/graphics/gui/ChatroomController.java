@@ -1,6 +1,7 @@
 package graphics.gui;
 
 import graphics.Fonts;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,14 +33,12 @@ public class ChatroomController implements IOnChatMessageReceivedListener
     public void btnSend_Click(ActionEvent event)
     {
         client.sendChatMessage(txtMessage.getText());
-//        chatLists.getItems().add(new Pair<>("Mohammad: ", txtMessage.getText()));
-//        chatLists.refresh();
     }
 
     @Override
     public void onChatMessageReceived(String from, String message)
     {
-        chatLists.getItems().add(new Pair<>(from, message));
+        Platform.runLater(() -> chatLists.getItems().add(new Pair<>(from, message)));
     }
 
     public static class ChatListItem extends ListCell<Pair<String, String>>

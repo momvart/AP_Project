@@ -1,6 +1,5 @@
 package graphics.gui;
 
-import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -10,7 +9,7 @@ public class NetworkStage extends Stage
 {
     public void start() throws Exception
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("layout/NetworkTabPaneFXML.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("layout/networkstage.fxml"));
         Scene scene = new Scene(new StackPane());
         scene.setRoot(fxmlLoader.load());
         setScene(scene);

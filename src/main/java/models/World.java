@@ -11,6 +11,7 @@ import java.nio.file.*;
 
 import com.google.gson.*;
 import network.GameClientC;
+import network.GameHost;
 import serialization.*;
 
 public class World
@@ -119,5 +120,5 @@ public class World
 
 
     public static GameClientC sCurrentClient;
-
+    public static GameHost sCurrentHost;
 }

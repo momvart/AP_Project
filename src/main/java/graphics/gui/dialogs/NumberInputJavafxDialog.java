@@ -5,6 +5,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 
 import java.util.Optional;
@@ -30,8 +31,8 @@ public class NumberInputJavafxDialog
         label.setTextFill(Color.WHITE);
         HBox hBox = new HBox(label, textField);
         hBox.setSpacing(10);
+        HBox.setHgrow(textField, Priority.ALWAYS);
         SingleChoiceDialog.applyCss(dialog);
-        textField.setPrefWidth(100);
         dialog.getDialogPane().setContent(hBox);
         Optional<ButtonType> buttonType = dialog.showAndWait();
         return Integer.parseInt(textField.getText());

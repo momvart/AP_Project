@@ -14,10 +14,7 @@ import serialization.StorageGlobalAdapter;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 //GameClient that is used in client side
 public class GameClientC extends GameClient
@@ -26,6 +23,7 @@ public class GameClientC extends GameClient
 
     private IOnChatMessageReceivedListener chatMessageReceiver;
     private IOnAttackMapReturnedListener attackMapReturnedListener;
+    private Runnable onPlayersListUpdatedListener;
 
     public GameClientC(int port, String ip) throws IOException
     {
@@ -54,6 +52,22 @@ public class GameClientC extends GameClient
         this.attackMapReturnedListener = attackMapReturnedListener;
     }
 
+    private void callOnPlayersListUpdated()
+    {
+        if (onPlayersListUpdatedListener != null)
+            onPlayersListUpdatedListener.run();
+    }
+
+    public void setOnPlayersListUpdatedListener(Runnable onPlayersListUpdatedListener)
+    {
+        this.onPlayersListUpdatedListener = onPlayersListUpdatedListener;
+    }
+
+    public Collection<ClientInfo> getPlayersList()
+    {
+        return players.values();
+    }
+
     @Override
     public void messageReceived(Message message)
     {
@@ -62,9 +76,13 @@ public class GameClientC extends GameClient
             case SET_ID:
                 this.info.setId(UUID.fromString(message.getMessage()));
                 break;
+            case SET_CLIENT_INFO:
+                this.setInfo(deserializer.fromJson(message.getMessage(), ClientInfo.class));
+                break;
             case PLAYERS_LIST:
                 players = new HashMap<>();
                 ((ArrayList<ClientInfo>)deserializer.fromJson(message.getMessage(), new TypeToken<ArrayList<ClientInfo>>() { }.getType())).forEach(info -> players.put(info.getId(), info));
+                callOnPlayersListUpdated();
                 break;
             case CHAT_MESSAGE:
                 callOnChatMessageReceived(message);
@@ -101,5 +119,10 @@ public class GameClientC extends GameClient
     public void sendChatMessage(String message)
     {
         sendMessage(new Message(message, getClientId(), MessageType.CHAT_MESSAGE));
+    }
+
+    public void sendInfo()
+    {
+        sendMessage(new Message(deserializer.toJson(getInfo()), getClientId(), MessageType.SET_CLIENT_INFO));
     }
 }

@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import java.io.*;
 import java.net.Socket;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class GameClient implements IOnMessageReceivedListener
 {
@@ -12,9 +13,14 @@ public class GameClient implements IOnMessageReceivedListener
 
     private Socket socket;
 
+    protected Receiver receiver;
+
     protected Gson deserializer = new Gson();
 
     private IOnMessageReceivedListener messageReceiver;
+
+    private Consumer<GameClient> onConnectionClosedListener;
+
 
     public GameClient(Socket socket) throws IOException
     {
@@ -33,12 +39,28 @@ public class GameClient implements IOnMessageReceivedListener
         return info;
     }
 
+    public void setInfo(ClientInfo info)
+    {
+        this.info = info;
+    }
+
     public UUID getClientId()
     {
         return info.getId();
     }
 
     private DataOutputStream writer;
+
+    private void callOnConnectionClosed()
+    {
+        if (onConnectionClosedListener != null)
+            onConnectionClosedListener.accept(this);
+    }
+
+    public void setOnConnectionClosedListener(Consumer<GameClient> onConnectionClosedListener)
+    {
+        this.onConnectionClosedListener = onConnectionClosedListener;
+    }
 
     public void sendMessage(Message message)
     {
@@ -54,8 +76,18 @@ public class GameClient implements IOnMessageReceivedListener
 
     public void setUp()
     {
-        Receiver receiver = new Receiver(this);
+        receiver = new Receiver(this);
         receiver.start();
+        receiver.setOnConnectionClosedListener(this::callOnConnectionClosed);
+    }
+
+    public void close()
+    {
+        try
+        {
+            socket.close();
+        }
+        catch (IOException ex) { ex.printStackTrace(); }
     }
 
     private void callOnMessageReceived(Message message)

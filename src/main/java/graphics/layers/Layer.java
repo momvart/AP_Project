@@ -111,9 +111,11 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
     public void setHorizontallyScrollable(boolean scrollable)
     {
         this.hScrollable = scrollable;
+        updateScrollBounds();
     }
 
-    public void setVerticallyScrollable(boolean scrollable) { this.vScrollable = scrollable; }
+    public void setVerticallyScrollable(boolean scrollable)
+    { this.vScrollable = scrollable; updateScrollBounds(); }
 
     public void setScroll(double x, double y)
     {
@@ -134,10 +136,11 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
 
             minXScroll = Math.min(minXScroll, x);
             minYScroll = Math.min(minYScroll, y);
-            if (drawer.getDrawable() == null)
-                continue;
-            maxXScroll = Math.max(maxXScroll, x + drawer.getDrawable().getWidth() - bounds.getWidth());
-            maxYScroll = Math.max(maxYScroll, y + drawer.getDrawable().getHeight() - bounds.getHeight());
+            if (drawer.getDrawable() != null)
+            {
+                maxXScroll = Math.max(maxXScroll, x + drawer.getDrawable().getWidth() - bounds.getWidth());
+                maxYScroll = Math.max(maxYScroll, y + drawer.getDrawable().getHeight() - bounds.getHeight());
+            }
         }
     }
 
@@ -178,7 +181,7 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
         drawers.add(drawer);
         if (drawer.isClickable())
             addClickable(drawer);
-        if (!dynamicScroll)
+        if (!dynamicScroll && isScrollable())
             updateScrollBounds();
     }
 
@@ -192,7 +195,7 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
         pendingAdds.add(drawer);
         if (drawer.isClickable())
             addClickable(drawer);
-        if (!dynamicScroll)
+        if (!dynamicScroll && isScrollable())
             updateScrollBounds();
     }
 
