@@ -7,5 +7,8 @@ public enum MessageType
     LIVE_ATTACK_PLAY,
     SERVER_MESSAGE,
     SET_ID,
-    PLAYERS_LIST
+    PLAYERS_LIST,
+    GET_MAP,
+    RET_MAP,
+    ERROR
 }

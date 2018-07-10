@@ -1,7 +1,5 @@
-import network.GameClient;
-import network.GameClientC;
-import network.GameHost;
-import network.Message;
+import models.World;
+import network.*;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -10,6 +8,9 @@ public class NetworkTest
 {
     public static void main(String[] args) throws IOException
     {
+        World.initialize();
+        World.newGame();
+
         Scanner scanner = new Scanner(System.in);
         String s = scanner.nextLine();
         if (s.equals("server"))
@@ -21,11 +22,14 @@ public class NetworkTest
         {
             GameClientC client = new GameClientC(8888, "localhost");
             client.setUp();
-            client.setChatMessageReceiver(message -> System.out.println(message.getMessage()));
+            client.setMessageReceiver(message -> System.out.println(message));
             while (true)
             {
                 String s1 = scanner.nextLine();
-                client.sendChatMessage(s1);
+                if (s1.equals("map"))
+                    client.sendMessage(new Message(scanner.nextLine(), client.getClientId(), MessageType.GET_MAP));
+                else
+                    client.sendChatMessage(s1);
             }
         }
     }

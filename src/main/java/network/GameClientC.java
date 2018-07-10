@@ -1,11 +1,19 @@
 package network;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import models.Village;
+import models.World;
+import models.buildings.Building;
+import serialization.AttackMapGlobalAdapter;
+import serialization.BuildingGlobalAdapter;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 //GameClient that is used in client side
@@ -48,6 +56,16 @@ public class GameClientC extends GameClient
                 break;
             case ATTACK_REQUEST:
                 break;
+            case GET_MAP:
+            {
+                Gson serializer = new GsonBuilder()
+                        .registerTypeAdapter(Map.class, new AttackMapGlobalAdapter())
+                        .registerTypeAdapter(Building.class, new BuildingGlobalAdapter())
+                        .setPrettyPrinting()
+                        .create();
+                sendMessage(new Message(serializer.toJson(World.getVillage().getMap(), Map.class), getClientId(), MessageType.RET_MAP).setMetadata(message.getSenderId().toString()));
+            }
+            break;
             default:
                 super.messageReceived(message);
         }

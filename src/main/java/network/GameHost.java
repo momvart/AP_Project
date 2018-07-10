@@ -1,6 +1,7 @@
 package network;
 
 import com.google.gson.Gson;
+import exceptions.GameClientNotFoundException;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -60,9 +61,13 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
     }
 
     //send message to specific client
-    public void sendMessage(UUID clientId, Message message)
+    public void sendMessage(UUID clientId, Message message) throws GameClientNotFoundException
     {
-        clients.get(clientId).sendMessage(message);
+        try
+        {
+            clients.get(clientId).sendMessage(message);
+        }
+        catch (NullPointerException ex) { throw new GameClientNotFoundException(clientId); }
     }
 
     @Override
@@ -73,7 +78,26 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
             case CHAT_MESSAGE:
                 broadcastExcept(message.getSenderId(), message);
                 break;
-
+            case GET_MAP:
+                try
+                {
+                    sendMessage(UUID.fromString(message.getMessage()), message);
+                }
+                catch (GameClientNotFoundException | IllegalArgumentException ex)
+                {
+                    sendMessage(message.getSenderId(), new Message(ex.getMessage(), null, MessageType.ERROR));
+                }
+                break;
+            case RET_MAP:
+                try
+                {
+                    sendMessage(UUID.fromString(message.getMetadata()), message);
+                }
+                catch (GameClientNotFoundException | IllegalArgumentException ex)
+                {
+                    sendMessage(message.getSenderId(), new Message(ex.getMessage(), null, MessageType.ERROR));
+                }
+                break;
         }
     }
 }
