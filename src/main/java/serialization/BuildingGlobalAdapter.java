@@ -3,6 +3,7 @@ package serialization;
 import com.google.gson.*;
 import models.buildings.Building;
 import models.buildings.BuildingValues;
+import models.buildings.Storage;
 import utils.Point;
 
 import java.lang.reflect.Type;
@@ -42,6 +43,8 @@ public class BuildingGlobalAdapter implements JsonDeserializer<Building>, JsonSe
         retVal.add(LOCATION_X_FIELD_NAME, new JsonPrimitive(src.getLocation().getX()));
         retVal.add(LOCATION_Y_FIELD_NAME, new JsonPrimitive(src.getLocation().getY()));
 
+        if (src instanceof Storage)
+            retVal.add("amount", new JsonPrimitive(((Storage)src).getCurrentAmount()));
         return retVal;
     }
 }

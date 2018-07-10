@@ -265,7 +265,11 @@ public class VillageStage extends GUIMapStage implements IOnChatMessageReceivedL
 
     private void onBtnNetworkClick(Drawer sender, MouseEvent event)
     {
-
+        try
+        {
+            new NetworkStage().start();
+        }
+        catch (Exception ex) {ex.printStackTrace();}
     }
 
     @Override

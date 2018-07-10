@@ -57,7 +57,7 @@ public class AttackMapGlobalAdapter implements JsonDeserializer<AttackMap>, Json
         JsonArray walls = new JsonArray(src.getBuildings(Wall.BUILDING_TYPE).size());
         src.getBuildings(Wall.BUILDING_TYPE).getValues().stream().map(wall ->
         {
-            JsonObject obj = context.serialize(wall, Building.class).getAsJsonObject();
+            JsonObject obj = context.serialize(wall).getAsJsonObject();
             obj.remove("type");
             return obj;
         }).forEach(walls::add);

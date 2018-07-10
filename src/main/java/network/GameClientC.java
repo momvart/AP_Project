@@ -3,11 +3,14 @@ package network;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import models.Village;
 import models.World;
+import models.attack.AttackMap;
 import models.buildings.Building;
+import models.buildings.ElixirStorage;
+import models.buildings.GoldStorage;
 import serialization.AttackMapGlobalAdapter;
 import serialization.BuildingGlobalAdapter;
+import serialization.StorageGlobalAdapter;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -22,6 +25,7 @@ public class GameClientC extends GameClient
     private HashMap<UUID, ClientInfo> players;
 
     private IOnChatMessageReceivedListener chatMessageReceiver;
+    private IOnAttackMapReturnedListener attackMapReturnedListener;
 
     public GameClientC(int port, String ip) throws IOException
     {
@@ -37,6 +41,17 @@ public class GameClientC extends GameClient
     public void setChatMessageReceiver(IOnChatMessageReceivedListener chatMessageReceiver)
     {
         this.chatMessageReceiver = chatMessageReceiver;
+    }
+
+    private void callOnAttackMapReturned(UUID from, AttackMap map)
+    {
+        if (attackMapReturnedListener != null)
+            attackMapReturnedListener.onAttackMapReturned(from, map);
+    }
+
+    public void setAttackMapReturnedListener(IOnAttackMapReturnedListener attackMapReturnedListener)
+    {
+        this.attackMapReturnedListener = attackMapReturnedListener;
     }
 
     @Override
@@ -64,6 +79,18 @@ public class GameClientC extends GameClient
                         .setPrettyPrinting()
                         .create();
                 sendMessage(new Message(serializer.toJson(World.getVillage().getMap(), Map.class), getClientId(), MessageType.RET_MAP).setMetadata(message.getSenderId().toString()));
+            }
+            break;
+            case RET_MAP:
+            {
+                Gson deserializer = new GsonBuilder()
+                        .registerTypeAdapter(AttackMap.class, new AttackMapGlobalAdapter())
+                        .registerTypeAdapter(Building.class, new BuildingGlobalAdapter())
+                        .registerTypeAdapter(GoldStorage.class, new StorageGlobalAdapter<>(GoldStorage.class))
+                        .registerTypeAdapter(ElixirStorage.class, new StorageGlobalAdapter<>(ElixirStorage.class))
+                        .create();
+                AttackMap map = deserializer.fromJson(message.getMessage(), AttackMap.class);
+                callOnAttackMapReturned(message.getSenderId(), map);
             }
             break;
             default:

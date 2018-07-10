@@ -76,7 +76,7 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
         switch (message.getMessageType())
         {
             case CHAT_MESSAGE:
-                broadcastExcept(message.getSenderId(), message);
+                broadcastMessage(message);
                 break;
             case GET_MAP:
                 try
@@ -100,4 +100,9 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
                 break;
         }
     }
+
+    //region Attack
+
+
+    //endregion
 }

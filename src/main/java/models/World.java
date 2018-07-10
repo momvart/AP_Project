@@ -10,6 +10,7 @@ import java.io.*;
 import java.nio.file.*;
 
 import com.google.gson.*;
+import network.GameClientC;
 import serialization.*;
 
 public class World
@@ -115,4 +116,8 @@ public class World
     {
         return sCurrentGame.getVillage();
     }
+
+
+    public static GameClientC sCurrentClient;
+
 }
