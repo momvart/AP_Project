@@ -23,6 +23,7 @@ public class NetworkTest
             GameClientC client = new GameClientC(8888, "localhost");
             client.setUp();
             client.setMessageReceiver(message -> System.out.println(message));
+            client.setAttackMapReturnedListener((from, map) -> System.out.println("Map Received"));
             while (true)
             {
                 String s1 = scanner.nextLine();

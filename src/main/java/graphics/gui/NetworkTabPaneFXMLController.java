@@ -1,27 +1,42 @@
 package graphics.gui;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import models.World;
 
 
 public class NetworkTabPaneFXMLController
 {
-    public Tab chatTab;
-    public Tab leaderboardTab;
-    public Tab playersTab;
-    public VBox players;
+    @FXML
+    public ChatroomController tabChatController;
 
-    public AnchorPane chatroom;
-    public VBox leaderboard;
+    @FXML
+    public LeaderBoardController tabLeaderBoardController;
 
-    public void serverBtnEventHandler(ActionEvent actionEvent)
+    @FXML
+    public PlayersController tabPlayersController;
+
+    public void initialize()
+    {
+        if (World.sCurrentClient == null)
+        {
+            //TODO: disable tabs and make some connections
+        }
+        else
+        {
+            tabChatController.initialize(World.sCurrentClient);
+        }
+    }
+
+    public void btnServer_Click(ActionEvent actionEvent)
     {
 
     }
 
-    public void joinBtnEventHandler(ActionEvent actionEvent)
+    public void btnJoin_Click(ActionEvent actionEvent)
     {
 
     }

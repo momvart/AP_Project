@@ -6,15 +6,14 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public class NetworkStage extends Application
+public class NetworkStage extends Stage
 {
-    @Override
-    public void start(Stage stage) throws Exception
+    public void start() throws Exception
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/graphics/gui/FXMLs/NetworkTabPaneFXML.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("layout/NetworkTabPaneFXML.fxml"));
         Scene scene = new Scene(new StackPane());
         scene.setRoot(fxmlLoader.load());
-        stage.setScene(scene);
-        stage.show();
+        setScene(scene);
+        show();
     }
 }
