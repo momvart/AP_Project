@@ -1,11 +1,15 @@
 package graphics.gui;
 
+import graphics.gui.dialogs.NumberInputJavafxDialog;
+import graphics.gui.dialogs.PortAndIPJavafxDialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Tab;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
+import javafx.util.Pair;
 import models.World;
+import network.GameClientC;
+import network.GameHost;
+
+import java.io.IOException;
 
 
 public class NetworkTabPaneFXMLController
@@ -33,11 +37,37 @@ public class NetworkTabPaneFXMLController
 
     public void btnServer_Click(ActionEvent actionEvent)
     {
-
+        NumberInputJavafxDialog dialog = new NumberInputJavafxDialog("Enter port number", "Host");
+        int port = dialog.showAlert();
+        GameHost gameHost = null;
+        try
+        {
+            gameHost = new GameHost(port);
+            gameHost.start();
+            GameClientC gameClientC = new GameClientC(port, "localhost");
+            gameClientC.setUp();
+            World.sCurrentClient = gameClientC;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void btnJoin_Click(ActionEvent actionEvent)
     {
+        PortAndIPJavafxDialog dialog = new PortAndIPJavafxDialog("Enter host's ip and port", "Join");
+        Pair<String, Integer> portAndIp = dialog.showAlert();
+        try
+        {
+            GameClientC clientC = new GameClientC(portAndIp.getValue(), portAndIp.getKey());
+            clientC.setUp();
+            World.sCurrentClient = clientC;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
 
     }
 }
