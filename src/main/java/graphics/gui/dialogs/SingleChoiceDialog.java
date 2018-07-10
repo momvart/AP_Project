@@ -53,6 +53,7 @@ public class SingleChoiceDialog extends GraphicDialog
     public static void applyCss(Dialog dialog)
     {
         String fontName = Fonts.getMedium().getName();
+        System.err.println(fontName);
         double fontSize = Fonts.getMedium().getSize();
         dialog.initStyle(StageStyle.TRANSPARENT);
         DialogPane dialogPane = dialog.getDialogPane();

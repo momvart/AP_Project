@@ -10,19 +10,22 @@
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml" fx:id="mainVbox" fx:controller="graphics.gui.NetworkTabPaneFXMLController">
-    <HBox>
+    <HBox spacing="10">
         <Button fx:id="btnHost" text="Host" onAction="#btnServer_Click"/>
         <Button fx:id="btnJoin" text="Join" onAction="#btnJoin_Click"/>
+        <Button fx:id="btnDisconnect" text="Disconnect" onAction="#btnDisconnect_Click" disable="true"/>
+        <Label fx:id="status" text="Status:"/>
+        <Label fx:id="lStatus" text="disconnected"/>
     </HBox>
     <TabPane prefHeight="300.0" prefWidth="400.0">
         <Tab text="Chat">
-            <fx:include fx:id="tabChat" source="chatroom.fxml"/>
+            <fx:include fx:id="tabChat" source="chatroom.fxml" disable="true"/>
         </Tab>
         <Tab text="LeaderBoard">
-            <fx:include fx:id="tabLeaderBoard" source="leaderboard.fxml"/>
+            <fx:include fx:id="tabLeaderBoard" source="leaderboard.fxml" disable="true"/>
         </Tab>
         <Tab text="Players">
-            <fx:include fx:id="tabPlayers" source="players.fxml"/>
+            <fx:include fx:id="tabPlayers" source="players.fxml" disable="true"/>
         </Tab>
     </TabPane>
 </VBox>

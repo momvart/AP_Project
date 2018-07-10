@@ -10,8 +10,8 @@ import javafx.util.Pair;
 
 public class PortAndIPJavafxDialog
 {
-    private static final String PORT = "Port : ";
-    private static final String IP = "IP :";
+    private static final String PORT = "Port: ";
+    private static final String IP = "IP: ";
 
     private String message;
     private String title;
