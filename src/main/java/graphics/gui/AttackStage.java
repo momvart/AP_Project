@@ -8,12 +8,12 @@ import graphics.drawers.drawables.ButtonDrawable;
 import graphics.drawers.drawables.ImageDrawable;
 import graphics.drawers.drawables.RoundRectDrawable;
 import graphics.drawers.drawables.TextDrawable;
-import graphics.helpers.*;
+import graphics.helpers.GeneralSoldierGraphicHelper;
+import graphics.helpers.HealerGraphicHelper;
+import graphics.helpers.SoldierGraphicHelper;
+import graphics.helpers.TimerGraphicHelper;
 import graphics.layers.Layer;
-import graphics.layers.ResourceLayer;
-import graphics.positioning.IsometricPositioningSystem;
 import graphics.positioning.NormalPositioningSystem;
-import graphics.positioning.PositioningSystem;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -24,9 +24,6 @@ import menus.ParentMenu;
 import menus.SoldierMenuItem;
 import models.World;
 import models.attack.Attack;
-import models.attack.attackHelpers.SingleTargetAttackHelper;
-import models.buildings.Building;
-import models.buildings.DefensiveTower;
 import models.soldiers.Healer;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
@@ -99,16 +96,14 @@ public class AttackStage extends AttackMapStage
 
     public void setUpAndShow()
     {
-        theAttack.setSoldierPutListener(soldier -> addSoldier(soldier, true));
+        theAttack.setSoldierPutListener(this::addSoldier);
         super.setUpAndShow();
     }
 
-    private void addSoldier(Soldier soldier, boolean networkPermission)
+    private void addSoldier(Soldier soldier)
     {
         soldier.getAttackHelper().setIsReal();
-        boolean isReal = soldier.getAttackHelper().isReal();
-        if (!isReal && !networkPermission)
-            return;
+        System.out.println("soldier is real is : " + soldier.getAttackHelper().isReal());
         SoldierGraphicHelper helper;
         Layer layer = soldier.getMoveType() == MoveType.AIR ? lFliers : getObjectsLayer();
         if (soldier.getType() == Healer.SOLDIER_TYPE)

@@ -42,10 +42,8 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     }
 
     @Override
-    public void fire(boolean networkPermission)
+    public void fire()
     {
-        if (!isReal() && !networkPermission)
-            return;
         if (soldier == null || soldier.getAttackHelper().isDead())
             return;
         if (target == null)
@@ -54,7 +52,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
         if (target.getStrength() > 0 && !target.getAttackHelper().isDestroyed())
         {
             int initialStrength = target.getStrength();
-            target.getAttackHelper().decreaseStrength(getDamage());
+            target.getAttackHelper().decreaseStrength(getDamage(), false);
 
             BuildingDestructionReport bdr = new BuildingDestructionReport(target, initialStrength, target.getStrength());
             callOnSoldierFire(bdr);
@@ -72,8 +70,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                 else
                     attack.addToClaimedResource(new Resource(0, claimedAmount));
                 storage.decreaseCurrentAmount(claimedAmount);
-                if (isReal)
-                    NetworkHelper.soldierFiring(this);
             }
         }
 
@@ -96,10 +92,8 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     }
 
     @Override
-    public void setTarget(boolean networkPermission)
+    public void setTarget()
     {
-        if (!isReal && !networkPermission)
-            return;
         if (soldier != null && !soldier.getAttackHelper().isDead())
             if (target == null || target.getAttackHelper().getStrength() <= 0 || target.getAttackHelper().isDestroyed())
             {
@@ -107,15 +101,11 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                 {
                     target = getNearestBuilding();
                 }
-                catch (Exception e)
-                {
-                }
+                catch (Exception e) {}
                 if (target != null)
                     System.err.println("new target: " + target.getName() + " at: " + target.getLocation().toString());
                 else
                     System.err.println("no target found.");
-                if (isReal)
-                    NetworkHelper.soldierSetTarget(this);
             }
     }
 
@@ -197,11 +187,11 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
             {
                 if (target == null || target.getStrength() <= 0 || target.getAttackHelper().isDestroyed())
                 {
-                    setTarget(false);
+                    setTarget();
                     callOnDecamp();
                     return;
                 }
-                fire(false);
+                fire();
             }
             else
                 System.out.println("soldier is dead ");

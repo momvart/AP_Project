@@ -2,6 +2,7 @@ package graphics.helpers;
 
 import graphics.layers.Layer;
 import models.attack.attackHelpers.HealerAttackHelper;
+import models.attack.attackHelpers.NetworkHelper;
 import models.soldiers.Soldier;
 import utils.PointF;
 
@@ -26,16 +27,24 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
     @Override
     public void triggerSoldier()
     {
-        attackHelper.setTarget(false);
+        attackHelper.setTarget();
         if (attackHelper.getDestination() != null)
         {
-            startJoggingToward(new PointF(attackHelper.getDestination()));
+            startJoggingToward(new PointF(attackHelper.getDestination()), false);
         }
     }
 
     @Override
-    public void startJoggingToward(PointF dest)
+    public void startJoggingToward(PointF dest, boolean networkPermission)
     {
+        boolean isReal = soldier.getAttackHelper().isReal();
+        if (!isReal && !networkPermission)
+        {
+            moveDest = null;
+            finalStandingPoint = null;
+            facingBuildingPoint = null;
+            return;
+        }
         if (finalStandingPoint != null)
             return;
         makeRun();
@@ -54,6 +63,8 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
             cos = (finalStandingPoint.getX() - drawer.getPosition().getX()) / distanceToFinalPosition;
             sin = (finalStandingPoint.getY() - drawer.getPosition().getY()) / distanceToFinalPosition;
         }
+        if (isReal)
+            NetworkHelper.soldrStJogTowd(soldier.getId(), dest);
     }
 
     @Override
@@ -61,14 +72,13 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
     {
         if (getStatus() != Status.RUN)
             return;
-        startJoggingToward(attackHelper.getDestination().toPointF());
+        startJoggingToward(attackHelper.getDestination().toPointF(), false);
         continueMoving(deltaT);
     }
 
     @Override
     public void callOnReload()
     {
-        System.out.println(getStatus());
         if (attackHelper != null && getStatus() == null)
             triggerSoldier();
         if (getStatus() == Status.ATTACK)
@@ -85,7 +95,7 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
         if (getStatus() == Status.RUN)
             return;
         if (attackHelper.getDestination() != null)
-            startJoggingToward(attackHelper.getDestination().toPointF());
+            startJoggingToward(attackHelper.getDestination().toPointF(), false);
     }
 
 }

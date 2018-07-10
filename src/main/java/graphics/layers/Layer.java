@@ -9,7 +9,6 @@ import graphics.positioning.PositioningSystem;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.shape.FillRule;
 import utils.RectF;
 
 import java.util.*;
@@ -135,6 +134,8 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
 
             minXScroll = Math.min(minXScroll, x);
             minYScroll = Math.min(minYScroll, y);
+            if (drawer.getDrawable() == null)
+                continue;
             maxXScroll = Math.max(maxXScroll, x + drawer.getDrawable().getWidth() - bounds.getWidth());
             maxYScroll = Math.max(maxYScroll, y + drawer.getDrawable().getHeight() - bounds.getHeight());
         }

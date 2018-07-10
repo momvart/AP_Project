@@ -59,9 +59,9 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
     //graphcs
     protected IOnBulletTriggerListener triggerListener;
 
-    public abstract void setTarget(boolean networkPermission);
+    public abstract void setTarget();
 
-    public abstract void attack(boolean networkPermission);
+    public abstract void attack();
 
     @Override
     public void onReload()
@@ -71,7 +71,7 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
             DefensiveTowerGraphicHelper towerGraphicHelper = (DefensiveTowerGraphicHelper)getGraphicHelper();
             if (towerGraphicHelper.getBullet().inProgress)
                 return;
-            setTarget(false);
+            setTarget();
         }
     }
 
@@ -95,6 +95,6 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
     @Override
     public void onBulletHit()
     {
-        attack(false);
+        attack();
     }
 }

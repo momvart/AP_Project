@@ -1,6 +1,9 @@
 package models.soldiers;
 
-import java.util.*;
+import exceptions.SoldierNotFoundException;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.stream.Stream;
 
 public class SoldierCollection
@@ -32,5 +35,14 @@ public class SoldierCollection
     public void addSoldier(Soldier soldier)
     {
         lists.get(soldier.getType() - 1).add(soldier);
+    }
+
+    public Soldier getSoldierById(long id) throws SoldierNotFoundException
+    {
+        for (ArrayList<Soldier> list : lists)
+            for (Soldier soldier : list)
+                if (soldier.getId() == id)
+                    return soldier;
+        throw new SoldierNotFoundException("soldier not found ", "");
     }
 }

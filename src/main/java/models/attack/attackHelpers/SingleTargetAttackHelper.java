@@ -19,10 +19,8 @@ public class SingleTargetAttackHelper extends DefensiveTowerAttackHelper
 
     Soldier targetSoldier;
     @Override
-    public void setTarget(boolean networkPermission)
+    public void setTarget()
     {
-        if (!isReal && !networkPermission)
-            return;
         DefensiveTower tower = getTower();
         Point soldierPoint = null;
         try
@@ -37,20 +35,14 @@ public class SingleTargetAttackHelper extends DefensiveTowerAttackHelper
         if (targetSoldier == null)
             return;
         triggerListener.onBulletTrigger(targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition(), targetSoldier);
-        if (isReal)
-            NetworkHelper.buildingSetTarget(this);
     }
 
     @Override
-    public void attack(boolean networkPermission)
+    public void attack()
     {
-        if (!isReal && !networkPermission)
-            return;
-        targetSoldier.getAttackHelper().decreaseHealth(getTower().getDamagePower());
+        targetSoldier.getAttackHelper().decreaseHealth(getTower().getDamagePower(), false);
         mainTargets = null;
         targetSoldier = null;
-        if (isReal)
-            NetworkHelper.buildingAttack(this);
         // TODO: 6/6/18 don't change mainTargets and wholeTargets to null  each turn for some towers
     }
 }

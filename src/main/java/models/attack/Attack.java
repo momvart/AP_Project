@@ -104,6 +104,16 @@ public class Attack
         turn++;
     }
 
+    /**
+     * Adds units to the list undeployed.
+     */
+    int soldierNum = 0;
+
+    public Soldier getSoldierById(long id) throws SoldierNotFoundException
+    {
+        return soldiers.getSoldierById(id);
+    }
+
     public enum QuitReason
     {
         TURN("Time Is Up!"),
@@ -164,20 +174,25 @@ public class Attack
 
     //region Soldiers Management
 
-    /**
-     * Adds units to the list undeployed.
-     */
+    public Building getBuildingById(long id) throws BuildingNotFoundException
+    {
+        List<Building> buildings = map.getAllBuildings().collect(Collectors.toList());
+        for (Building building : buildings)
+            if (building.getId() == id)
+                return building;
+        throw new BuildingNotFoundException();
+    }
+
     public void addUnit(Soldier soldier)
     {
         soldiers.addSoldier(soldier);
+        soldier.setId(soldierNum);
+        soldierNum++;
         soldier.participateIn(this);
-
     }
 
     public void addUnits(List<Soldier> soldierList)
     {
-        if (!isReal)
-            return;
         soldierList.forEach(this::addUnit);
     }
 
@@ -191,6 +206,7 @@ public class Attack
             callOnSoldierPut(soldier);
         }
     }
+
 
     public void putUnits(int unitType, int count, Point location, boolean networkPermission) throws ConsoleException
     {

@@ -1,22 +1,26 @@
 package graphics.gui;
 
-import exceptions.ConsoleException;
 import graphics.GraphicsValues;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ButtonDrawable;
 import graphics.drawers.drawables.ImageDrawable;
-import graphics.helpers.*;
+import graphics.helpers.AreaSplashDefenseGraphicHelper;
+import graphics.helpers.AttackBuildingGraphicHelper;
+import graphics.helpers.BuildingGraphicHelper;
+import graphics.helpers.SingleTDefenseGraphicHelper;
 import graphics.layers.ResourceLayer;
-import graphics.positioning.*;
+import graphics.positioning.IsometricPositioningSystem;
+import graphics.positioning.NormalPositioningSystem;
+import graphics.positioning.PositioningSystem;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.WindowEvent;
-import menus.*;
 import models.attack.Attack;
-import models.attack.AttackMap;
 import models.attack.attackHelpers.SingleTargetAttackHelper;
-import models.buildings.*;
-import utils.*;
+import models.buildings.Building;
+import models.buildings.DefensiveTower;
+import utils.GraphicsUtilities;
+import utils.RectF;
 
 import java.net.URISyntaxException;
 
@@ -61,6 +65,7 @@ public class AttackMapStage extends GUIMapStage
     @Override
     public BuildingGraphicHelper addBuilding(Building building)
     {
+        building.getAttackHelper().setBuildingIsReal();
         AttackBuildingGraphicHelper graphicHelper;
 
         if (building instanceof DefensiveTower && !preview)

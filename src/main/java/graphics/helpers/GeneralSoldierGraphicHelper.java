@@ -28,10 +28,10 @@ public class GeneralSoldierGraphicHelper extends SoldierGraphicHelper implements
     @Override
     public void triggerSoldier()
     {
-        attackHelper.setTarget(false);
+        attackHelper.setTarget();
         if (attackHelper.getTarget() != null)
         {
-            startJoggingToward(new PointF(attackHelper.getTarget().getLocation()));
+            startJoggingToward(new PointF(attackHelper.getTarget().getLocation()), false);
         }
     }
 
@@ -43,7 +43,7 @@ public class GeneralSoldierGraphicHelper extends SoldierGraphicHelper implements
         Point newDest = attackHelper.getTarget().getLocation();
         if (newDest != null)
         {
-            startJoggingToward(new PointF(newDest));
+            startJoggingToward(new PointF(newDest), false);
         }
     }
 

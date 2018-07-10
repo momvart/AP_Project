@@ -10,6 +10,7 @@ public abstract class Soldier
     private int level;
     private Point location;
     protected transient SoldierAttackHelper attackHelper;
+    private int id;
     public Soldier()
     {
 
@@ -66,34 +67,14 @@ public abstract class Soldier
         return location;
     }
 
-    public static Soldier getSimilarSoldier(Soldier soldier)
+    public int getId()
     {
-        Soldier newSoldier;
-        int level = soldier.getLevel();
-        switch (soldier.getType())
-        {
-            case Archer.SOLDIER_TYPE:
-                newSoldier = new Archer(level);
-                break;
-            case Dragon.SOLDIER_TYPE:
-                newSoldier = new Dragon(level);
-                break;
-            case Giant.SOLDIER_TYPE:
-                newSoldier = new Giant(level);
-                break;
-            case Guardian.SOLDIER_TYPE:
-                newSoldier = new Guardian(level);
-                break;
-            case Healer.SOLDIER_TYPE:
-                newSoldier = new Healer(level);
-                break;
-            default:
-                newSoldier = new WallBreaker(level);
-                break;
-        }//TODO‌ we should manipulate here anytime we suppose to add to or change the soldier varieties
-        newSoldier.setLocation(soldier.getLocation());
-        newSoldier.attackHelper = soldier.attackHelper;
-        return newSoldier;
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
     }
 
     public void setLocation(Point location)

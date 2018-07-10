@@ -49,18 +49,26 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         return health;
     }
 
-    public void increaseHealth(int amount)
+    public void increaseHealth(int amount, boolean networkPermission)
     {
+        if (!isReal && !networkPermission)
+            return;
         health = Math.min(this.getHealth() + amount, getInitialHealth());
+        if (isReal)
+            NetworkHelper.soldierIncreaseHealth(soldier.getId(), amount);
     }
 
-    public void decreaseHealth(int amount)
+    public void decreaseHealth(int amount, boolean networkPermission)
     {
+        if (!isReal && !networkPermission)
+            return;
         health = Math.max(health - amount, 0);
         if (health <= 0)
             setDead(true);
         if (getGraphicHelper() != null)
             getGraphicHelper().updateDrawer();
+        if (isReal)
+            NetworkHelper.soldierDecreaseHealth(soldier.getId(), amount);
     }
 
     public int getInitialHealth()
@@ -196,9 +204,9 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     public abstract void move();
 
-    public abstract void fire(boolean networkPermission);
+    public abstract void fire();
 
-    public abstract void setTarget(boolean networkPermission);
+    public abstract void setTarget();
 
     public abstract Point getTargetLocation();
 
@@ -234,9 +242,11 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         soldierDieListeners.add(soldierDieListener);
     }
 
-    protected void callOnSoldierDie()
+    public void callOnSoldierDie()
     {
         soldierDieListeners.forEach(IOnSoldierDieListener::onSoldierDie);
+        if (soldier.getAttackHelper().isReal)
+            NetworkHelper.soldierDie(soldier.getId());
     }
 
     public void onMoveFinished(PointF currentPos)

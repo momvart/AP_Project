@@ -4,6 +4,7 @@ import graphics.drawers.SoldierDrawer;
 import graphics.layers.Layer;
 import models.attack.attackHelpers.IOnDecampListener;
 import models.attack.attackHelpers.IOnSoldierDieListener;
+import models.attack.attackHelpers.NetworkHelper;
 import models.attack.attackHelpers.SoldierAttackHelper;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
@@ -81,8 +82,19 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     }
 
     Point facingBuildingPoint;
-    public void startJoggingToward(PointF dest)
+
+    public void startJoggingToward(PointF dest, boolean networkPermission)
     {
+        boolean isReal = soldier.getAttackHelper().isReal();
+        if (!isReal && !networkPermission)
+        {
+            moveDest = null;
+            nextCheckPointF = null;
+            facingBuildingPoint = null;
+            finalStandingPoint = null;
+            return;
+        }
+
         makeRun();
         nextCheckPointF = null;
         moveDest = dest;
@@ -96,6 +108,8 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
             return;
         }
         facingBuildingPoint = soldierPath.get(1);
+        if (isReal)
+            NetworkHelper.soldrStJogTowd(soldier.getId(), dest);
     }
 
     protected void setFinalStandingPoint()
@@ -106,9 +120,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 
     protected void doReplacing(double deltaT)
     {
-        if (status != Status.RUN)
-            return;
-        if (finalStandingPoint == null)
+        if (status != Status.RUN || finalStandingPoint == null)
             return;
         if (nextCheckPointF == null || PointF.euclideanDistance2nd(nextCheckPointF, drawer.getPosition()) < .01)
         {
@@ -209,7 +221,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     }
 
 
-    protected void onMoveFinished()
+    public void onMoveFinished()
     {
         if (finalStandingPoint == null)
             return;
@@ -220,6 +232,8 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
             moveListener.onMoveFinished(drawer.getPosition());
         finalStandingPoint = null;
         nextCheckPointF = null;
+        if (soldier.getAttackHelper().isReal())
+            NetworkHelper.setSldPos(soldier.getId(), drawer.getPosition());
     }
 
     public void setMoveListener(IOnMoveFinishedListener moveListener)
@@ -230,7 +244,6 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     @Override
     public void update(double deltaT)
     {
-        System.out.println("soldier position is : ‌" + drawer.getPosition());
         super.update(deltaT);
         doReplacing(deltaT);
     }

@@ -15,28 +15,22 @@ public class TrapAttackHelper extends SingleTargetAttackHelper
     }
 
     @Override
-    public void setTarget(boolean networkPermission)
+    public void setTarget()
     {
-        if (!isReal && !networkPermission)
-            return;
         mainTargets = new ArrayList<>();
         List<Soldier> soldiers = attack.getSoldiersOnLocations().getSoldiers(building.getLocation());
         mainTargets.addAll(soldiers);
         if (mainTargets.size() > 0)
             targetSoldier = mainTargets.get(0);
-        if (isReal)
-            NetworkHelper.buildingSetTarget(this);
     }
 
     @Override
-    public void attack(boolean networkPermission)
+    public void attack()
     {
         if (mainTargets != null && mainTargets.size() != 0)
         {
-            super.attack(networkPermission);
-            decreaseStrength(getStrength());
-            if (isReal)
-                NetworkHelper.buildingAttack(this);
+            super.attack();
+            decreaseStrength(getStrength(), false);
         }
     }
 
@@ -44,6 +38,6 @@ public class TrapAttackHelper extends SingleTargetAttackHelper
     public void onReload()
     {
         super.onReload();
-        attack(false);
+        attack();
     }
 }

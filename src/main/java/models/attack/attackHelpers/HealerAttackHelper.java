@@ -21,7 +21,7 @@ public class HealerAttackHelper extends SoldierAttackHelper
 
     public void ageOneDeltaT()
     {
-        decreaseHealth(1);
+        decreaseHealth(1, false);
     }
 
     public HealerAttackHelper(Attack attack, Healer healer)
@@ -62,10 +62,8 @@ public class HealerAttackHelper extends SoldierAttackHelper
     }
 
     @Override
-    public void fire(boolean networkPermission)
+    public void fire()
     {
-        if (!isReal && !networkPermission)
-            return;
         ArrayList<SoldiersHealReport> reports = new ArrayList<>();
         if (soldier != null && !soldier.getAttackHelper().isDead())
         {
@@ -74,27 +72,21 @@ public class HealerAttackHelper extends SoldierAttackHelper
                 for (Soldier target : targets)
                 {
                     System.out.println("healer healing soldier type:" + target.getType() + "in amount of" + getDamage());
-                    target.getAttackHelper().increaseHealth(getDamage());
+                    target.getAttackHelper().increaseHealth(getDamage(), false);
                 }
-                if (isReal)
-                    NetworkHelper.soldierFiring(this);
             }
         }
     }
 
     @Override
-    public void setTarget(boolean networkPermission)
+    public void setTarget()
     {
-        if (!isReal && !networkPermission)
-            return;
         targets = getSoldiersInRange();
         try
         {
             destination = attack.getNearestSoldier(getSoldierLocation(), 35, MoveType.GROUND);// 35 represents a high range to cover all the map
         }
         catch (SoldierNotFoundException e) {}
-        if (isReal)
-            NetworkHelper.soldierSetTarget(this);
     }
 
     @Override
@@ -142,13 +134,13 @@ public class HealerAttackHelper extends SoldierAttackHelper
             callOnSoldierDie();
             return;
         }
-        setTarget(false);
+        setTarget();
         ageOneDeltaT();
         if (!readyToFireTarget)
             return;
         if (soldier != null && isSoldierDeployed() && !isDead() && getHealth() > 0)
         {
-            fire(false);
+            fire();
             if (destination == null)
             {
                 callOnDecamp();
