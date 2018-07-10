@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--<?import java.lang.*?>-->
+<!--<?import java.util.*?>-->
+<!--<?import javafx.scene.*?>-->
+<!--<?import javafx.scene.control.*?>-->
+<!--<?import javafx.scene.layout.*?>-->
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml" fx:id="mainVbox" fx:controller="graphics.gui.NetworkTabPaneFXMLController"
+>
+    <children>
+        <HBox fx:id="buttonsHbox">
+            <children>
+                <Button fx:id="hostBtn" text="Host" onAction="#serverBtnEventHandler"></Button>
+                <Button fx:id="joinBtn" text="Join" onAction="#joinBtnEventHandler"></Button>
+            </children>
+        </HBox>
+        <TabPane prefHeight="900.0" prefWidth="1200.0">
+            <Tab fx:id="chatTab" text="Chatroom">
+                <fx:include fx:id="chatroom" source="chatroom.fxml"/>
+            </Tab>
+            <Tab fx:id="leaderboardTab" text="LeaderBoard">
+                <fx:include fx:id="leaderboard" source="leaderboard.fxml"/>
+            </Tab>
+            <Tab fx:id="playersTab" text="Players">
+                <fx:include fx:id="players" source="players.fxml"/>
+            </Tab>
+        </TabPane>
+    </children>
+</VBox>
