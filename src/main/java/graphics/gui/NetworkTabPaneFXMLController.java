@@ -47,6 +47,7 @@ public class NetworkTabPaneFXMLController
             GameClientC gameClientC = new GameClientC(port, "localhost");
             gameClientC.setUp();
             World.sCurrentClient = gameClientC;
+            tabChatController.initialize(World.sCurrentClient);
         }
         catch (IOException e)
         {
@@ -63,6 +64,7 @@ public class NetworkTabPaneFXMLController
             GameClientC clientC = new GameClientC(portAndIp.getValue(), portAndIp.getKey());
             clientC.setUp();
             World.sCurrentClient = clientC;
+            tabChatController.initialize(World.sCurrentClient);
         }
         catch (IOException e)
         {

@@ -14,7 +14,7 @@
         <Button fx:id="btnHost" text="Host" onAction="#btnServer_Click"/>
         <Button fx:id="btnJoin" text="Join" onAction="#btnJoin_Click"/>
     </HBox>
-    <TabPane prefHeight="900.0" prefWidth="1200.0">
+    <TabPane prefHeight="300.0" prefWidth="400.0">
         <Tab text="Chat">
             <fx:include fx:id="tabChat" source="chatroom.fxml"/>
         </Tab>
