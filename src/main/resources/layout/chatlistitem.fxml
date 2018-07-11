@@ -9,7 +9,9 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml">
     <Label
-            fx:id="lblTitle"/>
+            fx:id="lblTitle"
+            maxWidth="Infinity"/>
     <Label
-            fx:id="lblText"/>
+            fx:id="lblText"
+            maxWidth="Infinity"/>
 </VBox>

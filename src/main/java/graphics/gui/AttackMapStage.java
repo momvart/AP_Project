@@ -56,7 +56,7 @@ public class AttackMapStage extends GUIMapStage
             Drawer dBtnAttack = new Drawer(btnAttack);
             dBtnAttack.setPosition(0, getStuffsLayer().getHeight() / ((NormalPositioningSystem)getStuffsLayer().getPosSys()).getScale() - 2);
             dBtnAttack.setLayer(getStuffsLayer());
-            dBtnAttack.setClickListener(null);
+            dBtnAttack.setClickListener(this::onBtnAttackClick);
         }
 
         getGuiScene().addLayer(lResource);
@@ -126,6 +126,12 @@ public class AttackMapStage extends GUIMapStage
     protected void onMarginalCellClick(Drawer sender, MouseEvent e)
     {
 
+    }
+
+    private void onBtnAttackClick(Drawer sender, MouseEvent e)
+    {
+        this.close();
+        new AttackStage(theAttack, width, height).setUpAndShow();
     }
 
     @Override

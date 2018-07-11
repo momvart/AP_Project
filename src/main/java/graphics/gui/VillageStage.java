@@ -1,45 +1,33 @@
 package graphics.gui;
 
-import com.google.gson.JsonIOException;
-import exceptions.ConsoleException;
-import exceptions.MyIOException;
-import exceptions.MyJsonException;
+import com.google.gson.*;
+import exceptions.*;
 import graphics.*;
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
-import graphics.drawers.drawables.ButtonDrawable;
-import graphics.drawers.drawables.RoundRectDrawable;
-import graphics.gui.dialogs.MapInputDialog;
-import graphics.gui.dialogs.SettingsDialog;
+import graphics.drawers.drawables.*;
+import graphics.gui.dialogs.*;
 import graphics.gui.dialogs.SingleChoiceDialog;
 import graphics.gui.dialogs.TextInputDialog;
 import graphics.helpers.BuildingGraphicHelper;
 import graphics.helpers.VillageBuildingGraphicHelper;
-import graphics.layers.ChatLayer;
-import graphics.layers.Layer;
-import graphics.layers.ResourceLayer;
+import graphics.layers.*;
 import graphics.positioning.NormalPositioningSystem;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
-import menus.AttackMapItem;
-import menus.Menu;
-import menus.ParentMenu;
-import models.Map;
-import models.Village;
-import models.World;
+import menus.*;
+import models.*;
 import models.buildings.Building;
 import network.IOnChatMessageReceivedListener;
 import utils.RectF;
 import views.VillageView;
-import views.dialogs.DialogResult;
+import views.dialogs.*;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -47,14 +35,11 @@ import java.nio.file.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class VillageStage extends GUIMapStage implements IOnChatMessageReceivedListener
+public class VillageStage extends GUIMapStage
 {
     private Village village;
 
     private ResourceLayer lResource;
-
-    private VBox vbChat;
-    private ChatLayer lChat;
 
     private VillageView villageView;
 
@@ -113,41 +98,6 @@ public class VillageStage extends GUIMapStage implements IOnChatMessageReceivedL
         dBtnChat.setPosition(1, 0.5);
         dBtnChat.setLayer(getStuffsLayer());
         dBtnChat.setClickListener(this::onBtnChatClick);
-
-        //Chat
-        {
-            Canvas chatCanvas = new Canvas(200, 400);
-            GameScene chatScene = new GameScene(chatCanvas.getWidth(), chatCanvas.getHeight());
-            GraphicHandler chatHandler = new GraphicHandler(chatCanvas.getGraphicsContext2D(), new RectF(0, 0, chatCanvas.getWidth(), chatCanvas.getHeight()));
-            GameLooper chatLooper = new GameLooper(chatHandler);
-
-            chatHandler.setScale(1);
-
-            lChat = new ChatLayer(12, new RectF(0, 0, chatCanvas.getWidth(), chatCanvas.getHeight()));
-
-            RoundRectDrawable chatBackground = new RoundRectDrawable(lChat.getWidth(), lChat.getHeight(), GraphicsValues.PADDING, ButtonDrawable.DARK);
-            Drawer dChatBg = new Drawer(chatBackground);
-            Layer lChatBg = new Layer(lChat.getOrder() - 1, lChat.getBounds());
-            dChatBg.setLayer(lChatBg);
-
-
-            chatScene.addLayer(lChatBg);
-            chatScene.addLayer(lChat);
-
-            onChatMessageReceived("Mohammad", "Salam");
-
-            TextField txtChat = new TextField();
-            txtChat.setFont(Fonts.getSmall());
-            txtChat.setBackground(new Background(new BackgroundFill(ButtonDrawable.LIGHT, null, null)));
-
-            vbChat = new VBox(chatCanvas, txtChat);
-            vbChat.setPrefWidth(chatCanvas.getWidth());
-            vbChat.setVisible(false);
-            group.getChildren().add(vbChat);
-
-            chatHandler.setScene(chatScene);
-            chatLooper.start();
-        }
 
         ButtonDrawable btnNetwork = new ButtonDrawable("", GraphicsValues.IconPaths.Network, CELL_SIZE / 2, CELL_SIZE / 2);
         btnNetwork.setFill(ButtonDrawable.LIGHT);
@@ -276,7 +226,6 @@ public class VillageStage extends GUIMapStage implements IOnChatMessageReceivedL
 
     private void onBtnChatClick(Drawer sender, MouseEvent event)
     {
-        vbChat.setVisible(!vbChat.isVisible());
     }
 
     private void onBtnNetworkClick(Drawer sender, MouseEvent event)
@@ -286,11 +235,5 @@ public class VillageStage extends GUIMapStage implements IOnChatMessageReceivedL
             new NetworkStage().start();
         }
         catch (Exception ex) {ex.printStackTrace();}
-    }
-
-    @Override
-    public void onChatMessageReceived(String from, String message)
-    {
-        lChat.newMessage(new Pair<>(from, message));
     }
 }

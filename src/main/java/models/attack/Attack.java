@@ -134,13 +134,14 @@ public class Attack
         }
     }
 
-    public void quitAttack(QuitReason reason)
+    public AttackReport quitAttack(QuitReason reason)
     {
-        for (int i = 1; i < SoldierValues.SOLDIER_TYPES_COUNT; i++)
-            World.getVillage().getSoldiers(i).removeIf(soldier -> soldier.isParticipating(this) && soldier.getAttackHelper().isDead());
-        World.getVillage().addResource(claimedResource);
-        decreaseLootFromDefenderStorages();
-        World.sCurrentGame.addScore(claimedScore);
+        return new AttackReport(null, null,
+                totalResource, claimedResource,
+                0, claimedScore,
+                soldiers.getLists().stream()
+                        .map(list -> (int)list.stream().filter(soldier -> soldier.isParticipating(this) && soldier.getAttackHelper().isDead()).count())
+                        .collect(Collectors.toList()));
     }
 
     private void decreaseLootFromDefenderStorages()

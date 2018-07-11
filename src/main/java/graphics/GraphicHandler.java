@@ -15,6 +15,8 @@ public class GraphicHandler implements IFrameUpdatable
     private GraphicsContext gc;
     private GameScene scene;
 
+    private boolean disableDraws = false;
+
     private ArrayList<IFrameUpdatable> updatables = new ArrayList<>();
 
     public GraphicHandler(GraphicsContext gc, RectF camera)
@@ -38,6 +40,11 @@ public class GraphicHandler implements IFrameUpdatable
         gc.save();
         gc.transform(scale, 0, 0, scale, 0, 0);
         this.scale = scale;
+    }
+
+    public void setDisableDraws(boolean disableDraws)
+    {
+        this.disableDraws = disableDraws;
     }
 
     private RectF cameraBounds = new RectF(0, 0, 0, 0);
@@ -75,7 +82,8 @@ public class GraphicHandler implements IFrameUpdatable
 
         updatables.forEach(u -> u.update(deltaT));
         scene.update(deltaT);
-        scene.draw(gc, cameraBounds);
+        if (!disableDraws)
+            scene.draw(gc, cameraBounds);
     }
 
     public void handleMouseClick(MouseEvent event)

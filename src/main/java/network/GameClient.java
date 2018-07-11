@@ -15,7 +15,7 @@ public class GameClient implements IOnMessageReceivedListener
 
     protected Receiver receiver;
 
-    protected Gson deserializer = new Gson();
+    protected Gson gson = new Gson();
 
     private IOnMessageReceivedListener messageReceiver;
 
@@ -60,6 +60,11 @@ public class GameClient implements IOnMessageReceivedListener
     public void setOnConnectionClosedListener(Consumer<GameClient> onConnectionClosedListener)
     {
         this.onConnectionClosedListener = onConnectionClosedListener;
+    }
+
+    public void sendMessage(String message, MessageType messageType)
+    {
+        sendMessage(new Message(message, getClientId(), messageType));
     }
 
     public void sendMessage(Message message)

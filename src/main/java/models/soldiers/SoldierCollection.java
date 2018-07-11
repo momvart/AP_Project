@@ -22,6 +22,11 @@ public class SoldierCollection
         return SoldierValues.SOLDIER_TYPES_COUNT;
     }
 
+    public ArrayList<ArrayList<Soldier>> getLists()
+    {
+        return lists;
+    }
+
     public ArrayList<Soldier> getSoldiers(int soldierType)
     {
         return lists.get(soldierType - 1);

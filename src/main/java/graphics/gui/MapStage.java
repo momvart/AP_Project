@@ -127,6 +127,7 @@ public abstract class MapStage extends Stage
         show();
 
         setOnCloseRequest(this::onClose);
+        focusedProperty().addListener((observable, oldValue, newValue) -> graphicHandlers.forEach(graphicHandler -> graphicHandler.setDisableDraws(!newValue)));
     }
 
     protected void setUpFloor()

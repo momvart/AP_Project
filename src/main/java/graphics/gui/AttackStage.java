@@ -8,10 +8,7 @@ import graphics.drawers.drawables.ButtonDrawable;
 import graphics.drawers.drawables.ImageDrawable;
 import graphics.drawers.drawables.RoundRectDrawable;
 import graphics.drawers.drawables.TextDrawable;
-import graphics.helpers.GeneralSoldierGraphicHelper;
-import graphics.helpers.HealerGraphicHelper;
-import graphics.helpers.SoldierGraphicHelper;
-import graphics.helpers.TimerGraphicHelper;
+import graphics.helpers.*;
 import graphics.layers.Layer;
 import graphics.positioning.NormalPositioningSystem;
 import javafx.scene.Group;
@@ -24,10 +21,13 @@ import menus.ParentMenu;
 import menus.SoldierMenuItem;
 import models.World;
 import models.attack.Attack;
+import models.attack.AttackReport;
+import models.buildings.Building;
 import models.soldiers.Healer;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierValues;
+import network.Message;
 import utils.GraphicsUtilities;
 import utils.Point;
 import utils.RectF;
@@ -118,6 +118,13 @@ public class AttackStage extends AttackMapStage
     }
 
     @Override
+    public BuildingGraphicHelper addBuilding(Building building)
+    {
+        building.getAttackHelper().addDestroyListener(this::checkForAllBuildingsDestroyed);
+        return super.addBuilding(building);
+    }
+
+    @Override
     protected void onMarginalCellClick(Drawer sender, MouseEvent e)
     {
         if (!theAttack.isReal)
@@ -158,14 +165,21 @@ public class AttackStage extends AttackMapStage
     {
         getGuiHandler().removeUpdatable(timer);
 
-        theAttack.quitAttack(reason);
+        AttackReport report = theAttack.quitAttack(reason);
 
         getLooper().stop();
 
-        createAttackFinishLayer(reason);
+        createAttackFinishLayer(reason, report);
+
+        if (World.sCurrentClient != null)
+        {
+            report.setDefenderId(World.sCurrentClient.getActiveAttackTarget());
+            report.setAttackerId(World.sCurrentClient.getClientId());
+            World.sCurrentClient.sendAttackReport(report);
+        }
     }
 
-    private void createAttackFinishLayer(Attack.QuitReason reason)
+    private void createAttackFinishLayer(Attack.QuitReason reason, AttackReport report)
     {
         Layer layer = new Layer(12, new RectF((width - 400) / 2, (height - 400) / 2, 400, 400), new NormalPositioningSystem(1));
 
@@ -184,9 +198,9 @@ public class AttackStage extends AttackMapStage
         }
 
 
-        addTextAndIcon(layer, Integer.toString(theAttack.getClaimedResource().getGold()), GraphicsValues.IconPaths.GoldCoin, 100);
-        addTextAndIcon(layer, Integer.toString(theAttack.getClaimedResource().getElixir()), GraphicsValues.IconPaths.ElixirDrop, 150);
-        addTextAndIcon(layer, Integer.toString(theAttack.getClaimedScore()), GraphicsValues.IconPaths.Trophie, 200);
+        addTextAndIcon(layer, Integer.toString(report.getClaimedResource().getGold()), GraphicsValues.IconPaths.GoldCoin, 100);
+        addTextAndIcon(layer, Integer.toString(report.getClaimedResource().getElixir()), GraphicsValues.IconPaths.ElixirDrop, 150);
+        addTextAndIcon(layer, Integer.toString(report.getClaimedScore()), GraphicsValues.IconPaths.Trophie, 200);
 
         ButtonDrawable btnEnd = new ButtonDrawable("Return to Village", GraphicsValues.IconPaths.Map, CELL_SIZE * 2, CELL_SIZE);
         btnEnd.setPivot(0.5, 1);

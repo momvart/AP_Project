@@ -2,6 +2,14 @@
 
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="graphics.gui.PlayersController">
-    <ListView fx:id="listView"/>
+    <ListView fx:id="listView" VBox.vgrow="ALWAYS"/>
+    <ButtonBar fx:id="btnBar">
+        <buttons>
+            <Button text="Attack" onAction="#btnAttack_Click"/>
+        </buttons>
+    </ButtonBar>
 </VBox>

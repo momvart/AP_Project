@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import models.World;
 import models.attack.AttackMap;
+import models.attack.AttackReport;
 import models.buildings.Building;
 import models.buildings.ElixirStorage;
 import models.buildings.GoldStorage;
@@ -33,7 +34,7 @@ public class GameClientC extends GameClient
     private void callOnChatMessageReceived(Message chatMessage)
     {
         if (chatMessageReceiver != null)
-            chatMessageReceiver.onChatMessageReceived(players.get(chatMessage.getSenderId()).getName(), chatMessage.getMessage());
+            chatMessageReceiver.onChatMessageReceived(chatMessage.getSenderId(), chatMessage.getMessage());
     }
 
     public void setChatMessageReceiver(IOnChatMessageReceivedListener chatMessageReceiver)
@@ -41,8 +42,16 @@ public class GameClientC extends GameClient
         this.chatMessageReceiver = chatMessageReceiver;
     }
 
+    private UUID activeAttackTarget;
+
+    public UUID getActiveAttackTarget()
+    {
+        return activeAttackTarget;
+    }
+
     private void callOnAttackMapReturned(UUID from, AttackMap map)
     {
+        activeAttackTarget = from;
         if (attackMapReturnedListener != null)
             attackMapReturnedListener.onAttackMapReturned(from, map);
     }
@@ -63,6 +72,11 @@ public class GameClientC extends GameClient
         this.onPlayersListUpdatedListener = onPlayersListUpdatedListener;
     }
 
+    public ClientInfo getPlayerInfo(UUID id)
+    {
+        return players.get(id);
+    }
+
     public Collection<ClientInfo> getPlayersList()
     {
         return players.values();
@@ -77,11 +91,11 @@ public class GameClientC extends GameClient
                 this.info.setId(UUID.fromString(message.getMessage()));
                 break;
             case SET_CLIENT_INFO:
-                this.setInfo(deserializer.fromJson(message.getMessage(), ClientInfo.class));
+                this.setInfo(gson.fromJson(message.getMessage(), ClientInfo.class));
                 break;
             case PLAYERS_LIST:
                 players = new HashMap<>();
-                ((ArrayList<ClientInfo>)deserializer.fromJson(message.getMessage(), new TypeToken<ArrayList<ClientInfo>>() { }.getType())).forEach(info -> players.put(info.getId(), info));
+                ((ArrayList<ClientInfo>)gson.fromJson(message.getMessage(), new TypeToken<ArrayList<ClientInfo>>() { }.getType())).forEach(info -> players.put(info.getId(), info));
                 callOnPlayersListUpdated();
                 break;
             case CHAT_MESSAGE:
@@ -123,6 +137,11 @@ public class GameClientC extends GameClient
 
     public void sendInfo()
     {
-        sendMessage(new Message(deserializer.toJson(getInfo()), getClientId(), MessageType.SET_CLIENT_INFO));
+        sendMessage(new Message(gson.toJson(getInfo()), getClientId(), MessageType.SET_CLIENT_INFO));
+    }
+
+    public void sendAttackReport(AttackReport report)
+    {
+        sendMessage(gson.toJson(report), MessageType.ATTACK_REPORT);
     }
 }

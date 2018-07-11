@@ -2,6 +2,7 @@ package models.attack;
 
 import models.Resource;
 
+import java.util.List;
 import java.util.UUID;
 
 public class AttackReport
@@ -9,18 +10,21 @@ public class AttackReport
     private UUID attackerId;
     private UUID defenderId;
     private Resource totalResource;
-    private Resource gainedResource;
-    private int totalTrophies;
-    private int gainedTrophies;
+    private Resource claimedResource;
+    private int totalScore;
+    private int claimedScore;
 
-    public AttackReport(UUID attackerId, UUID defenderId, Resource totalResource, Resource gainedResource, int totalTrophies, int gainedTrophies)
+    private List<Integer> troopsCount;
+
+    public AttackReport(UUID attackerId, UUID defenderId, Resource totalResource, Resource claimedResource, int totalScore, int claimedScore, List<Integer> troopsCount)
     {
         this.attackerId = attackerId;
         this.defenderId = defenderId;
         this.totalResource = totalResource;
-        this.gainedResource = gainedResource;
-        this.totalTrophies = totalTrophies;
-        this.gainedTrophies = gainedTrophies;
+        this.claimedResource = claimedResource;
+        this.totalScore = totalScore;
+        this.claimedScore = claimedScore;
+        this.troopsCount = troopsCount;
     }
 
     public UUID getAttackerId()
@@ -28,9 +32,19 @@ public class AttackReport
         return attackerId;
     }
 
+    public void setAttackerId(UUID attackerId)
+    {
+        this.attackerId = attackerId;
+    }
+
     public UUID getDefenderId()
     {
         return defenderId;
+    }
+
+    public void setDefenderId(UUID defenderId)
+    {
+        this.defenderId = defenderId;
     }
 
     public Resource getTotalResource()
@@ -38,18 +52,23 @@ public class AttackReport
         return totalResource;
     }
 
-    public Resource getGainedResource()
+    public Resource getClaimedResource()
     {
-        return gainedResource;
+        return claimedResource;
     }
 
-    public int getTotalTrophies()
+    public int getTotalScore()
     {
-        return totalTrophies;
+        return totalScore;
     }
 
-    public int getGainedTrophies()
+    public int getClaimedScore()
     {
-        return gainedTrophies;
+        return claimedScore;
+    }
+
+    public List<Integer> getTroopsCount()
+    {
+        return troopsCount;
     }
 }
