@@ -87,7 +87,7 @@ public abstract class MapStage extends Stage
         return lObjects;
     }
 
-    public void setUpAndShow()
+    public void setup()
     {
         Group group = new Group();
 
@@ -124,10 +124,15 @@ public abstract class MapStage extends Stage
         group.setOnMouseClicked(this::handleMouseClick);
         group.setOnScroll(this::handleMouseScroll);
         setScene(new Scene(group));
-        show();
 
         setOnCloseRequest(this::onClose);
         focusedProperty().addListener((observable, oldValue, newValue) -> graphicHandlers.forEach(graphicHandler -> graphicHandler.setDisableDraws(!newValue)));
+    }
+
+    public void setupAndShow()
+    {
+        setup();
+        show();
     }
 
     protected void setUpFloor()

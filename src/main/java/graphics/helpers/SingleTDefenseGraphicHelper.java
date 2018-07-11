@@ -19,7 +19,7 @@ public class SingleTDefenseGraphicHelper extends DefensiveTowerGraphicHelper
     @Override
     protected void triggerBullet(Soldier soldier)
     {
-        bulletHelper.startNewWave(new PointF(building.getLocation()), bulletUltimatePosition, soldier);
+        bulletHelper.startNewWave(new PointF(building.getLocation()), bulletUltimatePosition, soldier, false);
     }
 
     private double cos;

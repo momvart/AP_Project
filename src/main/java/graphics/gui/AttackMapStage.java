@@ -128,10 +128,23 @@ public class AttackMapStage extends GUIMapStage
 
     }
 
+    private Runnable onAttackStartRequestListener;
+
+    private void callOnAttackStartRequest()
+    {
+        if (onAttackStartRequestListener != null)
+            onAttackStartRequestListener.run();
+    }
+
+    public void setOnAttackStartRequestListener(Runnable onAttackStartRequestListener)
+    {
+        this.onAttackStartRequestListener = onAttackStartRequestListener;
+    }
+
     private void onBtnAttackClick(Drawer sender, MouseEvent e)
     {
         this.close();
-        new AttackStage(theAttack, width, height).setUpAndShow();
+        callOnAttackStartRequest();
     }
 
     @Override

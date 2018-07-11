@@ -3,6 +3,7 @@ package network;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import javafx.util.Pair;
 import models.World;
 import models.attack.AttackMap;
 import models.attack.AttackReport;
@@ -16,6 +17,7 @@ import serialization.StorageGlobalAdapter;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.*;
+import java.util.function.Consumer;
 
 //GameClient that is used in client side
 public class GameClientC extends GameClient
@@ -24,7 +26,11 @@ public class GameClientC extends GameClient
 
     private IOnChatMessageReceivedListener chatMessageReceiver;
     private IOnAttackMapReturnedListener attackMapReturnedListener;
-    private Runnable onPlayersListUpdatedListener;
+    private Runnable playersListUpdatedListener;
+    private Consumer<UUID> attackStartListener;
+    private Consumer<UUID> defenseStartListener;
+    private Consumer<AttackReport> attackFinishListener;
+    private Consumer<AttackReport> defenseFinishListener;
 
     public GameClientC(int port, String ip) throws IOException
     {
@@ -63,13 +69,57 @@ public class GameClientC extends GameClient
 
     private void callOnPlayersListUpdated()
     {
-        if (onPlayersListUpdatedListener != null)
-            onPlayersListUpdatedListener.run();
+        if (playersListUpdatedListener != null)
+            playersListUpdatedListener.run();
     }
 
-    public void setOnPlayersListUpdatedListener(Runnable onPlayersListUpdatedListener)
+    public void setPlayersListUpdatedListener(Runnable playersListUpdatedListener)
     {
-        this.onPlayersListUpdatedListener = onPlayersListUpdatedListener;
+        this.playersListUpdatedListener = playersListUpdatedListener;
+    }
+
+    private void callAttackStarted(UUID defenderId)
+    {
+        if (attackStartListener != null)
+            attackStartListener.accept(defenderId);
+    }
+
+    public void setAttackStartListener(Consumer<UUID> attackStartListener)
+    {
+        this.attackStartListener = attackStartListener;
+    }
+
+    private void callDefenseStarted(UUID attackerId)
+    {
+        if (defenseStartListener != null)
+            defenseStartListener.accept(attackerId);
+    }
+
+    public void setDefenseStartListener(Consumer<UUID> defenseStartListener)
+    {
+        this.defenseStartListener = defenseStartListener;
+    }
+
+    private void callAttackFinished(AttackReport report)
+    {
+        if (attackFinishListener != null)
+            attackFinishListener.accept(report);
+    }
+
+    public void setAttackFinishListener(Consumer<AttackReport> attackFinishListener)
+    {
+        this.attackFinishListener = attackFinishListener;
+    }
+
+    private void callDefenseFinished(AttackReport report)
+    {
+        if (defenseFinishListener != null)
+            defenseFinishListener.accept(report);
+    }
+
+    public void setDefenseFinishListener(Consumer<AttackReport> defenseFinishListener)
+    {
+        this.defenseFinishListener = defenseFinishListener;
     }
 
     public ClientInfo getPlayerInfo(UUID id)
@@ -101,8 +151,6 @@ public class GameClientC extends GameClient
             case CHAT_MESSAGE:
                 callOnChatMessageReceived(message);
                 break;
-            case ATTACK_REQUEST:
-                break;
             case GET_MAP:
             {
                 Gson serializer = new GsonBuilder()
@@ -123,6 +171,25 @@ public class GameClientC extends GameClient
                         .create();
                 AttackMap map = deserializer.fromJson(message.getMessage(), AttackMap.class);
                 callOnAttackMapReturned(message.getSenderId(), map);
+            }
+            break;
+            case ATTACK_REPORT:
+            {
+                AttackReport report = gson.fromJson(message.getMessage(), AttackReport.class);
+
+                if (report.getAttackerId().equals(getClientId()))
+                    callAttackFinished(report);
+                else
+                    callDefenseFinished(report);
+            }
+            break;
+            case ATTACK_STARTED:
+            {
+                Pair<UUID, UUID> pair = gson.fromJson(message.getMessage(), new TypeToken<Pair<UUID, UUID>>() { }.getType());
+                if (pair.getKey().equals(getClientId()))
+                    callAttackStarted(pair.getValue());
+                else
+                    callDefenseStarted(pair.getKey());
             }
             break;
             default:

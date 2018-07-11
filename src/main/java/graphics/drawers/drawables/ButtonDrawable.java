@@ -15,7 +15,7 @@ public class ButtonDrawable extends Drawable
     private final double IconHeightRatio;
 
     public static final Color LIGHT = Color.rgb(255, 255, 255, 0.6);
-    public static final Color DARK = Color.rgb(0, 0, 0, 0.6);
+    public static final Color DARK = GraphicsValues.BLACK_60;
 
     protected RoundRectDrawable background;
     protected RoundRectDrawable bgForeground;
@@ -27,14 +27,14 @@ public class ButtonDrawable extends Drawable
         this.background = new RoundRectDrawable(width, height, CornerRadius, DARK);
         this.bgForeground = new RoundRectDrawable(width - 2 * InsidePadding, height / 2 - InsidePadding, CornerRadius, Color.rgb(255, 255, 255, 0.2));
 
+        this.label = new TextDrawable(text, Color.WHITE, Fonts.getSmaller());
+        this.label.setPivot(.5, 1);
+        this.label.setHasShadow(true);
+        this.label.setMaxWidth(width - 2 * InsidePadding);
+
         if (!text.isEmpty())
-        {
-            this.label = new TextDrawable(text, Color.WHITE, Fonts.getSmaller());
-            this.label.setPivot(.5, 1);
-            this.label.setHasShadow(true);
-            this.label.setMaxWidth(width - 2 * InsidePadding);
             IconHeightRatio = 2 / 3.0;
-        }
+
         else
             IconHeightRatio = 1;
 

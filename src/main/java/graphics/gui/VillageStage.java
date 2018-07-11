@@ -13,6 +13,7 @@ import graphics.helpers.BuildingGraphicHelper;
 import graphics.helpers.VillageBuildingGraphicHelper;
 import graphics.layers.*;
 import graphics.positioning.NormalPositioningSystem;
+import graphics.positioning.PercentPositioningSystem;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ButtonType;
@@ -37,18 +38,41 @@ import java.util.stream.Collectors;
 
 public class VillageStage extends GUIMapStage
 {
-    private Village village;
+    private static VillageStage instance;
+
+    public static VillageStage getInstance()
+    {
+        if (instance == null)
+        {
+            instance = new VillageStage(World.getVillage(), 1200, 900);
+            instance.setup();
+        }
+        return instance;
+    }
+
+    public static void showInstance()
+    {
+        getInstance().show();
+    }
 
     private ResourceLayer lResource;
 
+    private Layer lCaution;
+    private TextDrawable txtCaution;
+    private ButtonDrawable btnCaution;
+
+
     private VillageView villageView;
 
-    public VillageStage(Village village, double width, double height)
+    private VillageStage(Village village, double width, double height)
     {
         super(village.getMap(), width, height);
         lResource = new ResourceLayer(8,
                 new RectF(width - 200 - GraphicsValues.PADDING * 2, 20, 200 + GraphicsValues.PADDING * 2, 70),
                 village::getResources, village::getTotalResourceCapacity);
+        lCaution = new Layer(100, new RectF(0, 0, width, height));
+        lCaution.setPosSys(new PercentPositioningSystem(lCaution));
+        lCaution.setVisible(false);
     }
 
     public void setVillageView(VillageView villageView)
@@ -105,6 +129,32 @@ public class VillageStage extends GUIMapStage
         dBtnNetwork.setPosition(1, 0);
         dBtnNetwork.setLayer(getStuffsLayer());
         dBtnNetwork.setClickListener(this::onBtnNetworkClick);
+
+
+        //Caution Layer
+        {
+            RoundRectDrawable bg = new RoundRectDrawable(lCaution.getWidth(), lCaution.getHeight(), 0, GraphicsValues.BLACK_60);
+            Drawer dBackground = new Drawer(bg);
+            dBackground.setLayer(lCaution);
+            dBackground.setClickListener((sender, e) ->
+            {
+            });
+
+            txtCaution = new TextDrawable("", Fonts.getLarge());
+            txtCaution.setPivot(0.5, 0.5);
+            txtCaution.setFill(Color.WHITE);
+            Drawer dTxtCaution = new Drawer(txtCaution);
+            dTxtCaution.setPosition(0.5, 0.5);
+            dTxtCaution.setLayer(lCaution);
+
+            btnCaution = new ButtonDrawable("", "", CELL_SIZE * 2, CELL_SIZE);
+            btnCaution.setPivot(0.5, 0.5);
+            Drawer dBtnCaution = new Drawer(btnCaution);
+            dBtnCaution.setPosition(0.5, 0.75);
+            dBtnCaution.setLayer(lCaution);
+
+            getGuiScene().addLayer(lCaution);
+        }
 
         getGuiScene().addLayer(lResource);
 
@@ -230,10 +280,20 @@ public class VillageStage extends GUIMapStage
 
     private void onBtnNetworkClick(Drawer sender, MouseEvent event)
     {
-        try
-        {
-            new NetworkStage().start();
-        }
-        catch (Exception ex) {ex.printStackTrace();}
+        NetworkStage.showInstance();
+    }
+
+    public void lockStageForAttack(String attackerName)
+    {
+        txtCaution.setText("Your village is under attack by: " + attackerName);
+        btnCaution.setText("WATCH");
+        lCaution.setVisible(true);
+        getLooper().stop();
+    }
+
+    public void unlockStageAfterAttack()
+    {
+        lCaution.setVisible(false);
+        getLooper().start();
     }
 }
