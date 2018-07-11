@@ -3,6 +3,7 @@ package graphics.gui;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class NetworkStage extends Stage
@@ -13,6 +14,7 @@ public class NetworkStage extends Stage
         Scene scene = new Scene(new StackPane());
         scene.setRoot(fxmlLoader.load());
         setScene(scene);
+        initModality(Modality.WINDOW_MODAL);
         show();
     }
 }

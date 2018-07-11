@@ -19,6 +19,8 @@ public class GraphicsValues
     public static final String WALLS_ASSETS_PATH = "assets/buildings/wall";
     public static final String SOLDIERS_ASSETS_PATH = "assets/soldiers";
     public static final String UI_ASSETS_PATH = "assets/ui";
+    public static final String UI_SOUNDS_PATH = "assets/ui/sounds";
+    public static final String GAME_MUSICS_PATH = "assets/musics";
     public static final double PADDING = 10;
 
     private static double scale = 1;

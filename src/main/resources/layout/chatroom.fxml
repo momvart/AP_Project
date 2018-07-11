@@ -3,19 +3,18 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      prefHeight="400.0" prefWidth="600.0" fx:controller="graphics.gui.ChatroomController">
+      prefHeight="400.0" prefWidth="600.0" fx:controller="graphics.gui.ChatroomController" stylesheets="@chatroom.css"
+      styleClass="list-cell">
     <ListView fx:id="chatLists" prefWidth="600.0" prefHeight="400.0"
               VBox.vgrow="ALWAYS"/>
     <HBox fx:id="hbox"
           prefWidth="600">
-        <TextField fx:id="txtMessage"
+        <TextField fx:id="txtMessage" styleClass="text-field"
                    HBox.hgrow="ALWAYS"/>
-        <Button text="Send" onAction="#btnSend_Click"/>
+        <Button text="Send" onAction="#btnSend_Click" styleClass="button" HBox.hgrow="ALWAYS"/>
     </HBox>
 </VBox>
 

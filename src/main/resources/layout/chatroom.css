@@ -1,0 +1,19 @@
+.button:hover {
+    -fx-background-color: yellowgreen;
+    -fx-text-fill: black;
+    -fx-font-family: Supercell-Magic;
+}
+
+.button {
+    -fx-background-color: lightblue;
+    -fx-text-fill: black;
+    -fx-font-family: Supercell-Magic;
+    -fx-font-size: 10;
+    -fx-fit-to-height: true;
+}
+
+.text-field {
+    -fx-background-color: lightgreen;
+    -fx-font-family: Supercell-Magic;
+
+}

@@ -1,0 +1,51 @@
+.tab-pane {
+    -fx-background-color: lightgray;
+}
+
+.tab {
+    -fx-background-color: lightgray;
+}
+
+.tab:selected {
+    -fx-background-color: black;
+}
+
+.tab:selected .tab-label {
+    -fx-background-color: black;
+    -fx-text-fill: gold;
+}
+
+.tab .tab-label {
+    -fx-background-color: lightgray;
+    -fx-font-family: Supercell-Magic;
+    -fx-text-fill: black;
+}
+
+.button {
+    -fx-background-color: lightblue;
+    -fx-text-fill: black;
+    -fx-font-family: Supercell-Magic;
+    -fx-font-size: 10;
+    -fx-fit-to-height: true;
+}
+
+.button:hover {
+    -fx-background-color: yellowgreen;
+    -fx-text-fill: black;
+    -fx-font-family: Supercell-Magic;
+}
+
+.vbox {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}
+
+.label {
+    -fx-text-fill: white;
+    -fx-font-family: Supercell-Magic;
+}
+
+.label-status {
+    -fx-text-fill: gold;
+    -fx-font-family: Supercell-Magic;
+}
