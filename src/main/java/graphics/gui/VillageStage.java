@@ -1,36 +1,45 @@
 package graphics.gui;
 
-import com.google.gson.*;
-import exceptions.*;
+import com.google.gson.JsonIOException;
+import exceptions.ConsoleException;
+import exceptions.MyIOException;
+import exceptions.MyJsonException;
 import graphics.*;
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
-import graphics.drawers.drawables.*;
-import graphics.gui.dialogs.*;
+import graphics.drawers.drawables.ButtonDrawable;
+import graphics.drawers.drawables.RoundRectDrawable;
+import graphics.gui.dialogs.MapInputDialog;
+import graphics.gui.dialogs.SettingsDialog;
 import graphics.gui.dialogs.SingleChoiceDialog;
 import graphics.gui.dialogs.TextInputDialog;
 import graphics.helpers.BuildingGraphicHelper;
 import graphics.helpers.VillageBuildingGraphicHelper;
-import graphics.layers.*;
+import graphics.layers.ChatLayer;
+import graphics.layers.Layer;
+import graphics.layers.ResourceLayer;
 import graphics.positioning.NormalPositioningSystem;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
-import menus.*;
-import models.*;
+import menus.AttackMapItem;
+import menus.Menu;
+import menus.ParentMenu;
+import models.Map;
+import models.Village;
+import models.World;
 import models.buildings.Building;
 import network.IOnChatMessageReceivedListener;
-import network.IOnMessageReceivedListener;
-import network.Message;
-import network.MessageType;
 import utils.RectF;
 import views.VillageView;
-import views.dialogs.*;
+import views.dialogs.DialogResult;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -248,18 +257,25 @@ public class VillageStage extends GUIMapStage implements IOnChatMessageReceivedL
 
     private void onBtnSettingsClick(Drawer sender, MouseEvent event)
     {
-        SpinnerDialog spinnerDialog = new SpinnerDialog(getStuffsLayer(), width, height, "Set game speed", 1, 3, 0.5);
-        DialogResult dialogResult = spinnerDialog.showDialog();
+        SettingsDialog dialog = new SettingsDialog();
+        dialog.showMenu();
 
-        if (dialogResult.getResultCode().equals(DialogResultCode.YES))
-            World.sSettings.setGameSpeed((double)(dialogResult.getData("speed")));
+        if (dialog.isPaused()) ;
+        //pause
+        if (!dialog.hasSounds()) ;
+        //disable game sounds
+        if (dialog.isBackToMenu()) ;
+            //back To menu
+        else
+        {
+            World.sSettings.setGameSpeed(dialog.getGameSpeed());
+        }
+
 
     }
 
     private void onBtnChatClick(Drawer sender, MouseEvent event)
     {
-//        lChat.setVisible(!lChat.isVisible());
-//        lChat.newMessage(new Message("salam" + System.currentTimeMillis(), "mohammad"));
         vbChat.setVisible(!vbChat.isVisible());
     }
 

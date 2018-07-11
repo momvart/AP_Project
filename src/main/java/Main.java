@@ -1,26 +1,23 @@
 import graphics.Fonts;
 import graphics.gui.dialogs.SingleChoiceDialog;
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Spinner;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import models.World;
-import network.GameClient;
-import network.GameClientC;
-import network.GameHost;
 import views.VillageView;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -108,68 +105,10 @@ public class Main extends Application
 
     private void handleMouseClicks(Stage stage, Button newGame, Button loadGame, Button settings, Button quit)
     {
-        //todo : change alerts to dialog
         newGame.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
         {
-            GameClient client = null;
-            GameHost gameHost = null;
-            ButtonType serverButton = new ButtonType("SERVER", ButtonBar.ButtonData.YES);
-            ButtonType clientButton = new ButtonType("CLIENT", ButtonBar.ButtonData.YES);
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Which one?", serverButton, clientButton);
-            SingleChoiceDialog.applyCss(alert);
-            Optional<ButtonType> buttonType = alert.showAndWait();
-            if (buttonType.get().getText().equals("SERVER"))
-            {
-                alert.setTitle("PORT");
-                alert.setContentText("Insert port number");
-                TextField textField = new TextField();
-                alert.setGraphic(textField);
-                alert.getButtonTypes().removeAll(serverButton, clientButton);
-                alert.getButtonTypes().add(new ButtonType("OK", ButtonBar.ButtonData.YES));
-                alert.showAndWait();
-                try
-                {
-                    gameHost = new GameHost(Integer.parseInt(textField.getText()));
-                    World.newGame();
-                    new VillageView(new Scanner(System.in));
-                    gameHost.start();
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-            else
-            {
-                alert.setTitle("CLIENT");
-                alert.setContentText("Insert ip and port");
-                TextField ip = new TextField();
-                TextField port = new TextField();
-                Label ipL = new Label("IP:");
-                ipL.setPrefWidth(ip.getPrefWidth());
-                ipL.setTextFill(Color.YELLOWGREEN);
-                Label portL = new Label("PORT:");
-                portL.setPrefWidth(port.getPrefWidth());
-                portL.setTextFill(Color.YELLOWGREEN);
-                HBox hBox = new HBox(ipL, ip);
-                HBox hBox1 = new HBox(portL, port);
-                VBox vBox = new VBox(hBox, hBox1);
-                vBox.setAlignment(Pos.CENTER_RIGHT);
-                alert.setGraphic(vBox);
-                alert.getButtonTypes().removeAll(serverButton, clientButton);
-                alert.getButtonTypes().add(new ButtonType("OK", ButtonBar.ButtonData.YES));
-                alert.showAndWait();
-                try
-                {
-                    client = new GameClientC(Integer.parseInt(port.getText()), ip.getText());
-                    World.newGame();
-                    client.setUp();
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
+            World.newGame();
+            new VillageView(new Scanner(System.in));
             stage.close();
         });
         loadGame.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
