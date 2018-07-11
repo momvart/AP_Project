@@ -193,9 +193,5 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                 }
                 fire();
             }
-            else
-                System.out.println("soldier is dead ");
-        else
-            System.out.println("not ready decamping !!!");
     }
 }

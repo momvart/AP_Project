@@ -84,7 +84,7 @@ public class BuildingAttackHelper implements IOnReloadListener
     @Override
     public void onReload() {}
 
-    private ArrayList<IOnDestroyListener> destroyListeners = new ArrayList<>();
+    ArrayList<IOnDestroyListener> destroyListeners = new ArrayList<>();
 
     protected void callOnDestroyed()
     {

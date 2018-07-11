@@ -4,6 +4,7 @@ import exceptions.BuildingNotFoundException;
 import exceptions.ConsoleException;
 import exceptions.SoldierNotFoundException;
 import graphics.helpers.DefensiveTowerGraphicHelper;
+import graphics.helpers.GuardianGiantGraphicHelper;
 import graphics.helpers.SoldierGraphicHelper;
 import models.attack.Attack;
 import models.buildings.Building;
@@ -40,6 +41,12 @@ public class NetworkDecode
     public void soldrStJogTowd(long soldierId, PointF dest)
     {
         getSoldier(soldierId).getAttackHelper().getGraphicHelper().startJoggingToward(dest, true);
+    }
+
+    public void grdnGntStJojTow(long id, Soldier soldier)
+    {
+        GuardianGiantGraphicHelper graphicHelper = (GuardianGiantGraphicHelper)getBuilding(id).getAttackHelper().getGraphicHelper();
+        graphicHelper.startJoggingToward(soldier, true);
     }
 
     public void setSoldrPos(long soldierId, PointF pos)

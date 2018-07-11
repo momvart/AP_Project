@@ -69,7 +69,6 @@ public class AttackBuildingDrawer extends BuildingDrawer
     public void updateDrawer()
     {
         super.updateDrawer();
-
         if (getBuilding().getAttackHelper().getStrength() < getBuilding().getAttackHelper().getInitialStrength() && !getBuilding().getAttackHelper().isDestroyed())
         {
             strengthbarDrawer.setVisible(true);

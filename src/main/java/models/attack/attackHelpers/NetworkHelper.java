@@ -18,6 +18,11 @@ public class NetworkHelper
 
     }
 
+    public static void grdnGntStJojTow(long id, Soldier dest)
+    {
+
+    }
+
     public static void setSldPos(long soldierId, PointF position)
     {
 
@@ -53,7 +58,7 @@ public class NetworkHelper
 
     }
 
-    public static void gdnGntStJojTow(long id, PointF dest)
+    public static void setgrdnGntPos(long id, PointF position)
     {
 
     }

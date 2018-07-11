@@ -1,46 +1,144 @@
 package graphics.helpers;
 
-import graphics.drawers.SoldierDrawer;
 import graphics.layers.Layer;
+import models.Map;
 import models.attack.Attack;
 import models.attack.attackHelpers.GuardianGiantAttackHelper;
+import models.attack.attackHelpers.IOnDecampListener;
 import models.attack.attackHelpers.NetworkHelper;
+import models.buildings.Building;
+import models.buildings.DefensiveTower;
 import models.buildings.GuardianGiant;
-import models.soldiers.Guardian;
+import models.soldiers.Soldier;
 import utils.Point;
 import utils.PointF;
 
 import java.util.List;
 
-public class GuardianGiantGraphicHelper extends SoldierGraphicHelper
+import static java.lang.Math.round;
+
+public class GuardianGiantGraphicHelper extends SingleTDefenseGraphicHelper implements IOnDestroyListener, IOnDecampListener
 {
-    GuardianGiant guardianGiant;
+
+    protected PointF moveDest;
+    protected IOnMoveFinishedListener moveListener;
+    protected Status status;
+    protected PointF nextCheckPointF;
+    protected PointF finalStandingPoint;
+    protected double sin;
+    protected double cos;
+    Point facingBuildingPoint;
+    Building building;
     GuardianGiantAttackHelper attackHelper;
 
-    public GuardianGiantGraphicHelper(GuardianGiant guardianGiant, Layer layer)
+
+    public GuardianGiantGraphicHelper(Building building, Layer layer, Map map)
     {
-        super(null, layer);
-        this.guardianGiant = guardianGiant;
+        super(building, layer, map);
+        this.building = building;
+        attackHelper = (GuardianGiantAttackHelper)building.getAttackHelper();
 
-        drawer = new SoldierDrawer(new Guardian(1));
-        drawer = new SoldierDrawer(new Guardian(1));
-        drawer.setPosition(guardianGiant.getLocation().getX(), guardianGiant.getLocation().getY());
-        drawer.setLayer(layer);
+    }
 
-        attackHelper = (GuardianGiantAttackHelper)guardianGiant.getAttackHelper();
+    public void setUpListeners()
+    {
+        this.setReloadListener(attackHelper);
+        this.setMoveListener(attackHelper);
+        attackHelper.setDecampListener(this);
+        attackHelper.addDestroyListener(this);
+    }
+
+    public Status getStatus()
+    {
+        return status;
+    }
+
+    private void makeDie()
+    {
+        status = Status.DIE;
+        //drawer.playAnimation(SoldierDrawer.DIE);
+    }
+
+    private void makeRun()
+    {
+        status = Status.RUN;
+        //drawer.playAnimation(SoldierDrawer.RUN);
+    }
+
+    private void doReplacing(double deltaT)
+    {
+        if (status != Status.RUN || finalStandingPoint == null)
+        {
+            return;
+        }
+        triggerSoldier();
+        if (nextCheckPointF == null || PointF.euclideanDistance2nd(nextCheckPointF, buildingDrawer.getPosition()) < .01)
+        {
+            setNewCheckPoint();
+        }
+        if (status == Status.RUN)
+            continueMoving(deltaT);
+    }
+
+
+    protected double getDistanceToFinalPosition()
+    {
+        return PointF.euclideanDistance(finalStandingPoint, buildingDrawer.getPosition());
+    }
+
+    protected Point getVeryPoint(PointF position)
+    {
+        return new Point((int)round(position.getX()), (int)round(position.getY()));
+    }
+
+
+    public void setMoveListener(IOnMoveFinishedListener moveListener)
+    {
+        this.moveListener = moveListener;
     }
 
     @Override
-    protected void makeAttack()
+    public void update(double deltaT)
+    {
+        super.update(deltaT);
+        doReplacing(deltaT);
+    }
+
+    @Override
+    public void callOnReload()
+    {
+        if (status == null)
+            triggerSoldier();
+        if (status == Status.ATTACK)
+        {
+            makeAttack();
+            super.callOnReload();
+        }
+    }
+
+    private void triggerSoldier()
+    {
+        attackHelper.setTarget();
+        if (attackHelper.getTargetSoldier() != null)
+        {
+            startJoggingToward(attackHelper.getTargetSoldier(), false);
+        }
+    }
+
+    public void updateDrawer()
+    {
+        buildingDrawer.updateDrawer();
+    }
+
+    private void makeAttack()
     {
         status = Status.ATTACK;
-        drawer.playAnimation(SoldierDrawer.ATTACK);
-        PointF looking = attackHelper.getTargetLocation().toPointF();
-        drawer.setFace(looking.getX() - drawer.getPosition().getX(), looking.getY() - drawer.getPosition().getY());
+        //drawer.playAnimation(SoldierDrawer.ATTACK);
+        //PointF looking = attackHelper.getTargetLocation().toPointF();
+        //drawer.setFace(looking.getX() - drawer.getPosition().getX(), looking.getY() - drawer.getPosition().getY());
     }
 
-    @Override
-    public void startJoggingToward(PointF dest, boolean networkPermission)
+    public void startJoggingToward(Soldier targetSoldier, boolean networkPermission)
     {
         boolean isReal = attackHelper.isReal();
         if (!isReal && !networkPermission)
@@ -53,9 +151,9 @@ public class GuardianGiantGraphicHelper extends SoldierGraphicHelper
         }
         makeRun();
         nextCheckPointF = null;
-        moveDest = dest;
-        drawer.setFace(dest.getX() - drawer.getPosition().getX(), dest.getY() - drawer.getPosition().getY());
-        List<Point> soldierPath = attackHelper.getAttack().getSoldierPath(getVeryPoint(drawer.getPosition()), getVeryPoint(moveDest), false);
+        moveDest = targetSoldier.getAttackHelper().getGraphicHelper().drawer.getPosition();
+        //drawer.setFace(dest.getX() - drawer.getPosition().getX(), dest.getY() - drawer.getPosition().getY());
+        List<Point> soldierPath = attackHelper.getAttack().getSoldierPath(getVeryPoint(buildingDrawer.getPosition()), getVeryPoint(moveDest), false);
         if (soldierPath.size() > 1)
             setFinalStandingPoint();
         else
@@ -65,46 +163,43 @@ public class GuardianGiantGraphicHelper extends SoldierGraphicHelper
         }
         facingBuildingPoint = soldierPath.get(1);
         if (isReal)
-            NetworkHelper.gdnGntStJojTow(guardianGiant.getId(), dest);
+            NetworkHelper.grdnGntStJojTow(building.getId(), targetSoldier);
     }
 
-    @Override
-    protected void setFinalStandingPoint()
+    private void setFinalStandingPoint()
     {
-        Point lastPoint = attackHelper.getLastPointOfStanding(guardianGiant.getRange(), guardianGiant.getLocation(), getVeryPoint(moveDest));
+        Point lastPoint = attackHelper.getLastPointOfStanding(((DefensiveTower)building).getRange(), building.getLocation(), getVeryPoint(moveDest));
         finalStandingPoint = new PointF(lastPoint);
     }
 
-    @Override
-    protected void continueMoving(double deltaT)
+    private void continueMoving(double deltaT)
     {
         double stepDistance = deltaT * GuardianGiant.GUARDIAN_GIANT_SPEED;
         double distanceToFinalPosition = getDistanceToFinalPosition();
 
-        if (distanceToFinalPosition < .1 || distanceToFinalPosition < stepDistance)
+        if ((distanceToFinalPosition < .1 || distanceToFinalPosition < stepDistance) && attackHelper.getTargetSoldier().getAttackHelper().getGraphicHelper().getStatus() != SoldierGraphicHelper.Status.RUN)
         {
             onMoveFinished();
             return;
         }
 
         PointF newPosition;
-        newPosition = new PointF(drawer.getPosition().getX() + cos * stepDistance, drawer.getPosition().getY() + sin * stepDistance);
+        newPosition = new PointF(buildingDrawer.getPosition().getX() + cos * stepDistance, buildingDrawer.getPosition().getY() + sin * stepDistance);
 
-        drawer.setPosition(newPosition.getX(), newPosition.getY());
+        buildingDrawer.setPosition(newPosition.getX(), newPosition.getY());
 
-        if (!getVeryPoint(drawer.getPosition()).equals(guardianGiant.getLocation()))
+        if (!getVeryPoint(buildingDrawer.getPosition()).equals(building.getLocation()))
         {
-            Point newPoint = getVeryPoint(drawer.getPosition());
-            attackHelper.getAttack().getMap().changeBuildingCell(guardianGiant, newPoint);
-            guardianGiant.setLocation(newPoint);
+            Point newPoint = getVeryPoint(buildingDrawer.getPosition());
+            attackHelper.getAttack().getMap().changeBuildingCell(building, newPoint);
+            building.setLocation(newPoint);
         }
     }
 
-    @Override
-    protected void setNewCheckPoint()
+    private void setNewCheckPoint()
     {
         Point nextCheckPoint;
-        nextCheckPoint = Attack.getNextPathStraightReachablePoint(attackHelper.getAttack(), getVeryPoint(drawer.getPosition()), getVeryPoint(moveDest), false);
+        nextCheckPoint = Attack.getNextPathStraightReachablePoint(attackHelper.getAttack(), getVeryPoint(buildingDrawer.getPosition()), getVeryPoint(moveDest), false);
         try
         {
             if (isSoldierDistantFighter())
@@ -113,7 +208,7 @@ public class GuardianGiantGraphicHelper extends SoldierGraphicHelper
                 {
                     if (isDistanceToFinalPointLessThanRange())
                     {
-                        finalStandingPoint = drawer.getPosition();
+                        finalStandingPoint = buildingDrawer.getPosition();
                         onMoveFinished();
                         return;
                     }
@@ -142,53 +237,62 @@ public class GuardianGiantGraphicHelper extends SoldierGraphicHelper
             onMoveFinished();
             return;
         }
-        double distanceToNextCheckPoint = PointF.euclideanDistance(nextCheckPointF, drawer.getPosition());
-        cos = (nextCheckPointF.getX() - drawer.getPosition().getX()) / distanceToNextCheckPoint;
-        sin = (nextCheckPointF.getY() - drawer.getPosition().getY()) / distanceToNextCheckPoint;
-        drawer.setFace(cos, sin);
+        double distanceToNextCheckPoint = PointF.euclideanDistance(nextCheckPointF, buildingDrawer.getPosition());
+        cos = (nextCheckPointF.getX() - buildingDrawer.getPosition().getX()) / distanceToNextCheckPoint;
+        sin = (nextCheckPointF.getY() - buildingDrawer.getPosition().getY()) / distanceToNextCheckPoint;
+        //drawer.setFace(cos, sin);
     }
 
-    @Override
-    protected boolean isDistanceToFinalPointLessThanRange()
+    private boolean isDistanceToFinalPointLessThanRange()
     {
-        return PointF.euclideanDistance(drawer.getPosition(), finalStandingPoint) <= guardianGiant.getRange();
+        return PointF.euclideanDistance(buildingDrawer.getPosition(), finalStandingPoint) <= ((GuardianGiant)building).getRange();
     }
 
-    @Override
-    protected boolean isSoldierDistantFighter()
+    private boolean isSoldierDistantFighter()
     {
-        return guardianGiant.getRange() != 1;
+        return ((DefensiveTower)building).getRange() != 1;
     }
 
-    @Override
-    public void onMoveFinished()
+    private void onMoveFinished()
     {
         if (finalStandingPoint == null)
             return;
         makeAttack();
 
-        guardianGiant.setLocation(getVeryPoint(finalStandingPoint));
-        attackHelper.getAttack().getMap().changeBuildingCell(guardianGiant, getVeryPoint(finalStandingPoint));
+        building.setLocation(getVeryPoint(finalStandingPoint));
+        attackHelper.getAttack().getMap().changeBuildingCell(building, getVeryPoint(finalStandingPoint));
 
-        drawer.setPosition(finalStandingPoint.getX(), finalStandingPoint.getY());
+        buildingDrawer.setPosition(finalStandingPoint.getX(), finalStandingPoint.getY());
         if (moveListener != null)
-            moveListener.onMoveFinished(drawer.getPosition());
+            moveListener.onMoveFinished(buildingDrawer.getPosition());
         finalStandingPoint = null;
         nextCheckPointF = null;
         if (attackHelper.isReal())
-            NetworkHelper.setSldPos(guardianGiant.getId(), drawer.getPosition());
+            NetworkHelper.setgrdnGntPos(building.getId(), buildingDrawer.getPosition());
     }
-
 
     @Override
     public void onDecamp()
     {
-        if (attackHelper.getTargetSoldier() == null)
-            return;
-        Point newDest = attackHelper.getTargetLocation();
-        if (newDest != null)
+        Soldier targetSoldier = attackHelper.getTargetSoldier();
+        if (targetSoldier != null)
         {
-            startJoggingToward(new PointF(newDest), false);
+            startJoggingToward(targetSoldier, false);
         }
+        else
+            status = null;
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        makeDie();
+    }
+
+    public enum Status
+    {
+        DIE,
+        RUN,
+        ATTACK;
     }
 }

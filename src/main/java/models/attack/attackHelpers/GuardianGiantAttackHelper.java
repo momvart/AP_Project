@@ -1,52 +1,32 @@
 package models.attack.attackHelpers;
 
+import graphics.helpers.IOnMoveFinishedListener;
 import models.attack.Attack;
 import models.buildings.DefensiveTower;
 import models.buildings.GuardianGiant;
 import models.soldiers.Soldier;
 import utils.Point;
+import utils.PointF;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-public class GuardianGiantAttackHelper extends SingleTargetAttackHelper
+public class GuardianGiantAttackHelper extends SingleTargetAttackHelper implements IOnMoveFinishedListener
 {
     public GuardianGiantAttackHelper(GuardianGiant building, Attack attack)
     {
         super(building, attack);
     }
 
-    Soldier targetSoldier;
-
     public Soldier getTargetSoldier()
     {
         return targetSoldier;
     }
 
-    @Override
-    public void setTarget()
-    {
-        mainTargets = new ArrayList<>();
-        Optional<Soldier> min = attack.getDeployedAliveUnits().min(Comparator.comparingDouble(soldier -> Point.euclideanDistance2nd(soldier.getLocation(), getBuilding().getLocation())));
-        min.ifPresent(soldier -> mainTargets.add(soldier));
-        targetSoldier = mainTargets.get(0);
-    }
-
-    @Override
-    public void passTurn()
-    {
-        if (!destroyed)
-        {
-            DefensiveTower defensiveTower = (DefensiveTower)building;
-            setTarget();
-            if (mainTargets.size() != 0 && Point.euclideanDistance(mainTargets.get(0).getLocation(), defensiveTower.getLocation()) <= defensiveTower.getRange() * 1.5)
-                attack();
-            else
-                move();
-        }
-    }
+    private IOnDecampListener decampListener;
+    private boolean readyToFireTarget = false;
 
     private void move()
     {
@@ -92,5 +72,70 @@ public class GuardianGiantAttackHelper extends SingleTargetAttackHelper
             }
         }
         return lastPoint;
+    }
+
+    @Override
+    public void setTarget()
+    {
+        mainTargets = new ArrayList<>();
+        Optional<Soldier> min = attack.getDeployedAliveUnits().min(Comparator.comparingDouble(soldier -> Point.euclideanDistance2nd(soldier.getLocation(), getBuilding().getLocation())));
+        min.ifPresent(soldier -> mainTargets.add(soldier));
+        if (mainTargets != null && mainTargets.size() != 0)
+            targetSoldier = mainTargets.get(0);
+        else
+            targetSoldier = null;
+    }
+
+    @Override
+    public void passTurn()
+    {
+        if (!destroyed)
+        {
+            DefensiveTower defensiveTower = (DefensiveTower)building;
+            setTarget();
+            if (targetSoldier != null && Point.euclideanDistance(targetSoldier.getLocation(), defensiveTower.getLocation()) <= defensiveTower.getRange() * 1.5)
+                attack();
+            else
+                move();
+        }
+    }
+
+    public void setDecampListener(IOnDecampListener decampListener)
+    {
+        this.decampListener = decampListener;
+    }
+
+    @Override
+    public void onMoveFinished(PointF currentPos)
+    {
+        readyToFireTarget = true;
+    }
+
+    @Override
+    public void onReload()
+    {
+        if (building == null || getStrength() <= 0 || isDestroyed())
+        {
+            callOnDestroyed();
+            return;
+        }
+        if (readyToFireTarget)
+            if (building != null && getStrength() > 0)
+            {
+                if (targetSoldier == null || targetSoldier.getAttackHelper().getHealth() <= 0 || targetSoldier.getAttackHelper().isDead())
+                {
+                    setTarget();
+                    callOnDecamp();
+                    return;
+                }
+                attack();
+            }
+    }
+
+    private void callOnDecamp()
+    {
+        readyToFireTarget = false;
+        if (decampListener != null)
+            decampListener.onDecamp();
     }
 }

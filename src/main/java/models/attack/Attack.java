@@ -483,6 +483,8 @@ public class Attack
     private static boolean isThereABuildingInPath(Point start, Point destination, ArrayList<Point> buildingsPositions)
     {
         ArrayList<Point> pointsOnTheLine = getPointsOnLine(start, destination);
+        if (pointsOnTheLine.contains(start))
+            pointsOnTheLine.remove(start);
         return pointsOnTheLine.stream().anyMatch(p -> buildingsPositions.contains(p));
     }
 
