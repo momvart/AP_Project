@@ -10,7 +10,7 @@
     "speed": 2,
     "range": 1,
     "favouriteTargets": [],
-    "initialHealth": 100,
+    "initialHealth": 50,
     "initialDamage": 10,
     "minBarracksLevel": 0,
     "moveType": "GROUND"
@@ -33,7 +33,7 @@
         "name": "models.buildings.Mine"
       }
     ],
-    "initialHealth": 500,
+    "initialHealth": 100,
     "initialDamage": 30,
     "minBarracksLevel": 0,
     "moveType": "GROUND"
@@ -69,7 +69,7 @@
         "name": "models.buildings.DefensiveTower"
       }
     ],
-    "initialHealth": 100,
+    "initialHealth": 30,
     "initialDamage": 10,
     "minBarracksLevel": 0,
     "moveType": "GROUND"
@@ -89,7 +89,7 @@
         "name": "models.buildings.Wall"
       }
     ],
-    "initialHealth": 40,
+    "initialHealth": 20,
     "initialDamage": 50,
     "minBarracksLevel": 0,
     "moveType": "GROUND"

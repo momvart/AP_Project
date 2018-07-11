@@ -27,7 +27,6 @@ import models.soldiers.Healer;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierValues;
-import network.Message;
 import utils.GraphicsUtilities;
 import utils.Point;
 import utils.RectF;
@@ -35,6 +34,8 @@ import utils.TimeSpan;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class AttackStage extends AttackMapStage
 {
@@ -42,12 +43,25 @@ public class AttackStage extends AttackMapStage
 
     private TimerGraphicHelper timer;
 
+    private Consumer<AttackReport> attackFinishedListener;
+
     public AttackStage(Attack attack, double width, double height)
     {
         super(attack, width, height, false);
         this.theAttack = attack;
 
         lFliers = new Layer(3, getObjectsLayer().getBounds(), getObjectsLayer().getPosSys());
+    }
+
+    private void callAttackFinished(AttackReport report)
+    {
+        if (attackFinishedListener != null)
+            attackFinishedListener.accept(report);
+    }
+
+    public void setAttackFinishedListener(Consumer<AttackReport> attackFinishedListener)
+    {
+        this.attackFinishedListener = attackFinishedListener;
     }
 
     @Override
@@ -94,10 +108,10 @@ public class AttackStage extends AttackMapStage
         getGameScene().addLayer(lFliers);
     }
 
-    public void setUpAndShow()
+    public void setup()
     {
         theAttack.setSoldierPutListener(this::addSoldier);
-        super.setUpAndShow();
+        super.setup();
     }
 
     private void addSoldier(Soldier soldier)
@@ -175,8 +189,9 @@ public class AttackStage extends AttackMapStage
         {
             report.setDefenderId(World.sCurrentClient.getActiveAttackTarget());
             report.setAttackerId(World.sCurrentClient.getClientId());
-            World.sCurrentClient.sendAttackReport(report);
         }
+
+        callAttackFinished(report);
     }
 
     private void createAttackFinishLayer(Attack.QuitReason reason, AttackReport report)

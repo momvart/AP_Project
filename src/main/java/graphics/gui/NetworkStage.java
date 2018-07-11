@@ -7,12 +7,23 @@ import javafx.stage.Stage;
 
 public class NetworkStage extends Stage
 {
-    public void start() throws Exception
+    private static NetworkStage instance;
+
+    private NetworkStage()
     {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("layout/networkstage.fxml"));
         Scene scene = new Scene(new StackPane());
-        scene.setRoot(fxmlLoader.load());
+        try { scene.setRoot(fxmlLoader.load()); }
+        catch (Exception ex) {}
         setScene(scene);
-        show();
     }
+
+    public static void showInstance()
+    {
+        if (instance == null)
+            instance = new NetworkStage();
+        instance.show();
+    }
+
+
 }

@@ -58,10 +58,10 @@ public class VillageView extends ConsoleMenuContainerView
 
         Platform.runLater(() ->
         {
-            villageStage = new VillageStage(village, 1200, 900);
+            villageStage = VillageStage.getInstance();
             villageStage.setVillageView(this);
-            villageStage.setUpAndShow();
             village.setVillageStage(villageStage);
+            VillageStage.showInstance();
         });
     }
 
@@ -159,7 +159,19 @@ public class VillageView extends ConsoleMenuContainerView
                     openMap(((AttackMapItem)menu).getFilePath(), true);
                     break;
                 case Menu.Id.ATTACK_MAP_ATTACK:
-                    Platform.runLater(() -> new AttackStage(theAttack, 1200, 900).setUpAndShow());
+                    Platform.runLater(() ->
+                    {
+                        AttackStage stage = new AttackStage(theAttack, 1200, 900);
+                        stage.setAttackFinishedListener(report ->
+                        {
+                            World.getVillage().addResource(report.getClaimedResource());
+                            List<Integer> spentTroops = report.getTroopsCount();
+                            for (int i = 0; i < spentTroops.size(); i++)
+                                if (spentTroops.get(i) > 0)
+                                    World.getVillage().getSoldiers(i + 1).subList(0, spentTroops.get(i) - 1);
+                        });
+                        stage.setupAndShow();
+                    });
                     break;
                 case Menu.Id.ATTACK_MAP_INFO:
                     showMapInfo(theAttack.getMap());

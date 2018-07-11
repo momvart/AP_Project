@@ -90,6 +90,24 @@ public class Village
         }
     }
 
+    public boolean spendResource(Resource toSpend, boolean forced)
+    {
+        try
+        {
+            getResources().decrease(toSpend);
+            return true;
+        }
+        catch (IllegalArgumentException ex)
+        {
+            if (forced)
+            {
+                getResources().decrease(getResources());
+                return true;
+            }
+            else return false;
+        }
+    }
+
     /**
      * Adds a certain amount of resource to the village.
      * If there is not enough space the remaining will be ignored.

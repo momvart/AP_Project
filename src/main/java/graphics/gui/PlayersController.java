@@ -2,21 +2,21 @@ package graphics.gui;
 
 import graphics.Fonts;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
-import javafx.util.Pair;
 import models.World;
 import models.attack.Attack;
 import models.attack.AttackMap;
+import models.attack.AttackReport;
 import network.ClientInfo;
 import network.GameClientC;
 import network.Message;
 import network.MessageType;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,8 +33,12 @@ public class PlayersController
     public void initialize(GameClientC client)
     {
         this.client = client;
-        client.setOnPlayersListUpdatedListener(this::updatePlayersList);
+        client.setPlayersListUpdatedListener(this::updatePlayersList);
         client.setAttackMapReturnedListener(this::onAttackMapReturned);
+        client.setAttackStartListener(this::onAttackStarted);
+        client.setAttackFinishListener(this::onAttackFinished);
+        client.setDefenseStartListener(this::onDefenseStarted);
+        client.setDefenseFinishListener(this::onDefenseFinished);
         listView.setCellFactory(list -> new PlayersListItem());
         listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> btnBar.setDisable(newValue.getId().equals(client.getClientId())));
     }
@@ -45,23 +49,58 @@ public class PlayersController
     }
 
 
-    private UUID lastAttackReq;
-
     @FXML
     private void btnAttack_Click(ActionEvent event)
     {
         if (listView.getSelectionModel().getSelectedItems().isEmpty())
             return;
-        lastAttackReq = listView.getSelectionModel().getSelectedItems().get(0).getId();
-        client.sendMessage(new Message(lastAttackReq.toString(), client.getClientId(), MessageType.GET_MAP));
+        client.sendMessage(new Message(listView.getSelectionModel().getSelectedItems().get(0).getId().toString(), client.getClientId(), MessageType.GET_MAP));
     }
+
+    private HashMap<UUID, AttackMap> cachedMaps = new HashMap<>();
 
     private void onAttackMapReturned(UUID from, AttackMap map)
     {
-        if (!from.equals(lastAttackReq))
-            return;
+        cachedMaps.put(from, map);
 
-        Platform.runLater(() -> new AttackMapStage(new Attack(map, true), 1200, 900, true).setUpAndShow());
+        Platform.runLater(() ->
+        {
+            AttackMapStage stage = new AttackMapStage(new Attack(map, true), 1200, 900, true);
+            stage.setOnAttackStartRequestListener(() -> client.sendMessage(from.toString(), MessageType.ATTACK_REQUEST));
+            stage.setupAndShow();
+        });
+    }
+
+    private void onAttackStarted(UUID defenderId)
+    {
+        Platform.runLater(() ->
+        {
+            AttackStage stage = new AttackStage(new Attack(cachedMaps.get(defenderId), true), 1200, 900);
+            stage.setAttackFinishedListener(report -> World.sCurrentClient.sendAttackReport(report));
+            stage.setupAndShow();
+        });
+    }
+
+    private void onAttackFinished(AttackReport report)
+    {
+        World.getVillage().addResource(report.getClaimedResource());
+        List<Integer> spentTroops = report.getTroopsCount();
+        for (int i = 0; i < spentTroops.size(); i++)
+            if (spentTroops.get(i) > 0)
+                World.getVillage().getSoldiers(i + 1).subList(0, spentTroops.get(i) - 1).clear();
+    }
+
+    private void onDefenseStarted(UUID attackerId)
+    {
+        VillageStage.getInstance().lockStageForAttack(client.getPlayerInfo(attackerId).getName());
+    }
+
+    private void onDefenseFinished(AttackReport report)
+    {
+        World.getVillage().spendResource(report.getClaimedResource(), true);
+        //TODO: Maybe just storages amounts should be decreased.
+
+        VillageStage.getInstance().unlockStageAfterAttack();
     }
 
     public static class PlayersListItem extends ListCell<ClientInfo>

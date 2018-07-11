@@ -2,6 +2,7 @@ package graphics;
 
 import graphics.drawers.drawables.ImageDrawable;
 import graphics.positioning.IsometricPositioningSystem;
+import javafx.scene.paint.Color;
 import models.buildings.BuildingValues;
 import models.soldiers.SoldierValues;
 import utils.GraphicsUtilities;
@@ -20,6 +21,8 @@ public class GraphicsValues
     public static final String SOLDIERS_ASSETS_PATH = "assets/soldiers";
     public static final String UI_ASSETS_PATH = "assets/ui";
     public static final double PADDING = 10;
+
+    public static final Color BLACK_60 = Color.rgb(0, 0, 0, 0.6);
 
     private static double scale = 1;
 

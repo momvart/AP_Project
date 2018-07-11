@@ -223,8 +223,10 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
 
     public boolean handleMouseClick(double x, double y, MouseEvent event)
     {
+        if (!isVisible())
+            return false;
         for (Drawer clickable : clickables)
-            if (clickable.containsPoint(x - bounds.getX() - scrollX, y - bounds.getY() - scrollY))
+            if (clickable.isVisible() && clickable.containsPoint(x - bounds.getX() - scrollX, y - bounds.getY() - scrollY))
             {
                 clickable.callOnClick(event);
                 return true;

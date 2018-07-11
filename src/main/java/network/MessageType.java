@@ -2,15 +2,14 @@ package network;
 
 public enum MessageType
 {
-    ATTACK_REQUEST,
     CHAT_MESSAGE,
-    LIVE_ATTACK_PLAY,
-    SERVER_MESSAGE,
     SET_ID,
     SET_CLIENT_INFO,
     PLAYERS_LIST,
     GET_MAP,
     RET_MAP,
     ERROR,
-    ATTACK_REPORT
+    ATTACK_REPORT,
+    ATTACK_STARTED,
+    ATTACK_REQUEST
 }

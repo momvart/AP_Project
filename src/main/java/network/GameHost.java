@@ -2,6 +2,7 @@ package network;
 
 import com.google.gson.Gson;
 import exceptions.GameClientNotFoundException;
+import javafx.util.Pair;
 import models.attack.AttackReport;
 
 import java.io.*;
@@ -19,6 +20,8 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
     private HashMap<UUID, GameClient> clients = new HashMap<>();
 
     private ArrayList<AttackReport> attackReports = new ArrayList<>();
+
+    private ArrayList<Pair<UUID, UUID>> activeAttacks = new ArrayList<>();
 
     private Gson gson = new Gson();
 
@@ -111,15 +114,32 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
                     sendMessage(message.getSenderId(), new Message(ex.getMessage(), null, MessageType.ERROR));
                 }
                 break;
-            case ATTACK_REPORT:
+            case ATTACK_REPORT: //means that attack is finished.
                 AttackReport report = gson.fromJson(message.getMessage(), AttackReport.class);
+                activeAttacks.removeIf(pair -> pair.getKey().equals(report.getAttackerId()) && pair.getValue().equals(report.getDefenderId()));
                 attackReports.add(report);
+                sendMessage(report.getAttackerId(), message);
+                sendMessage(report.getDefenderId(), message);
                 callOnAttackReportReceived(report);
                 break;
             case SET_CLIENT_INFO:
                 clients.get(message.getSenderId()).setInfo(gson.fromJson(message.getMessage(), ClientInfo.class));
                 broadcastClientsList();
                 break;
+            case ATTACK_REQUEST:
+                UUID defender = UUID.fromString(message.getMessage());
+                if (activeAttacks.stream().anyMatch(pair ->
+                        pair.getKey().equals(message.getSenderId()) || pair.getKey().equals(message.getSenderId()) ||
+                                pair.getValue().equals(message.getSenderId()) || pair.getValue().equals(message.getSenderId())))
+                    sendMessage(message.getSenderId(), new Message("Attacker or Deffender are already in an attack", null, MessageType.ERROR));
+                else
+                {
+                    Pair<UUID, UUID> pair = new Pair<>(message.getSenderId(), defender);
+                    activeAttacks.add(pair);
+                    Message msg = new Message(gson.toJson(pair), null, MessageType.ATTACK_STARTED);
+                    sendMessage(message.getSenderId(), msg);
+                    sendMessage(defender, msg);
+                }
         }
     }
 
