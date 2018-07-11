@@ -27,7 +27,6 @@ import models.soldiers.Healer;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierValues;
-import network.Message;
 import utils.GraphicsUtilities;
 import utils.Point;
 import utils.RectF;
@@ -103,7 +102,6 @@ public class AttackStage extends AttackMapStage
     private void addSoldier(Soldier soldier)
     {
         soldier.getAttackHelper().setIsReal();
-        System.out.println("soldier is real is : " + soldier.getAttackHelper().isReal());
         SoldierGraphicHelper helper;
         Layer layer = soldier.getMoveType() == MoveType.AIR ? lFliers : getObjectsLayer();
         if (soldier.getType() == Healer.SOLDIER_TYPE)

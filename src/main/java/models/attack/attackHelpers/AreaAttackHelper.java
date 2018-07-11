@@ -37,14 +37,15 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         }
         targetSoldier = getAnAliveSoldier(attack.getSoldiersOnLocations().getSoldiers(soldier));
         if (targetSoldier == null)
+        {
             return;
+        }
+
 
         if (building.getType() == WizardTower.DEFENSIVE_TOWER_TYPE)
             triggerListener.onBulletTrigger(targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition(), targetSoldier);
         else
-        {
             triggerListener.onBulletTrigger(soldier.toPointF(), null);
-        }
     }
 
     @Override

@@ -45,7 +45,7 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
             facingBuildingPoint = null;
             return;
         }
-        if (finalStandingPoint != null)
+        if (finalStandingPoint != null)// means that you are in the middle of an other move
             return;
         makeRun();
         moveDest = dest;
@@ -70,7 +70,7 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
     @Override
     protected void doReplacing(double deltaT)
     {
-        if (getStatus() != Status.RUN)
+        if (getStatus() != Status.RUN || moveDest == null || finalStandingPoint == null)
             return;
         startJoggingToward(attackHelper.getDestination().toPointF(), false);
         continueMoving(deltaT);

@@ -1,5 +1,6 @@
 package models.attack.attackHelpers;
 
+import models.soldiers.Soldier;
 import utils.Point;
 import utils.PointF;
 
@@ -43,6 +44,11 @@ public class NetworkHelper
     }
 
     public static void buildingDecreaseStrength(long id, int amount)
+    {
+
+    }
+
+    public static void bulletStartNewWave(long buildingId, PointF start, PointF end, Soldier soldier)
     {
 
     }

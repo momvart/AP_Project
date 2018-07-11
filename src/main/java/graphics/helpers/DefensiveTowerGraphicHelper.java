@@ -41,6 +41,11 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
         this.bulletHitListener = bulletHitListener;
     }
 
+    public DefensiveTowerAttackHelper getAttackHelper()
+    {
+        return attackHelper;
+    }
+
     @Override
     public void setUpListeners()
     {
