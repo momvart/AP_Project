@@ -3,6 +3,7 @@ package models.attack.attackHelpers;
 import exceptions.BuildingNotFoundException;
 import exceptions.ConsoleException;
 import exceptions.SoldierNotFoundException;
+import graphics.helpers.DefensiveTowerGraphicHelper;
 import graphics.helpers.SoldierGraphicHelper;
 import models.attack.Attack;
 import models.buildings.Building;
@@ -74,6 +75,12 @@ public class NetworkDecode
         getBuilding(id).getAttackHelper().decreaseStrength(amount, true);
     }
 
+    public void bulletStartNewWave(long buildingId, PointF start, PointF end, Soldier soldier)
+    {
+        DefensiveTowerGraphicHelper graphicHelper = (DefensiveTowerGraphicHelper)getBuilding(buildingId).getAttackHelper().getGraphicHelper();
+        graphicHelper.getBullet().startNewWave(start, end, soldier, true);
+    }
+
     //
     private Soldier getSoldier(long soldierId)
     {
@@ -100,4 +107,5 @@ public class NetworkDecode
         }
         return null;
     }
+
 }

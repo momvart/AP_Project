@@ -4,6 +4,7 @@ import graphics.IFrameUpdatable;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ImageDrawable;
 import graphics.layers.Layer;
+import models.attack.attackHelpers.NetworkHelper;
 import models.soldiers.Soldier;
 import utils.GraphicsUtilities;
 import utils.PointF;
@@ -22,10 +23,12 @@ public class BulletHelper implements IFrameUpdatable
     protected boolean hitTarget = false;
     protected double cos;
     protected double sin;
+    protected boolean isReal;
 
     public BulletHelper(DefensiveTowerGraphicHelper towerGraphicHelper, Layer layer)
     {
         this.towerGraphicHelper = towerGraphicHelper;
+        isReal = towerGraphicHelper.getAttackHelper().isReal();
         try
         {
             ImageDrawable imageDrawable = GraphicsUtilities.createImageDrawable("assets/bullets/arrow.png", 10, 10, true, 0.5, 0.5);
@@ -44,8 +47,13 @@ public class BulletHelper implements IFrameUpdatable
 
     Soldier targetSoldier;
 
-    public void startNewWave(final PointF start, final PointF end, Soldier soldier)
+    public void startNewWave(final PointF start, final PointF end, Soldier soldier, boolean networkPermission)
     {
+        if (!isReal && !networkPermission)
+        {
+            onMoveFinish();
+            return;
+        }
         this.start = start;
         this.end = end;
         targetSoldier = soldier;
@@ -53,6 +61,8 @@ public class BulletHelper implements IFrameUpdatable
             setUpCosSin(start, end);
         hitTarget = false;
         inProgress = true;
+        if (isReal)
+            NetworkHelper.bulletStartNewWave(towerGraphicHelper.getAttackHelper().getBuilding().getId(), start, end, soldier);
     }
 
     private void setUpCosSin(PointF start, PointF end)
@@ -72,7 +82,7 @@ public class BulletHelper implements IFrameUpdatable
     {
         if (end == null || start == null)
             return;
-        if (hitTarget)
+        if (hitTarget || !inProgress)
             return;
         if (drawer == null || targetSoldier == null || targetSoldier.getAttackHelper() == null
                 || targetSoldier.getAttackHelper().getGraphicHelper() == null

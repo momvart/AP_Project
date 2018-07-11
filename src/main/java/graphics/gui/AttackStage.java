@@ -117,7 +117,6 @@ public class AttackStage extends AttackMapStage
     private void addSoldier(Soldier soldier)
     {
         soldier.getAttackHelper().setIsReal();
-        System.out.println("soldier is real is : " + soldier.getAttackHelper().isReal());
         SoldierGraphicHelper helper;
         Layer layer = soldier.getMoveType() == MoveType.AIR ? lFliers : getObjectsLayer();
         if (soldier.getType() == Healer.SOLDIER_TYPE)

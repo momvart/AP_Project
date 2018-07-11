@@ -2,6 +2,7 @@ package graphics.helpers;
 
 import graphics.drawers.Drawer;
 import graphics.layers.Layer;
+import models.attack.attackHelpers.NetworkHelper;
 import models.soldiers.Soldier;
 import utils.GraphicsUtilities;
 import utils.PointF;
@@ -51,9 +52,14 @@ public class CannonBulletHelper extends BulletHelper
     }
 
     @Override
-    public void startNewWave(final PointF start, final PointF end, final Soldier soldier)
+    public void startNewWave(final PointF start, final PointF end, final Soldier soldier, final boolean networkPermission)
     {
-        super.startNewWave(start, end, soldier);
+        if (!isReal && !networkPermission)
+        {
+            onMoveFinish();
+            return;
+        }
+        super.startNewWave(start, end, soldier, networkPermission);
         reachedVertex = false;
         hitTarget = false;
         vertex = getVertexOfParabola(start, end);
@@ -63,6 +69,8 @@ public class CannonBulletHelper extends BulletHelper
         cos = (vertex.getX() - start.getX()) / distance;
         sin = (vertex.getY() - start.getY()) / distance;
         inProgress = true;
+        if (isReal)
+            NetworkHelper.bulletStartNewWave(towerGraphicHelper.getAttackHelper().getBuilding().getId(), start, end, soldier);
     }
 
     @Override
@@ -70,9 +78,9 @@ public class CannonBulletHelper extends BulletHelper
     {
         if (drawer.getPosition() == null || vertex == null)
             return;
-        if (hitTarget)
+        if (hitTarget || !inProgress)
             return;
-        if (!reachedVertex && PointF.euclideanDistance(drawer.getPosition(), vertex) < 1)
+        if (!reachedVertex && PointF.euclideanDistance(drawer.getPosition(), vertex) < .5)
         {
             reachedVertex = true;
             double distance = PointF.euclideanDistance(drawer.getPosition(), end);
