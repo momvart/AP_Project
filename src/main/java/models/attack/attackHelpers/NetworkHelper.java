@@ -52,4 +52,9 @@ public class NetworkHelper
     {
 
     }
+
+    public static void gdnGntStJojTow(long id, PointF dest)
+    {
+
+    }
 }

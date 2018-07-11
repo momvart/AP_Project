@@ -2,7 +2,6 @@ package models.attack;
 
 import exceptions.*;
 import models.Resource;
-import models.World;
 import models.attack.attackHelpers.NetworkHelper;
 import models.buildings.*;
 import models.soldiers.MoveType;
@@ -11,6 +10,7 @@ import models.soldiers.SoldierCollection;
 import models.soldiers.SoldierValues;
 import utils.MapCellNode;
 import utils.Point;
+import utils.PointF;
 import utils.Size;
 
 import java.util.*;
@@ -440,6 +440,91 @@ public class Attack
             push(soldier, to);
         }
     }
+
+    public static Point getLastPointOfStanding(Attack attack, int range, Point start, Point destination, boolean isFlying)
+    {
+        List<Point> soldierPath = attack.getSoldierPath(start, destination, isFlying);
+        if (soldierPath == null || soldierPath.size() <= 1)
+            return null;
+        Point lastPoint = soldierPath.get(1);
+
+        int i;
+        for (i = 1; i < soldierPath.size() - 1; i++)
+        {
+            lastPoint = soldierPath.get(i);
+            if (Point.euclideanDistance(soldierPath.get(i + 1), destination) > range)
+            {
+                break;
+            }
+        }
+        return lastPoint;
+    }
+
+    public static Point getNextPathStraightReachablePoint(Attack attack, Point start, Point destination, boolean isFlying)
+    {
+        List<Point> soldierPath = attack.getSoldierPath(start, destination, isFlying);
+        if (soldierPath == null)
+            return null;
+        Point pointToGo = soldierPath.get(soldierPath.size() - 1);
+        ArrayList<Point> aliveBuildingPositions = getAliveBuildingsPositions(attack);
+
+        int i;
+        for (i = soldierPath.size() - 2; i >= 0; i--)
+        {
+            if (isThereABuildingInPath(start, soldierPath.get(i + 1), aliveBuildingPositions))
+            {
+                return pointToGo;
+            }
+            pointToGo = soldierPath.get(i + 1);
+        }
+        return pointToGo;
+    }
+
+    private static boolean isThereABuildingInPath(Point start, Point destination, ArrayList<Point> buildingsPositions)
+    {
+        ArrayList<Point> pointsOnTheLine = getPointsOnLine(start, destination);
+        return pointsOnTheLine.stream().anyMatch(p -> buildingsPositions.contains(p));
+    }
+
+    private static ArrayList<Point> getAliveBuildingsPositions(Attack attack)
+    {
+        ArrayList<Point> positions = new ArrayList<>();
+        getAliveBuildings(attack).filter(building -> building.getType() != Trap.BUILDING_TYPE).forEach(building -> positions.add(building.getLocation()));
+        return positions;
+    }
+
+    public static Stream<Building> getAliveBuildings(Attack attack)
+    {
+        return attack.getMap().getBuildings().stream().filter(building -> !building.getAttackHelper().isDestroyed()).filter(building -> building.getAttackHelper().getStrength() > 0);
+    }
+
+    public static ArrayList<Point> getPointsOnLine(Point start, Point destination)
+    {
+        ArrayList<Point> pointsOnLine = new ArrayList<>();
+        double stepLength = .2;
+        PointF begin = new PointF(start.getX() + .5, start.getY() + .5);
+        PointF end = new PointF(destination.getX() + .5, destination.getY() + .5);
+        double distance = PointF.euclideanDistance(begin, end);
+        double cos = (end.getX() - begin.getX()) / distance;
+        double sin = (end.getY() - begin.getY()) / distance;
+        PointF currentPoint = begin;
+        double initialState = begin.getX() - end.getX();
+        pointsOnLine.add(start);
+
+        while (true)
+        {
+            if (initialState * (currentPoint.getX() - end.getX()) <= 0)
+                break;
+            currentPoint.setX(currentPoint.getX() + stepLength * cos);
+            currentPoint.setY(currentPoint.getY() + stepLength * sin);
+            Point veryCurrentPoint = new Point((int)Math.floor(currentPoint.getX()), (int)Math.floor(currentPoint.getY()));
+            if (!pointsOnLine.contains(veryCurrentPoint))
+                pointsOnLine.add(veryCurrentPoint);
+        }
+        return pointsOnLine;
+    }
+
+
     //endregion
 
     //region Events

@@ -5,8 +5,6 @@ import graphics.helpers.IOnMoveFinishedListener;
 import graphics.helpers.IOnReloadListener;
 import graphics.helpers.SoldierGraphicHelper;
 import models.attack.Attack;
-import models.buildings.Building;
-import models.buildings.Trap;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierValues;
@@ -15,7 +13,6 @@ import utils.PointF;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveFinishedListener
 {
@@ -144,63 +141,6 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         return pointToGo;
     }
 
-    public Point getLastPointOfStanding(int range, Point start, Point destination)
-    {
-        List<Point> soldierPath = attack.getSoldierPath(start, destination, soldier.getMoveType() == MoveType.AIR);
-        if (soldierPath == null || soldierPath.size() <= 1)
-            return null;
-        Point lastPoint = soldierPath.get(1);
-
-        int i;
-        for (i = 1; i < soldierPath.size() - 1; i++)
-        {
-            lastPoint = soldierPath.get(i);
-            if (Point.euclideanDistance(soldierPath.get(i + 1), destination) > range)
-            {
-                break;
-            }
-        }
-        return lastPoint;
-    }
-
-    public Point getNextPathStraightReachablePoint(Point start, Point destination)
-    {
-        List<Point> soldierPath = attack.getSoldierPath(start, destination, soldier.getMoveType() == MoveType.AIR);
-        if (soldierPath == null)
-            return null;
-        Point pointToGo = soldierPath.get(soldierPath.size() - 1);
-        ArrayList<Point> aliveBuildingPositions = getAliveBuildingsPositions();
-
-        int i;
-        for (i = soldierPath.size() - 2; i >= 0; i--)
-        {
-            if (isThereABuildingInPath(start, soldierPath.get(i + 1), aliveBuildingPositions))
-            {
-                return pointToGo;
-            }
-            pointToGo = soldierPath.get(i + 1);
-        }
-        return pointToGo;
-    }
-
-    private boolean isThereABuildingInPath(Point start, Point destination, ArrayList<Point> buildingsPositions)
-    {
-        ArrayList<Point> pointsOnTheLine = getPointsOnLine(start, destination);
-        return pointsOnTheLine.stream().anyMatch(p -> buildingsPositions.contains(p));
-    }
-
-    private ArrayList<Point> getAliveBuildingsPositions()
-    {
-        ArrayList<Point> positions = new ArrayList<>();
-        getAliveBuildings().filter(building -> building.getType() != Trap.BUILDING_TYPE).forEach(building -> positions.add(building.getLocation()));
-        return positions;
-    }
-
-    public Stream<Building> getAliveBuildings()
-    {
-        return attack.getMap().getBuildings().stream().filter(building -> !building.getAttackHelper().isDestroyed()).filter(building -> building.getAttackHelper().getStrength() > 0);
-    }
-
 
     public abstract void move();
 
@@ -267,31 +207,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         this.graphicHelper = graphicHelper;
     }
 
-    public ArrayList<Point> getPointsOnLine(Point start, Point destination)
-    {
-        ArrayList<Point> pointsOnLine = new ArrayList<>();
-        double stepLength = .2;
-        PointF begin = new PointF(start.getX() + .5, start.getY() + .5);
-        PointF end = new PointF(destination.getX() + .5, destination.getY() + .5);
-        double distance = PointF.euclideanDistance(begin, end);
-        double cos = (end.getX() - begin.getX()) / distance;
-        double sin = (end.getY() - begin.getY()) / distance;
-        PointF currentPoint = begin;
-        double initialState = begin.getX() - end.getX();
-        pointsOnLine.add(start);
 
-        while (true)
-        {
-            if (initialState * (currentPoint.getX() - end.getX()) <= 0)
-                break;
-            currentPoint.setX(currentPoint.getX() + stepLength * cos);
-            currentPoint.setY(currentPoint.getY() + stepLength * sin);
-            Point veryCurrentPoint = new Point((int)Math.floor(currentPoint.getX()), (int)Math.floor(currentPoint.getY()));
-            if (!pointsOnLine.contains(veryCurrentPoint))
-                pointsOnLine.add(veryCurrentPoint);
-        }
-        return pointsOnLine;
-    }
 
     @Override
     public void onReload()

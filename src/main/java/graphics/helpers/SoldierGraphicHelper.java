@@ -2,6 +2,7 @@ package graphics.helpers;
 
 import graphics.drawers.SoldierDrawer;
 import graphics.layers.Layer;
+import models.attack.Attack;
 import models.attack.attackHelpers.IOnDecampListener;
 import models.attack.attackHelpers.IOnSoldierDieListener;
 import models.attack.attackHelpers.NetworkHelper;
@@ -17,25 +18,17 @@ import static java.lang.Math.round;
 
 public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnDecampListener, IOnSoldierDieListener
 {
+
     protected Soldier soldier;
 
     protected SoldierDrawer drawer;
 
     protected PointF moveDest;
-    private IOnMoveFinishedListener moveListener;
-    private Status status;
+    protected IOnMoveFinishedListener moveListener;
+    protected Status status;
     private int turn = 1;
     private SoldierAttackHelper attackHelper;
-
-    public SoldierGraphicHelper(Soldier soldier, Layer layer)
-    {
-        this.soldier = soldier;
-        drawer = new SoldierDrawer(soldier);
-        setReloadDuration(.7);
-        drawer.setPosition(soldier.getLocation().getX(), soldier.getLocation().getY());
-        drawer.setLayer(layer);
-        attackHelper = soldier.getAttackHelper();
-    }
+    protected PointF nextCheckPointF;
 
     public SoldierDrawer getDrawer()
     {
@@ -67,7 +60,17 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         drawer.setFace(looking.getX() - drawer.getPosition().getX(), looking.getY() - drawer.getPosition().getY());
     }
 
-    private PointF nextCheckPointF;
+    public SoldierGraphicHelper(Soldier soldier, Layer layer)
+    {
+        this.soldier = soldier;
+        drawer = new SoldierDrawer(soldier);
+        setReloadDuration(.7);
+        if (drawer == null)
+            return;
+        drawer.setPosition(soldier.getLocation().getX(), soldier.getLocation().getY());
+        drawer.setLayer(layer);
+        attackHelper = soldier.getAttackHelper();
+    }
 
     protected void makeDie()
     {
@@ -114,7 +117,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 
     protected void setFinalStandingPoint()
     {
-        Point lastPoint = soldier.getAttackHelper().getLastPointOfStanding(soldier.getAttackHelper().getRange(), soldier.getLocation(), getVeryPoint(moveDest));
+        Point lastPoint = Attack.getLastPointOfStanding(attackHelper.getAttack(), soldier.getAttackHelper().getRange(), soldier.getLocation(), getVeryPoint(moveDest), soldier.getMoveType() == MoveType.AIR);
         finalStandingPoint = new PointF(lastPoint);
     }
 
@@ -158,10 +161,10 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         return PointF.euclideanDistance(finalStandingPoint, drawer.getPosition());
     }
 
-    private void setNewCheckPoint()
+    protected void setNewCheckPoint()
     {
         Point nextCheckPoint;
-        nextCheckPoint = soldier.getAttackHelper().getNextPathStraightReachablePoint(getVeryPoint(drawer.getPosition()), getVeryPoint(moveDest));
+        nextCheckPoint = Attack.getNextPathStraightReachablePoint(attackHelper.getAttack(), getVeryPoint(drawer.getPosition()), getVeryPoint(moveDest), soldier.getMoveType() == MoveType.AIR);
         try
         {
             if (isSoldierDistantFighter())
@@ -226,7 +229,10 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         if (finalStandingPoint == null)
             return;
         makeAttack();
+
         soldier.setLocation(getVeryPoint(finalStandingPoint));
+        soldier.getAttackHelper().getAttack().moveOnLocation(soldier, soldier.getLocation(), getVeryPoint(finalStandingPoint));
+
         drawer.setPosition(finalStandingPoint.getX(), finalStandingPoint.getY());
         if (moveListener != null)
             moveListener.onMoveFinished(drawer.getPosition());

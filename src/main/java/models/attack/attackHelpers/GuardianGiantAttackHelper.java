@@ -18,12 +18,20 @@ public class GuardianGiantAttackHelper extends SingleTargetAttackHelper
         super(building, attack);
     }
 
+    Soldier targetSoldier;
+
+    public Soldier getTargetSoldier()
+    {
+        return targetSoldier;
+    }
+
     @Override
     public void setTarget()
     {
         mainTargets = new ArrayList<>();
         Optional<Soldier> min = attack.getDeployedAliveUnits().min(Comparator.comparingDouble(soldier -> Point.euclideanDistance2nd(soldier.getLocation(), getBuilding().getLocation())));
         min.ifPresent(soldier -> mainTargets.add(soldier));
+        targetSoldier = mainTargets.get(0);
     }
 
     @Override
@@ -42,7 +50,7 @@ public class GuardianGiantAttackHelper extends SingleTargetAttackHelper
 
     private void move()
     {
-        Point pointToGo = getPointToGo(mainTargets.get(0).getLocation());
+        Point pointToGo = getPointToGo(targetSoldier.getLocation());
         attack.getMap().changeBuildingCell(building, pointToGo);
     }
 
@@ -60,5 +68,29 @@ public class GuardianGiantAttackHelper extends SingleTargetAttackHelper
                 break;
         }
         return pointToGo;
+    }
+
+    public Point getTargetLocation()
+    {
+        return targetSoldier.getLocation();
+    }
+
+    public Point getLastPointOfStanding(int range, Point start, Point destination)
+    {
+        List<Point> soldierPath = attack.getSoldierPath(start, destination, false);
+        if (soldierPath == null || soldierPath.size() <= 1)
+            return null;
+        Point lastPoint = soldierPath.get(1);
+
+        int i;
+        for (i = 1; i < soldierPath.size() - 1; i++)
+        {
+            lastPoint = soldierPath.get(i);
+            if (Point.euclideanDistance(soldierPath.get(i + 1), destination) > range)
+            {
+                break;
+            }
+        }
+        return lastPoint;
     }
 }
