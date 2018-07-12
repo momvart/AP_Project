@@ -97,4 +97,5 @@ public abstract class DefensiveTowerAttackHelper extends BuildingAttackHelper im
     {
         attack();
     }
+
 }

@@ -4,10 +4,7 @@ import graphics.GraphicsValues;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.ButtonDrawable;
 import graphics.drawers.drawables.ImageDrawable;
-import graphics.helpers.AreaSplashDefenseGraphicHelper;
-import graphics.helpers.AttackBuildingGraphicHelper;
-import graphics.helpers.BuildingGraphicHelper;
-import graphics.helpers.SingleTDefenseGraphicHelper;
+import graphics.helpers.*;
 import graphics.layers.ResourceLayer;
 import graphics.positioning.IsometricPositioningSystem;
 import graphics.positioning.NormalPositioningSystem;
@@ -16,6 +13,7 @@ import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.WindowEvent;
 import models.attack.Attack;
+import models.attack.attackHelpers.GuardianGiantAttackHelper;
 import models.attack.attackHelpers.SingleTargetAttackHelper;
 import models.buildings.Building;
 import models.buildings.DefensiveTower;
@@ -71,7 +69,12 @@ public class AttackMapStage extends GUIMapStage
         if (building instanceof DefensiveTower && !preview)
         {
             if (building.getAttackHelper() instanceof SingleTargetAttackHelper)
-                graphicHelper = new SingleTDefenseGraphicHelper(building, getObjectsLayer(), getMap());
+            {
+                if (building.getAttackHelper() instanceof GuardianGiantAttackHelper)
+                    graphicHelper = new GuardianGiantGraphicHelper(building, getObjectsLayer(), map);
+                else
+                    graphicHelper = new SingleTDefenseGraphicHelper(building, getObjectsLayer(), getMap());
+            }
             else
                 graphicHelper = new AreaSplashDefenseGraphicHelper(building, getObjectsLayer(), getMap());
         }
@@ -80,6 +83,7 @@ public class AttackMapStage extends GUIMapStage
 
         if (!preview)
             building.getAttackHelper().setGraphicHelper(graphicHelper);
+
         setUpBuildingDrawer(graphicHelper.getBuildingDrawer());
         graphicHelper.setUpListeners();
         gHandler.addUpdatable(graphicHelper);

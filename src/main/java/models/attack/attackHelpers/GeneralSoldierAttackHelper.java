@@ -119,7 +119,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 
     private Building getNearestBuilding() throws Exception
     {
-        ArrayList<Building> aliveBuildings = getAliveBuildings()
+        ArrayList<Building> aliveBuildings = Attack.getAliveBuildings(soldier.getAttackHelper().getAttack())
                 .sorted(Comparator.comparingDouble(building -> Point.euclideanDistance2nd(building.getLocation(), getSoldierLocation())))
                 .collect(Collectors.toCollection(ArrayList::new));
         try
@@ -193,9 +193,5 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                 }
                 fire();
             }
-            else
-                System.out.println("soldier is dead ");
-        else
-            System.out.println("not ready decamping !!!");
     }
 }
