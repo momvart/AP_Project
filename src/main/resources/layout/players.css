@@ -1,0 +1,29 @@
+.list-cell-player {
+    -fx-background-color: #37474F;
+}
+
+.list-cell-player .list-cell:odd {
+    -fx-background-color: #263238;
+}
+
+.list-cell-player .list-cell:even {
+    -fx-background-color: #37474F;
+}
+
+.list-cell-player .list-cell .label {
+    -fx-text-fill: #ECEFF1;
+    -fx-font-family: Supercell-Magic;
+    -fx-font-size: 8;
+}
+
+.list-cell-player .list-cell:selected {
+    -fx-background-color: #B0BEC5;
+}
+
+.list-cell-player .list-cell:selected .label {
+    -fx-text-fill: #263238;
+}
+
+.list-cell-player .list-cell:filled:hover {
+    -fx-background-color: #78909C;
+}

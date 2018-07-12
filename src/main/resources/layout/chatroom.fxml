@@ -7,8 +7,8 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       prefHeight="400.0" prefWidth="600.0" fx:controller="graphics.gui.ChatroomController" stylesheets="@chatroom.css"
-      styleClass="list-cell">
-    <ListView fx:id="chatLists" prefWidth="600.0" prefHeight="400.0"
+      styleClass="vbox-chatroom">
+    <ListView fx:id="chatLists" prefWidth="600.0" prefHeight="400.0" styleClass="list-cell"
               VBox.vgrow="ALWAYS"/>
     <HBox fx:id="hbox"
           prefWidth="600">

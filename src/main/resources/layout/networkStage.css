@@ -1,25 +1,30 @@
 .tab-pane {
-    -fx-background-color: lightgray;
+    -fx-background-color: black;
 }
 
 .tab {
-    -fx-background-color: lightgray;
+    -fx-background-color: #ECEFF1;
 }
 
 .tab:selected {
-    -fx-background-color: black;
+    -fx-background-color: #263238;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #607D8B;
+
 }
 
 .tab:selected .tab-label {
-    -fx-background-color: black;
-    -fx-text-fill: gold;
+    -fx-text-fill: #ECEFF1;
 }
 
 .tab .tab-label {
-    -fx-background-color: lightgray;
+    -fx-text-fill: #263238;
     -fx-font-family: Supercell-Magic;
-    -fx-text-fill: black;
 }
+
+
 
 .button {
     -fx-background-color: lightblue;
@@ -40,12 +45,23 @@
     -fx-text-fill: white;
 }
 
-.label {
+.label-status {
+    -fx-text-fill: gold;
+    -fx-font-weight: bold;
+    -fx-font-family: Supercell-Magic;
+}
+
+.label-status-text {
     -fx-text-fill: white;
     -fx-font-family: Supercell-Magic;
 }
 
-.label-status {
-    -fx-text-fill: gold;
+.label-title {
     -fx-font-family: Supercell-Magic;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+}
+
+.button-back {
+    -fx-background-color: pink;
 }

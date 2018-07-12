@@ -1,18 +1,20 @@
-.button:hover {
-    -fx-background-color: yellowgreen;
-    -fx-text-fill: black;
-    -fx-font-family: Supercell-Magic;
-}
-
-.button {
-    -fx-background-color: lightblue;
-    -fx-text-fill: black;
-    -fx-font-family: Supercell-Magic;
-    -fx-font-size: 10;
-    -fx-fit-to-height: true;
-}
-
 .text-field {
-    -fx-background-color: lightgreen;
+    -fx-background-color: #546E7A;
+    -fx-font-family: Chilanka;
+    -fx-font-weight: bold;
+    -fx-font-size: 15;
+}
+
+.list-cell {
+    -fx-background-color: #37474F;
+}
+
+.list-cell .label {
+    -fx-font-size: 10;
     -fx-font-family: Supercell-Magic;
+    -fx-padding: 3;
+}
+
+.vbox-chatroom {
+    -fx-background-color: #37474F;
 }

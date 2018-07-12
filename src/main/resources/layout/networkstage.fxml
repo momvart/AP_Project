@@ -3,34 +3,47 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <VBox fx:id="mainVbox" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="graphics.gui.NetworkStageController" stylesheets="@networkStage.css" styleClass="vbox">
-    <StackPane>
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <Button fx:id="btnHost" onAction="#btnServer_Click" text="Host" HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                    styleClass="button"/>
-            <Button fx:id="btnJoin" onAction="#btnJoin_Click" text="Join" HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                    styleClass="button"/>
-        </HBox>
-        <HBox spacing="10" alignment="CENTER_LEFT" visible="false">
-            <Label text="Status:" styleClass="label-status"/>
-            <Label fx:id="lblStatus" text="disconnected" HBox.hgrow="ALWAYS" styleClass="label"/>
-            <Button fx:id="btnDisconnect" disable="true" onAction="#btnDisconnect_Click" text="Disconnect"
-                    styleClass="button"/>
-        </HBox>
-    </StackPane>
+      fx:controller="graphics.gui.NetworkStageController" stylesheets="@networkStage.css" styleClass="vbox"
+      spacing="10">
+    <VBox spacing="10">
+        <StackPane>
+            <Label text="Multiplayer" alignment="BASELINE_CENTER" StackPane.alignment="CENTER"
+                   styleClass="label-title"/>
+            <Button fx:id="btnBack" text="back" onAction="#btnBack_Click" StackPane.alignment="CENTER_LEFT"
+                    styleClass="button-back"/>
+        </StackPane>
+        <StackPane>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button fx:id="btnHost" onAction="#btnServer_Click" text="Host" HBox.hgrow="ALWAYS"
+                        maxWidth="Infinity"
+                        styleClass="button"/>
+                <Button fx:id="btnJoin" onAction="#btnJoin_Click" text="Join" HBox.hgrow="ALWAYS"
+                        maxWidth="Infinity"
+                        styleClass="button"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER_LEFT" visible="false">
+                <Label text="Status:" styleClass="label-status"/>
+                <Label fx:id="lblStatus" text="disconnected" HBox.hgrow="ALWAYS" styleClass="label-status-text"/>
+                <Button fx:id="btnDisconnect" disable="true" onAction="#btnDisconnect_Click" text="Disconnect"
+                        styleClass="button"/>
+            </HBox>
+        </StackPane>
+    </VBox>
+
     <TabPane fx:id="tabs" prefHeight="300.0" prefWidth="400.0" disable="true" tabClosingPolicy="UNAVAILABLE"
+             VBox.vgrow="ALWAYS"
              styleClass="tab-pane">
         <Tab text="Players">
-            <fx:include fx:id="tabPlayers" source="players.fxml" styleClass="tab"/>
+            <fx:include fx:id="tabPlayers" source="players.fxml" VBox.vgrow="ALWAYS"/>
         </Tab>
         <Tab text="Chat">
-            <fx:include fx:id="tabChat" source="chatroom.fxml" styleClass="tab"/>
+            <fx:include fx:id="tabChat" source="chatroom.fxml" VBox.vgrow="ALWAYS"/>
         </Tab>
         <Tab text="LeaderBoard">
-            <fx:include fx:id="tabLeaderBoard" source="leaderboard.fxml" styleClass="tab"/>
+            <fx:include fx:id="tabLeaderBoard" source="leaderboard.fxml" VBox.vgrow="ALWAYS"/>
         </Tab>
         <Tab text="Attacks">
-            <fx:include fx:id="tabAttacks" source="attackreports.fxml" styleClass="tab"/>
+            <fx:include fx:id="tabAttacks" source="attackreports.fxml" VBox.vgrow="ALWAYS"/>
         </Tab>
     </TabPane>
 </VBox>

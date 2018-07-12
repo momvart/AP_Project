@@ -6,10 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.Region;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import models.World;
 import network.GameClientC;
@@ -56,6 +54,7 @@ public class ChatroomController implements IOnChatMessageReceivedListener
         @FXML
         private Label lblText;
 
+
         public ChatListItem(ListView list)
         {
             try
@@ -81,12 +80,16 @@ public class ChatroomController implements IOnChatMessageReceivedListener
                     lblTitle.setText(":You");
                     lblTitle.setAlignment(Pos.CENTER_RIGHT);
                     lblText.setAlignment(Pos.CENTER_RIGHT);
+                    lblTitle.setTextFill(Color.GOLD);
+                    lblText.setTextFill(Color.WHITE);
                 }
                 else
                 {
                     lblTitle.setText(World.sCurrentClient.getPlayerInfo(item.getKey()).getName() + ":");
                     lblTitle.setAlignment(Pos.CENTER_LEFT);
                     lblText.setAlignment(Pos.CENTER_LEFT);
+                    lblTitle.setTextFill(Color.YELLOWGREEN);
+                    lblText.setTextFill(Color.WHITE);
                 }
                 lblText.setText(item.getValue());
                 setGraphic(lblText.getParent());

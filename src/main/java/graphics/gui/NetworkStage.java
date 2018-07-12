@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class NetworkStage extends Stage
 {
@@ -18,6 +19,7 @@ public class NetworkStage extends Stage
         catch (Exception ex) {}
         setScene(scene);
         initModality(Modality.WINDOW_MODAL);
+        initStyle(StageStyle.UNDECORATED);
         show();
     }
 

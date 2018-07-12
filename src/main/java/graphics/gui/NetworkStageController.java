@@ -3,13 +3,12 @@ package graphics.gui;
 import graphics.gui.dialogs.NumberInputJavafxDialog;
 import graphics.gui.dialogs.PortAndIPJavafxDialog;
 import graphics.gui.dialogs.TextInputJavafxDialog;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 import models.World;
 import network.GameClient;
@@ -41,6 +40,7 @@ public class NetworkStageController
 
     @FXML
     public AttackReportsController tabAttacksController;
+    public Button btnBack;
 
     public void initialize()
     {
@@ -161,4 +161,9 @@ public class NetworkStageController
     }
 
 
+    public void btnBack_Click(ActionEvent actionEvent)
+    {
+        Stage stage = (Stage)btnBack.getScene().getWindow();
+        stage.close();
+    }
 }
