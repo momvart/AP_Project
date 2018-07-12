@@ -24,6 +24,9 @@ import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import menus.*;
 import models.*;
+import models.attack.Attack;
+import models.attack.AttackMap;
+import models.attack.attackHelpers.NetworkDecoder;
 import models.buildings.Building;
 import network.AttackUDPReceiver;
 import network.IOnChatMessageReceivedListener;
@@ -292,7 +295,11 @@ public class VillageStage extends GUIMapStage
         {
             AttackUDPReceiver receiver = new AttackUDPReceiver(5500);
             receiver.start();
+            Attack attack = new Attack(null, false);
+            NetworkDecoder decoder = new NetworkDecoder(attack, receiver);
             World.sCurrentClient.sendUDPStarted("localhost", receiver.getSocket().getLocalPort());
+            new AttackStage(attack, width, height).setupAndShow();
+
         }));
         lCaution.setVisible(true);
         getLooper().stop();

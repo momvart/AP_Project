@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import models.World;
 import models.attack.Attack;
@@ -16,9 +17,11 @@ import network.GameClientC;
 import network.Message;
 import network.MessageType;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class PlayersController
 {
@@ -45,9 +48,18 @@ public class PlayersController
 
     private void updatePlayersList()
     {
-        Platform.runLater(() -> listView.getItems().setAll(World.sCurrentClient.getPlayersList()));
+        Platform.runLater(() -> listView.getItems().setAll
+                (World.sCurrentClient.getPlayersList().stream()
+                        .sorted(Comparator.comparingInt(ClientInfo::getTotalTrophies).reversed())
+                        .collect(Collectors.toList())));
     }
 
+
+    @FXML
+    private void btnRefresh_Click(ActionEvent event)
+    {
+        World.sCurrentClient.sendMessage("", MessageType.PLAYERS_LIST);
+    }
 
     @FXML
     private void btnAttack_Click(ActionEvent event)
@@ -108,15 +120,24 @@ public class PlayersController
         @FXML
         private Label lblName;
 
+        @FXML
+        private Label lblTrophies;
+
+        @FXML
+        private ImageView imgTrophie;
+
         public PlayersListItem()
         {
             try
             {
-                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("layout/playerslistitem.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("layout/playeritem.fxml"));
                 loader.setController(this);
                 loader.load();
 
                 lblName.setFont(Fonts.getBBMedium());
+                lblTrophies.setFont(Fonts.getBBMedium());
+                imgTrophie.fitHeightProperty().bind(lblTrophies.heightProperty());
+                imgTrophie.fitWidthProperty().bind(imgTrophie.fitHeightProperty());
             }
             catch (Exception ex) {ex.printStackTrace();}
         }
@@ -128,6 +149,7 @@ public class PlayersController
             if (!empty)
             {
                 lblName.setText(item.getName());
+                lblTrophies.setText(Integer.toString(item.getTotalTrophies()));
 
                 if (item.getId().equals(World.sCurrentClient.getClientId()))
                     lblName.setTextFill(Color.web("#1815d9"));

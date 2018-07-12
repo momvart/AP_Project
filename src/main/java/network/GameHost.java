@@ -86,6 +86,11 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
         catch (NullPointerException ex) { throw new GameClientNotFoundException(clientId); }
     }
 
+    private void sendClientsList(UUID clientId)
+    {
+        sendMessage(clientId, new Message(gson.toJson(clients.values().stream().map(GameClient::getInfo).collect(Collectors.toList())), null, MessageType.PLAYERS_LIST));
+    }
+
     @Override
     public void messageReceived(Message message)
     {
@@ -118,6 +123,8 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
                 AttackReport report = gson.fromJson(message.getMessage(), AttackReport.class);
                 activeAttacks.removeIf(pair -> pair.getKey().equals(report.getAttackerId()) && pair.getValue().equals(report.getDefenderId()));
                 attackReports.add(report);
+                clients.get(report.getAttackerId()).getInfo().addTrophies(report.getClaimedScore());
+                clients.get(report.getDefenderId()).getInfo().addTrophies(report.getTotalScore() - report.getClaimedScore());
                 sendMessage(report.getAttackerId(), message);
                 sendMessage(report.getDefenderId(), message);
                 callOnAttackReportReceived(report);
@@ -125,6 +132,9 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
             case SET_CLIENT_INFO:
                 clients.get(message.getSenderId()).setInfo(gson.fromJson(message.getMessage(), ClientInfo.class));
                 broadcastClientsList();
+                break;
+            case PLAYERS_LIST:
+                sendClientsList(message.getSenderId());
                 break;
             case ATTACK_REQUEST:
                 UUID defender = UUID.fromString(message.getMessage());
@@ -144,6 +154,9 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
             case ATTACK_UDP_READY:
                 activeAttacks.stream().filter(pair -> pair.getValue().equals(message.getSenderId())).findFirst()
                         .ifPresent(pair -> sendMessage(pair.getKey(), message));
+                break;
+            case ATTACK_REPORTS_LIST:
+                sendMessage(message.getSenderId(), new Message(gson.toJson(attackReports), null, MessageType.ATTACK_REPORTS_LIST));
                 break;
         }
     }

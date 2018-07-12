@@ -1,5 +1,23 @@
+.root{
+    -fx-font-family: Supercell-Magic;
+    -fx-focus-color:transparent;
+    -fx-padding:10;
+    -fx-background-color:#263238;
+    -fx-text-fill: white;
+}
+
+.list-view
+{
+    -fx-background-color:transparent;
+}
+
+.list-cell {
+    -fx-font-family: CCBackBeat;
+    -fx-background-color:transparent;
+}
+
 .tab-pane {
-    -fx-background-color: black;
+
 }
 
 .tab {
@@ -7,11 +25,12 @@
 }
 
 .tab:selected {
-    -fx-background-color: #263238;
+    -fx-background-color: #78909C;
 }
 
 .tab-pane .tab-header-area .tab-header-background {
-    -fx-background-color: #607D8B;
+    -fx-background-color: #263238;
+        -fx-focus-color:transparent;
 
 }
 
@@ -21,7 +40,11 @@
 
 .tab .tab-label {
     -fx-text-fill: #263238;
-    -fx-font-family: Supercell-Magic;
+}
+
+.tab-pane .tab-content-area
+{
+    -fx-background-color:#455A64;
 }
 
 
@@ -29,7 +52,6 @@
 .button {
     -fx-background-color: lightblue;
     -fx-text-fill: black;
-    -fx-font-family: Supercell-Magic;
     -fx-font-size: 10;
     -fx-fit-to-height: true;
 }
@@ -37,29 +59,21 @@
 .button:hover {
     -fx-background-color: yellowgreen;
     -fx-text-fill: black;
-    -fx-font-family: Supercell-Magic;
-}
-
-.vbox {
-    -fx-background-color: black;
-    -fx-text-fill: white;
 }
 
 .label-status {
     -fx-text-fill: gold;
     -fx-font-weight: bold;
-    -fx-font-family: Supercell-Magic;
 }
 
 .label-status-text {
     -fx-text-fill: white;
-    -fx-font-family: Supercell-Magic;
 }
 
 .label-title {
-    -fx-font-family: Supercell-Magic;
     -fx-text-fill: white;
     -fx-alignment: center;
+    -fx-font-size: 15
 }
 
 .button-back {

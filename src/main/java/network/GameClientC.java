@@ -32,6 +32,7 @@ public class GameClientC extends GameClient
     private Consumer<UUID> defenseStartListener;
     private Consumer<AttackReport> attackFinishListener;
     private Consumer<AttackReport> defenseFinishListener;
+    private Consumer<ArrayList<AttackReport>> attackReportsReceivedListener;
 
     public GameClientC(int port, String ip) throws IOException
     {
@@ -123,6 +124,17 @@ public class GameClientC extends GameClient
         this.defenseFinishListener = defenseFinishListener;
     }
 
+    private void callAttackReportsReceived(ArrayList<AttackReport> reports)
+    {
+        if (attackReportsReceivedListener != null)
+            attackReportsReceivedListener.accept(reports);
+    }
+
+    public void setAttackReportsReceivedListener(Consumer<ArrayList<AttackReport>> attackReportsReceivedListener)
+    {
+        this.attackReportsReceivedListener = attackReportsReceivedListener;
+    }
+
     public ClientInfo getPlayerInfo(UUID id)
     {
         return players.get(id);
@@ -204,6 +216,9 @@ public class GameClientC extends GameClient
                 {
                     ex.printStackTrace();
                 }
+                break;
+            case ATTACK_REPORTS_LIST:
+                callAttackReportsReceived(gson.fromJson(message.getMessage(), new TypeToken<ArrayList<AttackReport>>() { }.getType()));
                 break;
             default:
                 super.messageReceived(message);

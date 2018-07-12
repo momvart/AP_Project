@@ -13,24 +13,18 @@ import models.buildings.DefensiveTower;
 import models.buildings.GuardianGiant;
 import models.soldiers.Soldier;
 import network.AttackMessage;
+import network.AttackUDPReceiver;
 import utils.Point;
 import utils.PointF;
 
-public class NetworkDecode
+public class NetworkDecoder
 {
-    private static NetworkDecode instance;
     private Attack theAttack;
 
-    private NetworkDecode(Attack theAttack)
+    public NetworkDecoder(Attack theAttack, AttackUDPReceiver receiver)
     {
         this.theAttack = theAttack;
-    }
-
-    public static NetworkDecode getInstance(Attack attack)
-    {
-        if (instance == null)
-            instance = new NetworkDecode(attack);
-        return instance;
+        receiver.setAttackMessageReceiver(this::onAttackMessageReceived);
     }
 
     private void onAttackMessageReceived(AttackMessage message)

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
+      fx:controller="graphics.gui.AttackReportsController"
       prefHeight="400.0" prefWidth="600.0">
+    <Button
+            text="Refresh"
+            onAction="#btnRefresh_Click"/>
     <ListView fx:id="listView" styleClass="list-cell"/>
 </VBox>

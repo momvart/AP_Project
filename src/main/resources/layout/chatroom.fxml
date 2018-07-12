@@ -11,10 +11,12 @@
     <ListView fx:id="chatLists" prefWidth="600.0" prefHeight="400.0" styleClass="list-cell"
               VBox.vgrow="ALWAYS"/>
     <HBox fx:id="hbox"
-          prefWidth="600">
+          prefWidth="600"
+          alignment="CENTER">
         <TextField fx:id="txtMessage" styleClass="text-field"
                    HBox.hgrow="ALWAYS"/>
-        <Button text="Send" onAction="#btnSend_Click" styleClass="button" HBox.hgrow="ALWAYS"/>
+        <Button text="SEND" onAction="#btnSend_Click" styleClass="button-send" HBox.hgrow="ALWAYS"
+                defaultButton="true"/>
     </HBox>
 </VBox>
 

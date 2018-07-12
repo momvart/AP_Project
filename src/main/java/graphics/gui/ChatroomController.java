@@ -32,12 +32,13 @@ public class ChatroomController implements IOnChatMessageReceivedListener
         this.client = client;
         client.setChatMessageReceiver(this);
 
-        chatLists.setCellFactory(list -> new ChatListItem(list));
+        chatLists.setCellFactory(ChatListItem::new);
     }
 
     public void btnSend_Click(ActionEvent event)
     {
         client.sendChatMessage(txtMessage.getText());
+        txtMessage.clear();
     }
 
     @Override

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+    <HBox>
+        <Label text="Attacker:"/>
+        <Label fx:id="lblAttackerName" text="Attacker"/>
+        <Label text="Defender:"/>
+        <Label fx:id="lblDefenderName" text="Defender"/>
+    </HBox>
+    <HBox alignment="CENTER">
+        <Label fx:id="lblClaimedGold" alignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <ImageView
+                fx:id="imgGold"
+                fitHeight="NaN">
+            <Image url="@../assets/ui/gold.png"/>
+        </ImageView>
+        <Label fx:id="lblClaimedElixir" alignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <ImageView
+                fx:id="imgElixir"
+                fitHeight="NaN">
+            <Image url="@../assets/ui/elixir.png"/>
+        </ImageView>
+        <Label fx:id="lblClaimedTrophies" alignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <ImageView
+                fx:id="imgTrophie"
+                fitHeight="NaN">
+            <Image url="@../assets/ui/trophie.png"/>
+        </ImageView>
+    </HBox>
+    <HBox>
+
+    </HBox>
+</VBox>

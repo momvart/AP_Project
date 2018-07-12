@@ -29,6 +29,9 @@ public class NetworkStageController
     @FXML
     public PlayersController tabPlayersController;
 
+    @FXML
+    private AttackReportsController tabAttackReportsController;
+
     public Button btnHost;
     public Button btnJoin;
 
@@ -113,6 +116,7 @@ public class NetworkStageController
 
         tabChatController.initialize(World.sCurrentClient);
         tabPlayersController.initialize(World.sCurrentClient);
+        tabAttackReportsController.initialize();
     }
 
     public void btnDisconnect_Click(ActionEvent actionEvent)

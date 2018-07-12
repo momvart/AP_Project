@@ -9,6 +9,7 @@ public enum MessageType
     GET_MAP,
     RET_MAP,
     ERROR,
+    ATTACK_REPORTS_LIST,
     ATTACK_REPORT,
     ATTACK_STARTED,
     ATTACK_REQUEST,

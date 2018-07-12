@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      alignment="CENTER_LEFT">
+    <Label fx:id="lblName"
+           HBox.hgrow="ALWAYS"
+           maxWidth="Infinity"/>
+    <Label fx:id="lblTrophies"/>
+    <ImageView
+            fx:id="imgTrophie">
+        <Image url="@../assets/ui/trophie.png"/>
+    </ImageView>
+</HBox>

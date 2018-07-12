@@ -6,6 +6,7 @@ public class ClientInfo
 {
     private UUID id;
     private String name;
+    private int totalTrophies;
 
     public ClientInfo()
     {
@@ -30,5 +31,20 @@ public class ClientInfo
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public int getTotalTrophies()
+    {
+        return totalTrophies;
+    }
+
+    public void setTotalTrophies(int totalTrophies)
+    {
+        this.totalTrophies = totalTrophies;
+    }
+
+    public void addTrophies(int trophies)
+    {
+        totalTrophies += trophies;
     }
 }

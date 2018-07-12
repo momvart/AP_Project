@@ -1,20 +1,15 @@
 .text-field {
     -fx-background-color: #546E7A;
-    -fx-font-family: Chilanka;
     -fx-font-weight: bold;
-    -fx-font-size: 15;
-}
-
-.list-cell {
-    -fx-background-color: #37474F;
+    -fx-font-family: CCBackBeat;
+    -fx-background-radius: 0 0 0 0;
 }
 
 .list-cell .label {
     -fx-font-size: 10;
-    -fx-font-family: Supercell-Magic;
-    -fx-padding: 3;
 }
 
-.vbox-chatroom {
-    -fx-background-color: #37474F;
+.button-send
+{
+    -fx-background-radius: 0 0 0 0;
 }
