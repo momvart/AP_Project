@@ -179,8 +179,6 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
     public void addObject(Drawer drawer)
     {
         drawers.add(drawer);
-        if (drawer.isClickable())
-            addClickable(drawer);
         if (!dynamicScroll && isScrollable())
             updateScrollBounds();
     }
@@ -193,8 +191,6 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
             return;
         }
         pendingAdds.add(drawer);
-        if (drawer.isClickable())
-            addClickable(drawer);
         if (!dynamicScroll && isScrollable())
             updateScrollBounds();
     }
@@ -204,33 +200,28 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
     public void removeObject(Drawer drawer)
     {
         pendingRemoves.add(drawer);
-        if (drawer.isClickable())
-            clickables.remove(drawer);
     }
 
     public void removeAllObjects()
     {
         drawers.clear();
-        clickables.clear();
-    }
-
-    private HashSet<Drawer> clickables = new HashSet<>();
-
-    public void addClickable(Drawer clickable)
-    {
-        clickables.add(clickable);
     }
 
     public boolean handleMouseClick(double x, double y, MouseEvent event)
     {
         if (!isVisible())
             return false;
-        for (Drawer clickable : clickables)
-            if (clickable.isVisible() && clickable.containsPoint(x - bounds.getX() - scrollX, y - bounds.getY() - scrollY))
+        for (int i = drawers.size() - 1; i >= 0; i--)
+            if (drawers.get(i).isClickable())
             {
-                clickable.callOnClick(event);
-                return true;
+                Drawer clickable = drawers.get(i);
+                if (clickable.isVisible() && clickable.containsPoint(x - bounds.getX() - scrollX, y - bounds.getY() - scrollY))
+                {
+                    clickable.callOnClick(event);
+                    return true;
+                }
             }
+
         return false;
     }
 

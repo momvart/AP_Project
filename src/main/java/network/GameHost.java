@@ -148,6 +148,7 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
                     activeAttacks.add(pair);
                     Message msg = new Message(gson.toJson(pair), null, MessageType.ATTACK_STARTED);
                     sendMessage(message.getSenderId(), msg);
+                    msg.setMetadata(message.getMetadata());
                     sendMessage(defender, msg);
                 }
                 break;

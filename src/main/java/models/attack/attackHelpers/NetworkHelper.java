@@ -11,7 +11,7 @@ import java.net.*;
 
 public class NetworkHelper
 {
-    private static final String UNIT_TYPE_FIELD = "UT";
+    public static final String UNIT_TYPE_FIELD = "UT";
     //these methods should send some encoded data to the network
 
     private static DatagramSocket socket;

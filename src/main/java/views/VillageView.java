@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 public class VillageView extends ConsoleMenuContainerView
 {
@@ -368,6 +369,7 @@ public class VillageView extends ConsoleMenuContainerView
 
             AttackMap map = gson.fromJson(reader, AttackMap.class);
             theAttack = new Attack(map, isReal);
+            theAttack.addUnits(World.getVillage().getAllSoldiers().collect(Collectors.toList()));
         }
         catch (JsonParseException ex)
         {

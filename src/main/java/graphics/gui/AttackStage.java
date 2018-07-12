@@ -71,9 +71,6 @@ public class AttackStage extends AttackMapStage
 
         initStyle(StageStyle.UNDECORATED);
 
-        for (int i = 1; i <= SoldierValues.SOLDIER_TYPES_COUNT; i++)
-            theAttack.addUnits(World.getVillage().getSoldiers(i));
-
         ParentMenu parentMenu = new ParentMenu(100, "");
         ArrayList<SoldierMenuItem> soldierMenuItems = new ArrayList<>();
         for (int i = 1; i <= SoldierValues.SOLDIER_TYPES_COUNT; i++)

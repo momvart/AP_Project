@@ -9,7 +9,7 @@
     <Button
             text="Refresh"
             onAction="#btnRefresh_Click"/>
-    <ListView fx:id="listView" VBox.vgrow="ALWAYS"/>
+    <ListView fx:id="listView" VBox.vgrow="ALWAYS" stylesheets="@players.css" styleClass="list-cell-player"/>
     <ButtonBar fx:id="btnBar">
         <buttons>
             <Button text="Attack" onAction="#btnAttack_Click"/>

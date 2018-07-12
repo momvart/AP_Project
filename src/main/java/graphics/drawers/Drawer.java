@@ -118,8 +118,6 @@ public class Drawer implements IFrameUpdatable
     {
         this.clickListener = clickListener;
         clickable = clickListener != null;
-        if (layer != null)
-            layer.addClickable(this);
     }
 
     public void callOnClick(MouseEvent event)

@@ -1,18 +1,13 @@
-.list-cell-player {
-    -fx-background-color: #37474F;
-}
-
 .list-cell-player .list-cell:odd {
-    -fx-background-color: #263238;
+    -fx-background-color: #546E7A;
 }
 
 .list-cell-player .list-cell:even {
-    -fx-background-color: #37474F;
+    -fx-background-color: transparent;
 }
 
 .list-cell-player .list-cell .label {
     -fx-text-fill: #ECEFF1;
-    -fx-font-family: Supercell-Magic;
     -fx-font-size: 8;
 }
 

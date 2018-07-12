@@ -23,6 +23,11 @@ public class AttackMessage
         return data;
     }
 
+    public int getIntData(String name)
+    {
+        return getData().get(name).getAsInt();
+    }
+
     public static class Types
     {
         public static final int PutUnit = 1001;

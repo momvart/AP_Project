@@ -28,8 +28,14 @@ import models.attack.Attack;
 import models.attack.AttackMap;
 import models.attack.attackHelpers.NetworkDecoder;
 import models.buildings.Building;
+import models.buildings.ElixirStorage;
+import models.buildings.GoldStorage;
+import models.soldiers.Soldier;
 import network.AttackUDPReceiver;
 import network.IOnChatMessageReceivedListener;
+import serialization.AttackMapGlobalAdapter;
+import serialization.BuildingGlobalAdapter;
+import serialization.StorageGlobalAdapter;
 import utils.RectF;
 import views.VillageView;
 import views.dialogs.*;
@@ -142,6 +148,7 @@ public class VillageStage extends GUIMapStage
             dBackground.setLayer(lCaution);
             dBackground.setClickListener((sender, e) ->
             {
+                System.out.println("fuck");
             });
 
             txtCaution = new TextDrawable("", Fonts.getLarge());
@@ -155,6 +162,9 @@ public class VillageStage extends GUIMapStage
             btnCaution.setPivot(0.5, 0.5);
             dBtnCaution = new Drawer(btnCaution);
             dBtnCaution.setPosition(0.5, 0.75);
+            dBtnCaution.setClickListener((sender, e) ->
+            {
+            });
             dBtnCaution.setLayer(lCaution);
 
             getGuiScene().addLayer(lCaution);
@@ -287,7 +297,7 @@ public class VillageStage extends GUIMapStage
         NetworkStage.showInstance();
     }
 
-    public void lockStageForAttack(String attackerName)
+    public void lockStageForAttack(String attackerName, List<Soldier> soldiers)
     {
         txtCaution.setText("Your village is under attack by: " + attackerName);
         ((ButtonDrawable)dBtnCaution.getDrawable()).setText("WATCH");
@@ -295,7 +305,16 @@ public class VillageStage extends GUIMapStage
         {
             AttackUDPReceiver receiver = new AttackUDPReceiver(5500);
             receiver.start();
-            Attack attack = new Attack(null, false);
+            Gson serializer = new GsonBuilder()
+                    .registerTypeAdapter(AttackMap.class, new AttackMapGlobalAdapter())
+                    .registerTypeAdapter(Map.class, new AttackMapGlobalAdapter())
+                    .registerTypeAdapter(Building.class, new BuildingGlobalAdapter())
+                    .registerTypeAdapter(GoldStorage.class, new StorageGlobalAdapter<>(GoldStorage.class))
+                    .registerTypeAdapter(ElixirStorage.class, new StorageGlobalAdapter<>(ElixirStorage.class))
+                    .setPrettyPrinting()
+                    .create();
+            Attack attack = new Attack(serializer.fromJson(serializer.toJson(World.getVillage().getMap(), Map.class), AttackMap.class), false);
+            attack.addUnits(soldiers);
             NetworkDecoder decoder = new NetworkDecoder(attack, receiver);
             World.sCurrentClient.sendUDPStarted("localhost", receiver.getSocket().getLocalPort());
             new AttackStage(attack, width, height).setupAndShow();

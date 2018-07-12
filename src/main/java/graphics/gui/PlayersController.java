@@ -1,5 +1,9 @@
 package graphics.gui;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import graphics.Fonts;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -12,10 +16,12 @@ import models.World;
 import models.attack.Attack;
 import models.attack.AttackMap;
 import models.attack.AttackReport;
+import models.soldiers.Soldier;
 import network.ClientInfo;
 import network.GameClientC;
 import network.Message;
 import network.MessageType;
+import serialization.SoldierAdapter;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -78,7 +84,15 @@ public class PlayersController
         Platform.runLater(() ->
         {
             AttackMapStage stage = new AttackMapStage(new Attack(map, true), 1200, 900, true);
-            stage.setOnAttackStartRequestListener(() -> client.sendMessage(from.toString(), MessageType.ATTACK_REQUEST));
+            stage.setOnAttackStartRequestListener(() ->
+            {
+                Message msg = new Message(from.toString(), World.sCurrentClient.getClientId(), MessageType.ATTACK_REQUEST);
+                JsonArray soldiers = new JsonArray();
+                Gson serializer = new GsonBuilder().registerTypeAdapter(Soldier.class, new SoldierAdapter()).create();
+                World.getVillage().getAllSoldiers().forEach(soldier -> soldiers.add(serializer.toJsonTree(soldier, Soldier.class)));
+                msg.setMetadata(serializer.toJson(soldiers));
+                client.sendMessage(msg);
+            });
             stage.setupAndShow();
         });
     }
@@ -87,7 +101,9 @@ public class PlayersController
     {
         Platform.runLater(() ->
         {
-            AttackStage stage = new AttackStage(new Attack(cachedMaps.get(defenderId), true), 1200, 900);
+            Attack attack = new Attack(cachedMaps.get(defenderId), true);
+            attack.addUnits(World.getVillage().getAllSoldiers().collect(Collectors.toList()));
+            AttackStage stage = new AttackStage(attack, 1200, 900);
             stage.setAttackFinishedListener(report -> World.sCurrentClient.sendAttackReport(report));
             stage.setupAndShow();
         });
@@ -102,9 +118,9 @@ public class PlayersController
                 World.getVillage().getSoldiers(i + 1).subList(0, spentTroops.get(i) - 1).clear();
     }
 
-    private void onDefenseStarted(UUID attackerId)
+    private void onDefenseStarted(UUID attackerId, List<Soldier> soldiers)
     {
-        VillageStage.getInstance().lockStageForAttack(client.getPlayerInfo(attackerId).getName());
+        VillageStage.getInstance().lockStageForAttack(client.getPlayerInfo(attackerId).getName(), soldiers);
     }
 
     private void onDefenseFinished(AttackReport report)

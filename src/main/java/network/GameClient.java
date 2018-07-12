@@ -1,6 +1,9 @@
 package network;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import models.soldiers.Soldier;
+import serialization.SoldierAdapter;
 
 import java.io.*;
 import java.net.Socket;
@@ -27,6 +30,7 @@ public class GameClient implements IOnMessageReceivedListener
         this.socket = socket;
         writer = new DataOutputStream(socket.getOutputStream());
         this.info = new ClientInfo();
+        gson = new GsonBuilder().registerTypeAdapter(Soldier.class, new SoldierAdapter()).create();
     }
 
     public Socket getSocket()

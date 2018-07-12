@@ -10,6 +10,7 @@ import models.attack.attackHelpers.NetworkHelper;
 import models.buildings.Building;
 import models.buildings.ElixirStorage;
 import models.buildings.GoldStorage;
+import models.soldiers.Soldier;
 import serialization.AttackMapGlobalAdapter;
 import serialization.BuildingGlobalAdapter;
 import serialization.StorageGlobalAdapter;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 //GameClient that is used in client side
@@ -29,7 +31,7 @@ public class GameClientC extends GameClient
     private IOnAttackMapReturnedListener attackMapReturnedListener;
     private Runnable playersListUpdatedListener;
     private Consumer<UUID> attackStartListener;
-    private Consumer<UUID> defenseStartListener;
+    private BiConsumer<UUID, List<Soldier>> defenseStartListener;
     private Consumer<AttackReport> attackFinishListener;
     private Consumer<AttackReport> defenseFinishListener;
     private Consumer<ArrayList<AttackReport>> attackReportsReceivedListener;
@@ -91,13 +93,13 @@ public class GameClientC extends GameClient
         this.attackStartListener = attackStartListener;
     }
 
-    private void callDefenseStarted(UUID attackerId)
+    private void callDefenseStarted(UUID attackerId, List<Soldier> soldiers)
     {
         if (defenseStartListener != null)
-            defenseStartListener.accept(attackerId);
+            defenseStartListener.accept(attackerId, soldiers);
     }
 
-    public void setDefenseStartListener(Consumer<UUID> defenseStartListener)
+    public void setDefenseStartListener(BiConsumer<UUID, List<Soldier>> defenseStartListener)
     {
         this.defenseStartListener = defenseStartListener;
     }
@@ -167,11 +169,11 @@ public class GameClientC extends GameClient
             case GET_MAP:
             {
                 Gson serializer = new GsonBuilder()
-                        .registerTypeAdapter(Map.class, new AttackMapGlobalAdapter())
+                        .registerTypeAdapter(models.Map.class, new AttackMapGlobalAdapter())
                         .registerTypeAdapter(Building.class, new BuildingGlobalAdapter())
                         .setPrettyPrinting()
                         .create();
-                sendMessage(new Message(serializer.toJson(World.getVillage().getMap(), Map.class), getClientId(), MessageType.RET_MAP).setMetadata(message.getSenderId().toString()));
+                sendMessage(new Message(serializer.toJson(World.getVillage().getMap(), models.Map.class), getClientId(), MessageType.RET_MAP).setMetadata(message.getSenderId().toString()));
             }
             break;
             case RET_MAP:
@@ -202,7 +204,7 @@ public class GameClientC extends GameClient
                 if (pair.getKey().equals(getClientId()))
                     callAttackStarted(pair.getValue());
                 else
-                    callDefenseStarted(pair.getKey());
+                    callDefenseStarted(pair.getKey(), gson.fromJson(message.getMetadata(), new TypeToken<ArrayList<Soldier>>() { }.getType()));
             }
             break;
             case ATTACK_UDP_READY:
