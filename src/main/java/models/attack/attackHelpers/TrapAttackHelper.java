@@ -30,7 +30,7 @@ public class TrapAttackHelper extends SingleTargetAttackHelper
         if (mainTargets != null && mainTargets.size() != 0)
         {
             super.attack();
-            decreaseStrength(getStrength(), false);
+            decreaseStrength(getStrength());
         }
     }
 

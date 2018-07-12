@@ -46,26 +46,31 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
         return health;
     }
 
-    public void increaseHealth(int amount, boolean networkPermission)
+    public void increaseHealth(int amount)
     {
-        if (!isReal && !networkPermission)
+        if (!isReal)
             return;
         health = Math.min(this.getHealth() + amount, getInitialHealth());
-        if (isReal)
-            NetworkHelper.soldierIncreaseHealth(soldier.getId(), amount);
+        NetworkHelper.soldierSetHealth(soldier.getId(), health);
     }
 
-    public void decreaseHealth(int amount, boolean networkPermission)
+    public void setHealth(int health, boolean networkPermission)
     {
-        if (!isReal && !networkPermission)
+        if (!networkPermission)
+            return;
+        this.health = health;
+    }
+
+    public void decreaseHealth(int amount)
+    {
+        if (!isReal)
             return;
         health = Math.max(health - amount, 0);
         if (health <= 0)
             setDead(true);
         if (getGraphicHelper() != null)
             getGraphicHelper().updateDrawer();
-        if (isReal)
-            NetworkHelper.soldierDecreaseHealth(soldier.getId(), amount);
+        NetworkHelper.soldierSetHealth(soldier.getId(), health);
     }
 
     public int getInitialHealth()

@@ -69,10 +69,10 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         DefensiveTower tower = (DefensiveTower)building;
         if (mainTargets != null)
             for (Soldier soldier : mainTargets)
-                soldier.getAttackHelper().decreaseHealth(tower.getDamagePower(), false);
+                soldier.getAttackHelper().decreaseHealth(tower.getDamagePower());
         if (wholeTargets != null)
             for (Soldier soldier : wholeTargets)
-                soldier.getAttackHelper().decreaseHealth(tower.getDamagePower() - 1, false);
+                soldier.getAttackHelper().decreaseHealth(tower.getDamagePower() - 1);
         mainTargets = null;
         wholeTargets = null;
     }

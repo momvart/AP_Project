@@ -112,7 +112,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         }
         facingBuildingPoint = soldierPath.get(1);
         if (isReal)
-            NetworkHelper.soldrStJogTowd(soldier.getId(), dest);
+            NetworkHelper.sldrStJogTowd(soldier.getId(), dest);
     }
 
     protected void setFinalStandingPoint()
@@ -151,9 +151,14 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 
         if (!getVeryPoint(drawer.getPosition()).equals(soldier.getLocation()))
         {
-            soldier.getAttackHelper().getAttack().moveOnLocation(soldier, soldier.getLocation(), getVeryPoint(drawer.getPosition()));
-            soldier.setLocation(getVeryPoint(drawer.getPosition()));
+            syncLogicWithGraphic();
         }
+    }
+
+    public void syncLogicWithGraphic()
+    {
+        soldier.getAttackHelper().getAttack().moveOnLocation(soldier, soldier.getLocation(), getVeryPoint(drawer.getPosition()));
+        soldier.setLocation(getVeryPoint(drawer.getPosition()));
     }
 
     protected double getDistanceToFinalPosition()
@@ -230,10 +235,9 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
             return;
         makeAttack();
 
-        soldier.setLocation(getVeryPoint(finalStandingPoint));
-        soldier.getAttackHelper().getAttack().moveOnLocation(soldier, soldier.getLocation(), getVeryPoint(finalStandingPoint));
-
         drawer.setPosition(finalStandingPoint.getX(), finalStandingPoint.getY());
+        syncLogicWithGraphic();
+
         if (moveListener != null)
             moveListener.onMoveFinished(drawer.getPosition());
         finalStandingPoint = null;

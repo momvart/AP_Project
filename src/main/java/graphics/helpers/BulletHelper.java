@@ -39,6 +39,11 @@ public class BulletHelper implements IFrameUpdatable
         setUpBulletProperties(layer);
     }
 
+    public Drawer getDrawer()
+    {
+        return drawer;
+    }
+
     public void setUpBulletProperties(Layer layer)
     {
         if (towerGraphicHelper.getBuildingDrawer() != null)

@@ -60,17 +60,22 @@ public class NetworkHelper
         sendAttackMessage(AttackMessage.Types.PutUnit, obj);
     }
 
-    public static void soldrStJogTowd(long soldierId, PointF dest)
+    public static void sldrStJogTowd(long soldierId, PointF dest)
     {
 
     }
 
-    public static void grdnGntStJojTow(long id, Soldier dest)
+    public static void grdnGntStJojTowd(long id, Soldier dest)
     {
 
     }
 
     public static void setSldPos(long soldierId, PointF position)
+    {
+
+    }
+
+    public static void setGrdnGntPos(long id, PointF position)
     {
 
     }
@@ -85,17 +90,12 @@ public class NetworkHelper
 
     }
 
-    public static void soldierDecreaseHealth(long id, int amount)
+    public static void soldierSetHealth(long id, int health)
     {
 
     }
 
-    public static void soldierIncreaseHealth(long id, int amount)
-    {
-
-    }
-
-    public static void buildingDecreaseStrength(long id, int amount)
+    public static void buildingSetStrength(long id, int strength)
     {
 
     }
@@ -105,7 +105,7 @@ public class NetworkHelper
 
     }
 
-    public static void setgrdnGntPos(long id, PointF position)
+    public static void bulletSetPos(long buildingId, PointF position)
     {
 
     }

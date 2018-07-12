@@ -52,8 +52,8 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
         if (target.getStrength() > 0 && !target.getAttackHelper().isDestroyed())
         {
             int initialStrength = target.getStrength();
-            target.getAttackHelper().decreaseStrength(getDamage(), false);
 
+            target.getAttackHelper().decreaseStrength(getDamage());
             BuildingDestructionReport bdr = new BuildingDestructionReport(target, initialStrength, target.getStrength());
             callOnSoldierFire(bdr);
             if (target instanceof Storage)

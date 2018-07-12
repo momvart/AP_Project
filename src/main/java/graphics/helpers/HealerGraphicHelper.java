@@ -64,7 +64,7 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
             sin = (finalStandingPoint.getY() - drawer.getPosition().getY()) / distanceToFinalPosition;
         }
         if (isReal)
-            NetworkHelper.soldrStJogTowd(soldier.getId(), dest);
+            NetworkHelper.sldrStJogTowd(soldier.getId(), dest);
     }
 
     @Override

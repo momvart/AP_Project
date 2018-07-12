@@ -2,12 +2,15 @@ package models.attack.attackHelpers;
 
 import exceptions.BuildingNotFoundException;
 import exceptions.ConsoleException;
+import exceptions.CouldNotFetchNetworkDataException;
 import exceptions.SoldierNotFoundException;
 import graphics.helpers.DefensiveTowerGraphicHelper;
 import graphics.helpers.GuardianGiantGraphicHelper;
 import graphics.helpers.SoldierGraphicHelper;
 import models.attack.Attack;
 import models.buildings.Building;
+import models.buildings.DefensiveTower;
+import models.buildings.GuardianGiant;
 import models.soldiers.Soldier;
 import network.AttackMessage;
 import utils.Point;
@@ -70,54 +73,97 @@ public class NetworkDecode
         catch (ConsoleException ignored) {}
     }
 
-    public void soldrStJogTowd(long soldierId, PointF dest)
+    public void sldrStJogTowd(long soldierId, PointF dest) throws CouldNotFetchNetworkDataException
     {
-        getSoldier(soldierId).getAttackHelper().getGraphicHelper().startJoggingToward(dest, true);
+        Soldier soldier = getSoldier(soldierId);
+        if (soldier == null)
+            throw new CouldNotFetchNetworkDataException();
+        soldier.getAttackHelper().getGraphicHelper().startJoggingToward(dest, true);
     }
 
-    public void grdnGntStJojTow(long id, Soldier soldier)
+    public void grdnGntStJojTow(long id, Soldier soldier) throws CouldNotFetchNetworkDataException
     {
-        GuardianGiantGraphicHelper graphicHelper = (GuardianGiantGraphicHelper)getBuilding(id).getAttackHelper().getGraphicHelper();
+        Building building = getBuilding(id);
+        if (building == null)
+            throw new CouldNotFetchNetworkDataException();
+        GuardianGiantGraphicHelper graphicHelper = (GuardianGiantGraphicHelper)building.getAttackHelper().getGraphicHelper();
         graphicHelper.startJoggingToward(soldier, true);
     }
 
-    public void setSoldrPos(long soldierId, PointF pos)
+    public void setSoldrPos(long soldierId, PointF pos) throws CouldNotFetchNetworkDataException
     {
         Soldier soldier = getSoldier(soldierId);
+        if (soldier == null)
+            throw new CouldNotFetchNetworkDataException();
         SoldierGraphicHelper graphicHelper = soldier.getAttackHelper().getGraphicHelper();
         graphicHelper.onMoveFinished();
         graphicHelper.getDrawer().setPosition(pos.getX(), pos.getY());
+        graphicHelper.syncLogicWithGraphic();
     }
 
-    public void soldierDie(long id)
+
+    public void setGrdnGntPos(long id, PointF position) throws CouldNotFetchNetworkDataException
     {
-        getSoldier(id).getAttackHelper().callOnSoldierDie();
+        GuardianGiant guardianGiant = (GuardianGiant)getBuilding(id);
+        if (guardianGiant == null)
+            throw new CouldNotFetchNetworkDataException();
+        GuardianGiantGraphicHelper graphicHelper = (GuardianGiantGraphicHelper)guardianGiant.getAttackHelper().getGraphicHelper();
+        graphicHelper.onMoveFinished();
+        graphicHelper.getBuildingDrawer().setPosition(position.getX(), position.getY());
+        graphicHelper.syncLogicWithGraphic();
     }
 
-    public void buildingDestroy(long id)
+
+    public void soldierDie(long id) throws CouldNotFetchNetworkDataException
     {
-        getBuilding(id).getAttackHelper().callOnDestroyed();
+        Soldier soldier = getSoldier(id);
+        if (soldier == null)
+            throw new CouldNotFetchNetworkDataException();
+        soldier.getAttackHelper().callOnSoldierDie();
+
     }
 
-    public void soldierDecreaseHealth(long id, int amount)
+    public void buildingDestroy(long id) throws CouldNotFetchNetworkDataException
     {
-        getSoldier(id).getAttackHelper().decreaseHealth(amount, true);
+        Building building = getBuilding(id);
+        if (building == null)
+            throw new CouldNotFetchNetworkDataException();
+        building.getAttackHelper().callOnDestroyed();
     }
 
-    public void soldierIncreaseHealth(long id, int amount)
+
+    public void soldierSetHealth(long id, int health) throws CouldNotFetchNetworkDataException
     {
-        getSoldier(id).getAttackHelper().increaseHealth(amount, true);
+        Soldier soldier = getSoldier(id);
+        if (soldier == null)
+            throw new CouldNotFetchNetworkDataException();
+        soldier.getAttackHelper().setHealth(health, true);
     }
 
-    public void buildingDecreaseStrength(long id, int amount)
+    public void buildingSetStrength(long id, int strength) throws CouldNotFetchNetworkDataException
     {
-        getBuilding(id).getAttackHelper().decreaseStrength(amount, true);
+        Building building = getBuilding(id);
+        if (building == null)
+            throw new CouldNotFetchNetworkDataException();
+        building.getAttackHelper().setStrength(strength, true);
     }
 
-    public void bulletStartNewWave(long buildingId, PointF start, PointF end, Soldier soldier)
+    public void bulletStartNewWave(long id, PointF start, PointF end, Soldier soldier) throws CouldNotFetchNetworkDataException
     {
-        DefensiveTowerGraphicHelper graphicHelper = (DefensiveTowerGraphicHelper)getBuilding(buildingId).getAttackHelper().getGraphicHelper();
+        Building building = getBuilding(id);
+        if (building == null)
+            throw new CouldNotFetchNetworkDataException();
+        DefensiveTowerGraphicHelper graphicHelper = (DefensiveTowerGraphicHelper)building.getAttackHelper().getGraphicHelper();
         graphicHelper.getBullet().startNewWave(start, end, soldier, true);
+    }
+
+    public void bulletSetPos(long id, PointF position) throws CouldNotFetchNetworkDataException
+    {
+        DefensiveTower tower = (DefensiveTower)getBuilding(id);
+        if (tower == null)
+            throw new CouldNotFetchNetworkDataException();
+        DefensiveTowerGraphicHelper graphicHelper = (DefensiveTowerGraphicHelper)tower.getAttackHelper().getGraphicHelper();
+        graphicHelper.getBullet().getDrawer().setPosition(position.getX(), position.getY());
     }
 
     //

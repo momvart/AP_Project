@@ -163,7 +163,7 @@ public class GuardianGiantGraphicHelper extends SingleTDefenseGraphicHelper impl
         }
         facingBuildingPoint = soldierPath.get(1);
         if (isReal)
-            NetworkHelper.grdnGntStJojTow(building.getId(), targetSoldier);
+            NetworkHelper.grdnGntStJojTowd(building.getId(), targetSoldier);
     }
 
     private void setFinalStandingPoint()
@@ -189,11 +189,14 @@ public class GuardianGiantGraphicHelper extends SingleTDefenseGraphicHelper impl
         buildingDrawer.setPosition(newPosition.getX(), newPosition.getY());
 
         if (!getVeryPoint(buildingDrawer.getPosition()).equals(building.getLocation()))
-        {
-            Point newPoint = getVeryPoint(buildingDrawer.getPosition());
-            attackHelper.getAttack().getMap().changeBuildingCell(building, newPoint);
-            building.setLocation(newPoint);
-        }
+            syncLogicWithGraphic();
+    }
+
+    public void syncLogicWithGraphic()
+    {
+        Point newPoint = getVeryPoint(buildingDrawer.getPosition());
+        attackHelper.getAttack().getMap().changeBuildingCell(building, newPoint);
+        building.setLocation(newPoint);
     }
 
     private void setNewCheckPoint()
@@ -253,22 +256,21 @@ public class GuardianGiantGraphicHelper extends SingleTDefenseGraphicHelper impl
         return ((DefensiveTower)building).getRange() != 1;
     }
 
-    private void onMoveFinished()
+    public void onMoveFinished()
     {
         if (finalStandingPoint == null)
             return;
         makeAttack();
 
-        building.setLocation(getVeryPoint(finalStandingPoint));
-        attackHelper.getAttack().getMap().changeBuildingCell(building, getVeryPoint(finalStandingPoint));
-
         buildingDrawer.setPosition(finalStandingPoint.getX(), finalStandingPoint.getY());
+        syncLogicWithGraphic();
+
         if (moveListener != null)
             moveListener.onMoveFinished(buildingDrawer.getPosition());
         finalStandingPoint = null;
         nextCheckPointF = null;
         if (attackHelper.isReal())
-            NetworkHelper.setgrdnGntPos(building.getId(), buildingDrawer.getPosition());
+            NetworkHelper.setGrdnGntPos(building.getId(), buildingDrawer.getPosition());
     }
 
     @Override
