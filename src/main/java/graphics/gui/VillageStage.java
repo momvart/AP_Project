@@ -25,6 +25,7 @@ import javafx.util.Pair;
 import menus.*;
 import models.*;
 import models.buildings.Building;
+import network.AttackUDPReceiver;
 import network.IOnChatMessageReceivedListener;
 import utils.RectF;
 import views.VillageView;
@@ -59,7 +60,7 @@ public class VillageStage extends GUIMapStage
 
     private Layer lCaution;
     private TextDrawable txtCaution;
-    private ButtonDrawable btnCaution;
+    private Drawer dBtnCaution;
 
 
     private VillageView villageView;
@@ -147,9 +148,9 @@ public class VillageStage extends GUIMapStage
             dTxtCaution.setPosition(0.5, 0.5);
             dTxtCaution.setLayer(lCaution);
 
-            btnCaution = new ButtonDrawable("", "", CELL_SIZE * 2, CELL_SIZE);
+            ButtonDrawable btnCaution = new ButtonDrawable("", "", CELL_SIZE * 2, CELL_SIZE);
             btnCaution.setPivot(0.5, 0.5);
-            Drawer dBtnCaution = new Drawer(btnCaution);
+            dBtnCaution = new Drawer(btnCaution);
             dBtnCaution.setPosition(0.5, 0.75);
             dBtnCaution.setLayer(lCaution);
 
@@ -286,7 +287,13 @@ public class VillageStage extends GUIMapStage
     public void lockStageForAttack(String attackerName)
     {
         txtCaution.setText("Your village is under attack by: " + attackerName);
-        btnCaution.setText("WATCH");
+        ((ButtonDrawable)dBtnCaution.getDrawable()).setText("WATCH");
+        dBtnCaution.setClickListener(((sender, event) ->
+        {
+            AttackUDPReceiver receiver = new AttackUDPReceiver(5500);
+            receiver.start();
+            World.sCurrentClient.sendUDPStarted("localhost", receiver.getSocket().getLocalPort());
+        }));
         lCaution.setVisible(true);
         getLooper().stop();
     }

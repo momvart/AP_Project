@@ -41,8 +41,11 @@ public class BulletHelper implements IFrameUpdatable
 
     public void setUpBulletProperties(Layer layer)
     {
-        drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
-        drawer.setLayer(layer);
+        if (towerGraphicHelper.getBuildingDrawer() != null)
+        {
+            drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
+            drawer.setLayer(layer);
+        }
     }
 
     Soldier targetSoldier;

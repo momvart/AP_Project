@@ -23,7 +23,8 @@ public abstract class DefensiveTowerGraphicHelper extends AttackBuildingGraphicH
         setReloadDuration(0.5);
         attackHelper = (DefensiveTowerAttackHelper)building.getAttackHelper();
         this.layer = layer;
-        buildingDrawer.updateDrawer();
+        //if(buildingDrawer != null)
+        //   buildingDrawer.updateDrawer();
     }
 
     public Layer getLayer()

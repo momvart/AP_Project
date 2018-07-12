@@ -1,12 +1,12 @@
 package network;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import javafx.util.Pair;
 import models.World;
 import models.attack.AttackMap;
 import models.attack.AttackReport;
+import models.attack.attackHelpers.NetworkHelper;
 import models.buildings.Building;
 import models.buildings.ElixirStorage;
 import models.buildings.GoldStorage;
@@ -15,6 +15,7 @@ import serialization.BuildingGlobalAdapter;
 import serialization.StorageGlobalAdapter;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.*;
 import java.util.function.Consumer;
@@ -192,6 +193,18 @@ public class GameClientC extends GameClient
                     callDefenseStarted(pair.getKey());
             }
             break;
+            case ATTACK_UDP_READY:
+                try
+                {
+                    //TODO: set up network helper
+                    JsonObject obj = new JsonParser().parse(message.getMessage()).getAsJsonObject();
+                    NetworkHelper.initialize(obj.get("host").getAsString(), obj.get("port").getAsInt());
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+                break;
             default:
                 super.messageReceived(message);
         }
@@ -210,5 +223,13 @@ public class GameClientC extends GameClient
     public void sendAttackReport(AttackReport report)
     {
         sendMessage(gson.toJson(report), MessageType.ATTACK_REPORT);
+    }
+
+    public void sendUDPStarted(String host, int port)
+    {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("host", host);
+        obj.addProperty("port", port);
+        sendMessage(gson.toJson(obj), MessageType.ATTACK_UDP_READY);
     }
 }

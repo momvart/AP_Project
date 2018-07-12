@@ -4,6 +4,7 @@ import graphics.drawers.AttackBuildingDrawer;
 import graphics.layers.Layer;
 import models.Map;
 import models.buildings.Building;
+import models.buildings.GuardianGiant;
 
 public class AttackBuildingGraphicHelper extends BuildingGraphicHelper implements IOnDestroyListener
 {
@@ -12,10 +13,13 @@ public class AttackBuildingGraphicHelper extends BuildingGraphicHelper implement
     public AttackBuildingGraphicHelper(Building building, Layer layer, Map map)
     {
         super(building, layer, map);
-        buildingDrawer = new AttackBuildingDrawer(building, map);
+        if (building instanceof GuardianGiant)
+            buildingDrawer = new AttackBuildingDrawer(building, map);
+        else
+            buildingDrawer = new AttackBuildingDrawer(building, map);
         buildingDrawer.setLayer(layer);
         buildingDrawer.setPosition(building.getLocation().getX(), building.getLocation().getY());
-        buildingDrawer.updateDrawer();
+        //buildingDrawer.updateDrawer();
     }
 
     @Override

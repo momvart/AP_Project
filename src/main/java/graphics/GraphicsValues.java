@@ -4,6 +4,7 @@ import graphics.drawers.drawables.ImageDrawable;
 import graphics.positioning.IsometricPositioningSystem;
 import javafx.scene.paint.Color;
 import models.buildings.BuildingValues;
+import models.buildings.Wall;
 import models.soldiers.SoldierValues;
 import utils.GraphicsUtilities;
 
@@ -83,6 +84,8 @@ public class GraphicsValues
 
     public static ImageDrawable getBuildingImage(int buildingType, int level)
     {
+        if (buildingType == 14)//fucking debug condition
+            buildingType = Wall.BUILDING_TYPE;
         if (buildings == null)
             buildings = new HashMap<>();
 
