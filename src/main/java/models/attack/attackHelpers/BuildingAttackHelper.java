@@ -48,9 +48,9 @@ public class BuildingAttackHelper implements IOnReloadListener
         return strength;
     }
 
-    public void decreaseStrength(int amount)
+    public void decreaseStrength(int amount, boolean networkPermission)
     {
-        if (!isReal)
+        if (!isReal && !networkPermission)
             return;
         this.strength -= amount;
         if (strength <= 0)
@@ -61,7 +61,8 @@ public class BuildingAttackHelper implements IOnReloadListener
 
         if (getGraphicHelper() != null)
             getGraphicHelper().updateDrawer();
-        NetworkHelper.buildingSetStrength(building.getId(), strength);
+        if (isReal)
+            NetworkHelper.buildingSetStrength(building.getId(), strength);
     }
 
     public boolean isDestroyed()
@@ -78,13 +79,6 @@ public class BuildingAttackHelper implements IOnReloadListener
     {
         if (strength <= 0)
             destroyed = true;
-    }
-
-    public void setStrength(int strength, boolean networkPermission)
-    {
-        if (!networkPermission)
-            return;
-        this.strength = strength;
     }
 
     @Override

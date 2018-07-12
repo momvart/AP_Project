@@ -40,7 +40,7 @@ public class SingleTargetAttackHelper extends DefensiveTowerAttackHelper
     @Override
     public void attack()
     {
-        targetSoldier.getAttackHelper().decreaseHealth(getTower().getDamagePower());
+        targetSoldier.getAttackHelper().decreaseHealth(getTower().getDamagePower(), false);
         mainTargets = null;
         targetSoldier = null;
         // TODO: 6/6/18 don't change mainTargets and wholeTargets to null  each turn for some towers

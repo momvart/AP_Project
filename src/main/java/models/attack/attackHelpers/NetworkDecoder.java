@@ -139,13 +139,19 @@ public class NetworkDecoder
     public void soldierSetHealth(long id, int health) throws CouldNotFetchNetworkDataException
     {
         Soldier soldier = getSoldier(id);
-        soldier.getAttackHelper().setHealth(health, true);
+        SoldierAttackHelper attackHelper = soldier.getAttackHelper();
+        int previousHealth = attackHelper.getHealth();
+        if (health > previousHealth)
+            attackHelper.increaseHealth(health - previousHealth, true);
+        else
+            attackHelper.decreaseHealth(previousHealth - health, true);
     }
 
     public void buildingSetStrength(long id, int strength) throws CouldNotFetchNetworkDataException
     {
         Building building = getBuilding(id);
-        building.getAttackHelper().setStrength(strength, true);
+        BuildingAttackHelper attackHelper = building.getAttackHelper();
+        attackHelper.decreaseStrength(attackHelper.getStrength() - strength, true);
     }
 
     public void bulletStartNewWave(long id, PointF start, PointF end, long soldierId) throws CouldNotFetchNetworkDataException

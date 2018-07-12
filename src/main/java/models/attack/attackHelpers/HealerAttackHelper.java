@@ -21,7 +21,7 @@ public class HealerAttackHelper extends SoldierAttackHelper
 
     public void ageOneDeltaT()
     {
-        decreaseHealth(1);
+        decreaseHealth(1, false);
     }
 
     public HealerAttackHelper(Attack attack, Healer healer)
@@ -72,7 +72,7 @@ public class HealerAttackHelper extends SoldierAttackHelper
                 for (Soldier target : targets)
                 {
                     System.out.println("healer healing soldier type:" + target.getType() + "in amount of" + getDamage());
-                    target.getAttackHelper().increaseHealth(getDamage());
+                    target.getAttackHelper().increaseHealth(getDamage(), false);
                 }
             }
         }
