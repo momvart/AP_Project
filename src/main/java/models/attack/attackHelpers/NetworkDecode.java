@@ -8,6 +8,7 @@ import graphics.helpers.SoldierGraphicHelper;
 import models.attack.Attack;
 import models.buildings.Building;
 import models.soldiers.Soldier;
+import network.AttackMessage;
 import utils.Point;
 import utils.PointF;
 
@@ -16,7 +17,7 @@ public class NetworkDecode
     private static NetworkDecode instance;
     private Attack theAttack;
 
-    public NetworkDecode(Attack theAttack)
+    private NetworkDecode(Attack theAttack)
     {
         this.theAttack = theAttack;
     }
@@ -26,6 +27,37 @@ public class NetworkDecode
         if (instance == null)
             instance = new NetworkDecode(attack);
         return instance;
+    }
+
+    private void onAttackMessageReceived(AttackMessage message)
+    {
+        switch (message.getType())
+        {
+            case AttackMessage.Types.PutUnit:
+
+                break;
+            case AttackMessage.Types.StartJogging:
+
+                break;
+            case AttackMessage.Types.SoldierSetPos:
+
+                break;
+            case AttackMessage.Types.SoldierDie:
+
+                break;
+            case AttackMessage.Types.BuildingDestroy:
+
+                break;
+            case AttackMessage.Types.SoldierSetHealth:
+
+                break;
+            case AttackMessage.Types.BuildingSetStrength:
+
+                break;
+            case AttackMessage.Types.BuildingStartNewWave:
+
+                break;
+        }
     }
 
     public void putUnits(int unitType, int count, Point location)

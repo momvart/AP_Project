@@ -140,6 +140,11 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
                     sendMessage(message.getSenderId(), msg);
                     sendMessage(defender, msg);
                 }
+                break;
+            case ATTACK_UDP_READY:
+                activeAttacks.stream().filter(pair -> pair.getValue().equals(message.getSenderId())).findFirst()
+                        .ifPresent(pair -> sendMessage(pair.getKey(), message));
+                break;
         }
     }
 

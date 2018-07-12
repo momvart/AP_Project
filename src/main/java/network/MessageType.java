@@ -11,5 +11,6 @@ public enum MessageType
     ERROR,
     ATTACK_REPORT,
     ATTACK_STARTED,
-    ATTACK_REQUEST
+    ATTACK_REQUEST,
+    ATTACK_UDP_READY
 }
