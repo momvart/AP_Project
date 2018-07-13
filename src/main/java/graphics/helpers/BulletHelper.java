@@ -124,24 +124,6 @@ public class BulletHelper implements IFrameUpdatable
 
     private double getAngle(double sin, double cos)
     {
-        return cos > 0 ? Math.asin(sin) : sin > 0 ? (Math.PI - Math.asin(sin)) : (-Math.PI - Math.asin(sin));
-    }
-
-    @Override
-    public String toString()
-    {
-        return "BulletHelper{" +
-                "inProgress=" + inProgress +
-                ", towerGraphicHelper=" + towerGraphicHelper +
-                ", maxSpeed=" + maxSpeed +
-                ", drawer=" + drawer +
-                ", start=" + start +
-                ", end=" + end +
-                ", speed=" + speed +
-                ", hitTarget=" + hitTarget +
-                ", cos=" + cos +
-                ", sin=" + sin +
-                ", targetSoldier=" + targetSoldier +
-                '}';
+        return (180 / Math.PI) * (cos > 0 ? Math.asin(sin) : sin > 0 ? (Math.PI - Math.asin(sin)) : (-Math.PI - Math.asin(sin))) + 45;
     }
 }
