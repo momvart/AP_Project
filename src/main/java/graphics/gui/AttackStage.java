@@ -76,6 +76,7 @@ public class AttackStage extends AttackMapStage
         for (int i = 1; i <= SoldierValues.SOLDIER_TYPES_COUNT; i++)
         {
             SoldierMenuItem submenu = new SoldierMenuItem(100 + i, SoldierValues.getSoldierInfo(i).getName(), theAttack.getAllUnits(i).size(), i);
+            submenu.setFocusable(theAttack.isReal);
             soldierMenuItems.add(submenu);
         }
         soldierMenuItems.forEach(parentMenu::insertItem);
@@ -93,14 +94,16 @@ public class AttackStage extends AttackMapStage
             getGuiHandler().addUpdatable(timer);
         }
 
-        ButtonDrawable btnEndAttack = new ButtonDrawable("End Attack", GraphicsValues.IconPaths.Stop, CELL_SIZE, CELL_SIZE);
-        btnEndAttack.setPivot(0, 0);
-        btnEndAttack.setFill(ButtonDrawable.DARK);
-        Drawer dBtnEndAttack = new Drawer(btnEndAttack);
-        dBtnEndAttack.setPosition(0, getStuffsLayer().getHeight() / ((NormalPositioningSystem)getStuffsLayer().getPosSys()).getScale() - 2);
-        dBtnEndAttack.setLayer(getStuffsLayer());
-        dBtnEndAttack.setClickListener((sender, event) -> quitAttack(Attack.QuitReason.USER));
-
+        if (theAttack.isReal)
+        {
+            ButtonDrawable btnEndAttack = new ButtonDrawable("End Attack", GraphicsValues.IconPaths.Stop, CELL_SIZE, CELL_SIZE);
+            btnEndAttack.setPivot(0, 0);
+            btnEndAttack.setFill(ButtonDrawable.DARK);
+            Drawer dBtnEndAttack = new Drawer(btnEndAttack);
+            dBtnEndAttack.setPosition(0, getStuffsLayer().getHeight() / ((NormalPositioningSystem)getStuffsLayer().getPosSys()).getScale() - 2);
+            dBtnEndAttack.setLayer(getStuffsLayer());
+            dBtnEndAttack.setClickListener((sender, event) -> quitAttack(Attack.QuitReason.USER));
+        }
 
         getGameScene().addLayer(lFliers);
     }
