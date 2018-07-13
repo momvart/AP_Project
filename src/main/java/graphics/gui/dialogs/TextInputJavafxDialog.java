@@ -6,7 +6,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
 
 public class TextInputJavafxDialog
 {
@@ -26,7 +25,6 @@ public class TextInputJavafxDialog
         dialog.setTitle(title);
         TextField textField = new TextField();
         Label label = new Label(message);
-        label.setTextFill(Color.WHITE);
         HBox hBox = new HBox(label, textField);
         hBox.setSpacing(10);
         HBox.setHgrow(textField, Priority.ALWAYS);

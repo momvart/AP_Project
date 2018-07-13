@@ -43,6 +43,7 @@ public class Main extends Application
         VBox vBox = setButtons(primaryStage, width, height);
         group.getChildren().addAll(imageView, vBox);
         primaryStage.setScene(new Scene(group, 1200, 900));
+        World.sMenuStage = primaryStage;
         primaryStage.show();
     }
 
@@ -147,4 +148,5 @@ public class Main extends Application
             stage.close();
         });
     }
+
 }

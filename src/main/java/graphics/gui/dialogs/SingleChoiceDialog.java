@@ -1,6 +1,5 @@
 package graphics.gui.dialogs;
 
-import graphics.Fonts;
 import graphics.layers.Layer;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -52,21 +51,11 @@ public class SingleChoiceDialog extends GraphicDialog
 
     public static void applyCss(Dialog dialog)
     {
-        String fontName = Fonts.getMedium().getName();
-        System.err.println(fontName);
-        double fontSize = Fonts.getMedium().getSize();
         dialog.initStyle(StageStyle.TRANSPARENT);
         DialogPane dialogPane = dialog.getDialogPane();
         dialogPane.getStyleClass().remove("alert");
-        dialogPane.setStyle("-fx-background-color: black;" +
-                "-fx-alignment: center;" +
-                "-fx-font-family: " + fontName + ";" + "-fx-font-size: " + Double.toString(fontSize) + ";" +
-                "-fx-pref-width: 600;");
-        dialogPane.lookup(".header-panel").setStyle("-fx-background-color: black;" +
-                "-fx-text-alignment: center;");
-        ;
-        dialogPane.lookup(".header-panel .label").setStyle("-fx-wrap-text: true;" +
-                "-fx-text-fill: lightgreen;");
-        dialogPane.lookup(".content.label").setStyle("-fx-text-fill: white;");
+        dialogPane.getStyleClass().remove("header-panel");
+        dialogPane.getStylesheets().add("layout/dialogs.css");
+        dialogPane.getStyleClass().add("dialog-pane-game");
     }
 }

@@ -1,9 +1,12 @@
 package graphics.gui.dialogs;
 
 import graphics.layers.Layer;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import views.dialogs.DialogResult;
 import views.dialogs.DialogResultCode;
@@ -32,9 +35,12 @@ public class NumberInputDialog extends GraphicDialog
         }
         Spinner<Integer> spinner = new Spinner<>(1, choices.size(), 1, 1);
         spinner.setEditable(true);
-        Alert dialog = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.OK, ButtonType.CANCEL);
-        dialog.setContentText(message);
-        dialog.setGraphic(spinner);
+        Alert dialog = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.OK, ButtonType.CANCEL);
+        HBox hBox = new HBox();
+        hBox.setAlignment(Pos.CENTER);
+        hBox.setSpacing(10);
+        hBox.getChildren().addAll(new Label(message), spinner);
+        dialog.getDialogPane().setContent(hBox);
         SingleChoiceDialog.applyCss(dialog);
         dialog.initModality(Modality.WINDOW_MODAL);
         dialog.showAndWait();

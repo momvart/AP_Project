@@ -1,30 +1,39 @@
 package graphics.gui;
 
-import com.google.gson.*;
-import exceptions.*;
-import graphics.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
+import exceptions.ConsoleException;
+import exceptions.MyIOException;
+import exceptions.MyJsonException;
+import graphics.Fonts;
+import graphics.GraphicsValues;
 import graphics.drawers.BuildingDrawer;
 import graphics.drawers.Drawer;
-import graphics.drawers.drawables.*;
-import graphics.gui.dialogs.*;
+import graphics.drawers.drawables.ButtonDrawable;
+import graphics.drawers.drawables.RoundRectDrawable;
+import graphics.drawers.drawables.TextDrawable;
+import graphics.gui.dialogs.MapInputDialog;
+import graphics.gui.dialogs.SettingsDialog;
 import graphics.gui.dialogs.SingleChoiceDialog;
 import graphics.gui.dialogs.TextInputDialog;
 import graphics.helpers.BuildingGraphicHelper;
 import graphics.helpers.VillageBuildingGraphicHelper;
-import graphics.layers.*;
+import graphics.layers.Layer;
+import graphics.layers.ResourceLayer;
 import graphics.positioning.NormalPositioningSystem;
 import graphics.positioning.PercentPositioningSystem;
 import javafx.application.Platform;
 import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.util.Pair;
-import menus.*;
-import models.*;
+import menus.AttackMapItem;
+import menus.Menu;
+import menus.ParentMenu;
+import models.Map;
+import models.Village;
+import models.World;
 import models.attack.Attack;
 import models.attack.AttackMap;
 import models.attack.attackHelpers.NetworkDecoder;
@@ -33,13 +42,12 @@ import models.buildings.ElixirStorage;
 import models.buildings.GoldStorage;
 import models.soldiers.Soldier;
 import network.AttackUDPReceiver;
-import network.IOnChatMessageReceivedListener;
 import serialization.AttackMapGlobalAdapter;
 import serialization.BuildingGlobalAdapter;
 import serialization.StorageGlobalAdapter;
 import utils.RectF;
 import views.VillageView;
-import views.dialogs.*;
+import views.dialogs.DialogResult;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -275,12 +283,17 @@ public class VillageStage extends GUIMapStage
         SettingsDialog dialog = new SettingsDialog();
         dialog.showMenu();
 
-        if (dialog.isPaused()) ;
-        //pause
+        if (dialog.isPaused())
+        {
+            World.sSettings.setGameSpeed(0);
+        }
         if (!dialog.hasSounds()) ;
         //disable game sounds
-        if (dialog.isBackToMenu()) ;
-            //back To menu
+        if (dialog.isBackToMenu())
+        {
+            close();
+            World.showMenu();
+        }
         else
         {
             World.sSettings.setGameSpeed(dialog.getGameSpeed());

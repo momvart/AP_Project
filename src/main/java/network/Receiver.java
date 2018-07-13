@@ -30,7 +30,7 @@ public class Receiver extends Thread
         {
             while (true)
             {
-                byte[] buffer = new byte[client.getSocket().getReceiveBufferSize()];
+                byte[] buffer = new byte[20000];
 
                 int read = inputStream.read(buffer);
                 if (read == -1)
