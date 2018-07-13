@@ -48,23 +48,28 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     public void increaseHealth(int amount, boolean networkPermission)
     {
-        if (!isReal && !networkPermission)
-            return;
-        health = Math.min(this.getHealth() + amount, getInitialHealth());
-        if (isReal)
-            NetworkHelper.soldierSetHealth(soldier.getId(), health);
+        setHealth(amount + health, networkPermission);
     }
-
 
     public void decreaseHealth(int amount, boolean networkPermission)
     {
-        if (!isReal && !networkPermission)
+        setHealth(health - amount, networkPermission);
+    }
+
+    public void setHealth(int health, boolean networkPermission)
+    {
+        if (!isReal && !networkPermission && !isDead())
             return;
-        health = Math.max(health - amount, 0);
+
+        this.health = Math.max(0, Math.min(health, getInitialHealth()));
+
         if (health <= 0)
             setDead(true);
+
         if (getGraphicHelper() != null)
             getGraphicHelper().updateDrawer();
+
+
         if (isReal)
             NetworkHelper.soldierSetHealth(soldier.getId(), health);
     }
@@ -207,7 +212,6 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
     {
         this.graphicHelper = graphicHelper;
     }
-
 
 
     @Override
