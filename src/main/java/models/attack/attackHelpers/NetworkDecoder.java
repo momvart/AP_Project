@@ -7,9 +7,9 @@ import exceptions.SoldierNotFoundException;
 import graphics.helpers.DefensiveTowerGraphicHelper;
 import graphics.helpers.GuardianGiantGraphicHelper;
 import graphics.helpers.SoldierGraphicHelper;
+import models.Resource;
 import models.attack.Attack;
 import models.buildings.Building;
-import models.buildings.DefensiveTower;
 import models.buildings.GuardianGiant;
 import models.soldiers.Soldier;
 import network.AttackMessage;
@@ -156,11 +156,14 @@ public class NetworkDecoder
             graphicHelper.getBullet().startNewWave(start, end, getSoldier(soldierId), true);
     }
 
-    public void bulletSetPos(long id, PointF position) throws CouldNotFetchNetworkDataException
+    public void setClaimedScore(int claimedScore)
     {
-        DefensiveTower tower = (DefensiveTower)getBuilding(id);
-        DefensiveTowerGraphicHelper graphicHelper = (DefensiveTowerGraphicHelper)tower.getAttackHelper().getGraphicHelper();
-        graphicHelper.getBullet().getDrawer().setPosition(position.getX(), position.getY());
+        theAttack.setClaimedScore(claimedScore);
+    }
+
+    public void setClaimedResource(Resource claimedResource)
+    {
+        theAttack.setClaimedResource(claimedResource);
     }
 
 

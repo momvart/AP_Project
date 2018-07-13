@@ -68,9 +68,16 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                 int claimedAmount = finalStrength == 0 ? storage.getCurrentAmount() : (int)((float)storage.getCurrentAmount() * damage / initialStrength);
 
                 if (storage instanceof GoldStorage)
+                {
                     attack.addToClaimedResource(new Resource(claimedAmount, 0));
+                    NetworkHelper.setClaimedResource(attack.getClaimedResource());
+                }
+
                 else
+                {
                     attack.addToClaimedResource(new Resource(0, claimedAmount));
+                    NetworkHelper.setClaimedResource(attack.getClaimedResource());
+                }
                 storage.decreaseCurrentAmount(claimedAmount);
             }
         }
@@ -78,7 +85,9 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
         if (target.getStrength() <= 0)
         {
             attack.addScore(target.getBuildingInfo().getDestroyScore());
+            NetworkHelper.setClaimedScore(attack.getClaimedScore());
             attack.addToClaimedResource(target.getBuildingInfo().getDestroyResource());
+            NetworkHelper.setClaimedResource(attack.getClaimedResource());
         }
     }
 

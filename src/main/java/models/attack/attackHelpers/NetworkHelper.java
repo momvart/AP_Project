@@ -2,6 +2,7 @@ package models.attack.attackHelpers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import models.Resource;
 import models.soldiers.Soldier;
 import network.AttackMessage;
 import utils.Point;
@@ -154,7 +155,12 @@ public class NetworkHelper
         sendAttackMessage(AttackMessage.Types.BulletStartNewWave, obj);
     }
 
-    public static void bulletSetPos(long buildingId, PointF position)
+    public static void setClaimedScore(int claimedScore)
+    {
+
+    }
+
+    public static void setClaimedResource(Resource claimedResource)
     {
 
     }

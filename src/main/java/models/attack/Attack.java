@@ -114,6 +114,16 @@ public class Attack
         return soldiers.getSoldierById(id);
     }
 
+    public void setClaimedScore(int claimedScore)
+    {
+        this.claimedScore = claimedScore;
+    }
+
+    public void setClaimedResource(Resource claimedResource)
+    {
+        this.claimedResource = claimedResource;
+    }
+
     public enum QuitReason
     {
         TURN("Time Is Up!"),
