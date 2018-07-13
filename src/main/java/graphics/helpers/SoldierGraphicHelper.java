@@ -19,6 +19,7 @@ import static java.lang.Math.round;
 public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnDecampListener, IOnSoldierDieListener
 {
 
+    protected double STOP_DISTANCE = .1;
     protected Soldier soldier;
 
     protected SoldierDrawer drawer;
@@ -29,6 +30,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     private int turn = 1;
     private SoldierAttackHelper attackHelper;
     protected PointF nextCheckPointF;
+    protected boolean isChasingGuardianGiant = false;
 
     public SoldierDrawer getDrawer()
     {
@@ -113,8 +115,8 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         facingBuildingPoint = soldierPath.get(1);
         if (isReal)
             NetworkHelper.sldrStJogTowd(soldier.getId(), dest);
-
     }
+
 
     protected void setFinalStandingPoint()
     {
@@ -126,6 +128,9 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     {
         if (status != Status.RUN || finalStandingPoint == null || moveDest == null)
             return;
+        if (isChasingGuardianGiant)
+            triggerSoldier();
+
         if (nextCheckPointF == null || PointF.euclideanDistance2nd(nextCheckPointF, drawer.getPosition()) < .01)
         {
             setNewCheckPoint();
@@ -139,7 +144,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         double stepDistance = deltaT * soldier.getSpeed();
         double distanceToFinalPosition = getDistanceToFinalPosition();
 
-        if (distanceToFinalPosition < .1 || distanceToFinalPosition < stepDistance)
+        if (distanceToFinalPosition < STOP_DISTANCE || distanceToFinalPosition < stepDistance)
         {
             onMoveFinished();
             return;

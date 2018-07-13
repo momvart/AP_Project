@@ -78,7 +78,7 @@ public class CannonBulletHelper extends BulletHelper
         if (hitTarget || !inProgress)
             return;
 
-        if (!reachedVertex && PointF.euclideanDistance(drawer.getPosition(), vertex) < .01)
+        if (!reachedVertex && PointF.euclideanDistance(drawer.getPosition(), vertex) < .1)
         {
             reachedVertex = true;
             double distance = PointF.euclideanDistance(drawer.getPosition(), end);
@@ -89,7 +89,6 @@ public class CannonBulletHelper extends BulletHelper
         speed = reachedVertex ?
                 sqrt(abs(vertex.getY() - drawer.getPosition().getY()) / heightDifferanceToEnd) * maxSpeed
                 : sqrt((abs(vertex.getY() - drawer.getPosition().getY())) / heightDifferanceToStart) * maxSpeed;
-        System.out.println("Speed is : " + speed);
         double verticalStep = deltaT * speed * sin;
         double horizontalStep = deltaT * speed * cos;
         drawer.setPosition(drawer.getPosition().getX() + horizontalStep, drawer.getPosition().getY() + verticalStep);

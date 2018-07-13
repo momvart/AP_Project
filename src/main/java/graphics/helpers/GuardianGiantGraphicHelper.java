@@ -19,6 +19,7 @@ import static java.lang.Math.round;
 public class GuardianGiantGraphicHelper extends SingleTDefenseGraphicHelper implements IOnDestroyListener, IOnDecampListener
 {
 
+    private double STOP_DISTANCE = .1;
     private PointF moveDest;
     private IOnMoveFinishedListener moveListener;
     private Status status;
@@ -174,8 +175,12 @@ public class GuardianGiantGraphicHelper extends SingleTDefenseGraphicHelper impl
         double distanceToFinalPosition = getDistanceToFinalPosition();
 
         if (attackHelper.getTargetSoldier() == null)
+        {
             standInUrPlace();
-        if ((distanceToFinalPosition < .1 || distanceToFinalPosition < stepDistance) && attackHelper.getTargetSoldier().getAttackHelper().getGraphicHelper().getStatus() != SoldierGraphicHelper.Status.RUN)
+            return;
+        }
+
+        if ((distanceToFinalPosition < STOP_DISTANCE || distanceToFinalPosition < stepDistance) && attackHelper.getTargetSoldier().getAttackHelper().getGraphicHelper().getStatus() != SoldierGraphicHelper.Status.RUN)
         {
             onMoveFinished();
             return;
