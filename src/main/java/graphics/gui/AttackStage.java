@@ -125,6 +125,11 @@ public class AttackStage extends AttackMapStage
         soldier.getAttackHelper().addSoldierDieListener(this::checkForAllSoldiersDead);
         helper.setUpListeners();
         gHandler.addUpdatable(helper);
+        int count = (int)theAttack.getAliveUnits(soldier.getType()).filter(s -> !s.getAttackHelper().isSoldierDeployed()).count();
+        System.out.println(count);
+        ((SoldierMenuItem)getMenuLayer().getCurrentMenu().getMenuItems().stream().filter(menu -> menu.getId() == soldier.getType() + 100).findFirst().get())
+                .setCount(count);
+        getMenuLayer().updateMenu();
     }
 
     @Override
@@ -145,8 +150,6 @@ public class AttackStage extends AttackMapStage
         try
         {
             theAttack.putUnits(menu.getId() - 100, 1, new Point((int)sender.getPosition().getX(), (int)sender.getPosition().getY()), false);
-            menu.setCount((int)theAttack.getAliveUnits(menu.getId() - 100).filter(soldier -> !soldier.getAttackHelper().isSoldierDeployed()).count());
-            getMenuLayer().updateMenu();
         }
         catch (ConsoleException ex) { ex.printStackTrace(); }
     }
