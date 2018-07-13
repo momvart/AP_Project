@@ -17,7 +17,6 @@ public class CannonBulletHelper extends BulletHelper
     private final double height = 5;
     private boolean reachedVertex;
     private PointF vertex;
-    private double verticalSpeed = 2;
     private double heightDifferanceToEnd;
     private double heightDifferanceToStart;
 
@@ -79,20 +78,19 @@ public class CannonBulletHelper extends BulletHelper
         if (hitTarget || !inProgress)
             return;
 
-        if (!reachedVertex && PointF.euclideanDistance(drawer.getPosition(), vertex) < .5)
+        if (!reachedVertex && PointF.euclideanDistance(drawer.getPosition(), vertex) < .01)
         {
             reachedVertex = true;
             double distance = PointF.euclideanDistance(drawer.getPosition(), end);
             cos = (end.getX() - drawer.getPosition().getX()) / distance;
             sin = (end.getY() - drawer.getPosition().getY()) / distance;
         }
-        verticalSpeed = reachedVertex ?
+
+        speed = reachedVertex ?
                 sqrt(abs(vertex.getY() - drawer.getPosition().getY()) / heightDifferanceToEnd) * maxSpeed
-                : -sqrt(abs(vertex.getY() - drawer.getPosition().getY()) / heightDifferanceToStart) * maxSpeed;
-
-        speed = abs((1 / sin) * verticalSpeed);
-
-        double verticalStep = deltaT * verticalSpeed;
+                : sqrt((abs(vertex.getY() - drawer.getPosition().getY())) / heightDifferanceToStart) * maxSpeed;
+        System.out.println("Speed is : " + speed);
+        double verticalStep = deltaT * speed * sin;
         double horizontalStep = deltaT * speed * cos;
         drawer.setPosition(drawer.getPosition().getX() + horizontalStep, drawer.getPosition().getY() + verticalStep);
         if (reachedVertex && PointF.euclideanDistance(drawer.getPosition(), end) < .5)
@@ -112,16 +110,5 @@ public class CannonBulletHelper extends BulletHelper
         targetSoldier = null;
         cos = -1;
         sin = -1;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "CannonBulletHelper{" +
-                "height=" + height +
-                ", reachedVertex=" + reachedVertex +
-                ", vertex=" + vertex +
-                ", verticalSpeed=" + verticalSpeed +
-                '}' + super.toString();
     }
 }

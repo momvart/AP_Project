@@ -15,7 +15,7 @@ public class BulletHelper implements IFrameUpdatable
 {
     public boolean inProgress = false;
     protected DefensiveTowerGraphicHelper towerGraphicHelper;
-    protected final double maxSpeed = 4;//TODO‌ to be manipulated
+    protected final double maxSpeed = 6;//TODO‌ to be manipulated
     protected Drawer drawer;
     protected PointF start;
     protected PointF end;
