@@ -170,4 +170,9 @@ public class NetworkStageController
         Stage stage = (Stage)btnBack.getScene().getWindow();
         stage.close();
     }
+
+    public void selectTab(int index)
+    {
+        tabs.getSelectionModel().select(index);
+    }
 }

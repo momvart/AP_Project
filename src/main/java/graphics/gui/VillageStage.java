@@ -243,11 +243,19 @@ public class VillageStage extends GUIMapStage
 
     public void onBtnAttackClick(Drawer sender, MouseEvent event)
     {
-        List<Path> paths = World.sSettings.getAttackMapPaths().stream().map(Paths::get).collect(Collectors.toList());
-        ParentMenu mainMenu = new ParentMenu(Menu.Id.ATTACK_MAIN_MENU, "");
-        mainMenu.insertItem(new Menu(Menu.Id.ATTACK_LOAD_MAP, "Load Map", GraphicsValues.IconPaths.NewMap));
-        paths.forEach(p -> mainMenu.insertItem(new AttackMapItem(mainMenu, p)));
-        getMenuLayer().setCurrentMenu(mainMenu);
+        if (World.sCurrentClient == null)
+        {
+            List<Path> paths = World.sSettings.getAttackMapPaths().stream().map(Paths::get).collect(Collectors.toList());
+            ParentMenu mainMenu = new ParentMenu(Menu.Id.ATTACK_MAIN_MENU, "");
+            mainMenu.insertItem(new Menu(Menu.Id.ATTACK_LOAD_MAP, "Load Map", GraphicsValues.IconPaths.NewMap));
+            paths.forEach(p -> mainMenu.insertItem(new AttackMapItem(mainMenu, p)));
+            getMenuLayer().setCurrentMenu(mainMenu);
+        }
+        else
+        {
+            NetworkStage.showInstance();
+            NetworkStage.getInstance().getController().selectTab(0);
+        }
     }
 
     private void onBtnSaveClick(Drawer sender, MouseEvent event)
@@ -304,11 +312,14 @@ public class VillageStage extends GUIMapStage
 
     private void onBtnChatClick(Drawer sender, MouseEvent event)
     {
+        NetworkStage.showInstance();
+        NetworkStage.getInstance().getController().selectTab(1);
     }
 
     private void onBtnNetworkClick(Drawer sender, MouseEvent event)
     {
         NetworkStage.showInstance();
+        NetworkStage.getInstance().toFront();
     }
 
     public void lockStageForAttack(String attackerName, List<Soldier> soldiers)

@@ -9,6 +9,7 @@
 .list-view
 {
     -fx-background-color:transparent;
+    -fx-font-family: CCBackBeat;
 }
 
 .list-cell {
@@ -18,10 +19,6 @@
 
 .tab-pane {
 
-}
-
-.tab {
-    -fx-background-color: #ECEFF1;
 }
 
 .tab:selected {
@@ -77,5 +74,6 @@
 }
 
 .button-back {
-    -fx-background-color: pink;
+    -fx-background-color: transparent;
+        -fx-padding:5;
 }

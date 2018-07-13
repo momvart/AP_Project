@@ -11,6 +11,8 @@ public class NetworkStage extends Stage
 {
     private static NetworkStage instance;
 
+    private NetworkStageController controller;
+
     private NetworkStage()
     {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("layout/networkstage.fxml"));
@@ -20,14 +22,25 @@ public class NetworkStage extends Stage
         setScene(scene);
         initModality(Modality.WINDOW_MODAL);
         initStyle(StageStyle.UNDECORATED);
+        this.controller = fxmlLoader.getController();
         show();
+    }
+
+    public NetworkStageController getController()
+    {
+        return controller;
+    }
+
+    public static NetworkStage getInstance()
+    {
+        if (instance == null)
+            instance = new NetworkStage();
+        return instance;
     }
 
     public static void showInstance()
     {
-        if (instance == null)
-            instance = new NetworkStage();
-        instance.show();
+        getInstance().show();
     }
 
 

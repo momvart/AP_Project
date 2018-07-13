@@ -2,15 +2,23 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <VBox fx:id="mainVbox" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="graphics.gui.NetworkStageController" stylesheets="@networkStage.css" styleClass="vbox"
+      fx:controller="graphics.gui.NetworkStageController" stylesheets="@networkStage.css"
       spacing="10">
     <VBox spacing="10">
         <StackPane>
             <Label text="Multiplayer" alignment="BASELINE_CENTER" StackPane.alignment="CENTER"
                    styleClass="label-title"/>
-            <Button fx:id="btnBack" text="back" onAction="#btnBack_Click" StackPane.alignment="CENTER_LEFT"
-                    styleClass="button-back"/>
+            <Button fx:id="btnBack" onAction="#btnBack_Click" StackPane.alignment="CENTER_LEFT"
+                    styleClass="button-back">
+                <graphic>
+                    <ImageView fitHeight="20" fitWidth="20">
+                        <Image url="@../assets/ui/back.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
         </StackPane>
         <StackPane>
             <HBox spacing="10" alignment="CENTER_LEFT">
@@ -28,8 +36,7 @@
     </VBox>
 
     <TabPane fx:id="tabs" prefHeight="300.0" prefWidth="400.0" disable="false" tabClosingPolicy="UNAVAILABLE"
-             VBox.vgrow="ALWAYS"
-             styleClass="tab-pane">
+             VBox.vgrow="ALWAYS">
         <Tab text="Players">
             <fx:include fx:id="tabPlayers" source="players.fxml" VBox.vgrow="ALWAYS"/>
         </Tab>
@@ -37,7 +44,7 @@
             <fx:include fx:id="tabChat" source="chatroom.fxml" VBox.vgrow="ALWAYS"/>
         </Tab>
         <Tab text="Attacks">
-            <fx:include fx:id="tabAttackReports" source="attackreports.fxml" styleClass="tab" VBox.vgrow="ALWAYS"/>
+            <fx:include fx:id="tabAttackReports" source="attackreports.fxml" VBox.vgrow="ALWAYS"/>
         </Tab>
     </TabPane>
 </VBox>
