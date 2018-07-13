@@ -12,7 +12,9 @@ import javafx.util.Pair;
 import models.World;
 import network.GameClientC;
 import network.IOnChatMessageReceivedListener;
+import network.Message;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class ChatroomController implements IOnChatMessageReceivedListener
@@ -31,6 +33,7 @@ public class ChatroomController implements IOnChatMessageReceivedListener
     {
         this.client = client;
         client.setChatMessageReceiver(this);
+        client.setChatRepositoryReceiver(this::onChatRepositoryReceived);
 
         chatLists.setCellFactory(ChatListItem::new);
     }
@@ -44,7 +47,21 @@ public class ChatroomController implements IOnChatMessageReceivedListener
     @Override
     public void onChatMessageReceived(UUID from, String message)
     {
-        Platform.runLater(() -> chatLists.getItems().add(new Pair<>(from, message)));
+        Platform.runLater(() ->
+        {
+            chatLists.getItems().add(new Pair<>(from, message));
+            chatLists.scrollTo(chatLists.getItems().size() - 1);
+
+        });
+    }
+
+    public void onChatRepositoryReceived(ArrayList<Pair<UUID, String>> chatRepo)
+    {
+        Platform.runLater(() ->
+        {
+            chatLists.getItems().setAll(chatRepo);
+            chatLists.scrollTo(chatLists.getItems().size() - 1);
+        });
     }
 
     public static class ChatListItem extends ListCell<Pair<UUID, String>>

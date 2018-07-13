@@ -3,6 +3,7 @@ package network;
 public enum MessageType
 {
     CHAT_MESSAGE,
+    CHAT_REPOSITORY,
     SET_ID,
     SET_CLIENT_INFO,
     PLAYERS_LIST,

@@ -28,6 +28,7 @@ public class GameClientC extends GameClient
     private HashMap<UUID, ClientInfo> players;
 
     private IOnChatMessageReceivedListener chatMessageReceiver;
+    private Consumer<ArrayList<Pair<UUID, String>>> chatRepositoryReceiver;
     private IOnAttackMapReturnedListener attackMapReturnedListener;
     private Runnable playersListUpdatedListener;
     private Consumer<UUID> attackStartListener;
@@ -41,6 +42,7 @@ public class GameClientC extends GameClient
         super(new Socket(ip, port));
     }
 
+    //region Events
     private void callOnChatMessageReceived(Message chatMessage)
     {
         if (chatMessageReceiver != null)
@@ -50,6 +52,17 @@ public class GameClientC extends GameClient
     public void setChatMessageReceiver(IOnChatMessageReceivedListener chatMessageReceiver)
     {
         this.chatMessageReceiver = chatMessageReceiver;
+    }
+
+    private void callOnChatRepositoryReceived(ArrayList<Pair<UUID, String>> chatRepo)
+    {
+        if (chatRepositoryReceiver != null)
+            chatRepositoryReceiver.accept(chatRepo);
+    }
+
+    public void setChatRepositoryReceiver(Consumer<ArrayList<Pair<UUID, String>>> chatRepositoryReceiver)
+    {
+        this.chatRepositoryReceiver = chatRepositoryReceiver;
     }
 
     private UUID activeAttackTarget;
@@ -137,6 +150,8 @@ public class GameClientC extends GameClient
         this.attackReportsReceivedListener = attackReportsReceivedListener;
     }
 
+    //endregion
+
     public ClientInfo getPlayerInfo(UUID id)
     {
         return players.get(id);
@@ -165,6 +180,9 @@ public class GameClientC extends GameClient
                 break;
             case CHAT_MESSAGE:
                 callOnChatMessageReceived(message);
+                break;
+            case CHAT_REPOSITORY:
+                callOnChatRepositoryReceived(gson.fromJson(message.getMessage(), new TypeToken<ArrayList<Pair<UUID, String>>>() { }.getType()));
                 break;
             case GET_MAP:
             {

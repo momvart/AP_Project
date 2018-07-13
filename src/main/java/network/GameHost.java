@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -18,6 +19,8 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
     private ServerSocket serverSocket;
 
     private HashMap<UUID, GameClient> clients = new HashMap<>();
+
+    private LinkedList<Pair<UUID, String>> chatRepository = new LinkedList<>();
 
     private ArrayList<AttackReport> attackReports = new ArrayList<>();
 
@@ -44,6 +47,7 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
                 client.setMessageReceiver(this);
                 client.setOnConnectionClosedListener(this::onClientConnectionClosed);
                 broadcastClientsList();
+                messageReceived(new Message("", client.getClientId(), MessageType.CHAT_REPOSITORY));
             }
         }
         catch (IOException e)
@@ -97,7 +101,11 @@ public class GameHost extends Thread implements IOnMessageReceivedListener
         switch (message.getMessageType())
         {
             case CHAT_MESSAGE:
+                chatRepository.addLast(new Pair<>(message.getSenderId(), message.getMessage()));
                 broadcastMessage(message);
+                break;
+            case CHAT_REPOSITORY:
+                sendMessage(message.getSenderId(), new Message(gson.toJson(chatRepository), null, MessageType.CHAT_REPOSITORY));
                 break;
             case GET_MAP:
                 try

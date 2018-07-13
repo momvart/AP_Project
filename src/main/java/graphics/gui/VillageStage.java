@@ -322,6 +322,8 @@ public class VillageStage extends GUIMapStage
         NetworkStage.getInstance().toFront();
     }
 
+    private AttackStage liveCachedStage;
+
     public void lockStageForAttack(String attackerName, List<Soldier> soldiers)
     {
         txtCaution.setText("Your village is under attack by: " + attackerName);
@@ -345,6 +347,7 @@ public class VillageStage extends GUIMapStage
             AttackStage stage = new AttackStage(attack, width, height);
             stage.setup();
             dBtnCaution.setClickListener(((sender, event) -> stage.show()));
+            liveCachedStage = stage;
         });
         lCaution.setVisible(true);
         getLooper().stop();
@@ -354,5 +357,6 @@ public class VillageStage extends GUIMapStage
     {
         lCaution.setVisible(false);
         getLooper().start();
+        Platform.runLater(() -> liveCachedStage.close());
     }
 }
