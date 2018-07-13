@@ -6,7 +6,6 @@ import models.attack.Attack;
 import models.attack.attackHelpers.GuardianGiantAttackHelper;
 import models.attack.attackHelpers.IOnDecampListener;
 import models.attack.attackHelpers.NetworkHelper;
-import models.buildings.Building;
 import models.buildings.DefensiveTower;
 import models.buildings.GuardianGiant;
 import models.soldiers.Soldier;
@@ -115,7 +114,7 @@ public class GuardianGiantGraphicHelper extends SingleTDefenseGraphicHelper impl
 
     private void triggerSoldier()
     {
-        attackHelper.setTarget(false);
+        attackHelper.setTarget();
         if (attackHelper.getTargetSoldier() != null)
         {
             startJoggingToward(attackHelper.getTargetSoldier(), false);

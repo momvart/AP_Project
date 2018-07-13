@@ -64,6 +64,8 @@ public class HealerAttackHelper extends SoldierAttackHelper
     @Override
     public void fire()
     {
+        if (!isReal)
+            return;
         ArrayList<SoldiersHealReport> reports = new ArrayList<>();
         if (soldier != null && !soldier.getAttackHelper().isDead())
         {
@@ -79,9 +81,9 @@ public class HealerAttackHelper extends SoldierAttackHelper
     }
 
     @Override
-    public void setTarget(boolean networkPermission)
+    public void setTarget()
     {
-        if (!isReal && !networkPermission)
+        if (!isReal)
             return;
         targets = getSoldiersInRange();
         try
@@ -89,10 +91,6 @@ public class HealerAttackHelper extends SoldierAttackHelper
             destination = attack.getNearestSoldier(getSoldierLocation(), 35, MoveType.GROUND);// 35 represents a high range to cover all the map
         }
         catch (SoldierNotFoundException e) {}
-        finally
-        {
-            NetworkHelper.soldierSetTarget(soldier.getId());
-        }
     }
 
     @Override
@@ -140,7 +138,7 @@ public class HealerAttackHelper extends SoldierAttackHelper
             callOnSoldierDie();
             return;
         }
-        setTarget(false);
+        setTarget();
         ageOneDeltaT();
         if (!readyToFireTarget)
             return;

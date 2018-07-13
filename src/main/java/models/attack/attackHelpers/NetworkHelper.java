@@ -158,18 +158,4 @@ public class NetworkHelper
     {
 
     }
-
-    public static void buildingSetTarget(long id)
-    {
-        JsonObject obj = new JsonObject();
-        obj.addProperty(ID_FIELD, id);
-        sendAttackMessage(AttackMessage.Types.BuildingSetTarget, obj);
-    }
-
-    public static void soldierSetTarget(long id)
-    {
-        JsonObject obj = new JsonObject();
-        obj.addProperty(ID_FIELD, id);
-        sendAttackMessage(AttackMessage.Types.SoldierSetTarget, obj);
-    }
 }

@@ -44,6 +44,8 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     @Override
     public void fire()
     {
+        if (!isReal)
+            return;
         if (soldier == null || soldier.getAttackHelper().isDead())
             return;
         if (target == null)
@@ -92,9 +94,9 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     }
 
     @Override
-    public void setTarget(boolean networkPermission)
+    public void setTarget()
     {
-        if (!isReal && !networkPermission)
+        if (!isReal)
             return;
         if (soldier != null && !soldier.getAttackHelper().isDead())
             if (target == null || target.getAttackHelper().getStrength() <= 0 || target.getAttackHelper().isDestroyed())
@@ -109,8 +111,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                 else
                     System.err.println("no target found.");
             }
-        if (isReal)
-            NetworkHelper.soldierSetTarget(soldier.getId());
     }
 
     @Override
@@ -191,7 +191,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
             {
                 if (target == null || target.getStrength() <= 0 || target.getAttackHelper().isDestroyed())
                 {
-                    setTarget(false);
+                    setTarget();
                     callOnDecamp();
                     return;
                 }
