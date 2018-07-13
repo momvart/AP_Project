@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.VBox?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="graphics.gui.AttackReportsController"
       prefHeight="400.0" prefWidth="600.0"
       alignment="CENTER">
-    <ListView fx:id="listView" styleClass="list-cell"/>
+    <ListView fx:id="listView" styleClass="list-cell-attackreport" stylesheets="@attackreport.css"/>
 
-    <Button text="Refresh" onAction="#btnRefresh_Click"/>
+    <Button text="Refresh" onAction="#btnRefresh_Click" stylesheets="@players.css"/>
 </VBox>

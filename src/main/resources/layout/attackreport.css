@@ -1,0 +1,40 @@
+.list-cell-attackreport .list-cell .label-attacker {
+    -fx-text-fill: #ECEFF1;
+    -fx-font-family: Supercell-Magic;
+}
+
+.list-cell-attackreport .list-cell .label-defender {
+    -fx-text-fill: #ECEFF1;
+    -fx-font-family: Supercell-Magic;
+}
+
+.list-cell-attackreport .list-cell .label {
+    -fx-font-family: CCBackBeat;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 8;
+}
+
+.list-cell-attackreport .list-cell:filled:hover .label-attacker, .list-cell-attackreport .list-cell:filled:hover .label-defender {
+    -fx-text-fill: #546E7A;
+}
+
+.list-cell-attackreport .list-cell:filled:hover .label {
+    -fx-text-fill: #455A64;
+}
+
+.list-cell-attackreport {
+    -fx-background-color: #455A64;
+}
+
+.list-cell-attackreport .list-cell:filled:hover {
+    -fx-background-color: #78909C;
+}
+
+.list-cell-attackreport .list-cell:odd {
+    -fx-background-color: #546E7A;
+}
+
+.list-cell-attackreport .list-cell:even {
+    -fx-background-color: transparent;
+}

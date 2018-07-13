@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <VBox xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
-    <HBox>
-        <Label text="Attacker:"/>
-        <Label fx:id="lblAttackerName" text="Attacker"/>
-        <Label text="Defender:"/>
-        <Label fx:id="lblDefenderName" text="Defender"/>
-    </HBox>
+    <StackPane>
+        <HBox spacing="10" StackPane.alignment="CENTER_LEFT" alignment="CENTER_LEFT">
+            <Label text="Attacker:" styleClass="label-attacker" stylesheets="@attackreportitem.css"/>
+            <Label fx:id="lblAttackerName" text="Attacker" stylesheets="@attackreportitem.css" styleClass="label"/>
+        </HBox>
+        <HBox spacing="10" StackPane.alignment="CENTER_RIGHT" alignment="CENTER_RIGHT">
+            <Label fx:id="lblDefenderName" text="Defender" styleClass="label"/>
+            <Label text=":Defender" styleClass="label-defender" stylesheets="@attackreportitem.css"/>
+        </HBox>
+    </StackPane>
+
     <HBox alignment="CENTER">
-        <Label fx:id="lblClaimedGold" alignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <Label fx:id="lblClaimedGold" alignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="label"/>
         <ImageView
                 fx:id="imgGold"
                 fitHeight="NaN">
             <Image url="@../assets/ui/gold.png"/>
         </ImageView>
-        <Label fx:id="lblClaimedElixir" alignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <Label fx:id="lblClaimedElixir" alignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="label"/>
         <ImageView
                 fx:id="imgElixir"
                 fitHeight="NaN">
             <Image url="@../assets/ui/elixir.png"/>
         </ImageView>
-        <Label fx:id="lblClaimedTrophies" alignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <Label fx:id="lblClaimedTrophies" alignment="CENTER" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+               styleClass="label"/>
         <ImageView
                 fx:id="imgTrophie"
                 fitHeight="NaN">

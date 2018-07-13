@@ -5,20 +5,17 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
-import javafx.util.Pair;
 import models.World;
 import models.attack.AttackReport;
 import network.MessageType;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class AttackReportsController
 {
@@ -76,11 +73,12 @@ public class AttackReportsController
                 loader.setController(this);
                 loader.load();
 
-                lblAttackerName.setFont(Fonts.getBBSmaller());
+                lblAttackerName.setFont(Fonts.getBBSmall());
                 lblDefenderName.setFont(Fonts.getBBSmall());
                 lblClaimedGold.setFont(Fonts.getBBSmall());
                 lblClaimedElixir.setFont(Fonts.getBBSmall());
                 lblClaimedTrophies.setFont(Fonts.getBBSmall());
+
 
                 imgGold.fitHeightProperty().bind(lblClaimedGold.heightProperty());
                 imgGold.fitWidthProperty().bind(imgGold.fitHeightProperty());
@@ -102,7 +100,6 @@ public class AttackReportsController
             {
                 lblAttackerName.setText(World.sCurrentClient.getPlayerInfo(item.getAttackerId()).getName());
                 lblDefenderName.setText(World.sCurrentClient.getPlayerInfo(item.getDefenderId()).getName());
-
                 lblClaimedGold.setText(Integer.toString(item.getClaimedResource().getGold()));
                 lblClaimedElixir.setText(Integer.toString(item.getClaimedResource().getElixir()));
                 lblClaimedTrophies.setText(Integer.toString(item.getClaimedScore()));
