@@ -152,7 +152,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     public abstract void fire();
 
-    public abstract void setTarget();
+    public abstract void setTarget(boolean networkPermission);
 
     public abstract Point getTargetLocation();
 

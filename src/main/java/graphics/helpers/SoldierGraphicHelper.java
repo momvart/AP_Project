@@ -113,6 +113,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
         facingBuildingPoint = soldierPath.get(1);
         if (isReal)
             NetworkHelper.sldrStJogTowd(soldier.getId(), dest);
+
     }
 
     protected void setFinalStandingPoint()
@@ -123,7 +124,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
 
     protected void doReplacing(double deltaT)
     {
-        if (status != Status.RUN || finalStandingPoint == null)
+        if (status != Status.RUN || finalStandingPoint == null || moveDest == null)
             return;
         if (nextCheckPointF == null || PointF.euclideanDistance2nd(nextCheckPointF, drawer.getPosition()) < .01)
         {

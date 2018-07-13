@@ -6,7 +6,7 @@ import utils.Point;
 
 public class GuardianGiant extends DefensiveTower
 {
-    public static final int GUARDIAN_GIANT_SPEED = 3;
+    public static final int GUARDIAN_GIANT_SPEED = 2;
 
     public GuardianGiant(Point location, int buildingNum)
     {

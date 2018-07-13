@@ -27,7 +27,7 @@ public class HealerGraphicHelper extends SoldierGraphicHelper
     @Override
     public void triggerSoldier()
     {
-        attackHelper.setTarget();
+        attackHelper.setTarget(false);
         if (attackHelper.getDestination() != null)
         {
             startJoggingToward(new PointF(attackHelper.getDestination()), false);

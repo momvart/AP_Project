@@ -15,13 +15,17 @@ public class TrapAttackHelper extends SingleTargetAttackHelper
     }
 
     @Override
-    public void setTarget()
+    public void setTarget(boolean networkPermission)
     {
+        if (!isReal && !networkPermission)
+            return;
         mainTargets = new ArrayList<>();
         List<Soldier> soldiers = attack.getSoldiersOnLocations().getSoldiers(building.getLocation());
         mainTargets.addAll(soldiers);
         if (mainTargets.size() > 0)
             targetSoldier = mainTargets.get(0);
+        if (isReal)
+            NetworkHelper.buildingSetTarget(building.getId());
     }
 
     @Override

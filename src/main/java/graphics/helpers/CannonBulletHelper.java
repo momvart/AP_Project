@@ -55,10 +55,7 @@ public class CannonBulletHelper extends BulletHelper
     public void startNewWave(final PointF start, final PointF end, final Soldier soldier, final boolean networkPermission)
     {
         if (!isReal && !networkPermission)
-        {
-            onMoveFinish();
             return;
-        }
         super.startNewWave(start, end, soldier, networkPermission);
         reachedVertex = false;
         hitTarget = false;
@@ -78,8 +75,10 @@ public class CannonBulletHelper extends BulletHelper
     {
         if (drawer.getPosition() == null || vertex == null)
             return;
+
         if (hitTarget || !inProgress)
             return;
+
         if (!reachedVertex && PointF.euclideanDistance(drawer.getPosition(), vertex) < .5)
         {
             reachedVertex = true;
@@ -97,18 +96,22 @@ public class CannonBulletHelper extends BulletHelper
         double horizontalStep = deltaT * speed * cos;
         drawer.setPosition(drawer.getPosition().getX() + horizontalStep, drawer.getPosition().getY() + verticalStep);
         if (reachedVertex && PointF.euclideanDistance(drawer.getPosition(), end) < .5)
-        {
-            vertex = null;
-            hitTarget = true;
-            drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
-            inProgress = false;
-            towerGraphicHelper.onBulletHit(DefenseKind.AREA_SPLASH);
-            start = null;
-            end = null;
-            targetSoldier = null;
-            cos = -1;
-            sin = -1;
-        }
+            onMoveFinish();
+    }
+
+    @Override
+    public void onMoveFinish()
+    {
+        vertex = null;
+        hitTarget = true;
+        drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
+        inProgress = false;
+        towerGraphicHelper.onBulletHit(DefenseKind.AREA_SPLASH);
+        start = null;
+        end = null;
+        targetSoldier = null;
+        cos = -1;
+        sin = -1;
     }
 
     @Override
