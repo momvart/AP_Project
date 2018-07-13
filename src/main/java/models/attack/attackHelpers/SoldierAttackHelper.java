@@ -58,7 +58,7 @@ public abstract class SoldierAttackHelper implements IOnReloadListener, IOnMoveF
 
     public void setHealth(int health, boolean networkPermission)
     {
-        if (!isReal && !networkPermission && !isDead())
+        if ((!isReal && !networkPermission) || isDead())
             return;
 
         this.health = Math.max(0, Math.min(health, getInitialHealth()));

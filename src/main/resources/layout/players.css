@@ -8,7 +8,6 @@
 
 .list-cell-player .list-cell .label {
     -fx-text-fill: #ECEFF1;
-    -fx-font-size: 8;
 }
 
 .list-cell-player .list-cell:selected {

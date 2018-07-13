@@ -17,6 +17,7 @@ import models.attack.attackHelpers.GuardianGiantAttackHelper;
 import models.attack.attackHelpers.SingleTargetAttackHelper;
 import models.buildings.Building;
 import models.buildings.DefensiveTower;
+import models.buildings.GuardianGiant;
 import utils.GraphicsUtilities;
 import utils.RectF;
 
@@ -71,7 +72,7 @@ public class AttackMapStage extends GUIMapStage
             if (building.getAttackHelper() instanceof SingleTargetAttackHelper)
             {
                 if (building.getAttackHelper() instanceof GuardianGiantAttackHelper)
-                    graphicHelper = new GuardianGiantGraphicHelper(building, getObjectsLayer(), map);
+                    graphicHelper = new GuardianGiantGraphicHelper(((GuardianGiant)building), getObjectsLayer(), map);
                 else
                     graphicHelper = new SingleTDefenseGraphicHelper(building, getObjectsLayer(), getMap());
             }

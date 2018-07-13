@@ -57,7 +57,7 @@ public class BuildingAttackHelper implements IOnReloadListener
 
     public void setStrength(int strength, boolean networkPermission)
     {
-        if (!isReal && !networkPermission && !isDestroyed())
+        if ((!isReal && !networkPermission) || isDestroyed())
             return;
         this.strength = strength;
 
@@ -76,7 +76,7 @@ public class BuildingAttackHelper implements IOnReloadListener
 
     public boolean isDestroyed()
     {
-        return destroyed;
+        return strength <= 0;
     }
 
     public Attack getAttack()

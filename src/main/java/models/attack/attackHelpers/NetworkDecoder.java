@@ -89,10 +89,7 @@ public class NetworkDecoder
         {
             theAttack.putUnits(unitType, count, location, true);
         }
-        catch (ConsoleException ex)
-        {
-            ex.printStackTrace();
-        }
+        catch (ConsoleException ignored) { }
     }
 
     public void sldrStJogTowd(long soldierId, PointF dest) throws CouldNotFetchNetworkDataException

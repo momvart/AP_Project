@@ -181,5 +181,12 @@ public class PlayersController
                 setText("");
             }
         }
+
+        @Override
+        protected void updateBounds()
+        {
+            lblName.getParent().requestLayout();
+            super.updateBounds();
+        }
     }
 }

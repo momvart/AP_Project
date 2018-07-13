@@ -20,24 +20,21 @@ import static java.lang.Math.round;
 public class GuardianGiantGraphicHelper extends SingleTDefenseGraphicHelper implements IOnDestroyListener, IOnDecampListener
 {
 
-    protected PointF moveDest;
-    protected IOnMoveFinishedListener moveListener;
-    protected Status status;
-    protected PointF nextCheckPointF;
-    protected PointF finalStandingPoint;
-    protected double sin;
-    protected double cos;
-    Point facingBuildingPoint;
-    Building building;
-    GuardianGiantAttackHelper attackHelper;
+    private PointF moveDest;
+    private IOnMoveFinishedListener moveListener;
+    private Status status;
+    private PointF nextCheckPointF;
+    private PointF finalStandingPoint;
+    private double sin;
+    private double cos;
+    private Point facingBuildingPoint;
+    private GuardianGiantAttackHelper attackHelper;
 
 
-    public GuardianGiantGraphicHelper(Building building, Layer layer, Map map)
+    public GuardianGiantGraphicHelper(GuardianGiant building, Layer layer, Map map)
     {
         super(building, layer, map);
-        this.building = building;
         attackHelper = (GuardianGiantAttackHelper)building.getAttackHelper();
-
     }
 
     public void setUpListeners()
