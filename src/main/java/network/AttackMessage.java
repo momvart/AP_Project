@@ -56,5 +56,8 @@ public class AttackMessage
         public static final int SoldierSetHealth = 1006;
         public static final int BuildingSetStrength = 1007;
         public static final int BulletStartNewWave = 1008;
+        public static final int SetResource = 1009;
+        public static final int SetScore = 1010;
+        public static final int SetTime = 1011;
     }
 }

@@ -10,12 +10,14 @@ import graphics.helpers.SoldierGraphicHelper;
 import models.Resource;
 import models.attack.Attack;
 import models.buildings.Building;
+import models.buildings.DefensiveTower;
 import models.buildings.GuardianGiant;
 import models.soldiers.Soldier;
 import network.AttackMessage;
 import network.AttackUDPReceiver;
 import utils.Point;
 import utils.PointF;
+import utils.TimeSpan;
 
 public class NetworkDecoder
 {
@@ -68,6 +70,15 @@ public class NetworkDecoder
                             new PointF(message.getDoubleData("x1"), message.getDoubleData("y1")),
                             new PointF(message.getDoubleData("x2"), message.getDoubleData("y2")),
                             message.getLongData(NetworkHelper.SOLDIER_ID_FIELD));
+                    break;
+                case AttackMessage.Types.SetScore:
+                    setClaimedScore(message.getIntData("score"));
+                    break;
+                case AttackMessage.Types.SetResource:
+                    setClaimedResource(new Resource(message.getIntData(NetworkHelper.GOLD_FIELD), message.getIntData(NetworkHelper.ELIXIR_FIELD)));
+                    break;
+                case AttackMessage.Types.SetTime:
+                    setTime(message.getLongData("seconds"));
                     break;
             }
         }
@@ -166,6 +177,11 @@ public class NetworkDecoder
         theAttack.setClaimedResource(claimedResource);
     }
 
+
+    public void setTime(long seconds)
+    {
+        theAttack.setAttackTime(new TimeSpan(seconds));
+    }
 
     private Soldier getSoldier(long soldierId) throws CouldNotFetchNetworkDataException
     {
