@@ -1,0 +1,57 @@
+.dialog-pane-game {
+    -fx-background-color: #263238;
+}
+
+.dialog-pane-game *.header-panel {
+    -fx-background-color: #263238;
+}
+
+.dialog-pane-game *.header-panel .label {
+    -fx-text-fill: yellowgreen;
+    -fx-font-size: 10;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane-game *.label.content {
+    -fx-text-fill: #ECEFF1;
+    -fx-font-family: Supercell-Magic;
+    -fx-font-size: 8;
+}
+
+.dialog-pane-game *.button {
+    -fx-background-color: lightblue;
+    -fx-font-family: Supercell-Magic;
+    -fx-text-fill: black;
+    -fx-font-size: 6;
+    -fx-fit-to-height: true;
+}
+
+.dialog-pane-game *.button:hover {
+    -fx-background-color: yellowgreen;
+    -fx-text-fill: black;
+}
+
+.dialog-pane-game *.text-field {
+    -fx-background-color: #546E7A;
+    -fx-font-weight: bold;
+    -fx-font-family: CCBackBeat;
+    -fx-background-radius: 0 0 0 0;
+    -fx-font-size: 8;
+    -fx-text-fill: white;
+}
+
+.dialog-pane-game *.label {
+    -fx-text-fill: #ECEFF1;
+    -fx-font-family: Supercell-Magic;
+    -fx-font-size: 8;
+}
+
+.dialog-pane-game *.button-settings {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ECEFF1;
+}
+
+.dialog-pane-game *.button-settings:hover {
+    -fx-background-color: transparent;
+    -fx-text-fill: yellowgreen;
+}

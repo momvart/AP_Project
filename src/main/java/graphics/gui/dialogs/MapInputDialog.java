@@ -6,7 +6,9 @@ import graphics.layers.Layer;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import models.Map;
 import utils.ConsoleUtilities;
@@ -30,12 +32,14 @@ public class MapInputDialog extends GraphicDialog
     @Override
     public DialogResult showDialog()
     {
-        Alert dialog = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.OK, ButtonType.CANCEL);
+        Alert dialog = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.OK, ButtonType.CANCEL);
         TextField textField = new TextField();
-        textField.setAlignment(Pos.BOTTOM_CENTER);
-        dialog.setGraphic(textField);
+        HBox hBox = new HBox();
+        hBox.setAlignment(Pos.CENTER);
+        hBox.getChildren().addAll(new Label(message), textField);
+        hBox.setSpacing(10);
+        dialog.getDialogPane().setContent(hBox);
         SingleChoiceDialog.applyCss(dialog);
-        dialog.setContentText(message);
         dialog.initModality(Modality.WINDOW_MODAL);
         dialog.showAndWait();
         if (dialog.getResult().equals(ButtonType.OK))

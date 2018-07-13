@@ -1,6 +1,5 @@
 package graphics.gui.dialogs;
 
-import graphics.Fonts;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -142,7 +141,7 @@ public class SettingsDialog
     private Button getButton(String text)
     {
         Button button = new Button(text);
-        button.setStyle("-fx-background-color: black; -fx-text-fill: white; -fx-font-size: " + Fonts.getLarge().getSize() + ";");
+        button.getStyleClass().add("button-settings");
         button.setOnMouseMoved(event -> button.setTextFill(Color.YELLOWGREEN));
         return button;
     }

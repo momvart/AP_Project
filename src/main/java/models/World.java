@@ -1,23 +1,30 @@
 package models;
 
 
-import models.buildings.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import javafx.stage.Stage;
+import models.buildings.Building;
 import models.buildings.BuildingValues;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierValues;
-
-import java.io.*;
-import java.nio.file.*;
-
-import com.google.gson.*;
 import network.GameClientC;
 import network.GameHost;
-import serialization.*;
+import serialization.BuildingAdapter;
+import serialization.ClassAdapter;
+import serialization.MapAdapter;
+import serialization.SoldierAdapter;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class World
 {
     public static Game sCurrentGame;
     public static Settings sSettings;
+    public static Stage sMenuStage;
 
     public static void initialize()
     {
@@ -116,6 +123,11 @@ public class World
     public static Village getVillage()
     {
         return sCurrentGame.getVillage();
+    }
+
+    public static void showMenu()
+    {
+        sMenuStage.show();
     }
 
 
