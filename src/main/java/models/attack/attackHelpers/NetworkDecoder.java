@@ -7,6 +7,7 @@ import exceptions.SoldierNotFoundException;
 import graphics.helpers.DefensiveTowerGraphicHelper;
 import graphics.helpers.GuardianGiantGraphicHelper;
 import graphics.helpers.SoldierGraphicHelper;
+import models.Resource;
 import models.attack.Attack;
 import models.buildings.Building;
 import models.buildings.DefensiveTower;
@@ -16,6 +17,7 @@ import network.AttackMessage;
 import network.AttackUDPReceiver;
 import utils.Point;
 import utils.PointF;
+import utils.TimeSpan;
 
 public class NetworkDecoder
 {
@@ -69,11 +71,14 @@ public class NetworkDecoder
                             new PointF(message.getDoubleData("x2"), message.getDoubleData("y2")),
                             message.getLongData(NetworkHelper.SOLDIER_ID_FIELD));
                     break;
-                case AttackMessage.Types.BuildingSetTarget:
-                    buildingSetTarget(message.getIdData());
+                case AttackMessage.Types.SetScore:
+                    setClaimedScore(message.getIntData("score"));
                     break;
-                case AttackMessage.Types.SoldierSetTarget:
-                    soldierSetTarget(message.getIdData());
+                case AttackMessage.Types.SetResource:
+                    setClaimedResource(new Resource(message.getIntData(NetworkHelper.GOLD_FIELD), message.getIntData(NetworkHelper.ELIXIR_FIELD)));
+                    break;
+                case AttackMessage.Types.SetTime:
+                    setTime(message.getLongData("seconds"));
                     break;
             }
         }
@@ -162,24 +167,22 @@ public class NetworkDecoder
             graphicHelper.getBullet().startNewWave(start, end, getSoldier(soldierId), true);
     }
 
-    public void bulletSetPos(long id, PointF position) throws CouldNotFetchNetworkDataException
+    public void setClaimedScore(int claimedScore)
     {
-        DefensiveTower tower = (DefensiveTower)getBuilding(id);
-        DefensiveTowerGraphicHelper graphicHelper = (DefensiveTowerGraphicHelper)tower.getAttackHelper().getGraphicHelper();
-        graphicHelper.getBullet().getDrawer().setPosition(position.getX(), position.getY());
+        theAttack.setClaimedScore(claimedScore);
     }
 
-    public void buildingSetTarget(long id) throws CouldNotFetchNetworkDataException
+    public void setClaimedResource(Resource claimedResource)
     {
-        DefensiveTowerAttackHelper attackHelper = (DefensiveTowerAttackHelper)getBuilding(id).getAttackHelper();
-        attackHelper.setTarget(true);
+        theAttack.setClaimedResource(claimedResource);
     }
 
-    public void soldierSetTarget(long id) throws CouldNotFetchNetworkDataException
+
+    public void setTime(long seconds)
     {
-        SoldierAttackHelper attackHelper = (SoldierAttackHelper)getSoldier(id).getAttackHelper();
-        attackHelper.setTarget(true);
+        theAttack.setAttackTime(new TimeSpan(seconds));
     }
+
     private Soldier getSoldier(long soldierId) throws CouldNotFetchNetworkDataException
     {
         try

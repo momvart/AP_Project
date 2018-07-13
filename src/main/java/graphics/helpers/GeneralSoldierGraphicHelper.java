@@ -28,7 +28,7 @@ public class GeneralSoldierGraphicHelper extends SoldierGraphicHelper implements
     @Override
     public void triggerSoldier()
     {
-        attackHelper.setTarget(false);
+        attackHelper.setTarget();
         if (attackHelper.getTarget() != null)
         {
             startJoggingToward(new PointF(attackHelper.getTarget().getLocation()), false);

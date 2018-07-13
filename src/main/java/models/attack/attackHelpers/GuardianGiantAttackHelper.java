@@ -75,9 +75,9 @@ public class GuardianGiantAttackHelper extends SingleTargetAttackHelper implemen
     }
 
     @Override
-    public void setTarget(boolean networkPermission)
+    public void setTarget()
     {
-        if (!isReal && !networkPermission)
+        if (!isReal)
             return;
         mainTargets = new ArrayList<>();
         Optional<Soldier> min = attack.getDeployedAliveUnits().min(Comparator.comparingDouble(soldier -> Point.euclideanDistance2nd(soldier.getLocation(), getBuilding().getLocation())));
@@ -86,8 +86,6 @@ public class GuardianGiantAttackHelper extends SingleTargetAttackHelper implemen
             targetSoldier = mainTargets.get(0);
         else
             targetSoldier = null;
-        if (isReal)
-            NetworkHelper.buildingSetTarget(building.getId());
     }
 
     @Override
@@ -96,7 +94,7 @@ public class GuardianGiantAttackHelper extends SingleTargetAttackHelper implemen
         if (!destroyed)
         {
             DefensiveTower defensiveTower = (DefensiveTower)building;
-            setTarget(false);
+            setTarget();
             if (targetSoldier != null && Point.euclideanDistance(targetSoldier.getLocation(), defensiveTower.getLocation()) <= defensiveTower.getRange() * 1.5)
                 attack();
             else
@@ -128,7 +126,7 @@ public class GuardianGiantAttackHelper extends SingleTargetAttackHelper implemen
             {
                 if (targetSoldier == null || targetSoldier.getAttackHelper().getHealth() <= 0 || targetSoldier.getAttackHelper().isDead())
                 {
-                    setTarget(false);
+                    setTarget();
                     callOnDecamp();
                     return;
                 }

@@ -8,13 +8,11 @@ import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import models.soldiers.SoldierCollection;
 import models.soldiers.SoldierValues;
-import utils.MapCellNode;
-import utils.Point;
-import utils.PointF;
-import utils.Size;
+import utils.*;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -30,6 +28,8 @@ public class Attack
     private int turn;
     private HashMap<Storage, Resource> claimedResourceStorages = new HashMap<>();
     public boolean isReal;
+    private Consumer<TimeSpan> timeChangeListener;
+    private TimeSpan attackTime;
 
     private SoldierCoordinatedCollection soldiersOnLocations;
 
@@ -87,6 +87,31 @@ public class Attack
         return totalResource;
     }
 
+    public TimeSpan getAttackTime()
+    {
+        return attackTime;
+    }
+
+    public void setAttackTime(TimeSpan attackTime)
+    {
+        this.attackTime = attackTime;
+        callOnTimeChanged(attackTime);
+        attackTime.setTimeChangeListener(this::callOnTimeChanged);
+    }
+
+    private void callOnTimeChanged(TimeSpan time)
+    {
+        if (timeChangeListener != null)
+            timeChangeListener.accept(attackTime);
+        if (isReal)
+            NetworkHelper.setTime(time);
+    }
+
+    public void setTimeChangeListener(Consumer<TimeSpan> timeChangeListener)
+    {
+        this.timeChangeListener = timeChangeListener;
+    }
+
     //endregion
 
     public AttackMap getMap()
@@ -112,6 +137,17 @@ public class Attack
     public Soldier getSoldierById(long id) throws SoldierNotFoundException
     {
         return soldiers.getSoldierById(id);
+    }
+
+    public void setClaimedScore(int claimedScore)
+    {
+        this.claimedScore = claimedScore;
+    }
+
+    public void setClaimedResource(Resource claimedResource)
+    {
+        this.claimedResource.setGold(claimedResource.getGold());
+        this.claimedResource.setElixir(claimedResource.getElixir());
     }
 
     public enum QuitReason

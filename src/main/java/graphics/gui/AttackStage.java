@@ -42,6 +42,7 @@ public class AttackStage extends AttackMapStage
     private Layer lFliers;
 
     private TimerGraphicHelper timer;
+    private TextDrawable txtTime;
 
     private Consumer<AttackReport> attackFinishedListener;
 
@@ -82,16 +83,21 @@ public class AttackStage extends AttackMapStage
         soldierMenuItems.forEach(parentMenu::insertItem);
         getMenuLayer().setCurrentMenu(parentMenu);
 
-        TextDrawable txtTime = new TextDrawable("", Color.WHITE, Fonts.getMedium());
+        txtTime = new TextDrawable("03:00", Color.WHITE, Fonts.getMedium());
         {
             txtTime.setHasShadow(true);
             txtTime.setPivot(0.5, 0.5);
             Drawer dTime = new Drawer(txtTime);
             dTime.setPosition(0.5, 0.5);
             dTime.setLayer(getStuffsLayer());
-            timer = new TimerGraphicHelper(txtTime, new TimeSpan(3, 0), true);
-            timer.setOnTimeFinished(() -> this.quitAttack(Attack.QuitReason.TURN));
-            getGuiHandler().addUpdatable(timer);
+            theAttack.setAttackTime(new TimeSpan(3, 0));
+            theAttack.setTimeChangeListener(this::updateTimerText);
+            if (theAttack.isReal)
+            {
+                timer = new TimerGraphicHelper(theAttack.getAttackTime(), true);
+                timer.setOnTimeFinished(() -> this.quitAttack(Attack.QuitReason.TURN));
+                getGuiHandler().addUpdatable(timer);
+            }
         }
 
         if (theAttack.isReal)
@@ -156,6 +162,12 @@ public class AttackStage extends AttackMapStage
         }
         catch (ConsoleException ex) { ex.printStackTrace(); }
     }
+
+    private void updateTimerText(TimeSpan time)
+    {
+        txtTime.setText(String.format("%02d:%02d", time.getTotalMinutes(), time.getSeconds()));
+    }
+
 
     @Override
     protected void onClose(WindowEvent event)

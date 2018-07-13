@@ -5,17 +5,14 @@ import utils.TimeSpan;
 
 public class TimerGraphicHelper extends GraphicHelper
 {
-    private TextDrawable text;
-
     private TimeSpan time;
 
     private boolean reversed;
 
     private Runnable onTimeFinished;
 
-    public TimerGraphicHelper(TextDrawable text, TimeSpan time, boolean reversed)
+    public TimerGraphicHelper(TimeSpan time, boolean reversed)
     {
-        this.text = text;
         this.setReloadDuration(1);
         this.setReloadListener(this::onClockTick);
         this.time = time;
@@ -25,7 +22,6 @@ public class TimerGraphicHelper extends GraphicHelper
     private void onClockTick()
     {
         time.addSeconds(reversed ? -1 : 1);
-        updateText();
         if (time.getTotalSeconds() == 0)
             callOnTimeFinished();
     }
@@ -41,8 +37,4 @@ public class TimerGraphicHelper extends GraphicHelper
         this.onTimeFinished = onTimeFinished;
     }
 
-    private void updateText()
-    {
-        text.setText(String.format("%02d:%02d", time.getTotalMinutes(), time.getSeconds()));
-    }
 }

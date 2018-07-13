@@ -1,9 +1,13 @@
 package utils;
 
+import java.util.function.Consumer;
+
 public class TimeSpan
 {
     public static final int SEC_IN_MIN = 60;
     private long seconds = 0;
+    private Consumer<TimeSpan> timeChangeListener;
+
 
     public TimeSpan(long seconds)
     {
@@ -29,6 +33,8 @@ public class TimeSpan
     public TimeSpan addSeconds(long seconds)
     {
         this.seconds += seconds;
+        if (seconds != 0)
+            callTimeChanged();
         return this;
     }
 
@@ -55,5 +61,16 @@ public class TimeSpan
     public long getDays()
     {
         return getTotalHours() / 24;
+    }
+
+    private void callTimeChanged()
+    {
+        if (timeChangeListener != null)
+            timeChangeListener.accept(this);
+    }
+
+    public void setTimeChangeListener(Consumer<TimeSpan> timeChangeListener)
+    {
+        this.timeChangeListener = timeChangeListener;
     }
 }

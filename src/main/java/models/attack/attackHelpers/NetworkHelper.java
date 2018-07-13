@@ -2,10 +2,12 @@ package models.attack.attackHelpers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import models.Resource;
 import models.soldiers.Soldier;
 import network.AttackMessage;
 import utils.Point;
 import utils.PointF;
+import utils.TimeSpan;
 
 import java.net.*;
 
@@ -15,6 +17,8 @@ public class NetworkHelper
     public static final String ID_FIELD = "id";
     public static final String SOLDIER_ID_FIELD = "sid";
     public static final String HEALTH_STRENGTH = "hs";
+    public static final String GOLD_FIELD = "gold";
+    public static final String ELIXIR_FIELD = "elixir";
     //these methods should send some encoded data to the network
 
     private static DatagramSocket socket;
@@ -154,22 +158,25 @@ public class NetworkHelper
         sendAttackMessage(AttackMessage.Types.BulletStartNewWave, obj);
     }
 
-    public static void bulletSetPos(long buildingId, PointF position)
-    {
-
-    }
-
-    public static void buildingSetTarget(long id)
+    public static void setClaimedScore(int claimedScore)
     {
         JsonObject obj = new JsonObject();
-        obj.addProperty(ID_FIELD, id);
-        sendAttackMessage(AttackMessage.Types.BuildingSetTarget, obj);
+        obj.addProperty("score", claimedScore);
+        sendAttackMessage(AttackMessage.Types.SetScore, obj);
     }
 
-    public static void soldierSetTarget(long id)
+    public static void setClaimedResource(Resource claimedResource)
     {
         JsonObject obj = new JsonObject();
-        obj.addProperty(ID_FIELD, id);
-        sendAttackMessage(AttackMessage.Types.SoldierSetTarget, obj);
+        obj.addProperty(GOLD_FIELD, claimedResource.getGold());
+        obj.addProperty(ELIXIR_FIELD, claimedResource.getElixir());
+        sendAttackMessage(AttackMessage.Types.SetResource, obj);
+    }
+
+    public static void setTime(TimeSpan time)
+    {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("seconds", time.getTotalSeconds());
+        sendAttackMessage(AttackMessage.Types.SetTime, obj);
     }
 }

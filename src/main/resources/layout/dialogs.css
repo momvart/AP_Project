@@ -8,21 +8,22 @@
 
 .dialog-pane-game *.header-panel .label {
     -fx-text-fill: yellowgreen;
-    -fx-font-size: 10;
+    -fx-font-size: 15;
+    -fx-font-family: Supercell-Magic;
     -fx-font-weight: bold;
 }
 
 .dialog-pane-game *.label.content {
     -fx-text-fill: #ECEFF1;
-    -fx-font-family: Supercell-Magic;
-    -fx-font-size: 8;
+    -fx-font-family: CCBackBeat;
+    -fx-font-size: 15;
 }
 
 .dialog-pane-game *.button {
     -fx-background-color: lightblue;
     -fx-font-family: Supercell-Magic;
     -fx-text-fill: black;
-    -fx-font-size: 6;
+    -fx-font-size: 10;
     -fx-fit-to-height: true;
 }
 
@@ -36,14 +37,14 @@
     -fx-font-weight: bold;
     -fx-font-family: CCBackBeat;
     -fx-background-radius: 0 0 0 0;
-    -fx-font-size: 8;
+    -fx-font-size: 10;
     -fx-text-fill: white;
 }
 
 .dialog-pane-game *.label {
     -fx-text-fill: #ECEFF1;
-    -fx-font-family: Supercell-Magic;
-    -fx-font-size: 8;
+    -fx-font-family: CCBackBeat;
+    -fx-font-size: 15;
 }
 
 .dialog-pane-game *.button-settings {
