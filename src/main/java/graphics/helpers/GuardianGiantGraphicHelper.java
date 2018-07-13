@@ -115,7 +115,7 @@ public class GuardianGiantGraphicHelper extends SingleTDefenseGraphicHelper impl
 
     private void triggerSoldier()
     {
-        attackHelper.setTarget();
+        attackHelper.setTarget(false);
         if (attackHelper.getTargetSoldier() != null)
         {
             startJoggingToward(attackHelper.getTargetSoldier(), false);
@@ -174,6 +174,8 @@ public class GuardianGiantGraphicHelper extends SingleTDefenseGraphicHelper impl
         double stepDistance = deltaT * GuardianGiant.GUARDIAN_GIANT_SPEED;
         double distanceToFinalPosition = getDistanceToFinalPosition();
 
+        if (attackHelper.getTargetSoldier() == null)
+            standInUrPlace();
         if ((distanceToFinalPosition < .1 || distanceToFinalPosition < stepDistance) && attackHelper.getTargetSoldier().getAttackHelper().getGraphicHelper().getStatus() != SoldierGraphicHelper.Status.RUN)
         {
             onMoveFinished();
@@ -187,6 +189,21 @@ public class GuardianGiantGraphicHelper extends SingleTDefenseGraphicHelper impl
 
         if (!getVeryPoint(buildingDrawer.getPosition()).equals(building.getLocation()))
             syncLogicWithGraphic();
+    }
+
+    private void standInUrPlace()
+    {
+        if (finalStandingPoint == null)
+            return;
+
+        syncLogicWithGraphic();
+        status = null;
+        if (moveListener != null)
+            moveListener.onMoveFinished(buildingDrawer.getPosition());
+        finalStandingPoint = null;
+        nextCheckPointF = null;
+        if (attackHelper.isReal())
+            NetworkHelper.setGrdnGntPos(building.getId(), buildingDrawer.getPosition());
     }
 
     public void syncLogicWithGraphic()

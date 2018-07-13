@@ -24,8 +24,10 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
     Point soldier;
     Soldier targetSoldier;
     @Override
-    public void setTarget()
+    public void setTarget(boolean networkPermission)
     {
+        if (!isReal && !networkPermission)
+            return;
         DefensiveTower defensiveTower = (DefensiveTower)building;
         try
         {
@@ -37,15 +39,15 @@ public class AreaAttackHelper extends DefensiveTowerAttackHelper
         }
         targetSoldier = getAnAliveSoldier(attack.getSoldiersOnLocations().getSoldiers(soldier));
         if (targetSoldier == null)
-        {
             return;
-        }
 
 
         if (building.getType() == WizardTower.DEFENSIVE_TOWER_TYPE)
             triggerListener.onBulletTrigger(targetSoldier.getAttackHelper().getGraphicHelper().getDrawer().getPosition(), targetSoldier);
         else
             triggerListener.onBulletTrigger(soldier.toPointF(), null);
+        if (isReal)
+            NetworkHelper.buildingSetTarget(building.getId());
     }
 
     @Override

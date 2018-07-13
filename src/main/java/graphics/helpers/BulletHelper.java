@@ -58,10 +58,7 @@ public class BulletHelper implements IFrameUpdatable
     public void startNewWave(final PointF start, final PointF end, Soldier soldier, boolean networkPermission)
     {
         if (!isReal && !networkPermission)
-        {
-            onMoveFinish();
             return;
-        }
         this.start = start;
         this.end = end;
         targetSoldier = soldier;
@@ -69,6 +66,8 @@ public class BulletHelper implements IFrameUpdatable
             setUpCosSin(start, end);
         hitTarget = false;
         inProgress = true;
+        if (!isReal)
+            System.out.println("single target defensive towers new wave");
         if (isReal)
             NetworkHelper.bulletStartNewWave(towerGraphicHelper.getAttackHelper().getBuilding().getId(), start, end, soldier);
     }
@@ -114,7 +113,7 @@ public class BulletHelper implements IFrameUpdatable
         hitTarget = true;
         drawer.setPosition(towerGraphicHelper.getBuildingDrawer().getPosition().getX(), towerGraphicHelper.getBuildingDrawer().getPosition().getY());
         inProgress = false;
-        if (!targetSoldier.getAttackHelper().isDead())
+        if (targetSoldier != null && !targetSoldier.getAttackHelper().isDead())
             towerGraphicHelper.onBulletHit(DefenseKind.SINGLE_TARGET);
         start = null;
         end = null;

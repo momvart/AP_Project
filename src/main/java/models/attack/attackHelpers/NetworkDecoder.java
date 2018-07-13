@@ -69,6 +69,12 @@ public class NetworkDecoder
                             new PointF(message.getDoubleData("x2"), message.getDoubleData("y2")),
                             message.getLongData(NetworkHelper.SOLDIER_ID_FIELD));
                     break;
+                case AttackMessage.Types.BuildingSetTarget:
+                    buildingSetTarget(message.getIdData());
+                    break;
+                case AttackMessage.Types.SoldierSetTarget:
+                    soldierSetTarget(message.getIdData());
+                    break;
             }
         }
         catch (CouldNotFetchNetworkDataException ex)
@@ -147,7 +153,13 @@ public class NetworkDecoder
     {
         Building building = getBuilding(id);
         DefensiveTowerGraphicHelper graphicHelper = (DefensiveTowerGraphicHelper)building.getAttackHelper().getGraphicHelper();
-        graphicHelper.getBullet().startNewWave(start, end, getSoldier(soldierId), true);
+        if (soldierId == -10)
+        {
+            graphicHelper.getBullet().startNewWave(start, end, null, true);
+        }
+
+        else
+            graphicHelper.getBullet().startNewWave(start, end, getSoldier(soldierId), true);
     }
 
     public void bulletSetPos(long id, PointF position) throws CouldNotFetchNetworkDataException
@@ -157,6 +169,17 @@ public class NetworkDecoder
         graphicHelper.getBullet().getDrawer().setPosition(position.getX(), position.getY());
     }
 
+    public void buildingSetTarget(long id) throws CouldNotFetchNetworkDataException
+    {
+        DefensiveTowerAttackHelper attackHelper = (DefensiveTowerAttackHelper)getBuilding(id).getAttackHelper();
+        attackHelper.setTarget(true);
+    }
+
+    public void soldierSetTarget(long id) throws CouldNotFetchNetworkDataException
+    {
+        SoldierAttackHelper attackHelper = (SoldierAttackHelper)getSoldier(id).getAttackHelper();
+        attackHelper.setTarget(true);
+    }
     private Soldier getSoldier(long soldierId) throws CouldNotFetchNetworkDataException
     {
         try

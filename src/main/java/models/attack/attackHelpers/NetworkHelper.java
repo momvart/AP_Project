@@ -38,6 +38,8 @@ public class NetworkHelper
 
     private static void sendAttackMessage(int type, JsonObject data)
     {
+        if (socket == null)
+            return;
         try
         {
             byte[] message = serializer.toJson(new AttackMessage(type, data)).getBytes();
@@ -145,12 +147,29 @@ public class NetworkHelper
         obj.addProperty("y1", start.getY());
         obj.addProperty("x2", end.getX());
         obj.addProperty("y2", end.getY());
-        obj.addProperty(SOLDIER_ID_FIELD, soldier.getId());
+        if (soldier == null)
+            obj.addProperty(SOLDIER_ID_FIELD, -10);
+        else
+            obj.addProperty(SOLDIER_ID_FIELD, soldier.getId());
         sendAttackMessage(AttackMessage.Types.BulletStartNewWave, obj);
     }
 
     public static void bulletSetPos(long buildingId, PointF position)
     {
 
+    }
+
+    public static void buildingSetTarget(long id)
+    {
+        JsonObject obj = new JsonObject();
+        obj.addProperty(ID_FIELD, id);
+        sendAttackMessage(AttackMessage.Types.BuildingSetTarget, obj);
+    }
+
+    public static void soldierSetTarget(long id)
+    {
+        JsonObject obj = new JsonObject();
+        obj.addProperty(ID_FIELD, id);
+        sendAttackMessage(AttackMessage.Types.SoldierSetTarget, obj);
     }
 }
