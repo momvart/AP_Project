@@ -1,12 +1,9 @@
 import graphics.Fonts;
-import graphics.gui.dialogs.SingleChoiceDialog;
+import graphics.gui.dialogs.SettingsDialog;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Spinner;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,7 +17,6 @@ import views.VillageView;
 import java.io.BufferedReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.Scanner;
 
 public class Main extends Application
@@ -36,13 +32,14 @@ public class Main extends Application
         World.initialize();
         Fonts.initialize();
         Group group = new Group();
-        double width = 1200;
-        double height = 900;
+        double width = 840;
+        double height = 630;
         ImageView imageView = setBackground();
         imageView.setEffect(new GaussianBlur(20));
         VBox vBox = setButtons(primaryStage, width, height);
         group.getChildren().addAll(imageView, vBox);
-        primaryStage.setScene(new Scene(group, 1200, 900));
+        primaryStage.setScene(new Scene(group, 840, 630));
+        primaryStage.setResizable(false);
         World.sMenuStage = primaryStage;
         primaryStage.show();
     }
@@ -68,10 +65,10 @@ public class Main extends Application
     {
         ImageView imageView = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream("assets/floor/background2.png")));
         imageView.setCache(true);
-        imageView.prefWidth(1200);
-        imageView.prefHeight(900);
-        imageView.setFitWidth(1200);
-        imageView.setFitHeight(900);
+        imageView.prefWidth(840);
+        imageView.prefHeight(630);
+        imageView.setFitWidth(840);
+        imageView.setFitHeight(630);
         return imageView;
     }
 
@@ -127,21 +124,9 @@ public class Main extends Application
         });
         settings.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
         {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Set game speed", ButtonType.OK, ButtonType.CANCEL);
-            Spinner<Double> spinner = new Spinner(1, 3, 1, 0.5);
-            alert.setGraphic(spinner);
-            SingleChoiceDialog.applyCss(alert);
-            Optional<ButtonType> buttonType = alert.showAndWait();
-            buttonType.ifPresent(buttonType1 ->
-            {
-                if (buttonType.get().equals(ButtonType.OK))
-                {
-                    World.sSettings.setGameSpeed(spinner.getValue());
-                    alert.close();
-                }
-                else
-                    alert.close();
-            });
+            SettingsDialog dialog = new SettingsDialog();
+            dialog.showSettingDialog();
+            World.sSettings.setGameSpeed(dialog.getGameSpeed());
         });
         quit.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent ->
         {
