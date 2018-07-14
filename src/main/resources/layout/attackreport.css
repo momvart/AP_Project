@@ -12,7 +12,7 @@
     -fx-font-family: CCBackBeat;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-font-size: 8;
+    -fx-font-size: 10;
 }
 
 .list-cell-attackreport .list-cell:filled:hover .label-attacker, .list-cell-attackreport .list-cell:filled:hover .label-defender {

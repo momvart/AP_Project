@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class GeneralSoldierAttackHelper extends SoldierAttackHelper
@@ -137,44 +138,39 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
         ArrayList<Building> aliveBuildings = Attack.getAliveBuildings(soldier.getAttackHelper().getAttack())
                 .sorted(Comparator.comparingDouble(building -> Point.euclideanDistance2nd(building.getLocation(), getSoldierLocation())))
                 .collect(Collectors.toCollection(ArrayList::new));
+
+        Function<Building, Building> setRealTarget = target ->
+        {
+            if (target == null)
+                return null;
+            if (isTargetReachable(target))
+                return target;
+
+            ArrayList<Point> path = attack.getSoldierPath(getSoldierLocation(), target.getLocation(), true);
+            for (int i = path.size() - 1; i >= 0; i--)
+                if (attack.getMap().getBuildingAt(path.get(i)) != null)
+                    return attack.getMap().getBuildingAt(path.get(i));
+
+            return null;
+        };
+
+
         try
         {
             if (soldier.getSoldierInfo().getFavouriteTargets().length == 0)
                 throw new Exception();
 
-            return aliveBuildings.stream()
+            return setRealTarget.apply(aliveBuildings.stream()
                     .filter(building -> Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(t -> t.isInstance(building)))
-                    .filter(building -> building.getType() != Trap.BUILDING_TYPE)
-                    .filter(this::isTargetReachable)
-                    .findFirst().orElseThrow(DummyException::new);
-
-        }
-        catch (DummyException e)
-        {
-            Building implicitTarget = aliveBuildings.stream()
-                    .filter(building -> Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(t -> t.isInstance(building)))
-                    .filter(building -> building.getType() != Trap.BUILDING_TYPE)
-                    .findFirst().orElseThrow(Exception::new);
-            List<Point> soldierPath = attack.getSoldierPath(getSoldierLocation(), implicitTarget.getLocation(), true);
-            return getCriticalWall(soldierPath);
+                    .findFirst().orElseThrow(Exception::new));
         }
         catch (Exception ex)
         {
-            Building implicitTarget = aliveBuildings.stream()
+            return setRealTarget.apply(aliveBuildings.stream()
                     .filter(building -> building.getType() != Trap.BUILDING_TYPE)
                     .filter(building -> building.getType() != Wall.BUILDING_TYPE)
                     .findFirst()
-                    .orElse(null);
-            if (implicitTarget == null)
-            {
-                return null;
-            }
-
-            if (isTargetReachable(implicitTarget))
-            {
-                return implicitTarget;
-            }
-            return getCriticalWall(attack.getSoldierPath(getSoldierLocation(), implicitTarget.getLocation(), true));
+                    .orElse(null));
         }
     }
 
@@ -208,7 +204,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
     {
         try
         {
-            return !(attack.getSoldierPath(soldier.getLocation(), building.getLocation(), soldier.getMoveType() == MoveType.AIR) == null);
+            return attack.getSoldierPath(soldier.getLocation(), building.getLocation(), soldier.getMoveType() == MoveType.AIR) != null;
         }
         catch (Exception e)
         {

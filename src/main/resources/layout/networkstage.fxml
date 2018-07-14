@@ -35,7 +35,7 @@
         </StackPane>
     </VBox>
 
-    <TabPane fx:id="tabs" prefHeight="300.0" prefWidth="400.0" disable="false" tabClosingPolicy="UNAVAILABLE"
+    <TabPane fx:id="tabs" prefHeight="300.0" prefWidth="400.0" disable="true" tabClosingPolicy="UNAVAILABLE"
              VBox.vgrow="ALWAYS">
         <Tab text="Players">
             <fx:include fx:id="tabPlayers" source="players.fxml" VBox.vgrow="ALWAYS"/>

@@ -215,7 +215,10 @@ public class Attack
 
     public boolean areBuildingsDestroyed()
     {
-        return map.getAllBuildings().allMatch(building -> building.getAttackHelper().isDestroyed());
+        return map.getAllBuildings()
+                .filter(building -> building.getType() != Wall.BUILDING_TYPE)
+                .filter(building -> building.getType() != Trap.BUILDING_TYPE)
+                .allMatch(building -> building.getAttackHelper().isDestroyed());
     }
     //endregion
 
@@ -596,7 +599,7 @@ public class Attack
     //region Path Finding
     private PathFinder pathFinder = new PathFinder();
 
-    public List<Point> getSoldierPath(Point start, Point target, boolean isFlying)
+    public ArrayList<Point> getSoldierPath(Point start, Point target, boolean isFlying)
     {
         return pathFinder.getSoldierPath(start, target, isFlying);
     }
@@ -734,14 +737,12 @@ public class Attack
             return (int)Math.sqrt((node.getX() - target.getX()) * (node.getX() - target.getX()) + (node.getY() - target.getY()) * (node.getY() - target.getY())) * 10;
         }
 
-        public List<Point> getSoldierPath(Point soldierLocation, Point buildingLocation, boolean isFlying)
+        public ArrayList<Point> getSoldierPath(Point soldierLocation, Point buildingLocation, boolean isFlying)
         {
             MapCellNode soldier = new MapCellNode(soldierLocation, null, 0);
             MapCellNode building = new MapCellNode(buildingLocation, null, 0);
             List<MapCellNode> path = findPath(soldier, building, isFlying);
-            List<Point> soldierPath = new ArrayList<>(path.size());
-            for (MapCellNode aPath : path) soldierPath.add(aPath.getPoint());
-            return soldierPath;
+            return path.stream().map(MapCellNode::getPoint).collect(Collectors.toCollection(ArrayList::new));
         }
 
         public List<Point> getSoldierPath2(Point soldierLocation, Point buildingLocation, boolean isFlying, int damage, int speed)
