@@ -105,7 +105,11 @@ public class AttackController implements IMenuClickListener, ICommandManager
                 case Menu.Id.ATTACK_MAP_ATTACK:
                 {
                     theView.setCurrentMenu(null, false);
-                    Platform.runLater(() -> new AttackStage(theAttack, 1200, 900).setup());
+                    Platform.runLater(() ->
+                    {
+                        AttackStage attackStage = new AttackStage(theAttack, 1200, 900);
+                        attackStage.setup();
+                    });
                 }
                 break;
             }
@@ -240,7 +244,8 @@ public class AttackController implements IMenuClickListener, ICommandManager
                     .create();
 
             AttackMap map = gson.fromJson(reader, AttackMap.class);
-            setTheAttack(new Attack(map, isReal));
+            Attack attack = new Attack(map, isReal);
+            setTheAttack(attack);
         }
         catch (JsonParseException ex)
         {
