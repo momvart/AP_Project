@@ -63,7 +63,7 @@
     },
     "brewTime": 10,
     "speed": 2,
-    "range": 1,
+    "range": 2,
     "favouriteTargets": [
       {
         "name": "models.buildings.DefensiveTower"

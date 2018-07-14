@@ -1,5 +1,6 @@
 package models.attack.attackHelpers;
 
+import exceptions.DummyException;
 import graphics.helpers.GeneralSoldierGraphicHelper;
 import graphics.helpers.SoldierGraphicHelper;
 import models.Resource;
@@ -12,6 +13,7 @@ import utils.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class GeneralSoldierAttackHelper extends SoldierAttackHelper
@@ -144,23 +146,75 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
                     .filter(building -> Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(t -> t.isInstance(building)))
                     .filter(building -> building.getType() != Trap.BUILDING_TYPE)
                     .filter(this::isTargetReachable)
-                    .findFirst().orElseThrow(Exception::new);
+                    .findFirst().orElseThrow(DummyException::new);
 
+        }
+        catch (DummyException e)
+        {
+            Building implicitTarget = aliveBuildings.stream()
+                    .filter(building -> Arrays.stream(soldier.getSoldierInfo().getFavouriteTargets()).anyMatch(t -> t.isInstance(building)))
+                    .filter(building -> building.getType() != Trap.BUILDING_TYPE)
+                    .findFirst().orElseThrow(Exception::new);
+            List<Point> soldierPath = attack.getSoldierPath(getSoldierLocation(), implicitTarget.getLocation(), true);
+            return getCriticalWall(soldierPath);
         }
         catch (Exception ex)
         {
-            return aliveBuildings.stream()
-                    .filter(this::isTargetReachable)
+            Building implicitTarget = aliveBuildings.stream()
                     .filter(building -> building.getType() != Trap.BUILDING_TYPE)
+                    .filter(building -> building.getType() != Wall.BUILDING_TYPE)
                     .findFirst()
                     .orElse(null);
-        }
+            if (implicitTarget == null)
+            {
+                return null;
+            }
 
+            if (isTargetReachable(implicitTarget))
+            {
+                return implicitTarget;
+            }
+            return getCriticalWall(attack.getSoldierPath(getSoldierLocation(), implicitTarget.getLocation(), true));
+        }
     }
 
-    private boolean isTargetReachable(Building favouriteTarget)
+    private Building getCriticalWall(List<Point> soldierPath) throws Exception
     {
-        return !(attack.getSoldierPath(soldier.getLocation(), favouriteTarget.getLocation(), soldier.getMoveType() == MoveType.AIR) == null);
+        for (int i = 1; i < soldierPath.size(); i++)
+            if (isThereAWallIn(soldierPath.get(i)))
+                return getBuildingIn(soldierPath.get(i));
+        throw new Exception();
+    }
+
+    private Building getBuildingIn(Point point) throws Exception
+    {
+        List<Building> aliveBuildings = Attack.getAliveBuildings(attack).collect(Collectors.toList());
+        for (Building aliveBuilding : aliveBuildings)
+            if (aliveBuilding.getLocation().equals(point))
+                return aliveBuilding;
+        throw new Exception();
+    }
+
+    private boolean isThereAWallIn(Point point)
+    {
+        List<Building> aliveBuildings = Attack.getAliveBuildings(attack).collect(Collectors.toList());
+        for (Building aliveBuilding : aliveBuildings)
+            if (aliveBuilding instanceof Wall && aliveBuilding.getLocation().equals(point))
+                return true;
+        return false;
+    }
+
+    private boolean isTargetReachable(Building building)
+    {
+        try
+        {
+            return !(attack.getSoldierPath(soldier.getLocation(), building.getLocation(), soldier.getMoveType() == MoveType.AIR) == null);
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+
     }
 
     @Override
