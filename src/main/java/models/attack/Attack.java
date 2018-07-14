@@ -30,6 +30,7 @@ public class Attack
     public boolean isReal;
     private Consumer<TimeSpan> timeChangeListener;
     private TimeSpan attackTime;
+    private String defenderName;
 
     private SoldierCoordinatedCollection soldiersOnLocations;
 
@@ -112,6 +113,15 @@ public class Attack
         this.timeChangeListener = timeChangeListener;
     }
 
+    public String getDefenderName()
+    {
+        return defenderName;
+    }
+
+    public void setDefenderName(String defenderName)
+    {
+        this.defenderName = defenderName;
+    }
     //endregion
 
     public AttackMap getMap()

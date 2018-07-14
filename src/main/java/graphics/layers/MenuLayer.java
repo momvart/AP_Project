@@ -1,10 +1,14 @@
 package graphics.layers;
 
+import graphics.Fonts;
 import graphics.GraphicsValues;
 import graphics.drawers.Drawer;
 import graphics.drawers.drawables.MenuItemDrawable;
+import graphics.drawers.drawables.TextDrawable;
 import graphics.positioning.NormalPositioningSystem;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import menus.IMenuClickListener;
 import menus.Menu;
 import menus.ParentMenu;
@@ -60,7 +64,31 @@ public class MenuLayer extends Layer
 
         if (currentMenu == null)
             return;
+        String title;
+        String currentTitle = currentMenu.getText();
+        String parentTitle = null;
+        String parparentTitle = null;
+        try
+        {
+            parentTitle = ((Submenu)currentMenu).getParent().getText();
+            parparentTitle = ((Submenu)((Submenu)currentMenu).getParent()).getParent().getText();
+        }
+        catch (ClassCastException ignored)
+        {
+        }
 
+        if (parparentTitle != null && !parparentTitle.equals(""))
+            title = parparentTitle;
+        else if (parentTitle != null && !parentTitle.equals(""))
+            title = parentTitle;
+        else
+            title = currentTitle;
+        TextDrawable txtBuilding = new TextDrawable(title, Color.web("#ffffa8"), new Font(Fonts.getBBLarge().getName(), Fonts.getBBLarge().getSize() * 1.5));
+        txtBuilding.setPivot(0.5, 1);
+        txtBuilding.setHasShadow(true);
+        Drawer tDrawer = new Drawer(txtBuilding);
+        tDrawer.setPosition(getBounds().getWidth() / 2, 0);
+        tDrawer.setLayer(this);
         ArrayList<Menu> items = currentMenu.getMenuItems();
 
         final double start = ((orientation == Orientation.VERTICAL ? getBounds().getHeight() : getBounds().getWidth())

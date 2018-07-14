@@ -34,7 +34,6 @@ import utils.TimeSpan;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class AttackStage extends AttackMapStage
@@ -43,6 +42,7 @@ public class AttackStage extends AttackMapStage
 
     private TimerGraphicHelper timer;
     private TextDrawable txtTime;
+    private TextDrawable txtDefenderName;
 
     private Consumer<AttackReport> attackFinishedListener;
 
@@ -98,6 +98,15 @@ public class AttackStage extends AttackMapStage
                 timer.setOnTimeFinished(() -> this.quitAttack(Attack.QuitReason.TURN));
                 getGuiHandler().addUpdatable(timer);
             }
+        }
+
+        txtDefenderName = new TextDrawable("Defender: " + theAttack.getDefenderName(), Color.WHITE, Fonts.getBBLarge());
+        {
+            txtDefenderName.setHasShadow(true);
+            txtDefenderName.setPivot(0.5, 0.5);
+            Drawer dDefenderName = new Drawer(txtDefenderName);
+            dDefenderName.setPosition(0.5, 0.05);
+            dDefenderName.setLayer(getInfoLayer());
         }
 
         if (theAttack.isReal)

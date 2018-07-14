@@ -3,7 +3,6 @@ package graphics.gui;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import graphics.Fonts;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -102,6 +101,7 @@ public class PlayersController
         Platform.runLater(() ->
         {
             Attack attack = new Attack(cachedMaps.get(defenderId), true);
+            attack.setDefenderName(client.getPlayerInfo(defenderId).getName());
             attack.addUnits(World.getVillage().getAllSoldiers().collect(Collectors.toList()));
             AttackStage stage = new AttackStage(attack, 1200, 900);
             stage.setAttackFinishedListener(report -> World.sCurrentClient.sendAttackReport(report));
