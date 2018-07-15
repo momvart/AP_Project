@@ -148,7 +148,7 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
 
             ArrayList<Point> path = attack.getSoldierPath(getSoldierLocation(), target.getLocation(), true);
             for (int i = path.size() - 1; i >= 0; i--)
-                if (attack.getMap().getBuildingAt(path.get(i)) != null)
+                if (!attack.getMap().isEmptyOrDestroyed(path.get(i).getX(), path.get(i).getY()))
                     return attack.getMap().getBuildingAt(path.get(i));
 
             return null;
