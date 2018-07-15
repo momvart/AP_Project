@@ -82,6 +82,8 @@ public class NetworkHelper
 
     public static void sldrStJogTowd(long soldierId, PointF dest)
     {
+        if (!checkSocket())
+            return;
         JsonObject obj = new JsonObject();
         obj.addProperty(ID_FIELD, soldierId);
         obj.addProperty("x", dest.getX());
@@ -91,6 +93,8 @@ public class NetworkHelper
 
     public static void grdnGntStJojTowd(long id, Soldier dest)
     {
+        if (!checkSocket())
+            return;
         JsonObject obj = new JsonObject();
         obj.addProperty(ID_FIELD, id);
         obj.addProperty("sid", dest.getId());
@@ -99,6 +103,8 @@ public class NetworkHelper
 
     public static void setSldPos(long soldierId, PointF position)
     {
+        if (!checkSocket())
+            return;
         JsonObject obj = new JsonObject();
         obj.addProperty(ID_FIELD, soldierId);
         addPointProperty(obj, position);
@@ -107,6 +113,8 @@ public class NetworkHelper
 
     public static void setGrdnGntPos(long id, PointF position)
     {
+        if (!checkSocket())
+            return;
         JsonObject obj = new JsonObject();
         obj.addProperty(ID_FIELD, id);
         addPointProperty(obj, position);
@@ -115,6 +123,8 @@ public class NetworkHelper
 
     public static void soldierDie(long id)
     {
+        if (!checkSocket())
+            return;
         JsonObject obj = new JsonObject();
         obj.addProperty(ID_FIELD, id);
         sendAttackMessage(AttackMessage.Types.SoldierDie, obj);
@@ -122,6 +132,8 @@ public class NetworkHelper
 
     public static void buildingDestroy(long id)
     {
+        if (!checkSocket())
+            return;
         JsonObject obj = new JsonObject();
         obj.addProperty(ID_FIELD, id);
         sendAttackMessage(AttackMessage.Types.BuildingDestroy, obj);
@@ -129,6 +141,8 @@ public class NetworkHelper
 
     public static void soldierSetHealth(long id, int health)
     {
+        if (!checkSocket())
+            return;
         JsonObject obj = new JsonObject();
         obj.addProperty(ID_FIELD, id);
         obj.addProperty(HEALTH_STRENGTH, health);
@@ -137,6 +151,8 @@ public class NetworkHelper
 
     public static void buildingSetStrength(long id, int strength)
     {
+        if (!checkSocket())
+            return;
         JsonObject obj = new JsonObject();
         obj.addProperty(ID_FIELD, id);
         obj.addProperty(HEALTH_STRENGTH, strength);
@@ -145,6 +161,8 @@ public class NetworkHelper
 
     public static void bulletStartNewWave(long buildingId, PointF start, PointF end, Soldier soldier)
     {
+        if (!checkSocket())
+            return;
         JsonObject obj = new JsonObject();
         obj.addProperty(ID_FIELD, buildingId);
         obj.addProperty("x1", start.getX());
@@ -160,6 +178,8 @@ public class NetworkHelper
 
     public static void setClaimedScore(int claimedScore)
     {
+        if (!checkSocket())
+            return;
         JsonObject obj = new JsonObject();
         obj.addProperty("score", claimedScore);
         sendAttackMessage(AttackMessage.Types.SetScore, obj);
@@ -167,6 +187,8 @@ public class NetworkHelper
 
     public static void setClaimedResource(Resource claimedResource)
     {
+        if (!checkSocket())
+            return;
         JsonObject obj = new JsonObject();
         obj.addProperty(GOLD_FIELD, claimedResource.getGold());
         obj.addProperty(ELIXIR_FIELD, claimedResource.getElixir());
@@ -175,6 +197,8 @@ public class NetworkHelper
 
     public static void setTime(TimeSpan time)
     {
+        if (!checkSocket())
+            return;
         JsonObject obj = new JsonObject();
         obj.addProperty("seconds", time.getTotalSeconds());
         sendAttackMessage(AttackMessage.Types.SetTime, obj);

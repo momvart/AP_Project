@@ -12,6 +12,7 @@ import javafx.scene.input.ScrollEvent;
 import utils.RectF;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Layer implements IFrameUpdatable, IAlphaDrawable
 {
@@ -20,6 +21,8 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
     private int order;
     private RectF bounds;
     private boolean hardBound;
+
+    private boolean dynamicOrder = false;
 
     private boolean visible = true;
     private double alpha = 1;
@@ -68,6 +71,11 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
     public void setHardBound(boolean hardBound)
     {
         this.hardBound = hardBound;
+    }
+
+    public void setDynamicOrder(boolean dynamicOrder)
+    {
+        this.dynamicOrder = dynamicOrder;
     }
 
     public double getWidth()
@@ -241,10 +249,11 @@ public class Layer implements IFrameUpdatable, IAlphaDrawable
         gc.translate(scrollX, scrollY);
         RectF relBounds = new RectF(cameraBounds.getX() - bounds.getX() - scrollX, cameraBounds.getY() - bounds.getY() - scrollY, cameraBounds.getWidth(), cameraBounds.getHeight());
         RectF layerBounds = new RectF(-scrollX, -scrollY, getWidth(), getHeight());
-        drawers.stream()
-                .filter(d -> d.isVisible() && d.canBeVisibleIn(relBounds) && (!hardBound || d.canBeVisibleIn(layerBounds)))
-                .sorted(Comparator.comparing(d -> posSys.convertY(d.getPosition()))) //TODO: not optimized
-                .forEach(d -> d.draw(gc));
+        Stream<Drawer> stream = drawers.stream()
+                .filter(d -> d.isVisible() && d.canBeVisibleIn(relBounds) && (!hardBound || d.canBeVisibleIn(layerBounds)));
+        if (dynamicOrder)
+            stream = stream.sorted(Comparator.comparing(d -> posSys.convertY(d.getPosition()))); //TODO: not optimized
+        stream.forEach(d -> d.draw(gc));
         gc.restore();
     }
 

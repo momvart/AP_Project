@@ -59,6 +59,7 @@ public abstract class MapStage extends Stage
 
         lFloor = new Layer(FLOOR_LAYER_ORDER, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
         lObjects = new Layer(2, new RectF(0, 0, width, height), IsometricPositioningSystem.getInstance());
+        lObjects.setDynamicOrder(true);
         lbackground = new Layer(0, new RectF(0, 0, width, height), NormalPositioningSystem.getInstance());
     }
 
