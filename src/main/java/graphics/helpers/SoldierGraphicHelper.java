@@ -7,6 +7,7 @@ import models.attack.attackHelpers.IOnDecampListener;
 import models.attack.attackHelpers.IOnSoldierDieListener;
 import models.attack.attackHelpers.NetworkHelper;
 import models.attack.attackHelpers.SoldierAttackHelper;
+import models.soldiers.Dragon;
 import models.soldiers.MoveType;
 import models.soldiers.Soldier;
 import utils.Point;
@@ -130,7 +131,7 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
             return;
         if (isChasingGuardianGiant)
             triggerSoldier();
-
+        System.out.println("move dest is : " + moveDest + " final standing point is : " + finalStandingPoint + " next check point is : " + nextCheckPointF);
         if (nextCheckPointF == null || PointF.euclideanDistance2nd(nextCheckPointF, drawer.getPosition()) < .01)
         {
             setNewCheckPoint();
@@ -176,6 +177,10 @@ public abstract class SoldierGraphicHelper extends GraphicHelper implements IOnD
     {
         Point nextCheckPoint;
         nextCheckPoint = Attack.getNextPathStraightReachablePoint(attackHelper.getAttack(), getVeryPoint(drawer.getPosition()), getVeryPoint(moveDest), soldier.getMoveType() == MoveType.AIR);
+        if (soldier instanceof Dragon)
+            System.out.println("next check is : " + nextCheckPoint);
+        if (nextCheckPointF == null && soldier instanceof Dragon)
+            System.out.println("dragon on start of the move");
         try
         {
             if (isSoldierDistantFighter())

@@ -516,7 +516,8 @@ public class Attack
             return null;
         Point pointToGo = soldierPath.get(soldierPath.size() - 1);
         ArrayList<Point> aliveBuildingPositions = getAliveBuildingsPositions(attack);
-
+        if (isFlying)
+            return soldierPath.get(1);
         int i;
         for (i = soldierPath.size() - 2; i >= 0; i--)
         {

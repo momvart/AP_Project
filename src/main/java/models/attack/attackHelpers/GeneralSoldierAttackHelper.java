@@ -1,6 +1,5 @@
 package models.attack.attackHelpers;
 
-import exceptions.DummyException;
 import graphics.helpers.GeneralSoldierGraphicHelper;
 import graphics.helpers.SoldierGraphicHelper;
 import models.Resource;
@@ -13,7 +12,6 @@ import utils.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -174,32 +172,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
         }
     }
 
-    private Building getCriticalWall(List<Point> soldierPath) throws Exception
-    {
-        for (int i = 1; i < soldierPath.size(); i++)
-            if (isThereAWallIn(soldierPath.get(i)))
-                return getBuildingIn(soldierPath.get(i));
-        throw new Exception();
-    }
-
-    private Building getBuildingIn(Point point) throws Exception
-    {
-        List<Building> aliveBuildings = Attack.getAliveBuildings(attack).collect(Collectors.toList());
-        for (Building aliveBuilding : aliveBuildings)
-            if (aliveBuilding.getLocation().equals(point))
-                return aliveBuilding;
-        throw new Exception();
-    }
-
-    private boolean isThereAWallIn(Point point)
-    {
-        List<Building> aliveBuildings = Attack.getAliveBuildings(attack).collect(Collectors.toList());
-        for (Building aliveBuilding : aliveBuildings)
-            if (aliveBuilding instanceof Wall && aliveBuilding.getLocation().equals(point))
-                return true;
-        return false;
-    }
-
     private boolean isTargetReachable(Building building)
     {
         try
@@ -210,7 +182,6 @@ public class GeneralSoldierAttackHelper extends SoldierAttackHelper
         {
             return false;
         }
-
     }
 
     @Override
