@@ -169,7 +169,7 @@ public class VillageView extends ConsoleMenuContainerView
                             List<Integer> spentTroops = report.getTroopsCount();
                             for (int i = 0; i < spentTroops.size(); i++)
                                 if (spentTroops.get(i) > 0)
-                                    World.getVillage().getSoldiers(i + 1).subList(0, spentTroops.get(i) - 1);
+                                    World.getVillage().getSoldiers(i + 1).subList(0, spentTroops.get(i) - 1).clear();
                         });
                         stage.setupAndShow();
                     });

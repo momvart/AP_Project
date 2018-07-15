@@ -77,7 +77,7 @@ public class SettingsDialog
         dialog.setTitle(TITLE);
         SingleChoiceDialog.applyCss(dialog);
         GridPane gridPane = new GridPane();
-        Spinner<Double> speedSpinner = getSpinner(1, 3, 0.5);
+        Spinner<Double> speedSpinner = getSpinner(1, 10, 0.5);
         CheckBox cbSound = getCheckBox();
         Label lblSound = getLabel(SOUND_STATUS_MESSAGE);
         Label lblSpeed = getLabel(GAME_SPEED_MESSAGE);

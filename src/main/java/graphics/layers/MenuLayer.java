@@ -83,7 +83,7 @@ public class MenuLayer extends Layer
             title = parentTitle;
         else
             title = currentTitle;
-        TextDrawable txtBuilding = new TextDrawable(title, Color.web("#ffffa8"), new Font(Fonts.getBBLarge().getName(), Fonts.getBBLarge().getSize() * 1.5));
+        TextDrawable txtBuilding = new TextDrawable(title, Color.web("#ffffa8"), new Font(Fonts.getLarge().getName(), Fonts.getLarge().getSize()));
         txtBuilding.setPivot(0.5, 1);
         txtBuilding.setHasShadow(true);
         Drawer tDrawer = new Drawer(txtBuilding);

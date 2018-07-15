@@ -99,16 +99,17 @@ public class AttackStage extends AttackMapStage
                 getGuiHandler().addUpdatable(timer);
             }
         }
-
-        txtDefenderName = new TextDrawable("Defender: " + theAttack.getDefenderName(), Color.WHITE, Fonts.getBBLarge());
+        if (theAttack.getDefenderName() != null)
         {
-            txtDefenderName.setHasShadow(true);
-            txtDefenderName.setPivot(0.5, 0.5);
-            Drawer dDefenderName = new Drawer(txtDefenderName);
-            dDefenderName.setPosition(0.5, 0.05);
-            dDefenderName.setLayer(getInfoLayer());
+            txtDefenderName = new TextDrawable(theAttack.getDefenderName(), Color.WHITE, Fonts.getLarge());
+            {
+                txtDefenderName.setHasShadow(true);
+                txtDefenderName.setPivot(0.5, 0.5);
+                Drawer dDefenderName = new Drawer(txtDefenderName);
+                dDefenderName.setPosition(0.5, 0.05);
+                dDefenderName.setLayer(getInfoLayer());
+            }
         }
-
         if (theAttack.isReal)
         {
             ButtonDrawable btnEndAttack = new ButtonDrawable("End Attack", GraphicsValues.IconPaths.Stop, CELL_SIZE, CELL_SIZE);
